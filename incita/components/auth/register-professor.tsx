@@ -12,7 +12,16 @@ import { toast } from "react-toastify"
 import { handleAxiosError } from "@/app/utils"
 import { useRouter } from "next/navigation"
 
-export default function FormProfessor() {
+import type { UserRegistration } from "@/../types/user"
+
+interface FormProfessorProps {
+  onSubmit: (userData: UserRegistration) => Promise<void>
+  isSubmitting: boolean
+  showPassword: boolean
+  setShowPassword: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+export default function FormProfessor(props: FormProfessorProps) {
   const router = useRouter()
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)

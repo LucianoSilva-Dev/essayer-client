@@ -30,10 +30,10 @@ export default function Header() {
           </Link>
 
           <Link
-            href="/citar"
+            href="/adicionar"
             className={`flex items-center ${isActive("/citar") ? "text-white" : "text-gray-300 hover:text-white transition-colors"}`}
           >
-            Citações
+            Adicionar Repertório
           </Link>
         </div>
 

@@ -11,8 +11,15 @@ import { API_BASE_URL } from "@/app/constants"
 import { toast } from "react-toastify"
 import { handleAxiosError } from "@/app/utils"
 import { useRouter } from "next/navigation"
+import type { UserRegistration } from "@/../types/user"
+interface FormAlunoProps {
+  onSubmit: (userData: UserRegistration) => Promise<void>
+  isSubmitting: boolean
+  showPassword: boolean
+  setShowPassword: React.Dispatch<React.SetStateAction<boolean>>
+}
 
-export default function FormAluno() {
+export default function FormAluno(props: FormAlunoProps) {
   const router = useRouter()
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
