@@ -4,9 +4,9 @@ import { Inter } from "next/font/google"
 import Header from "@/../components/header"
 import { RepertorioProvider } from "@/../contexts/repertorio-context"
 import { CitacaoProvider } from "@/../contexts/citacao-context"
-import { ToastContainer } from "react-toastify"
+import { AuthProvider } from "@/../contexts/auth-context"
+import { ProfileProvider } from "@/../contexts/profile-context"
 import "./globals.css"
-import { AuthProvider } from "../../contexts/auth-context"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -24,15 +24,15 @@ export default function RootLayout({
     <html lang="pt-BR">
       <body className={inter.className}>
         <AuthProvider>
-          <RepertorioProvider>
-            <CitacaoProvider>
-              <Header />
-              {children}
-              <ToastContainer theme="light" autoClose={5000} />
-            </CitacaoProvider>
-          </RepertorioProvider>
+          <ProfileProvider>
+            <RepertorioProvider>
+              <CitacaoProvider>
+                <Header />
+                {children}
+              </CitacaoProvider>
+            </RepertorioProvider>
+          </ProfileProvider>
         </AuthProvider>
-
       </body>
     </html>
   )
