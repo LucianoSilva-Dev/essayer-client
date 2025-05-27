@@ -1,26 +1,18 @@
 "use client"
 
 import type React from "react"
-import type { RepertorioData } from "../components/repertorio/repertorio_form"
-
 import { createContext, useContext, useState, useEffect } from "react"
-
-// Estendendo o tipo RepertorioData para incluir id e data de criação
-export interface Repertorio extends RepertorioData {
-  id: string
-  criadoEm: string
-  comentarios: number
-}
+import type { Repertorio, RepertorioFormData } from "@/../types/repertorio"
 
 interface RepertorioContextType {
   repertorios: Repertorio[]
-  adicionarRepertorio: (data: RepertorioData) => Promise<Repertorio>
-  removerRepertorio: (id: string) => void
-  atualizarRepertorio: (id: string, data: RepertorioData) => Promise<Repertorio>
+  adicionarRepertorio: (data: RepertorioFormData) => Promise<Repertorio>
   toggleFavorito: (id: string) => void
   favoritos: string[]
   filtrarPorCategoria: (categoria: string | null) => Repertorio[]
+  filtrarPorModelo: (modelo: string | null) => Repertorio[]
   pesquisar: (termo: string) => Repertorio[]
+  buscarPorId: (id: string) => Repertorio | undefined
 }
 
 const RepertorioContext = createContext<RepertorioContextType | undefined>(undefined)
@@ -38,43 +30,44 @@ export function RepertorioProvider({ children }: { children: React.ReactNode }) 
     if (storedRepertorios) {
       setRepertorios(JSON.parse(storedRepertorios))
     } else {
-      // Dados iniciais de exemplo
+      // Dados iniciais de exemplo com os novos modelos
       setRepertorios([
         {
           id: "1",
-          titulo: "Desigualdade Social no Brasil",
-          conteudo:
-            "A desigualdade social no Brasil tem raízes históricas que remontam ao período colonial. Segundo dados do IBGE, o país possui um dos maiores índices de concentração de renda do mundo, com os 10% mais ricos detendo mais de 40% da renda nacional.",
-          fonte: "IBGE, 2022",
-          categoria: "Sociologia",
-          tags: ["desigualdade", "brasil", "economia"],
+          modelo: "obra",
+          titulo: "1984",
+          autoria: "George Orwell",
+          sinopse:
+            "Um romance distópico que retrata uma sociedade totalitária onde o governo controla todos os aspectos da vida dos cidadãos. A obra explora temas como vigilância, manipulação da verdade e perda da individualidade.",
+          fonte: "Editora Companhia das Letras, 2009",
+          categoria: "Literatura",
+          tags: ["distopia", "totalitarismo", "orwell"],
           isPublico: true,
-          criadoEm: new Date().toISOString(),
-          comentarios: 3,
+          comentarios: 8,
         },
         {
           id: "2",
-          titulo: "Inteligência Artificial e Ética",
-          conteudo:
-            "O desenvolvimento acelerado da inteligência artificial levanta questões éticas importantes sobre privacidade, vieses algorítmicos e o futuro do trabalho. Especialistas como Stuart Russell defendem a necessidade de alinhar os objetivos da IA com valores humanos.",
-          fonte: "Human Compatible, Stuart Russell, 2019",
+          modelo: "artigo",
+          titulo: "Os Impactos da Inteligência Artificial na Sociedade Contemporânea",
+          autoria: "Dr. João Silva",
+          sintese:
+            "O artigo analisa como a inteligência artificial está transformando diversos setores da sociedade, desde o mercado de trabalho até a educação. Discute os benefícios e desafios éticos que emergem com essa tecnologia, propondo diretrizes para um desenvolvimento responsável da IA.",
+          fonte: "Revista Brasileira de Tecnologia, vol. 15, n. 3, 2023",
           categoria: "Tecnologia",
-          tags: ["ia", "ética", "tecnologia"],
+          tags: ["inteligencia artificial", "sociedade", "etica"],
           isPublico: true,
-          criadoEm: new Date().toISOString(),
           comentarios: 5,
         },
         {
           id: "3",
-          titulo: "Aquecimento Global",
-          conteudo:
-            "O IPCC (Painel Intergovernamental sobre Mudanças Climáticas) alerta que, sem reduções significativas nas emissões de gases de efeito estufa, o aquecimento global poderá ultrapassar 1,5°C acima dos níveis pré-industriais entre 2030 e 2052.",
-          fonte: "Relatório IPCC, 2021",
-          categoria: "Ciência",
-          tags: ["clima", "meio ambiente", "sustentabilidade"],
+          modelo: "citacao",
+          autoria: "Nelson Mandela",
+          citacao: "A educação é a arma mais poderosa que você pode usar para mudar o mundo.",
+          fonte: "Discurso na Universidade de Witwatersrand, 2003",
+          categoria: "Filosofia",
+          tags: ["educacao", "transformacao", "mandela"],
           isPublico: true,
-          criadoEm: new Date().toISOString(),
-          comentarios: 2,
+          comentarios: 12,
         },
       ])
     }
@@ -95,36 +88,15 @@ export function RepertorioProvider({ children }: { children: React.ReactNode }) 
   }, [repertorios, favoritos, isLoaded])
 
   // Adicionar novo repertório
-  const adicionarRepertorio = async (data: RepertorioData): Promise<Repertorio> => {
+  const adicionarRepertorio = async (data: RepertorioFormData): Promise<Repertorio> => {
     const novoRepertorio: Repertorio = {
       ...data,
       id: Date.now().toString(),
-      criadoEm: new Date().toISOString(),
       comentarios: 0,
-    }
+    } as Repertorio
 
     setRepertorios((prev) => [novoRepertorio, ...prev])
     return novoRepertorio
-  }
-
-  // Remover repertório
-  const removerRepertorio = (id: string) => {
-    setRepertorios((prev) => prev.filter((rep) => rep.id !== id))
-    setFavoritos((prev) => prev.filter((favId) => favId !== id))
-  }
-
-  // Atualizar repertório existente
-  const atualizarRepertorio = async (id: string, data: RepertorioData): Promise<Repertorio> => {
-    const repertorioAtualizado = {
-      ...data,
-      id,
-      criadoEm: repertorios.find((r) => r.id === id)?.criadoEm || new Date().toISOString(),
-      comentarios: repertorios.find((r) => r.id === id)?.comentarios || 0,
-    }
-
-    setRepertorios((prev) => prev.map((rep) => (rep.id === id ? repertorioAtualizado : rep)))
-
-    return repertorioAtualizado
   }
 
   // Adicionar/remover dos favoritos
@@ -138,18 +110,60 @@ export function RepertorioProvider({ children }: { children: React.ReactNode }) 
     return repertorios.filter((rep) => rep.categoria === categoria)
   }
 
+  // Filtrar por modelo
+  const filtrarPorModelo = (modelo: string | null): Repertorio[] => {
+    if (!modelo) return repertorios
+    return repertorios.filter((rep) => rep.modelo === modelo)
+  }
+
   // Pesquisar por termo
   const pesquisar = (termo: string): Repertorio[] => {
     if (!termo.trim()) return repertorios
 
     const termoBusca = termo.toLowerCase().trim()
-    return repertorios.filter(
-      (rep) =>
-        rep.titulo.toLowerCase().includes(termoBusca) ||
-        rep.conteudo.toLowerCase().includes(termoBusca) ||
-        rep.fonte.toLowerCase().includes(termoBusca) ||
-        rep.tags.some((tag) => tag.toLowerCase().includes(termoBusca)),
-    )
+    return repertorios.filter((rep) => {
+      // Busca comum em todos os modelos
+      const buscaComum =
+        rep.categoria.toLowerCase().includes(termoBusca) ||
+        rep.tags.some((tag) => tag.toLowerCase().includes(termoBusca))
+
+      // Busca específica por modelo
+      switch (rep.modelo) {
+        case "obra":
+          return (
+            buscaComum ||
+            rep.titulo.toLowerCase().includes(termoBusca) ||
+            rep.autoria.toLowerCase().includes(termoBusca) ||
+            rep.sinopse.toLowerCase().includes(termoBusca) ||
+            rep.fonte.toLowerCase().includes(termoBusca)
+          )
+
+        case "artigo":
+          return (
+            buscaComum ||
+            rep.titulo.toLowerCase().includes(termoBusca) ||
+            rep.autoria.toLowerCase().includes(termoBusca) ||
+            rep.sintese.toLowerCase().includes(termoBusca) ||
+            rep.fonte.toLowerCase().includes(termoBusca)
+          )
+
+        case "citacao":
+          return (
+            buscaComum ||
+            rep.autoria.toLowerCase().includes(termoBusca) ||
+            rep.citacao.toLowerCase().includes(termoBusca) ||
+            rep.fonte.toLowerCase().includes(termoBusca)
+          )
+
+        default:
+          return buscaComum
+      }
+    })
+  }
+
+  // Buscar repertório por ID
+  const buscarPorId = (id: string): Repertorio | undefined => {
+    return repertorios.find((rep) => rep.id === id)
   }
 
   return (
@@ -157,12 +171,12 @@ export function RepertorioProvider({ children }: { children: React.ReactNode }) 
       value={{
         repertorios,
         adicionarRepertorio,
-        removerRepertorio,
-        atualizarRepertorio,
         toggleFavorito,
         favoritos,
         filtrarPorCategoria,
+        filtrarPorModelo,
         pesquisar,
+        buscarPorId,
       }}
     >
       {children}

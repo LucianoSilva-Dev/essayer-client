@@ -1,19 +1,14 @@
 "use client"
 
 import { useRouter } from "next/navigation"
-import RepertorioForm, { RepertorioData } from "../../../components/repertorio/repertorio_form"
+import RepertorioForm from "../../../components/repertorio/repertorio-form"
+import { useRepertorio } from "@/../contexts/repertorio-context"
 
 export default function AdicionarRepertorio() {
   const router = useRouter()
+  const { adicionarRepertorio } = useRepertorio()
 
-  const handleSubmit = async (data: RepertorioData) => {
-    // Simulando uma chamada de API
-    await new Promise((resolve) => setTimeout(resolve, 1000))
-
-    // Aqui você implementaria a lógica real para salvar os dados
-    console.log("Dados enviados:", data)
-
-    // Redirecionar após o envio bem-sucedido
+  const handleSubmit = async () => {
     router.push("/")
   }
 

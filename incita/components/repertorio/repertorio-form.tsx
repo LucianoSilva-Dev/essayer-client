@@ -1,23 +1,17 @@
 "use client"
 
 import type React from "react"
-
 import { useState, useRef } from "react"
-import { Save, Eye, EyeOff, X, Check, AlertCircle } from "lucide-react"
+import { Save, Eye, EyeOff, X, AlertCircle, BookOpen, FileText, Quote } from "lucide-react"
+import type { RepertorioFormData, ModeloRepertorio } from "@/../types/repertorio"
+import ObraForm from "../forms/obra-form"
+import ArtigoForm from "../forms/artigo-form"
+import CitacaoForm from "../forms/citacao-form"
 
 type RepertorioFormProps = {
-  onSubmit: (data: RepertorioData) => Promise<void>
+  onSubmit: (data: RepertorioFormData) => Promise<void>
   onCancel: () => void
-  initialData?: RepertorioData
-}
-
-export type RepertorioData = {
-  titulo: string
-  conteudo: string
-  fonte: string
-  categoria: string
-  tags: string[]
-  isPublico: boolean
+  initialData?: RepertorioFormData
 }
 
 const categorias = [
@@ -31,12 +25,32 @@ const categorias = [
   "Outro",
 ]
 
+const modelos = [
+  {
+    id: "obra" as ModeloRepertorio,
+    nome: "Obra",
+    descricao: "Livros, filmes, peças teatrais e outras obras artísticas",
+    icone: BookOpen,
+  },
+  {
+    id: "artigo" as ModeloRepertorio,
+    nome: "Artigo",
+    descricao: "Artigos científicos, jornalísticos e acadêmicos",
+    icone: FileText,
+  },
+  {
+    id: "citacao" as ModeloRepertorio,
+    nome: "Citação",
+    descricao: "Citações de autores, personalidades e pensadores",
+    icone: Quote,
+  },
+]
+
 export default function RepertorioForm({ onSubmit, onCancel, initialData }: RepertorioFormProps) {
-  const [formData, setFormData] = useState<RepertorioData>(
+  const [modeloSelecionado, setModeloSelecionado] = useState<ModeloRepertorio>(initialData?.modelo || "obra")
+  const [formData, setFormData] = useState<any>(
     initialData || {
-      titulo: "",
-      conteudo: "",
-      fonte: "",
+      modelo: "obra",
       categoria: "",
       tags: [],
       isPublico: true,
@@ -49,9 +63,35 @@ export default function RepertorioForm({ onSubmit, onCancel, initialData }: Repe
   const [tagInput, setTagInput] = useState("")
   const tagInputRef = useRef<HTMLInputElement>(null)
 
+  // Inicializar campos específicos do modelo quando o modelo muda
+  const handleModeloChange = (novoModelo: ModeloRepertorio) => {
+    setModeloSelecionado(novoModelo)
+    setFormData({
+      modelo: novoModelo,
+      categoria: formData.categoria || "",
+      tags: formData.tags || [],
+      isPublico: formData.isPublico ?? true,
+    })
+  }
+
+  const handleSpecificDataChange = (specificData: any) => {
+    setFormData((prev: any) => ({ ...prev, ...specificData }))
+
+    // Limpar erros dos campos específicos
+    Object.keys(specificData).forEach((field) => {
+      if (errors[field]) {
+        setErrors((prev) => {
+          const newErrors = { ...prev }
+          delete newErrors[field]
+          return newErrors
+        })
+      }
+    })
+  }
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target
-    setFormData((prev) => ({ ...prev, [name]: value }))
+    setFormData((prev: any) => ({ ...prev, [name]: value }))
 
     // Limpar erro quando o campo é editado
     if (errors[name]) {
@@ -65,12 +105,12 @@ export default function RepertorioForm({ onSubmit, onCancel, initialData }: Repe
 
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, checked } = e.target
-    setFormData((prev) => ({ ...prev, [name]: checked }))
+    setFormData((prev: any) => ({ ...prev, [name]: checked }))
   }
 
   const addTag = () => {
     if (tagInput.trim() && !formData.tags.includes(tagInput.trim())) {
-      setFormData((prev) => ({
+      setFormData((prev: any) => ({
         ...prev,
         tags: [...prev.tags, tagInput.trim()],
       }))
@@ -80,9 +120,9 @@ export default function RepertorioForm({ onSubmit, onCancel, initialData }: Repe
   }
 
   const removeTag = (tagToRemove: string) => {
-    setFormData((prev) => ({
+    setFormData((prev: any) => ({
       ...prev,
-      tags: prev.tags.filter((tag) => tag !== tagToRemove),
+      tags: prev.tags.filter((tag: string) => tag !== tagToRemove),
     }))
   }
 
@@ -96,20 +136,53 @@ export default function RepertorioForm({ onSubmit, onCancel, initialData }: Repe
   const validateForm = (): boolean => {
     const newErrors: Record<string, string> = {}
 
-    if (!formData.titulo.trim()) {
-      newErrors.titulo = "O título é obrigatório"
-    }
-
-    if (!formData.conteudo.trim()) {
-      newErrors.conteudo = "O conteúdo é obrigatório"
-    }
-
-    if (!formData.fonte.trim()) {
-      newErrors.fonte = "A fonte é obrigatória"
-    }
-
     if (!formData.categoria) {
       newErrors.categoria = "Selecione uma categoria"
+    }
+
+    // Validação específica por modelo
+    switch (modeloSelecionado) {
+      case "obra":
+        if (!formData.titulo?.trim()) {
+          newErrors.titulo = "O título é obrigatório"
+        }
+        if (!formData.autoria?.trim()) {
+          newErrors.autoria = "A autoria é obrigatória"
+        }
+        if (!formData.sinopse?.trim()) {
+          newErrors.sinopse = "A sinopse é obrigatória"
+        }
+        if (!formData.fonte?.trim()) {
+          newErrors.fonte = "A fonte é obrigatória"
+        }
+        break
+
+      case "artigo":
+        if (!formData.titulo?.trim()) {
+          newErrors.titulo = "O título é obrigatório"
+        }
+        if (!formData.autoria?.trim()) {
+          newErrors.autoria = "A autoria é obrigatória"
+        }
+        if (!formData.sintese?.trim()) {
+          newErrors.sintese = "A síntese é obrigatória"
+        }
+        if (!formData.fonte?.trim()) {
+          newErrors.fonte = "A fonte é obrigatória"
+        }
+        break
+
+      case "citacao":
+        if (!formData.autoria?.trim()) {
+          newErrors.autoria = "A autoria é obrigatória"
+        }
+        if (!formData.citacao?.trim()) {
+          newErrors.citacao = "A citação é obrigatória"
+        }
+        if (!formData.fonte?.trim()) {
+          newErrors.fonte = "A fonte é obrigatória"
+        }
+        break
     }
 
     setErrors(newErrors)
@@ -126,7 +199,7 @@ export default function RepertorioForm({ onSubmit, onCancel, initialData }: Repe
     setIsSubmitting(true)
 
     try {
-      await onSubmit(formData)
+      await onSubmit(formData as RepertorioFormData)
     } catch (error) {
       console.error("Erro ao salvar repertório:", error)
       setErrors({
@@ -137,10 +210,23 @@ export default function RepertorioForm({ onSubmit, onCancel, initialData }: Repe
     }
   }
 
+  const renderSpecificForm = () => {
+    switch (modeloSelecionado) {
+      case "obra":
+        return <ObraForm initialData={formData} onDataChange={handleSpecificDataChange} errors={errors} />
+      case "artigo":
+        return <ArtigoForm initialData={formData} onDataChange={handleSpecificDataChange} errors={errors} />
+      case "citacao":
+        return <CitacaoForm initialData={formData} onDataChange={handleSpecificDataChange} errors={errors} />
+      default:
+        return null
+    }
+  }
+
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden">
       <div className="bg-gray-800 text-white p-4 flex justify-between items-center">
-        <h2 className="text-xl font-semibold">{initialData ? "Editar Repertório" : "Novo Repertório"}</h2>
+        <h2 className="text-xl font-semibold">Novo Repertório</h2>
         <button
           type="button"
           onClick={() => setShowPreview(!showPreview)}
@@ -170,24 +256,47 @@ export default function RepertorioForm({ onSubmit, onCancel, initialData }: Repe
             </div>
           )}
 
-          <div className="mb-5">
-            <label htmlFor="titulo" className="block text-sm font-medium text-gray-700 mb-1">
-              Título <span className="text-red-500">*</span>
-            </label>
-            <input
-              type="text"
-              id="titulo"
-              name="titulo"
-              value={formData.titulo}
-              onChange={handleChange}
-              className={`w-full px-3 py-2 border ${
-                errors.titulo ? "border-red-500" : "border-gray-300"
-              } rounded-md focus:outline-none focus:ring-1 focus:ring-teal-600`}
-              placeholder="Digite um título claro e conciso"
-            />
-            {errors.titulo && <p className="mt-1 text-sm text-red-500">{errors.titulo}</p>}
+          {/* Seleção de Modelo */}
+          <div className="mb-6">
+            <label className="block text-sm font-medium text-gray-700 mb-3">Escolha o tipo de repertório</label>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {modelos.map((modelo) => {
+                const IconeModelo = modelo.icone
+                return (
+                  <button
+                    key={modelo.id}
+                    type="button"
+                    onClick={() => handleModeloChange(modelo.id)}
+                    className={`p-4 border-2 rounded-lg text-left transition-colors ${
+                      modeloSelecionado === modelo.id
+                        ? "border-teal-600 bg-teal-50"
+                        : "border-gray-200 hover:border-gray-300"
+                    }`}
+                  >
+                    <div className="flex items-center mb-2">
+                      <IconeModelo
+                        size={20}
+                        className={modeloSelecionado === modelo.id ? "text-teal-600" : "text-gray-400"}
+                      />
+                      <span
+                        className={`ml-2 font-medium ${
+                          modeloSelecionado === modelo.id ? "text-teal-600" : "text-gray-700"
+                        }`}
+                      >
+                        {modelo.nome}
+                      </span>
+                    </div>
+                    <p className="text-sm text-gray-500">{modelo.descricao}</p>
+                  </button>
+                )
+              })}
+            </div>
           </div>
 
+          {/* Campos específicos do modelo */}
+          {renderSpecificForm()}
+
+          {/* Categoria */}
           <div className="mb-5">
             <label htmlFor="categoria" className="block text-sm font-medium text-gray-700 mb-1">
               Categoria <span className="text-red-500">*</span>
@@ -211,6 +320,7 @@ export default function RepertorioForm({ onSubmit, onCancel, initialData }: Repe
             {errors.categoria && <p className="mt-1 text-sm text-red-500">{errors.categoria}</p>}
           </div>
 
+          {/* Tags */}
           <div className="mb-5">
             <label htmlFor="tags" className="block text-sm font-medium text-gray-700 mb-1">
               Tags
@@ -235,9 +345,9 @@ export default function RepertorioForm({ onSubmit, onCancel, initialData }: Repe
               </button>
             </div>
 
-            {formData.tags.length > 0 && (
+            {formData.tags && formData.tags.length > 0 && (
               <div className="flex flex-wrap gap-2 mt-2">
-                {formData.tags.map((tag) => (
+                {formData.tags.map((tag: string) => (
                   <span
                     key={tag}
                     className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-teal-100 text-teal-800"
@@ -256,42 +366,7 @@ export default function RepertorioForm({ onSubmit, onCancel, initialData }: Repe
             )}
           </div>
 
-          <div className="mb-5">
-            <label htmlFor="conteudo" className="block text-sm font-medium text-gray-700 mb-1">
-              Conteúdo <span className="text-red-500">*</span>
-            </label>
-            <textarea
-              id="conteudo"
-              name="conteudo"
-              value={formData.conteudo}
-              onChange={handleChange}
-              rows={8}
-              className={`w-full px-3 py-2 border ${
-                errors.conteudo ? "border-red-500" : "border-gray-300"
-              } rounded-md focus:outline-none focus:ring-1 focus:ring-teal-600`}
-              placeholder="Digite o conteúdo do repertório. Seja claro e objetivo."
-            />
-            {errors.conteudo && <p className="mt-1 text-sm text-red-500">{errors.conteudo}</p>}
-          </div>
-
-          <div className="mb-5">
-            <label htmlFor="fonte" className="block text-sm font-medium text-gray-700 mb-1">
-              Fonte <span className="text-red-500">*</span>
-            </label>
-            <input
-              type="text"
-              id="fonte"
-              name="fonte"
-              value={formData.fonte}
-              onChange={handleChange}
-              className={`w-full px-3 py-2 border ${
-                errors.fonte ? "border-red-500" : "border-gray-300"
-              } rounded-md focus:outline-none focus:ring-1 focus:ring-teal-600`}
-              placeholder="Ex: Livro, Artigo, Site (inclua autor e ano se possível)"
-            />
-            {errors.fonte && <p className="mt-1 text-sm text-red-500">{errors.fonte}</p>}
-          </div>
-
+          {/* Público/Privado */}
           <div className="mb-8">
             <div className="flex items-center">
               <input
@@ -335,54 +410,8 @@ export default function RepertorioForm({ onSubmit, onCancel, initialData }: Repe
         {showPreview && (
           <div className="border border-gray-200 rounded-lg p-4">
             <h3 className="text-lg font-medium text-gray-900 mb-4">Pré-visualização</h3>
-
-            <div className="bg-gray-600 rounded-lg overflow-hidden text-white p-4">
-              {/* Cabeçalho do card */}
-              <div className="flex justify-between items-center mb-3">
-                <div className="flex items-center">
-                  <div className="w-8 h-8 bg-gray-400 rounded-full flex items-center justify-center">
-                    <Check size={18} className="text-gray-600" />
-                  </div>
-                  <span className="ml-2">{formData.isPublico ? "Público" : "Privado"}</span>
-                </div>
-                <div className="text-xs bg-teal-600 px-2 py-1 rounded-full">
-                  {formData.categoria || "Sem categoria"}
-                </div>
-              </div>
-
-              {/* Título */}
-              <div className="bg-gray-500/50 rounded p-2 mb-3 text-center">{formData.titulo || "Título"}</div>
-
-              {/* Conteúdo */}
-              <div className="bg-gray-500/30 rounded p-3 mb-3 min-h-32 max-h-60 overflow-y-auto">
-                {formData.conteudo ? (
-                  <p className="whitespace-pre-line">{formData.conteudo}</p>
-                ) : (
-                  <>
-                    <div className="border-b border-gray-400 my-2"></div>
-                    <div className="border-b border-gray-400 my-2"></div>
-                    <div className="border-b border-gray-400 my-2"></div>
-                    <div className="border-b border-gray-400 my-2"></div>
-                  </>
-                )}
-              </div>
-
-              {/* Fonte */}
-              <div className="bg-gray-500/50 rounded p-2 mb-3 text-center">{formData.fonte || "Fonte"}</div>
-
-              {/* Tags */}
-              {formData.tags.length > 0 && (
-                <div className="flex flex-wrap gap-1 mb-3">
-                  {formData.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-700 text-gray-200"
-                    >
-                      #{tag}
-                    </span>
-                  ))}
-                </div>
-              )}
+            <div className="bg-gray-100 rounded-lg p-4 text-center text-gray-500">
+              Pré-visualização do card será exibida aqui
             </div>
           </div>
         )}
