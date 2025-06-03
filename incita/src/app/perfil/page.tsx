@@ -4,8 +4,8 @@ import { useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { useAuth } from "@/../contexts/auth-context"
 import { useProfile } from "@/../contexts/profile-context"
-import AlunoProfileComponent from "@/../components/profile/aluno-profile"
-import ProfessorProfileComponent from "@/../components/profile/professor-profile"
+import AlunoProfileComponent from "@/../components/profile/UserAccount"
+import ProfessorProfileComponent from "@/../components/profile/ProfAccount"
 
 export default function PerfilPage() {
   const router = useRouter()
