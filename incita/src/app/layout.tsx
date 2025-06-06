@@ -1,7 +1,7 @@
 import type React from "react"
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
-import Header from "@/../components/header"
+import { HeaderAzul } from "../../components/header_azul/header"
 import { RepertorioProvider } from "@/../contexts/repertorio-context"
 import { CitacaoProvider } from "@/../contexts/citacao-context"
 import { AuthProvider } from "@/../contexts/auth-context"
@@ -27,7 +27,7 @@ export default function RootLayout({
           <ProfileProvider>
             <RepertorioProvider>
               <CitacaoProvider>
-                <Header />
+                <HeaderAzul />
                 {children}
               </CitacaoProvider>
             </RepertorioProvider>
