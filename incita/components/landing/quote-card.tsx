@@ -34,8 +34,8 @@ export default function QuoteCard({
   }
 
   return (
-    <div className="relative w-full hover:scale-105 hover:shadow-xl duration-150">
-      <div className="relative rounded-xl bg-white border-t-[0.1rem] border-l-4 border-b-[0.1rem] border-yellow-600 overflow-hidden w-full">
+    <div className="relative w-full hover:scale-105 duration-150">
+      <div className="relative rounded-xl bg-white border-t-[0.1rem] border-l-4 border-b-[0.1rem] border-yellow-600 overflow-hidden w-full hover:shadow-xl duration-150">
         <div className="p-4">
           {/* Header com nome do autor */}
           <div className="flex items-center justify-between mb-3">
