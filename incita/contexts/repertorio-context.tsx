@@ -9,7 +9,8 @@ interface RepertorioContextType {
   adicionarRepertorio: (data: RepertorioFormData) => Promise<Repertorio>
   toggleFavorito: (id: string) => void
   favoritos: string[]
-  filtrarPorCategoria: (categoria: string | null) => Repertorio[]
+  filtrarPorRecorte: (recorte: string | null) => Repertorio[]
+  filtrarPorEixo: (eixo: string | null) => Repertorio[]
   filtrarPorModelo: (modelo: string | null) => Repertorio[]
   pesquisar: (termo: string) => Repertorio[]
   buscarPorId: (id: string) => Repertorio | undefined
@@ -40,11 +41,12 @@ export function RepertorioProvider({ children }: { children: React.ReactNode }) 
           sinopse:
             "Um romance distópico que retrata uma sociedade totalitária onde o governo controla todos os aspectos da vida dos cidadãos. A obra explora temas como vigilância, manipulação da verdade e perda da individualidade.",
           fonte: "Editora Companhia das Letras, 2009",
-          categoria: "Literatura",
-          tags: ["distopia", "totalitarismo", "orwell"],
+          eixo: "Artes e Cultura",
+          recorte: "Inteligência Artificial",
           isPublico: true,
-          comentarios: 8,
+          comentarios: 10,
         },
+
         {
           id: "2",
           modelo: "artigo",
@@ -53,19 +55,20 @@ export function RepertorioProvider({ children }: { children: React.ReactNode }) 
           sintese:
             "O artigo analisa como a inteligência artificial está transformando diversos setores da sociedade, desde o mercado de trabalho até a educação. Discute os benefícios e desafios éticos que emergem com essa tecnologia, propondo diretrizes para um desenvolvimento responsável da IA.",
           fonte: "Revista Brasileira de Tecnologia, vol. 15, n. 3, 2023",
-          categoria: "Tecnologia",
-          tags: ["inteligencia artificial", "sociedade", "etica"],
+          eixo: "Tecnologia",
+          recorte: "Filosofia",
           isPublico: true,
           comentarios: 5,
         },
+        
         {
           id: "3",
           modelo: "citacao",
           autoria: "Nelson Mandela",
           citacao: "A educação é a arma mais poderosa que você pode usar para mudar o mundo.",
           fonte: "Discurso na Universidade de Witwatersrand, 2003",
-          categoria: "Filosofia",
-          tags: ["educacao", "transformacao", "mandela"],
+          eixo: "Artes e Cultura",
+          recorte: "Filosofia",
           isPublico: true,
           comentarios: 12,
         },
@@ -104,10 +107,14 @@ export function RepertorioProvider({ children }: { children: React.ReactNode }) 
     setFavoritos((prev) => (prev.includes(id) ? prev.filter((favId) => favId !== id) : [...prev, id]))
   }
 
-  // Filtrar por categoria
-  const filtrarPorCategoria = (categoria: string | null): Repertorio[] => {
-    if (!categoria) return repertorios
-    return repertorios.filter((rep) => rep.categoria === categoria)
+  // Filtrar por Eixo Temático
+  const filtrarPorRecorte = (recorte: string | null): Repertorio[] => {
+    if (!recorte) return repertorios
+    return repertorios.filter((rep) => rep.recorte === recorte)
+  }
+  const filtrarPorEixo = (eixo: string | null): Repertorio[] => {
+    if (!eixo) return repertorios
+    return repertorios.filter((rep) => rep.eixo === eixo)
   }
 
   // Filtrar por modelo
@@ -124,8 +131,8 @@ export function RepertorioProvider({ children }: { children: React.ReactNode }) 
     return repertorios.filter((rep) => {
       // Busca comum em todos os modelos
       const buscaComum =
-        rep.categoria.toLowerCase().includes(termoBusca) ||
-        rep.tags.some((tag) => tag.toLowerCase().includes(termoBusca))
+        rep.eixo.toLowerCase().includes(termoBusca) ||
+        rep.recorte.toLowerCase().includes(termoBusca)
 
       // Busca específica por modelo
       switch (rep.modelo) {
@@ -173,7 +180,8 @@ export function RepertorioProvider({ children }: { children: React.ReactNode }) 
         adicionarRepertorio,
         toggleFavorito,
         favoritos,
-        filtrarPorCategoria,
+        filtrarPorEixo,
+        filtrarPorRecorte,
         filtrarPorModelo,
         pesquisar,
         buscarPorId,

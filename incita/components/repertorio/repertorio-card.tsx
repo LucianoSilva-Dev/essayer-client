@@ -177,9 +177,14 @@ export default function RepertorioCard({ repertorio }: RepertorioCardProps) {
       {/* Tags da categoria e modelo */}
       <div className="flex gap-2 mb-3">
         <span
-          className={`inline-block px-2 py-1 rounded-full text-xs font-medium border ${getCategoryColor(repertorio.categoria)}`}
+          className={`inline-block px-2 py-1 rounded-full text-xs font-medium border ${getCategoryColor(repertorio.eixo)}`}
         >
-          #{repertorio.categoria}
+          #{repertorio.eixo}
+        </span>
+        <span
+          className={`inline-block px-2 py-1 rounded-full text-xs font-medium border ${getCategoryColor(repertorio.recorte)}`}
+        >
+          #{repertorio.recorte}
         </span>
         <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-700 border border-gray-200">
           <ModeloIcon size={12} className="mr-1" />
@@ -190,24 +195,6 @@ export default function RepertorioCard({ repertorio }: RepertorioCardProps) {
       {/* Conteúdo específico do modelo - clicável */}
       <div onClick={handleViewDetails}>{renderContent()}</div>
 
-      {/* Tags */}
-      {repertorio.tags && repertorio.tags.length > 0 && (
-        <div className="flex flex-wrap gap-1 mb-3">
-          {repertorio.tags.slice(0, 3).map((tag) => (
-            <span
-              key={tag}
-              className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600"
-            >
-              #{tag}
-            </span>
-          ))}
-          {repertorio.tags.length > 3 && (
-            <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600">
-              +{repertorio.tags.length - 3}
-            </span>
-          )}
-        </div>
-      )}
 
     </div>
   )

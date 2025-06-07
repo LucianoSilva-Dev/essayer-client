@@ -3,8 +3,8 @@ export type ModeloRepertorio = "obra" | "artigo" | "citacao"
 export interface RepertorioBase {
   id: string
   modelo: ModeloRepertorio
-  categoria: string
-  tags: string[]
+  eixo: string
+  recorte: string
   isPublico: boolean
   comentarios: number
 }

@@ -34,7 +34,7 @@ export function HeaderAzul() {
               <a href="/topicos" className="text-gray-800 text-lg font-medium">
                 Tópicos
               </a>
-              <a href="/repertorios" className="text-gray-800 text-lg font-medium">
+              <a href="/repertorio" className="text-gray-800 text-lg font-medium">
                 Repertórios
               </a>
               <a href="/como-funciona" className="text-gray-800 text-lg font-medium">

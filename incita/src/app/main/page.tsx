@@ -9,8 +9,22 @@ import { useRepertorio } from "@/../contexts/repertorio-context"
 import RepertorioCard from "@/../components/repertorio/repertorio-card"
 import type { ModeloRepertorio } from "@/../types/repertorio"
 
-const categorias = [
-  "Todos",
+const eixo = [
+  "Artes e Cultura",
+  "Ciências Humanas",
+  "Ciências Exatas",
+  "Tecnologia",
+  "Atualidades",
+  "Filosofia",
+  "Sociologia",
+  "História",
+  "Literatura",
+]
+
+const recorte = [
+  "Inteligência Artificial",
+  "Ética",
+  "Inovação",
   "Filosofia",
   "Sociologia",
   "História",
@@ -18,7 +32,6 @@ const categorias = [
   "Ciência",
   "Tecnologia",
   "Atualidades",
-  "Outro",
 ]
 
 const modelos = [
@@ -49,9 +62,10 @@ const modelos = [
 ]
 
 export default function Home() {
-  const { repertorios, pesquisar, filtrarPorCategoria, filtrarPorModelo, favoritos } = useRepertorio()
+  const { repertorios, pesquisar, filtrarPorEixo, filtrarPorRecorte, filtrarPorModelo, favoritos } = useRepertorio()
   const [termoBusca, setTermoBusca] = useState("")
-  const [categoriaAtiva, setCategoriaAtiva] = useState<string | null>(null)
+  const [eixoAtivo, setEixoAtivo] = useState<string | null>(null)
+  const [recorteAtivo, setRecorteAtivo] = useState<string | null>(null)
   const [modeloAtivo, setModeloAtivo] = useState<string | null>(null)
   const [tipoVisualizacao, setTipoVisualizacao] = useState<"todos" | "salvos">("todos")
   const [showFilters, setShowFilters] = useState(false)
@@ -63,9 +77,14 @@ export default function Home() {
   // Aplicar filtros em sequência
   let repertoriosFiltrados = repertorios
 
-  // Filtrar por categoria
-  if (categoriaAtiva && categoriaAtiva !== "Todos") {
-    repertoriosFiltrados = filtrarPorCategoria(categoriaAtiva)
+  // Filtrar por eixo tematico
+  if (eixoAtivo && eixoAtivo !== "Todos") {
+    repertoriosFiltrados = filtrarPorEixo(eixoAtivo)
+  }
+
+   // Filtrar por recorte
+  if (recorteAtivo && recorteAtivo !== "Todos") {
+    repertoriosFiltrados = filtrarPorEixo(recorteAtivo)
   }
 
   // Filtrar por modelo
@@ -82,22 +101,25 @@ export default function Home() {
   if (termoBusca) {
     const resultadosBusca = pesquisar(termoBusca)
     repertoriosFiltrados = resultadosBusca.filter((rep) => {
-      const passaCategoria = !categoriaAtiva || categoriaAtiva === "Todos" || rep.categoria === categoriaAtiva
+      const passaEixo = !eixoAtivo || eixoAtivo === "Todos" || rep.eixo === eixoAtivo
+      const passaRecorte = !recorteAtivo || recorteAtivo === "Todos" || rep.recorte === recorteAtivo
       const passaModelo = !modeloAtivo || modeloAtivo === "todos" || rep.modelo === modeloAtivo
       const passaTipo = tipoVisualizacao === "todos" || favoritos.includes(rep.id)
-      return passaCategoria && passaModelo && passaTipo
+      return passaEixo && passaRecorte && passaModelo && passaTipo
     })
   }
 
   const limparFiltros = () => {
-    setCategoriaAtiva(null)
+    setEixoAtivo(null)
+    setRecorteAtivo(null)
     setModeloAtivo(null)
     setTermoBusca("")
   }
 
   const contarFiltrosAtivos = () => {
     let count = 0
-    if (categoriaAtiva && categoriaAtiva !== "Todos") count++
+    if (eixoAtivo && eixoAtivo !== "Todos") count++
+    if (recorteAtivo && recorteAtivo !== "Todos") count++
     if (modeloAtivo && modeloAtivo !== "todos") count++
     if (termoBusca) count++
     return count
@@ -197,21 +219,41 @@ export default function Home() {
                   </div>
                 </div>
 
-                {/* Filtros por Categoria */}
+                {/* Filtros por Eixo */}
                 <div className="mb-6">
-                  <h3 className="text-sm font-medium text-gray-700 mb-3">Filtrar por Categoria</h3>
+                  <h3 className="text-sm font-medium text-gray-700 mb-3">Filtrar por Eixo Temático</h3>
                   <div className="flex flex-wrap gap-2">
-                    {categorias.map((categoria) => (
+                    {eixo.map((eixo) => (
                       <button
-                        key={categoria}
-                        onClick={() => setCategoriaAtiva(categoria === "Todos" ? null : categoria)}
+                        key={eixo}
+                        onClick={() => setEixoAtivo(eixo === "Todos" ? null : eixo)}
                         className={`px-3 py-2 text-sm rounded-full border transition-colors ${
-                          (categoria === "Todos" && categoriaAtiva === null) || categoria === categoriaAtiva
+                          (eixo === "Todos" && eixoAtivo === null) || eixo === eixoAtivo
                             ? "bg-teal-100 text-teal-700 border-teal-200"
                             : "bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100"
                         }`}
                       >
-                        {categoria}
+                        {eixo}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Filtros por Recorte */}
+                <div className="mb-6">
+                  <h3 className="text-sm font-medium text-gray-700 mb-3">Filtrar por Categoria</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {recorte.map((recorte) => (
+                      <button
+                        key={recorte}
+                        onClick={() => setRecorteAtivo(recorte === "Todos" ? null : recorte)}
+                        className={`px-3 py-2 text-sm rounded-full border transition-colors ${
+                          (recorte === "Todos" && recorteAtivo === null) || recorte === recorteAtivo
+                            ? "bg-teal-100 text-teal-700 border-teal-200"
+                            : "bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100"
+                        }`}
+                      >
+                        {recorte}
                       </button>
                     ))}
                   </div>
@@ -248,9 +290,14 @@ export default function Home() {
                       • Tipo: <span className="font-medium">{modelos.find((m) => m.id === modeloAtivo)?.nome}</span>
                     </span>
                   )}
-                  {categoriaAtiva && categoriaAtiva !== "Todos" && (
+                  {eixoAtivo && eixoAtivo !== "Todos" && (
                     <span className="ml-1">
-                      • Categoria: <span className="font-medium">{categoriaAtiva}</span>
+                      • Eixo Temático: <span className="font-medium">{eixoAtivo}</span>
+                    </span>
+                  )}
+                  {recorteAtivo && recorteAtivo !== "Todos" && (
+                    <span className="ml-1">
+                      • Recorte: <span className="font-medium">{recorteAtivo}</span>
                     </span>
                   )}
                 </p>
@@ -270,10 +317,18 @@ export default function Home() {
                   </button>
                 </div>
               )}
-              {categoriaAtiva && categoriaAtiva !== "Todos" && (
+              {eixoAtivo && eixoAtivo !== "Todos" && (
                 <div className="flex items-center bg-teal-100 text-teal-700 px-3 py-1 rounded-full text-sm">
-                  Categoria: {categoriaAtiva}
-                  <button onClick={() => setCategoriaAtiva(null)} className="ml-2 text-teal-500 hover:text-teal-700">
+                  Categoria: {eixoAtivo}
+                  <button onClick={() => setEixoAtivo(null)} className="ml-2 text-teal-500 hover:text-teal-700">
+                    ×
+                  </button>
+                </div>
+              )}
+              {recorteAtivo && recorteAtivo !== "Todos" && (
+                <div className="flex items-center bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm">
+                  Recorte: {recorteAtivo}
+                  <button onClick={() => setRecorteAtivo(null)} className="ml-2 text-green-500 hover:text-green-700">
                     ×
                   </button>
                 </div>

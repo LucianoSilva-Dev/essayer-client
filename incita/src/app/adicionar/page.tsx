@@ -9,11 +9,11 @@ export default function AdicionarRepertorio() {
   const { adicionarRepertorio } = useRepertorio()
 
   const handleSubmit = async () => {
-    router.push("/")
+    router.push("/main")
   }
 
   const handleCancel = () => {
-    router.push("/")
+    router.push("/main")
   }
 
   return (
