@@ -21,7 +21,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="pt-BR">
+    <html className="scroll-smooth" lang="pt-BR">
       <body className={inter.className}>
         <AuthProvider>
           <ProfileProvider>

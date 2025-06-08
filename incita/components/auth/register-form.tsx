@@ -33,7 +33,7 @@ export function RegisterForm() {
   }
 
   return (
-    <div className="w-full max-w-md mx-auto flex flex-col items-center bg-gray-100 min-h-screen py-8">
+    <div className="w-full max-w-xl mx-auto flex flex-col items-center min-h-screen py-8 shadow-xl">
       <div className="bg-white rounded-lg shadow-md p-8 w-full">
         {/* Logo */}
         <div className="mb-6 text-center">
@@ -50,7 +50,7 @@ export function RegisterForm() {
               onClick={() => setUserType("aluno")}
               className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${
                 userType === "aluno"
-                  ? "bg-amber-600 text-white"
+                  ? "bg-[#CA9C60] text-white"
                   : "bg-white border border-gray-300 text-gray-700 hover:bg-gray-50"
               }`}
             >
@@ -61,7 +61,7 @@ export function RegisterForm() {
               onClick={() => setUserType("professor")}
               className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${
                 userType === "professor"
-                  ? "bg-amber-600 text-white"
+                  ? "bg-[#CA9C60] text-white"
                   : "bg-white border border-gray-300 text-gray-700 hover:bg-gray-50"
               }`}
             >

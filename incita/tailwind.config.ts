@@ -42,15 +42,14 @@ const config: Config = {
           '100%': { transform: 'translateY(0)', opacity: '1' },
         },
         upDown:{
-          '0%': { transform: 'translateY(10px)'},
+          '0%': { transform: 'translateY(100px)'},
           '50%': { transform: 'translateY(0)'},
-          '100%': { transform: 'translateY(-10px)'}
+          '100%': { transform: 'translateY(-100px)'}
         }
       },
       animation: {
         fadeIn: 'fadeIn 0.5s ease-in-out',
         slideUp: 'slideUp 0.5s ease-in-out',
-        UpDown: 'upDown 1s linear infinite',
       },
       fontFamily: {
         sans: ['Arial', 'Helvetica', 'sans-serif'],

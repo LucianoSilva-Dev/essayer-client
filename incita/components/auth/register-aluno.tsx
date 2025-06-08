@@ -86,7 +86,7 @@ export default function FormAluno(props: FormAlunoProps) {
   }
 
   return (
-    <div className="w-full max-w-md mx-auto flex flex-col items-center">
+    <div className="w-full max-w-auto mx-auto flex flex-col items-center">
       {/* Logo */}
       <div className="mb-6">
         <Image src="/favicon_2d.png" alt="Incita Logo" width={180} height={120} priority />

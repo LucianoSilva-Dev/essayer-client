@@ -2,7 +2,8 @@ import LandingPage from "../../../components/landing/page"
 
 export default function Landing() {
   return (
-    <div className="min-h-screen bg-white scroll-smooth">
+    //Esse "relative -top-[80px]" puxa a div pra cima, cobrindo o fundo do header, mas deixando um buraco no footer
+    <div className="min-h-screen bg-white landing-page relative -top-[80px]">
      <LandingPage/>
     </div>
   )
