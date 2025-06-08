@@ -59,8 +59,8 @@ export default function HeroSection() {
               </div>
             </div>
 
-            {/* Card principal (centro) */}
-            <div className="relative z-30 transform"> {/*Aqui deve ficar a animação "animate-upDown"*/}
+            {/* Card principal (centro)*/}
+            <div className="relative z-30 animate-[upDown_3s_ease-in-out_infinite]"> {/*Aqui deve ficar a animação "animate-upDown"*/}
               <div className="bg-white rounded-2xl p-6 w-96 shadow-2xl border-l-4 border-orange-400">
                 <div className="space-y-4">
                   <h3 className="text-xl font-bold text-gray-800">Contrato Social - Jean Rousseau</h3>
