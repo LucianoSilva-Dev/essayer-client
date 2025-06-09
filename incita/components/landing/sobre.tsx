@@ -2,7 +2,7 @@ import { Target, Eye, Star } from "lucide-react"
 
 export default function AboutSection() {
   return (
-    <section className="py-16 px-4 md:px-6 lg:px-6 bg-stone-50" id="sobre">
+    <section className="py-16 px-4 md:px-6 lg:px-6 bg-[#F3F4F6]" id="sobre">
       <div className="max-w-[70%] mx-auto">
         <h2 className="text-[45px] px-10 font-bold mb-6">Sobre o Incita</h2>
 
@@ -21,7 +21,7 @@ export default function AboutSection() {
         <div className="space-y-8 px-20">
           <div className="flex items-start gap-4">
             <div className="mt-1 bg-amber-100 p-2 rounded-full">
-              <Target className="h-5 w-5 text-amber-600" />
+              <Target className="h-8 w-8 text-amber-600" />
             </div>
             <div>
               <h3 className="text-lg font-semibold mb-1 text-[30px]">Missão</h3>
@@ -33,7 +33,7 @@ export default function AboutSection() {
 
           <div className="flex items-start gap-4">
             <div className="mt-1 bg-amber-100 p-2 rounded-full">
-              <Eye className="h-5 w-5 text-amber-600" />
+              <Eye className="h-8 w-8 text-amber-600" />
             </div>
             <div>
               <h3 className="text-lg font-semibold mb-1 text-[30px]">Visão</h3>
@@ -43,7 +43,7 @@ export default function AboutSection() {
 
           <div className="flex items-start gap-4">
             <div className="mt-1 bg-amber-100 p-2 rounded-full">
-              <Star className="h-5 w-5 text-amber-600" />
+              <Star className="h-8 w-8 text-amber-600" />
             </div>
             <div>
               <h3 className="text-lg font-semibold mb-1 text-[30px]">Valores</h3>

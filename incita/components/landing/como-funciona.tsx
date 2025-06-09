@@ -51,13 +51,13 @@ export default function ComoFunciona() {
   ]
 
   return (
-    <section className="py-16 bg-gray-50" id="como-funciona">
-      <div className="container mx-auto px-[100px]">
-        <h2 className="text-3xl font-bold text-center mb-12">Como funciona</h2>
-        <h1 className="text-2xl font-light text-center mb-12">
+    <section className="py-16 bg-[#F3F4F6]" id="como-funciona">
+      <div className="container mx-auto px-[100px] flex-column justify-center">
+        <h2 className="text-[40px] font-bold text-center mb-6">Como funciona</h2>
+        <h1 className="text-[30px] font-light text-center mb-12 max-w-4xl justify-self-center">
           Aprenda a navegar e aproveitar ao máximo nosso acervo de repertórios
         </h1>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
           {funcionalidades.map((item) => (
             <FuncionalidadeCard key={item.id} item={item} />
           ))}

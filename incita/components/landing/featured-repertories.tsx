@@ -35,7 +35,7 @@ const repertoireData = [
 
 export default function FeaturedRepertoires() {
   return (
-    <section className="py-12 px-4 bg-gray-50" id="repertorios">
+    <section className="py-12 px-4 bg-[#F3F4F6]" id="repertorios">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-10">
           <h2 className="text-3xl font-bold mb-2">Repertórios em destaque</h2>

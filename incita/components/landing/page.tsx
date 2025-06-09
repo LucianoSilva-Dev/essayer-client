@@ -8,7 +8,7 @@ import { Header } from "../landing/header/header"
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-white scroll-smooth">
+    <div className="min-h-screen bg-[#F3F4F6] scroll-smooth">
       <Header />
       <main>
         <Hero />
