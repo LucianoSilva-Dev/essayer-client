@@ -4,12 +4,12 @@ import Repertories from "../landing/featured-repertories"
 import FAQ from "../landing/como-funciona"
 import CTA from "../landing/sobre"
 import Footer from "../landing/footer"
-import { Header } from "../landing/header/header"
+import { HeaderLanding } from "../landing/header/header"
 
 export default function LandingPage() {
   return (
     <div className="min-h-screen bg-[#F3F4F6] scroll-smooth">
-      <Header />
+      <HeaderLanding />
       <main>
         <Hero />
         <MainTopics />

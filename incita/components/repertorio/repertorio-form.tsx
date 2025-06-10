@@ -2,7 +2,7 @@
 
 import type React from "react"
 import { useState, useRef } from "react"
-import { Save, Eye, EyeOff, X, AlertCircle, BookOpen, FileText, Quote } from "lucide-react"
+import { Save, Eye, EyeOff, X, Check, AlertCircle, BookOpen, FileText, Quote } from "lucide-react"
 import type { RepertorioFormData, ModeloRepertorio } from "@/../types/repertorio"
 import ObraForm from "../forms/obra-form"
 import ArtigoForm from "../forms/artigo-form"
@@ -213,23 +213,7 @@ export default function RepertorioForm({ onSubmit, onCancel, initialData }: Repe
     <div className="bg-white rounded-lg shadow-md overflow-hidden">
       <div className="bg-gray-800 text-white p-4 flex justify-between items-center">
         <h2 className="text-xl font-semibold">Novo Repertório</h2>
-        <button
-          type="button"
-          onClick={() => setShowPreview(!showPreview)}
-          className="flex items-center text-sm bg-gray-700 hover:bg-gray-600 px-3 py-1 rounded-md transition-colors"
-        >
-          {showPreview ? (
-            <>
-              <EyeOff size={16} className="mr-2" />
-              Ocultar Pré-visualização
-            </>
-          ) : (
-            <>
-              <Eye size={16} className="mr-2" />
-              Pré-visualizar
-            </>
-          )}
-        </button>
+        
       </div>
 
       <div className={`${showPreview ? "grid grid-cols-1 lg:grid-cols-2 gap-6" : "block"} p-6`}>
@@ -329,17 +313,29 @@ export default function RepertorioForm({ onSubmit, onCancel, initialData }: Repe
             </select>
             {errors.recorte && <p className="mt-1 text-sm text-red-500">{errors.recorte}</p>}
           </div>
+
+          <div className="flex justify-end space-x-4">
+            <button
+              type="button"
+              onClick={onCancel}
+              className="flex items-center px-4 py-2 border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+            >
+              <X size={18} className="mr-2" />
+              Cancelar
+            </button>
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="flex items-center px-4 py-2 border border-transparent rounded-md text-white bg-teal-800 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 disabled:opacity-50"
+            >
+              <Save size={18} className="mr-2" />
+              {isSubmitting ? "Salvando..." : "Salvar Repertório"}
+            </button>
+          </div>
+
         </form>
 
-        {/* Pré-visualização */}
-        {showPreview && (
-          <div className="border border-gray-200 rounded-lg p-4">
-            <h3 className="text-lg font-medium text-gray-900 mb-4">Pré-visualização</h3>
-            <div className="bg-gray-100 rounded-lg p-4 text-center text-gray-500">
-              Pré-visualização do card será exibida aqui
-            </div>
-          </div>
-        )}
+
       </div>
     </div>
   )

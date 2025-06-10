@@ -35,10 +35,6 @@ export function RegisterForm() {
   return (
     <div className="w-full max-w-xl mx-auto flex flex-col items-center min-h-screen py-8 shadow-xl">
       <div className="bg-white rounded-lg shadow-md p-8 w-full">
-        {/* Logo */}
-        <div className="mb-6 text-center">
-          <div className="text-3xl font-bold text-teal-600 mb-2">INCITA</div>
-        </div>
 
         {/* Pergunta e seleção de tipo */}
         <div className="mb-6">

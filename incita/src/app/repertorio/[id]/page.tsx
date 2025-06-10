@@ -77,20 +77,7 @@ export default function RepertorioDetalhes() {
 
   const isFavorito = favoritos.includes(repertorio.id)
 
-  const getCategoryColor = (categoria: string) => {
-    const colors = {
-      Filosofia: "bg-blue-100 text-blue-800 border-blue-200",
-      Sociologia: "bg-green-100 text-green-800 border-green-200",
-      História: "bg-purple-100 text-purple-800 border-purple-200",
-      Literatura: "bg-orange-100 text-orange-800 border-orange-200",
-      Ciência: "bg-cyan-100 text-cyan-800 border-cyan-200",
-      Tecnologia: "bg-gray-100 text-gray-800 border-gray-200",
-      Atualidades: "bg-red-100 text-red-800 border-red-200",
-      Outro: "bg-yellow-100 text-yellow-800 border-yellow-200",
-    }
-    return colors[categoria as keyof typeof colors] || colors["Outro"]
-  }
-
+  
   const getModeloIcon = (modelo: string) => {
     switch (modelo) {
       case "obra":
@@ -233,9 +220,9 @@ export default function RepertorioDetalhes() {
 
   return (
     <main className="min-h-screen bg-gray-50">
-      {/* Header fixo */}
-      <div className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-10">
-        <div className="container mx-auto px-4 py-4">
+      {/* Conteúdo principal */}
+      <div className="container mx-auto px-4 py-8">
+        <div className="max-w-4xl mx-auto">
           <div className="flex items-center justify-between">
             <button
               onClick={() => router.back()}
@@ -276,12 +263,7 @@ export default function RepertorioDetalhes() {
               </button>
             </div>
           </div>
-        </div>
-      </div>
 
-      {/* Conteúdo principal */}
-      <div className="container mx-auto px-4 py-8">
-        <div className="max-w-4xl mx-auto">
           {/* Card principal */}
           <div className="bg-white rounded-lg shadow-lg border-l-4 border-l-[#CA9C60] overflow-hidden">
             {/* Informações do autor */}
@@ -293,17 +275,7 @@ export default function RepertorioDetalhes() {
                   </div>
                   <div>
                     <p className="font-medium text-gray-900">Nome do Usuário</p>
-                    <p className="text-sm text-gray-600">Publicado em {new Date().toLocaleDateString("pt-BR")}</p>
                   </div>
-                </div>
-
-                {/* Tags */}
-                <div className="flex gap-2">
-                  <span
-                    className={`inline-block px-3 py-1 rounded-full text-sm font-medium border ${getCategoryColor(repertorio.categoria)}`}
-                  >
-                    #{repertorio.categoria}
-                  </span>
                 </div>
               </div>
             </div>
@@ -311,23 +283,6 @@ export default function RepertorioDetalhes() {
             {/* Conteúdo */}
             <div className="p-8">
               {renderContent()}
-
-              {/* Tags do repertório */}
-              {repertorio.tags && repertorio.tags.length > 0 && (
-                <div className="mt-8 pt-6 border-t border-gray-200">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-3">Tags</h3>
-                  <div className="flex flex-wrap gap-2">
-                    {repertorio.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors cursor-pointer"
-                      >
-                        #{tag}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              )}
 
               {/* Estatísticas */}
               <div className="mt-8 pt-6 border-t border-gray-200">
@@ -342,13 +297,6 @@ export default function RepertorioDetalhes() {
                       {repertorio.comentarios} comentários
                     </span>
                   </div>
-                  <span
-                    className={`px-2 py-1 rounded-full text-xs ${
-                      repertorio.isPublico ? "bg-green-100 text-green-800" : "bg-gray-100 text-gray-800"
-                    }`}
-                  >
-                    {repertorio.isPublico ? "Público" : "Privado"}
-                  </span>
                 </div>
               </div>
             </div>

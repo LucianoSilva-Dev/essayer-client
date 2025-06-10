@@ -3,11 +3,9 @@ import { NavItem } from "./nav-item"
 
 export function NavLinks() {
   const links = [
-    { href: "#inicio", label: "Início" },
-    { href: "#topicos", label: "Tópicos" },
-    { href: "#repertorios", label: "Repertórios" },
-    { href: "#como-funciona", label: "Como funciona" },
-    { href: "#sobre", label: "Sobre" },
+    { href: "/", label: "Início" },
+    { href: "/main", label: "Repertórios" },
+    { href: "/adicionar", label: "Adicionar Repertório" },
   ]
 
   return (

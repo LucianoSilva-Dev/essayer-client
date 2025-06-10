@@ -89,10 +89,7 @@ export default function FormProfessor(props: FormProfessorProps) {
 
   return (
     <div className="w-full max-w-auto mx-auto flex flex-col items-center">
-      {/* Logo */}
-      <div className="mb-6">
-        <Image src="/favicon_2d.png" alt="Incita Logo" width={180} height={120} priority />
-      </div>
+      
 
       {/* Título */}
       <h1 className="text-2xl font-medium text-gray-800 mb-8">Crie sua conta</h1>

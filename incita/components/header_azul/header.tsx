@@ -31,17 +31,11 @@ export function HeaderAzul() {
               <a href="/" className="text-gray-800 text-lg font-medium">
                 Início
               </a>
-              <a href="/topicos" className="text-gray-800 text-lg font-medium">
-                Tópicos
-              </a>
               <a href="/repertorio" className="text-gray-800 text-lg font-medium">
                 Repertórios
               </a>
               <a href="/como-funciona" className="text-gray-800 text-lg font-medium">
-                Como funciona
-              </a>
-              <a href="/sobre" className="text-gray-800 text-lg font-medium">
-                Sobre
+                Adicionar Repertório
               </a>
               <div className="flex flex-col space-y-2 pt-2">
                 <a
