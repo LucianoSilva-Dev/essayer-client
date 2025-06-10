@@ -37,9 +37,9 @@ export default function FeaturedRepertoires() {
   return (
     <section className="py-12 px-4 bg-[#F3F4F6]" id="repertorios">
       <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-10">
-          <h2 className="text-3xl font-bold mb-2">Repertórios em destaque</h2>
-          <p className="text-gray-600">Alguns exemplos do conteúdo que você encontrará em nosso acervo</p>
+        <div className="text-center mb-10 flex-column justify-center">
+          <h2 className="text-[45px] font-bold mb-2">Repertórios em destaque</h2>
+          <p className="text-[30px] text-gray-600 max-w-4xl justify-self-center">Alguns exemplos do conteúdo que você encontrará em nosso acervo</p>
         </div>
 
         <div className="grid grid-cols-1 gap-y-8 gap-x-16 md:grid-cols-2 max-w-3xl mx-auto">
@@ -58,7 +58,7 @@ export default function FeaturedRepertoires() {
         </div>
 
         <div className="mt-10 text-center">
-          <button className="bg-teal-700 hover:bg-teal-800 text-white py-3 px-6 rounded-md transition-colors">
+          <button className="bg-[#075F70] hover:shadow-xl hover:bg-[#054c59] duration-200 text-white text-[24px] py-3 px-6 rounded-md transition-colors">
             Ver todos os repertórios
           </button>
         </div>
