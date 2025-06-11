@@ -26,20 +26,6 @@ export default function RepertorioCard({ repertorio }: RepertorioCardProps) {
     router.push(`/repertorio/${repertorio.id}`)
   }
 
-  const getCategoryColor = (categoria: string) => {
-    const colors = {
-      Filosofia: "bg-blue-100 text-blue-800 border-blue-200",
-      Sociologia: "bg-green-100 text-green-800 border-green-200",
-      História: "bg-purple-100 text-purple-800 border-purple-200",
-      Literatura: "bg-orange-100 text-orange-800 border-orange-200",
-      Ciência: "bg-cyan-100 text-cyan-800 border-cyan-200",
-      Tecnologia: "bg-gray-100 text-gray-800 border-gray-200",
-      Atualidades: "bg-red-100 text-red-800 border-red-200",
-      Outro: "bg-yellow-100 text-yellow-800 border-yellow-200",
-    }
-    return colors[categoria as keyof typeof colors] || colors["Outro"]
-  }
-
   const getModeloIcon = (modelo: string) => {
     switch (modelo) {
       case "obra":
@@ -177,12 +163,12 @@ export default function RepertorioCard({ repertorio }: RepertorioCardProps) {
       {/* Tags da categoria e modelo */}
       <div className="flex gap-2 mb-3">
         <span
-          className={`inline-block px-2 py-1 rounded-full text-xs font-medium border ${getCategoryColor(repertorio.eixo)}`}
+          className={`inline-block px-2 py-1 rounded-full text-xs font-medium border bg-gray-100 text-gray-800 border-gray-200`}
         >
           #{repertorio.eixo}
         </span>
         <span
-          className={`inline-block px-2 py-1 rounded-full text-xs font-medium border ${getCategoryColor(repertorio.recorte)}`}
+          className={`inline-block px-2 py-1 rounded-full text-xs font-medium border bg-gray-100 text-gray-800 border-gray-200`}
         >
           #{repertorio.recorte}
         </span>
