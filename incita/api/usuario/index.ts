@@ -1,0 +1,78 @@
+import apiClient from '../api-client';
+import { GenericSuccessResponse } from '../types';
+import type {
+    Usuario,
+    UpdateUsuarioBody,
+    UpdateSenhaBody,
+    ProfessorCreateBody,
+    CreateUsuarioBody,
+    CreateUsuarioResponse
+} from './types';
+
+export const getUserById = async (id: string): Promise<Usuario> => {
+    const response = await apiClient.get<Usuario>(`/usuario/${id}`);
+    return response.data;
+};
+
+
+export const createUser = async (data: CreateUsuarioBody): Promise<CreateUsuarioResponse> => {
+    const response = await apiClient.post<CreateUsuarioResponse>('/usuario', data);
+    return response.data;
+};
+
+
+export const createProfessorRequest = async (data: ProfessorCreateBody): Promise<GenericSuccessResponse> => {
+    const response = await apiClient.post<GenericSuccessResponse>('/usuario/professor', data);
+    return response.data;
+};
+
+
+export const updateUser = async (id: string, data: UpdateUsuarioBody): Promise<GenericSuccessResponse> => {
+    const response = await apiClient.put<GenericSuccessResponse>(`/usuario/${id}`, data);
+    return response.data;
+};
+
+
+export const updatePassword = async (id: string, data: UpdateSenhaBody): Promise<GenericSuccessResponse> => {
+    const response = await apiClient.put<GenericSuccessResponse>(`/usuario/${id}/senha`, data);
+    return response.data;
+};
+
+
+export const deleteUser = async (id: string): Promise<GenericSuccessResponse> => {
+    const response = await apiClient.delete<GenericSuccessResponse>(`/usuario/${id}`);
+    return response.data;
+};
+
+// --- Serviços de Foto de Perfil ---
+
+export const uploadProfilePicture = async (id: string, file: File): Promise<GenericSuccessResponse> => {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    const response = await apiClient.post<GenericSuccessResponse>(`/usuario/foto/${id}`, formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        },
+    });
+    return response.data;
+};
+
+
+export const updateProfilePicture = async (id: string, file: File): Promise<GenericSuccessResponse> => {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    const response = await apiClient.put<GenericSuccessResponse>(`/usuario/foto/${id}`, formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        },
+    });
+    return response.data;
+};
+
+
+export const deleteProfilePicture = async (id: string): Promise<GenericSuccessResponse> => {
+    const response = await apiClient.delete<GenericSuccessResponse>(`/usuario/foto/${id}`);
+    return response.data;
+};
