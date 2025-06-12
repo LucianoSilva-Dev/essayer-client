@@ -18,7 +18,9 @@ export function mountRepertoire(repertorio: RepertorioDocument) {
     recorte={repertorio.subtopicos[0]}
     source={repertorio.fonte}
     author={repertorio.criador.nome}
-    likesQTD={repertorio.totalLikes} />)
+    likesQTD={repertorio.totalLikes}
+    likedByUser={repertorio.likeDoUsuario}
+    savedByUser={repertorio.favoritadoPeloUsuario} />)
   }
 
   if(isGetAllArtigoDoc(repertorio)) {
@@ -32,7 +34,9 @@ export function mountRepertoire(repertorio: RepertorioDocument) {
     recorte={repertorio.subtopicos[0]}
     source={repertorio.fonte}
     author={repertorio.criador.nome}
-    likesQTD={repertorio.totalLikes} />)
+    likesQTD={repertorio.totalLikes}
+    likedByUser={repertorio.likeDoUsuario}
+    savedByUser={repertorio.favoritadoPeloUsuario} />)
   }
 
   if(isGetAllObraDoc(repertorio)) {
@@ -45,7 +49,9 @@ export function mountRepertoire(repertorio: RepertorioDocument) {
     eixo={repertorio.topico}
     recorte={repertorio.subtopicos[0]}
     author={repertorio.criador.nome}
-    likesQTD={repertorio.totalLikes} />)
+    likesQTD={repertorio.totalLikes}
+    likedByUser={repertorio.likeDoUsuario}
+    savedByUser={repertorio.favoritadoPeloUsuario} />)
   }
 }
 

@@ -14,6 +14,8 @@ type QuoteCardProps = {
   source?: string
   author?: string
   likesQTD: number
+  likedByUser: boolean
+  savedByUser: boolean
 }
 
 export default function QuoteCard({
@@ -25,11 +27,13 @@ export default function QuoteCard({
   recorte,
   source,
   author,
-  likesQTD
+  likesQTD,
+  likedByUser,
+  savedByUser,
 
 }: QuoteCardProps) {
-  const [liked, setLiked] = useState(false)
-  const [saved, setSaved] = useState(false)
+  const [liked, setLiked] = useState(likedByUser)
+  const [saved, setSaved] = useState(savedByUser)
 
   const handleLike = async () => {
     if (liked) {
