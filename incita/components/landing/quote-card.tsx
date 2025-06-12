@@ -2,20 +2,27 @@
 
 import { useState } from "react"
 import { Bookmark, ThumbsUp } from "lucide-react"
+import { addFavorito, addLike, removeFavorito, removeLike } from "../../api/repertorio"
 
 type QuoteCardProps = {
+  id: string
   type: string
   title: string
   content: string
+  eixo: string
+  recorte: string
   source?: string
   author?: string
   likesQTD: number
 }
 
 export default function QuoteCard({
+  id,
   type,
   title,
   content,
+  eixo,
+  recorte,
   source,
   author,
   likesQTD
@@ -24,12 +31,37 @@ export default function QuoteCard({
   const [liked, setLiked] = useState(false)
   const [saved, setSaved] = useState(false)
 
-  const handleLike = () => {
-    setLiked(!liked)
+  const handleLike = async () => {
+    if (liked) {
+      try {
+        await removeLike(id)
+        setLiked(false)
+      } catch (e) { }
+
+    }
+    else {
+      try {
+        await addLike(id)
+        setLiked(true)
+      } catch (e) { }
+    }
   }
 
-  const handleSave = () => {
-    setSaved(!saved)
+  const handleSave = async () => {
+    if (saved) {
+      try {
+        await removeFavorito(id)
+        setSaved(false)
+      } catch (e) { }
+
+    }
+    else {
+      try {
+        await addFavorito(id)
+        setSaved(true)
+      } catch (e) { }
+
+    }
   }
 
   return (
@@ -81,10 +113,10 @@ export default function QuoteCard({
           {/* Botões de Tópico/Subtópico (pode ajustar depois se quiser deixar dinâmico também) */}
           <div className="flex gap-2 mt-3">
             <button className="flex-3 py-1 px-4 bg-blue-100 text-sky-700 text-xs rounded-full text-center">
-              Tópico
+              {eixo}
             </button>
             <button className="flex-1 py-1 px-4 bg-blue-100 text-sky-700 text-xs rounded-full text-center">
-              Subtópico
+              {recorte}
             </button>
           </div>
         </div>

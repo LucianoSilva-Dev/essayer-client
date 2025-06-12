@@ -54,20 +54,6 @@ export interface GetAllRepertoriosResponse {
   paginacao: Paginacao;
 }
 
-// --- Parâmetros de Query ---
-
-export interface GetAllRepertoriosParams {
-  tipoRepertorio?: ('Obra' | 'Artigo' | 'Citacao')[];
-  conteudo?: string;
-  subtopicos?: string[];
-  criador?: string;
-  favoritadoPeloUsuario?: boolean;
-  likeDoUsuario?: boolean;
-  ordernarPor?: 'MaxLikes' | 'MinLikes' | 'Newest' | 'Oldest';
-  offset?: number;
-  limit?: number;
-}
-
 // --- Corpos de Requisição (Body) ---
 
 export interface CreateComentarioBody {

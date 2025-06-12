@@ -1,39 +1,66 @@
-import QuoteCard from "./quote-card"
+'use client'
 
-const repertoireData = [
-  {
-    type: "citação",
-    title: "Jean Jacques Rousseau",
-    content:
-      "Lorem ipsum dolor sit amet. Qui iure iusto et dignissimos fugiat in vel sit qui reprehenderit omnis sed Aut in qui fugiat in vel dignissimos iusto consequatur expedita vel sit amet.",
-    source: "Lorem ipsum omnis",
-  },
-  {
-    type: "Artigo",
-    title: "O Oriente contra Ocidente",
-    content:
-      "Lorem ipsum dolor sit amet. Qui iure iusto et dignissimos fugiat in vel sit qui reprehenderit omnis sed Aut in qui fugiat in vel dignissimos...",
-    author: "Olavo de Carvalho",
-    reference: "Lorem Ipsum",
-    date: "01/03/2021",
-  },
-  {
-    type: "Obra musical",
-    title: "Perfeição",
-    content:
-      "Lorem ipsum dolor sit amet. Qui iure iusto et dignissimos fugiat in vel sit qui reprehenderit omnis sed Aut in qui fugiat in vel dignissimos iusto consequatur expedita vel sit amet...",
-    author: "Legião urbana",
-  },
-  {
-    type: "citação",
-    title: "Jean Jacques Rousseau",
-    content:
-      "Lorem ipsum dolor sit amet. Qui iure iusto et dignissimos fugiat in vel sit qui reprehenderit omnis sed Aut in qui fugiat in vel dignissimos iusto consequatur expedita vel sit amet.",
-    source: "Lorem ipsum omnis",
-  },
-]
+import { useEffect, useState } from "react"
+import { GetAllRepertoriosResponse, RepertorioDocument } from "../../api/repertorio/types"
+import QuoteCard from "./quote-card"
+import { getAllRepertorios } from "../../api/repertorio"
+import { isGetAllArtigoDoc, isGetAllCitacaoDoc, isGetAllObraDoc } from "../../api/repertorio/helpers"
+
+export function mountRepertoire(repertorio: RepertorioDocument) {
+  if(isGetAllCitacaoDoc(repertorio)) {
+    return (<QuoteCard
+    key={repertorio.id}
+    id={repertorio.id}
+    type={repertorio.tipoRepertorio}
+    title={repertorio.autor}
+    content={repertorio.frase}
+    eixo={repertorio.topico}
+    recorte={repertorio.subtopicos[0]}
+    source={repertorio.fonte}
+    author={repertorio.criador.nome}
+    likesQTD={repertorio.totalLikes} />)
+  }
+
+  if(isGetAllArtigoDoc(repertorio)) {
+    return (<QuoteCard
+    key={repertorio.id}
+    id={repertorio.id}
+    type={repertorio.tipoRepertorio}
+    title={repertorio.titulo}
+    content={repertorio.resumo}
+    eixo={repertorio.topico}
+    recorte={repertorio.subtopicos[0]}
+    source={repertorio.fonte}
+    author={repertorio.criador.nome}
+    likesQTD={repertorio.totalLikes} />)
+  }
+
+  if(isGetAllObraDoc(repertorio)) {
+    return (<QuoteCard
+    key={repertorio.id}
+    id={repertorio.id}
+    type={repertorio.tipoRepertorio}
+    title={repertorio.autor}
+    content={repertorio.sinopse}
+    eixo={repertorio.topico}
+    recorte={repertorio.subtopicos[0]}
+    author={repertorio.criador.nome}
+    likesQTD={repertorio.totalLikes} />)
+  }
+}
 
 export default function FeaturedRepertoires() {
+  const [featuredRepertoires, setFeaturedRepertoires] = useState<GetAllRepertoriosResponse | null>(null)
+  
+  useEffect(() => {
+    async function fetchData() {
+      const response = await getAllRepertorios('?ordenarPor=MaxLikes&limit=4')
+      console.log(response)
+      if (response) setFeaturedRepertoires(response)
+    }
+    fetchData()
+  }, [])
+
   return (
     <section className="py-12 px-4 bg-[#F3F4F6]" id="repertorios">
       <div className="max-w-6xl mx-auto">
@@ -43,18 +70,12 @@ export default function FeaturedRepertoires() {
         </div>
 
         <div className="grid grid-cols-1 gap-y-8 gap-x-16 md:grid-cols-2 max-w-3xl mx-auto">
-          {repertoireData.map((item, index) => (
-            <QuoteCard
-              key={index}
-              type={item.type}
-              title={item.title}
-              content={item.content}
-              source={item.source}
-              author={item.author}
-              reference={item.reference}
-              date={item.date}
-            />
-          ))}
+          {featuredRepertoires?.documentos.length! > 0 ? 
+          featuredRepertoires!.documentos.map((repertorio) => (
+            mountRepertoire(repertorio)
+          ))
+          : <p className="text-[30px] text-gray-600 max-w-4xl justify-self-center">Nenhum repertorio encontrado</p>
+          }
         </div>
 
         <div className="mt-10 text-center">

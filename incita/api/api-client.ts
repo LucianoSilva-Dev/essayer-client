@@ -25,10 +25,7 @@ apiClient.interceptors.request.use(
 apiClient.interceptors.response.use(
   // A primeira função lida com respostas de sucesso (2xx)
   (response) => response,
-  (error) => {
-    handleAxiosError(error);
-    return Promise.reject(error);
-  }
+  (error) => handleAxiosError(error)
 );
 
 export default apiClient;

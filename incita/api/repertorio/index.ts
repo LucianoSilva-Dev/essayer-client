@@ -7,7 +7,6 @@ import type {
     CreateCitacaoBody,
     CreateComentarioBody,
     CreateObraBody,
-    GetAllRepertoriosParams,
     GetAllRepertoriosResponse,
     ObraDocument,
     UpdateArtigoBody,
@@ -20,8 +19,8 @@ import type {
 /**
  * Busca todos os repertórios com filtros, ordenação e paginação.
  */
-export const getAllRepertorios = async (params: GetAllRepertoriosParams): Promise<GetAllRepertoriosResponse> => {
-    const response = await apiClient.get<GetAllRepertoriosResponse>('/repertorio', { params });
+export const getAllRepertorios = async (queryString?: string): Promise<GetAllRepertoriosResponse | null> => {
+    const response = await apiClient.get<GetAllRepertoriosResponse | null>('/repertorio' + queryString);
     return response.data;
 };
 
