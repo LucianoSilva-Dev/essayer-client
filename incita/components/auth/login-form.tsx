@@ -4,15 +4,13 @@ import { useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { EyeOff, Eye } from "lucide-react"
-import axios from 'axios'
-import { API_BASE_URL } from "@/app/constants"
-import { handleAxiosError } from "@/app/utils"
 import { toast } from "react-toastify"
 import { useRouter } from "next/navigation"
 import { useAuth } from '@/../contexts/auth-context'
+import { login as apiLogin } from '../../api/auth/index'
 
 export default function LoginForm() {
-  const {login} = useAuth()
+  const { login } = useAuth()
   const [showPassword, setShowPassword] = useState(false)
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
@@ -21,16 +19,11 @@ export default function LoginForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
-    // TODO: centralizar urls e endpoints em um único lugar
     try {
-      const response = await axios.post(`${API_BASE_URL}/auth/login`, { email, password })
-      login(response.data.token as string)
-      toast.success("Login realizado com sucesso!")
-      router.push("/citar")
-    } catch (e) {
-      handleAxiosError(e)
-    }
-
+      const response = await apiLogin({ email, senha: password })
+      login(response.token)
+      router.push("/")
+    } catch (e) { }
   }
 
   return (
@@ -43,11 +36,11 @@ export default function LoginForm() {
       {/* Título */}
       <h1 className="text-2xl font-medium text-gray-800 mb-8">Faça seu login</h1>
 
-      {/* Botão Google */}
+      {/* Botão Google
       <button className="flex items-center justify-center gap-2 w-full border border-gray-300 rounded-md py-3 px-4 mb-8 hover:bg-gray-50 transition-colors">
         <Image src="/google-icon.svg" alt="Google" width={20} height={20} />
         <span className="text-gray-700">Continuar com o Google</span>
-      </button>
+      </button> */}
 
       {/* Divisor */}
       <div className="w-full flex items-center mb-8">
