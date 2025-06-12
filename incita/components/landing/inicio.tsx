@@ -16,13 +16,13 @@ export default function HeroSection() {
             <div className="flex flex-col sm:flex-row gap-4 pt-4">
               <Link
                 href="#topicos"
-                className="inline-flex h-12 items-center justify-center rounded-md bg-[#E29D4F] px-8 text-base font-medium text-black hover:bg-[#d08c3e] transition-colors"
+                className="inline-flex h-12 items-center justify-center rounded-md bg-[#E29D4F] px-8 text-base text-[30px] font-medium text-white hover:bg-[#d08c3e] transition-colors"
               >
                 Explorar tópicos
               </Link>
               <Link
                 href="#como-funciona"
-                className="inline-flex h-12 items-center justify-center rounded-md bg-[#E29D4F] px-8 text-base font-medium text-black hover:bg-[#d08c3e] transition-colors"
+                className="inline-flex h-12 items-center justify-center rounded-md bg-[#E29D4F] px-8 text-base text-[30px] font-medium text-white hover:bg-[#d08c3e] transition-colors"
               >
                 Como funciona
               </Link>
@@ -61,7 +61,7 @@ export default function HeroSection() {
 
             {/* Card principal (centro)*/}
             <div className="relative z-30 animate-[upDown_3s_ease-in-out_infinite]"> {/*Aqui deve ficar a animação "animate-upDown"*/}
-              <div className="bg-white rounded-2xl p-6 w-96 shadow-2xl border-l-4 border-orange-400">
+              <div className="bg-white rounded-2xl p-6 w-96 shadow-2xl border-l-4 border-[#CA9C60]">
                 <div className="space-y-4">
                   <h3 className="text-xl font-bold text-gray-800">Contrato Social - Jean Rousseau</h3>
                   <div className="text-sm text-gray-700 space-y-2">

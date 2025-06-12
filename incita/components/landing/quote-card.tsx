@@ -9,8 +9,7 @@ type QuoteCardProps = {
   content: string
   source?: string
   author?: string
-  reference?: string
-  date?: string
+  likesQTD: number
 }
 
 export default function QuoteCard({
@@ -19,8 +18,8 @@ export default function QuoteCard({
   content,
   source,
   author,
-  reference,
-  date,
+  likesQTD
+
 }: QuoteCardProps) {
   const [liked, setLiked] = useState(false)
   const [saved, setSaved] = useState(false)
@@ -58,7 +57,7 @@ export default function QuoteCard({
               >
                 <ThumbsUp className={`h-4 w-4 ${liked ? "text-yellow-600 fill-current" : "text-gray-400"}`} />
               </button>
-              <span className="text-xs text-gray-500">200</span>
+              <span className="text-xs text-gray-500">{likesQTD}</span>
             </div>
           </div>
 
@@ -77,8 +76,6 @@ export default function QuoteCard({
           <div className="mb-3">
             <p className="text-l text-gray-700 pr-12 leading-relaxed">"{content}"</p>
             {source && <p className="text-xs text-gray-500 mt-1">Fonte: {source}</p>}
-            {reference && <p className="text-xs text-gray-500">Referência: {reference}</p>}
-            {date && <p className="text-xs text-gray-500">Data: {date}</p>}
           </div>
 
           {/* Botões de Tópico/Subtópico (pode ajustar depois se quiser deixar dinâmico também) */}
