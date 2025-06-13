@@ -30,13 +30,13 @@ export function AuthButtons() {
             <>
               <Link
                 href="/login"
-                className="px-6 py-2 rounded-full border border-white/30 text-white hover:bg-amber-500 transition-colors"
+                className="px-6 py-3 rounded-[10px] border border-white/30 text-white text-[20px] hover:bg-[#CA9C60] hover:border-[#CA9C60] duration-300 transition-colors"
               >
                 Entrar
               </Link>
               <Link
                 href="/register"
-                className="px-6 py-2 rounded-full bg-yellow-600 text-white hover:bg-amber-500"
+                className="px-6 py-3 rounded-[10px] bg-[#CA9C60] text-white text-[20px] hover:bg-[#a68050] duration-300 transition-colors"
               >
                 Cadastrar-se
               </Link>

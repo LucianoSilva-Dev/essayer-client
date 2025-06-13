@@ -15,7 +15,7 @@ export function HeaderAzul() {
 
   return (
     <header className="fixed top-0 w-full bg-[#075F70] z-50 border-b rounded-b-[2em]">
-      <div className="container mx-auto px-4 py-4 flex items-center justify-between">
+      <div className="container mx-auto px-4 py-2 flex items-center justify-between">
         <Logo />
 
         <div className="hidden md:flex items-center justify-between flex-1 ml-8">
@@ -40,13 +40,13 @@ export function HeaderAzul() {
               <div className="flex flex-col space-y-2 pt-2">
                 <a
                   href="/login"
-                  className="px-6 py-2 rounded-full text-base font-medium border border-amber-400 text-amber-400 text-center"
+                  className="px-6 py-2 rounded-[10px] text-base font-medium border border-amber-400 text-amber-400 text-center"
                 >
                   Entrar
                 </a>
                 <a
                   href="/register"
-                  className="px-6 py-2 rounded-full text-base font-medium bg-amber-400 text-white text-center"
+                  className="px-6 py-2 rounded-[10px] text-base font-medium bg-amber-400 text-white text-center"
                 >
                   Cadastrar-se
                 </a>
