@@ -18,7 +18,7 @@ export function mountRepertoire(repertorio: RepertorioDocument) {
     eixo={repertorio.topico}
     recorte={repertorio.subtopicos[0]}
     source={repertorio.fonte}
-    author={repertorio.criador.nome}
+    author={repertorio.criador}
     likesQTD={repertorio.totalLikes}
     likedByUser={repertorio.likeDoUsuario}
     savedByUser={repertorio.favoritadoPeloUsuario} />)
@@ -34,7 +34,7 @@ export function mountRepertoire(repertorio: RepertorioDocument) {
     eixo={repertorio.topico}
     recorte={repertorio.subtopicos[0]}
     source={repertorio.fonte}
-    author={repertorio.criador.nome}
+    author={repertorio.criador}
     likesQTD={repertorio.totalLikes}
     likedByUser={repertorio.likeDoUsuario}
     savedByUser={repertorio.favoritadoPeloUsuario} />)
@@ -49,7 +49,7 @@ export function mountRepertoire(repertorio: RepertorioDocument) {
     content={repertorio.sinopse}
     eixo={repertorio.topico}
     recorte={repertorio.subtopicos[0]}
-    author={repertorio.criador.nome}
+    author={repertorio.criador}
     likesQTD={repertorio.totalLikes}
     likedByUser={repertorio.likeDoUsuario}
     savedByUser={repertorio.favoritadoPeloUsuario} />)

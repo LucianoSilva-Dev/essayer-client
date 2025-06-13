@@ -1,3 +1,4 @@
+import { API_BASE_URL } from '@/app/constants';
 import apiClient from '../api-client';
 import { GenericSuccessResponse } from '../types';
 import type {
@@ -45,6 +46,13 @@ export const deleteUser = async (id: string): Promise<GenericSuccessResponse> =>
 };
 
 // --- Serviços de Foto de Perfil ---
+
+export const getProfilePictureLink = async (id: string | null | undefined): Promise<string | null> => {
+    if (!id) return null
+    const foto = await apiClient.get(`/usuario/foto/${id}`, { responseType: 'blob' })
+    if (!foto.data) return null
+    return URL.createObjectURL(foto.data)
+}
 
 export const uploadProfilePicture = async (id: string, file: File): Promise<GenericSuccessResponse> => {
     const formData = new FormData();

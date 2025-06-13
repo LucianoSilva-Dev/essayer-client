@@ -1,8 +1,10 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Bookmark, ThumbsUp } from "lucide-react"
 import { addFavorito, addLike, removeFavorito, removeLike } from "../../api/repertorio"
+import { PerfilUsuario } from "../../api/types"
+import { getProfilePictureLink } from "../../api/usuario"
 
 type QuoteCardProps = {
   id: string
@@ -12,7 +14,7 @@ type QuoteCardProps = {
   eixo: string
   recorte: string
   source?: string
-  author?: string
+  author?: PerfilUsuario
   likesQTD: number
   likedByUser: boolean
   savedByUser: boolean
@@ -34,6 +36,16 @@ export default function QuoteCard({
 }: QuoteCardProps) {
   const [liked, setLiked] = useState(likedByUser)
   const [saved, setSaved] = useState(savedByUser)
+  const [authorProfilePictureLink, setAuthorProfilePictureLink] = useState<string | null>(null)
+
+  useEffect(() => {
+    async function fetchData() {
+      const data = await getProfilePictureLink(author?.id)
+      if (data) setAuthorProfilePictureLink(data)
+    }
+
+    if (author) fetchData()
+  }, [])
 
   const handleLike = async () => {
     if (liked) {
@@ -75,10 +87,20 @@ export default function QuoteCard({
           {/* Header com nome do autor */}
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-2">
-              <div className="w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center">
-                <span className="text-xs">👤</span>
+              <div className="w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden">
+                {
+                  authorProfilePictureLink ? (
+                    <img
+                      src={authorProfilePictureLink}
+                      alt="Foto de perfil do autor"
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <span className="text-xs">👤</span>
+                  )
+                }
               </div>
-              <span className="text-sm text-gray-600">{author ?? "Autor desconhecido"}</span>
+              <span className="text-sm text-gray-600">{author?.nome ?? "Autor desconhecido"}</span>
             </div>
             <div className="flex items-center gap-2">
               {/* <button
