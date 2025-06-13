@@ -16,13 +16,13 @@ export default function HeroSection() {
             <div className="flex flex-col sm:flex-row gap-4 pt-4">
               <Link
                 href="#topicos"
-                className="inline-flex h-12 items-center justify-center rounded-md bg-[#E29D4F] px-8 text-base text-[30px] font-medium text-white hover:bg-[#d08c3e] transition-colors"
+                className="inline-flex min-h-20 max-w-45 leading-[35px] items-center justify-center rounded-md bg-[#CA9C60] px-30 text-center text-[27px] font-medium text-white hover:bg-[#a68050] duration-300 transition-colors"
               >
-                Explorar tópicos
+                Eixos Temáticos
               </Link>
               <Link
                 href="#como-funciona"
-                className="inline-flex h-12 items-center justify-center rounded-md bg-[#E29D4F] px-8 text-base text-[30px] font-medium text-white hover:bg-[#d08c3e] transition-colors"
+                className="inline-flex  min-h-20 max-w-45 leading-[35px] items-center justify-center rounded-md bg-[#CA9C60] px-30 text-center text-[27px] font-medium text-white hover:bg-[#a68050] duration-300 transition-colors"
               >
                 Como funciona
               </Link>
@@ -74,7 +74,7 @@ export default function HeroSection() {
                   <div className="text-xs text-gray-500">Referência: "Lorem ipsum dolor"</div>
                   <div className="flex gap-2 mt-4">
                     <div className="bg-blue-100 text-blue-700 px-4 py-2 rounded-full text-sm">
-                      <div className="text-gray-500 text-xs">Tópicos</div>
+                      <div className="text-gray-500 text-xs">Eixo</div>
                       <div className="font-medium">Política</div>
                     </div>
                     <div className="bg-blue-100 text-blue-700 px-4 py-2 rounded-full text-sm">

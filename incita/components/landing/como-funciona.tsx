@@ -57,7 +57,7 @@ export default function ComoFunciona() {
         <h1 className="text-[30px] font-light text-center mb-12 max-w-4xl justify-self-center">
           Aprenda a navegar e aproveitar ao máximo nosso acervo de repertórios
         </h1>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 md:gap-4 gap-6 lg:gap-32 min-h-[30rem]">
           {funcionalidades.map((item) => (
             <FuncionalidadeCard key={item.id} item={item} />
           ))}
