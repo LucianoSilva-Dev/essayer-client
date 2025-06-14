@@ -34,6 +34,12 @@ export function RegisterForm() {
 
   return (
     <div className="w-full max-w-xl mx-auto flex flex-col items-center min-h-screen py-8 shadow-xl">
+      
+      {/* Logo */}
+            <div className="mb-6">
+              <Image src="/favicon_2d.png" alt="Incita Logo" width={180} height={120} priority />
+            </div>
+
       <div className="bg-white rounded-lg shadow-md p-8 w-full">
 
         {/* Pergunta e seleção de tipo */}

@@ -84,7 +84,7 @@ export default function Home() {
 
    // Filtrar por recorte
   if (recorteAtivo && recorteAtivo !== "Todos") {
-    repertoriosFiltrados = filtrarPorEixo(recorteAtivo)
+    repertoriosFiltrados = filtrarPorRecorte(recorteAtivo)
   }
 
   // Filtrar por modelo
@@ -241,7 +241,7 @@ export default function Home() {
 
                 {/* Filtros por Recorte */}
                 <div className="mb-6">
-                  <h3 className="text-sm font-medium text-gray-700 mb-3">Filtrar por Categoria</h3>
+                  <h3 className="text-sm font-medium text-gray-700 mb-3">Filtrar por Recorte</h3>
                   <div className="flex flex-wrap gap-2">
                     {recorte.map((recorte) => (
                       <button
