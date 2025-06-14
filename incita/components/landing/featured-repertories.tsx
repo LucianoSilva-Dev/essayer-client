@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 'use client'
 
 import { useEffect, useState } from "react"
@@ -6,6 +5,7 @@ import { GetAllRepertoriosResponse, RepertorioDocument } from "../../api/reperto
 import QuoteCard from "./quote-card"
 import { getAllRepertorios } from "../../api/repertorio"
 import { isGetAllArtigoDoc, isGetAllCitacaoDoc, isGetAllObraDoc } from "../../api/repertorio/helpers"
+import Link from "next/link"
 
 export function mountRepertoire(repertorio: RepertorioDocument) {
   if(isGetAllCitacaoDoc(repertorio)) {
@@ -55,66 +55,13 @@ export function mountRepertoire(repertorio: RepertorioDocument) {
     savedByUser={repertorio.favoritadoPeloUsuario} />)
   }
 }
-=======
-import QuoteCard from "./quote-card"
-import Link from "next/link"
-
-const repertoireData = [
-  {
-    type: "citação",
-    title: "Jean Jacques Rousseau",
-    content:
-      "Lorem ipsum dolor sit amet. Qui iure iusto et dignissimos fugiat in vel sit qui reprehenderit omnis sed Aut in qui fugiat in vel dignissimos iusto consequatur expedita vel sit amet.",
-    source: "Lorem ipsum omnis",
-  },
-  {
-    type: "Artigo",
-    title: "O Oriente contra Ocidente",
-    content:
-      "Lorem ipsum dolor sit amet. Qui iure iusto et dignissimos fugiat in vel sit qui reprehenderit omnis sed Aut in qui fugiat in vel dignissimos...",
-    author: "Olavo de Carvalho",
-    reference: "Lorem Ipsum",
-    date: "01/03/2021",
-  },
-  {
-    type: "Obra musical",
-    title: "Perfeição",
-    content:
-      "Lorem ipsum dolor sit amet. Qui iure iusto et dignissimos fugiat in vel sit qui reprehenderit omnis sed Aut in qui fugiat in vel dignissimos iusto consequatur expedita vel sit amet...",
-    author: "Legião urbana",
-  },
-  {
-    type: "citação",
-    title: "Jean Jacques Rousseau",
-    content:
-      "Lorem ipsum dolor sit amet. Qui iure iusto et dignissimos fugiat in vel sit qui reprehenderit omnis sed Aut in qui fugiat in vel dignissimos iusto consequatur expedita vel sit amet.",
-    source: "Lorem ipsum omnis",
-  },
-  {
-    type: "Livro",
-    title: "A República",
-    content:
-      "Obra fundamental da filosofia política, onde Platão discute justiça, política e a organização ideal da sociedade.",
-    author: "Platão",
-    source: "A República",
-  },
-  {
-    type: "citação",
-    title: "Hannah Arendt",
-    content:
-      "O mais radical revolucionário se torna um conservador no dia seguinte à revolução.",
-    author: "Hannah Arendt",
-    source: "Entre o passado e o futuro",
-  },
-]
->>>>>>> e03becad5a722d1ab34621e0032801253d8a9b76
 
 export default function FeaturedRepertoires() {
   const [featuredRepertoires, setFeaturedRepertoires] = useState<GetAllRepertoriosResponse | null>(null)
   
   useEffect(() => {
     async function fetchData() {
-      const response = await getAllRepertorios('?ordenarPor=MaxLikes&limit=4')
+      const response = await getAllRepertorios('?ordenarPor=MaxLikes&limit=6')
       console.log(response)
       if (response) setFeaturedRepertoires(response)
     }
@@ -129,28 +76,14 @@ export default function FeaturedRepertoires() {
           <p className="text-[30px] text-gray-600 max-w-4xl justify-self-center">Alguns exemplos do conteúdo que você encontrará em nosso acervo</p>
         </div>
 
-<<<<<<< HEAD
-        <div className="grid grid-cols-1 gap-y-8 gap-x-16 md:grid-cols-2 max-w-3xl mx-auto">
+        <div className="grid grid-cols-3 gap-y-8 gap-x-16 md:grid-cols-2 max-w-7xl mx-auto lg:grid-cols-3">
           {featuredRepertoires?.documentos.length! > 0 ? 
           featuredRepertoires!.documentos.map((repertorio) => (
             mountRepertoire(repertorio)
           ))
           : <p className="text-[30px] text-gray-600 max-w-4xl justify-self-center">Nenhum repertorio encontrado</p>
           }
-=======
-        <div className="grid grid-cols-3 gap-y-8 gap-x-16 md:grid-cols-2 max-w-7xl mx-auto lg:grid-cols-3">
-          {repertoireData.map((item, index) => (
-            <QuoteCard
-              key={index}
-              type={item.type}
-              title={item.title}
-              content={item.content}
-              source={item.source}
-              author={item.author}
-              likesQTD={0} // Contagem de likes
-            />
-          ))}
->>>>>>> e03becad5a722d1ab34621e0032801253d8a9b76
+
         </div>
 
         <div className="mt-10 text-center">

@@ -142,7 +142,7 @@ export default function Home() {
           <div className="flex justify-center gap-4 mb-8">
             <button
               onClick={() => setTipoVisualizacao("salvos")}
-              className={`px-6 py-3 rounded-full border-2 transition-colors ${
+              className={`px-6 py-3 rounded-full border-2 transition-colors cursor-pointer ${
                 tipoVisualizacao === "salvos"
                   ? "bg-teal-600 text-white border-teal-600"
                   : "bg-white text-teal-600 border-teal-600 hover:bg-teal-50"
@@ -152,7 +152,7 @@ export default function Home() {
             </button>
             <button
               onClick={() => setTipoVisualizacao("todos")}
-              className={`px-6 py-3 rounded-full border-2 transition-colors ${
+              className={`px-6 py-3 rounded-full border-2 transition-colors cursor-pointer ${
                 tipoVisualizacao === "todos"
                   ? "bg-teal-600 text-white border-teal-600"
                   : "bg-white text-teal-600 border-teal-600 hover:bg-teal-50"
