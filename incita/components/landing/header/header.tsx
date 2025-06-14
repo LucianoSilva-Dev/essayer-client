@@ -14,7 +14,7 @@ export function HeaderLanding() {
   }
 
   return (
-    <header className="fixed top-0 w-full bg-white z-50 border-b rounded-b-[2em]">
+    <header className="fixed top-0 w-full bg-white z-50 border-b border-white rounded-b-[2em]">
       <div className="container mx-auto px-4 py-2 flex items-center justify-between">
         <Logo />
 

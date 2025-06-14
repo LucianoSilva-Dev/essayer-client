@@ -211,7 +211,7 @@ export default function RepertorioForm({ onSubmit, onCancel, initialData }: Repe
 
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden">
-      <div className="bg-gray-800 text-white p-4 flex justify-between items-center">
+      <div className="bg-[#075F70] text-white p-4 flex justify-between items-center">
         <h2 className="text-xl font-semibold">Novo Repertório</h2>
         
       </div>
@@ -268,13 +268,13 @@ export default function RepertorioForm({ onSubmit, onCancel, initialData }: Repe
 
           {/* Eixo Temático */}
           <div className="mb-5">
-            <label htmlFor="categoria" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="eixo" className="block text-sm font-medium text-gray-700 mb-1">
               Eixo Temático <span className="text-red-500">*</span>
             </label>
             <select
               id="eixo"
               name="eixo"
-              value={formData.categoria}
+              value={formData.eixo}
               onChange={handleChange}
               className={`w-full px-3 py-2 border ${
                 errors.eixo ? "border-red-500" : "border-gray-300"
@@ -292,16 +292,16 @@ export default function RepertorioForm({ onSubmit, onCancel, initialData }: Repe
 
           {/* Recortes */}
           <div className="mb-5">
-            <label htmlFor="categoria" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="recorte" className="block text-sm font-medium text-gray-700 mb-1">
               Recorte <span className="text-red-500">*</span>
             </label>
             <select
               id="recorte"
               name="recorte"
-              value={formData.categoria}
+              value={formData.recorte}
               onChange={handleChange}
               className={`w-full px-3 py-2 border ${
-                errors.eixos ? "border-red-500" : "border-gray-300"
+                errors.recorte ? "border-red-500" : "border-gray-300"
               } rounded-md focus:outline-none focus:ring-1 focus:ring-teal-600 bg-white`}
             >
               <option value="">Selecione um Recorte</option>
@@ -326,7 +326,7 @@ export default function RepertorioForm({ onSubmit, onCancel, initialData }: Repe
             <button
               type="submit"
               disabled={isSubmitting}
-              className="flex items-center px-4 py-2 border border-transparent rounded-md text-white bg-teal-800 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 disabled:opacity-50"
+              className="flex items-center px-4 py-2 border border-transparent rounded-md text-white bg-[#CA9C60] hover:bg-[#a68050] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 disabled:opacity-50"
             >
               <Save size={18} className="mr-2" />
               {isSubmitting ? "Salvando..." : "Salvar Repertório"}

@@ -98,6 +98,17 @@ export default function LoginForm() {
         >
           Entrar
         </button>
+
+         
+        <div className="flex justify-end mb-6 pt-1">
+          <label htmlFor="password" className="text-sm text-gray-500 ">
+            Não tem uma conta?
+          </label>
+          <Link href="/register" className="pl-1 text-sm text-gray-500 hover:text-teal-600">
+            Cadastre-se
+          </Link>
+        </div>
+
       </form>
     </div>
   )

@@ -185,25 +185,6 @@ export default function FormAluno(props: FormAlunoProps) {
           {errors.confirmPassword && <p className="mt-1 text-sm text-red-500">{errors.confirmPassword}</p>}
         </div>
 
-        {/* Termos e Condições */}
-      <div className="mb-6">
-        <label className="flex items-start">
-          <input
-            type="checkbox"
-            name="aceitouTermos"
-            checked={formData.aceitouTermos}
-            onChange={handleChange}
-            className="mt-1 h-4 w-4 text-teal-600 focus:ring-teal-500 border-gray-300 rounded"
-          />
-          <span className="ml-2 text-sm text-gray-700">
-            Eu concordo com os{" "}
-            <Link href="/termos" className="text-teal-600 hover:text-teal-700">
-              Termos e Condições
-            </Link>
-          </span>
-        </label>
-      </div>
-
         <button
           type="submit"
           className="w-full bg-teal-800 hover:bg-teal-700 text-white py-3 px-4 rounded-md transition-colors mb-4"
