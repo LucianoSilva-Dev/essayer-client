@@ -1,10 +1,12 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { ThumbsUp, User, Bookmark, BookOpen, FileText, Quote, Eye } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useRepertorio } from "@/../contexts/repertorio-context"
 import type { Repertorio } from "@/../types/repertorio"
+import { getProfilePictureLink } from "../../api/usuario"
+import { addLike, removeLike } from "../../api/repertorio"
 
 interface RepertorioCardProps {
   repertorio: Repertorio
@@ -13,13 +15,37 @@ interface RepertorioCardProps {
 export default function RepertorioCard({ repertorio }: RepertorioCardProps) {
   const router = useRouter()
   const { toggleFavorito, favoritos } = useRepertorio()
-  const [likes, setLikes] = useState(200) // Simulando likes
-  const [isLiked, setIsLiked] = useState(false)
+  const [likes, setLikes] = useState(repertorio.totalLikes)
+  const [isLiked, setIsLiked] = useState(repertorio.likeDoUsuario)
   const isFavorito = favoritos.includes(repertorio.id)
+  const [userProfilePictureLink, setUserProfilePictureLink] = useState<string | null>(null)
 
-  const handleLike = () => {
-    setIsLiked(!isLiked)
-    setLikes((prev) => (isLiked ? prev - 1 : prev + 1))
+  useEffect(() => {
+    async function fetchUserProfilePicture() {
+      // Garante que o ID do criador existe antes de buscar a imagem
+      if (repertorio.criador?.id) {
+        const link = await getProfilePictureLink(repertorio.criador.id)
+        setUserProfilePictureLink(link)
+      }
+    }
+    fetchUserProfilePicture()
+    // O array de dependências garante que o efeito só rode quando o ID do criador mudar.
+  }, [repertorio.criador.id])
+
+  const handleLike = async () => {
+    // setLikes((prev) => (isLiked ? prev - 1 : prev + 1))
+
+    try {
+      if (isLiked) {
+        await removeLike(repertorio.id)
+        setIsLiked(false)
+        setLikes((prev) => prev - 1)
+      } else {
+        await addLike(repertorio.id)
+        setIsLiked(true)
+        setLikes((prev) => prev + 1)
+      }
+    } catch (e) { }
   }
 
   const handleViewDetails = () => {
@@ -62,11 +88,6 @@ export default function RepertorioCard({ repertorio }: RepertorioCardProps) {
             <div className="mb-4">
               <p className="text-sm text-gray-700 line-clamp-4">
                 {repertorio.sinopse.length > 200 ? `${repertorio.sinopse.substring(0, 200)}...` : repertorio.sinopse}
-              </p>
-            </div>
-            <div className="mb-4">
-              <p className="text-xs text-gray-500">
-                <span className="font-medium">Fonte:</span> {repertorio.fonte}
               </p>
             </div>
           </>
@@ -118,10 +139,18 @@ export default function RepertorioCard({ repertorio }: RepertorioCardProps) {
       {/* Cabeçalho do card */}
       <div className="flex justify-between items-center mb-3">
         <div className="flex items-center">
-          <div className="w-6 h-6 bg-gray-800 rounded-full flex items-center justify-center mr-2">
-            <User size={14} className="text-white" />
-          </div>
-          <span className="text-sm font-medium text-gray-800">Nome</span>
+          {userProfilePictureLink ? (
+            <img
+              src={userProfilePictureLink}
+              alt={`Foto de perfil de ${repertorio.criador.nome}`}
+              className="w-6 h-6 rounded-full object-cover mr-2"
+            />
+          ) : (
+            <div className="w-6 h-6 bg-gray-800 rounded-full flex items-center justify-center mr-2">
+              <User size={14} className="text-white" />
+            </div>
+          )}
+          <span className="text-sm font-medium text-gray-800">{repertorio.criador.nome}</span>
         </div>
         <div className="flex items-center space-x-3">
           <button
@@ -149,9 +178,8 @@ export default function RepertorioCard({ repertorio }: RepertorioCardProps) {
               e.stopPropagation()
               handleLike()
             }}
-            className={`flex items-center space-x-1 transition-colors ${
-              isLiked ? "text-blue-500" : "text-gray-400 hover:text-blue-500"
-            }`}
+            className={`flex items-center space-x-1 transition-colors ${isLiked ? "text-blue-500" : "text-gray-400 hover:text-blue-500"
+              }`}
             title="Curtir"
           >
             <ThumbsUp size={16} />
@@ -180,8 +208,6 @@ export default function RepertorioCard({ repertorio }: RepertorioCardProps) {
 
       {/* Conteúdo específico do modelo - clicável */}
       <div onClick={handleViewDetails}>{renderContent()}</div>
-
-
     </div>
   )
 }

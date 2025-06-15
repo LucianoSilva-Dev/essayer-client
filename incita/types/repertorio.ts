@@ -1,3 +1,5 @@
+import { PerfilUsuario } from "../api/types"
+
 export type ModeloRepertorio = "obra" | "artigo" | "citacao"
 
 export interface RepertorioBase {
@@ -6,6 +8,10 @@ export interface RepertorioBase {
   eixo: string
   recorte: string
   isPublico: boolean
+  totalLikes: number
+  criador: PerfilUsuario
+  favoritadoPeloUsuario: boolean
+  likeDoUsuario: boolean
 }
 
 export interface RepertorioObra extends RepertorioBase {
