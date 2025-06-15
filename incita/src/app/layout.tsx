@@ -6,6 +6,8 @@ import { RepertorioProvider } from "@/../contexts/repertorio-context"
 import { CitacaoProvider } from "@/../contexts/citacao-context"
 import { AuthProvider } from "@/../contexts/auth-context"
 import { ProfileProvider } from "@/../contexts/profile-context"
+import { ToastContainer } from "react-toastify"
+// import "react-toastify/dist/ReactToastify.css"
 import "./globals.css"
 
 
@@ -28,6 +30,7 @@ export default function RootLayout({
           <ProfileProvider>
             <RepertorioProvider>
               <CitacaoProvider>
+                <ToastContainer />
                 <HeaderAzul />
                 {children}
               </CitacaoProvider>

@@ -24,6 +24,7 @@ export interface ArtigoDocument {
   titulo: string;
   fonte: string;
   resumo: string;
+  autor: string;
   criador: PerfilUsuario;
   subtopicos: string[];
   topico: string;
