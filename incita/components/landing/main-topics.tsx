@@ -62,7 +62,7 @@ export function MainTopics() {
   ]
 
   return (
-    <section className="w-full py-16 bg-gray-100" id="topicos">
+    <section className="w-full py-16 bg-gray-100 scroll-mt-25" id="topicos">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
           <h1 className="text-[45px] font-bold mb-4">Eixos Temáticos</h1>

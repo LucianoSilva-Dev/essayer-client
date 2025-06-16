@@ -69,7 +69,7 @@ export default function FeaturedRepertoires() {
   }, [])
 
   return (
-    <section className="py-12 px-4 bg-[#F3F4F6]" id="repertorios">
+    <section className="py-12 px-4 bg-[#F3F4F6] scroll-mt-25" id="repertorios">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-10 flex-column justify-center">
           <h2 className="text-[45px] font-bold mb-2">Repertórios em destaque</h2>

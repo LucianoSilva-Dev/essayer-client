@@ -51,7 +51,7 @@ export default function ComoFunciona() {
   ]
 
   return (
-    <section className="py-16 bg-[#F3F4F6]" id="como-funciona">
+    <section className="py-16 bg-[#F3F4F6] scroll-mt-25" id="como-funciona">
       <div className="container mx-auto px-[100px] flex-column justify-center">
         <h2 className="text-[40px] font-bold text-center mb-6">Como funciona</h2>
         <h1 className="text-[30px] font-light text-center mb-12 max-w-4xl justify-self-center">

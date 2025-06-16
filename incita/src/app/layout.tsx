@@ -32,7 +32,9 @@ export default function RootLayout({
               <CitacaoProvider>
                 <ToastContainer />
                 <HeaderAzul />
-                {children}
+                <main className="pt-25">
+                  {children}
+                </main>
               </CitacaoProvider>
             </RepertorioProvider>
           </ProfileProvider>

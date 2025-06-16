@@ -2,7 +2,7 @@ import { Target, Eye, Star } from "lucide-react"
 
 export default function AboutSection() {
   return (
-    <section className="py-16 px-4 md:px-6 lg:px-6 bg-[#F3F4F6]" id="sobre">
+    <section className="py-16 px-4 md:px-6 lg:px-6 bg-[#F3F4F6] scroll-mt-25" id="sobre">
       <div className="max-w-[70%] mx-auto">
         <h2 className="text-[35px] px-10 font-bold mb-6">Sobre o Incita</h2>
 
