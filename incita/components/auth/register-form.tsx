@@ -6,6 +6,7 @@ import Link from "next/link"
 import  FormAluno  from "./register-aluno"
 import  FormProfessor  from "./register-professor"
 import type { UserType, UserRegistration } from "@/../types/user"
+import router from "next/router"
 
 export function RegisterForm() {
   const [userType, setUserType] = useState<UserType>("aluno")
@@ -23,6 +24,7 @@ export function RegisterForm() {
       await new Promise((resolve) => setTimeout(resolve, 1000))
 
       // Redirecionar ou mostrar sucesso
+      router.push("/confirmation-code")
       alert("Conta criada com sucesso!")
     } catch (error) {
       console.error("Erro ao criar conta:", error)
