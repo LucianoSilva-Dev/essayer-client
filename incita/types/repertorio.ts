@@ -1,45 +1,87 @@
-import { PerfilUsuario } from "../api/types"
-
+// Frontend/types/repertorio.ts
 export type ModeloRepertorio = "obra" | "artigo" | "citacao"
 
-export interface RepertorioBase {
+// Interfaces para os tipos específicos de repertório
+export interface Obra {
   id: string
-  modelo: ModeloRepertorio
-  eixo: string
-  recorte: string
-  isPublico: boolean
-  totalLikes: number
-  criador: PerfilUsuario
-  favoritadoPeloUsuario: boolean
-  likeDoUsuario: boolean
-}
-
-export interface RepertorioObra extends RepertorioBase {
   modelo: "obra"
   titulo: string
   autoria: string
   sinopse: string
+  eixo: string
+  recorte: string
+  isPublico: boolean
+  totalLikes: number
+  favoritadoPeloUsuario: boolean
+  likeDoUsuario: boolean
+  criador: {
+    id: string
+    nome: string
+  }
 }
 
-export interface RepertorioArtigo extends RepertorioBase {
+export interface Artigo {
+  id: string
   modelo: "artigo"
   titulo: string
   autoria: string
   sintese: string
   fonte: string
+  eixo: string
+  recorte: string
+  isPublico: boolean
+  totalLikes: number
+  favoritadoPeloUsuario: boolean
+  likeDoUsuario: boolean
+  criador: {
+    id: string
+    nome: string
+  }
 }
 
-export interface RepertorioCitacao extends RepertorioBase {
+export interface Citacao {
+  id: string
   modelo: "citacao"
   autoria: string
   citacao: string
-  fonte?: string
+  fonte?: string // Fonte é opcional para citações
+  eixo: string
+  recorte: string
+  isPublico: boolean
+  totalLikes: number
+  favoritadoPeloUsuario: boolean
+  likeDoUsuario: boolean
+  criador: {
+    id: string
+    nome: string
+  }
 }
 
-export type Repertorio = RepertorioObra | RepertorioArtigo | RepertorioCitacao
+// Tipo union para Repertorio
+export type Repertorio = Obra | Artigo | Citacao
 
-export type RepertorioFormData =
-  | Omit<RepertorioObra, "id" | "comentarios">
-  | Omit<RepertorioArtigo, "id" | "comentarios">
-  | Omit<RepertorioCitacao, "id" | "comentarios">
-
+// Form Data para criação/edição de Repertório
+export type RepertorioFormData = {
+  modelo: ModeloRepertorio
+  autoria: string
+  eixo: string
+  recorte: string
+  isPublico: boolean // Para futuros usos, se houver lógica de público/privado
+} & (
+  | {
+      modelo: "obra"
+      titulo: string
+      sinopse: string
+    }
+  | {
+      modelo: "artigo"
+      titulo: string
+      sintese: string
+      fonte: string
+    }
+  | {
+      modelo: "citacao"
+      citacao: string
+      fonte?: string // Tornar fonte opcional no form data para citação
+    }
+)

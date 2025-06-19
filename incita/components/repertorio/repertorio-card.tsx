@@ -1,3 +1,4 @@
+// Frontend/components/repertorio/repertorio-card.tsx
 "use client"
 
 import { useEffect, useState } from "react"
@@ -22,19 +23,21 @@ export default function RepertorioCard({ repertorio }: RepertorioCardProps) {
 
   useEffect(() => {
     async function fetchUserProfilePicture() {
-      // Garante que o ID do criador existe antes de buscar a imagem
       if (repertorio.criador?.id) {
         const link = await getProfilePictureLink(repertorio.criador.id)
         setUserProfilePictureLink(link)
       }
     }
     fetchUserProfilePicture()
-    // O array de dependências garante que o efeito só rode quando o ID do criador mudar.
-  }, [repertorio.criador.id])
+  }, [repertorio.criador?.id])
+
+  // Atualizar estado local de likes e isLiked se as props mudarem (ex: após refetch geral)
+  useEffect(() => {
+    setLikes(repertorio.totalLikes);
+    setIsLiked(repertorio.likeDoUsuario);
+  }, [repertorio.totalLikes, repertorio.likeDoUsuario]);
 
   const handleLike = async () => {
-    // setLikes((prev) => (isLiked ? prev - 1 : prev + 1))
-
     try {
       if (isLiked) {
         await removeLike(repertorio.id)
@@ -45,7 +48,10 @@ export default function RepertorioCard({ repertorio }: RepertorioCardProps) {
         setIsLiked(true)
         setLikes((prev) => prev + 1)
       }
-    } catch (e) { }
+    } catch (e) {
+      console.error("Erro ao alternar like:", e);
+      // Opcional: Reverter estado local ou mostrar mensagem de erro
+    }
   }
 
   const handleViewDetails = () => {
@@ -119,11 +125,13 @@ export default function RepertorioCard({ repertorio }: RepertorioCardProps) {
             <div className="mb-4">
               <p className="text-sm text-gray-700 italic line-clamp-3 mb-2">"{repertorio.citacao}"</p>
             </div>
-            <div className="mb-4">
-              <p className="text-xs text-gray-500">
-                <span className="font-medium">Fonte:</span> {repertorio.fonte}
-              </p>
-            </div>
+            {repertorio.fonte && ( // Renderiza a fonte apenas se existir
+              <div className="mb-4">
+                <p className="text-xs text-gray-500">
+                  <span className="font-medium">Fonte:</span> {repertorio.fonte}
+                </p>
+              </div>
+            )}
           </>
         )
 

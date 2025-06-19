@@ -1,11 +1,13 @@
+// GeminiContext/Frontend/contexts/repertorio-context.tsx
 "use client"
 
 import type React from "react"
-import { createContext, useContext, useState, useEffect } from "react"
+import { createContext, useContext, useState, useEffect, useCallback, useRef } from "react"
 import type { Repertorio, RepertorioFormData } from "@/../types/repertorio"
-import { RepertorioDocument } from "../api/repertorio/types"
+import { RepertorioDocument, GetAllRepertoriosResponse } from "../api/repertorio/types"
 import { isGetAllArtigoDoc, isGetAllCitacaoDoc, isGetAllObraDoc } from "../api/repertorio/helpers"
 import { addFavorito, getAllRepertorios, removeFavorito } from "../api/repertorio"
+import { useAuth } from "./auth-context"
 
 const mountRepertoire = (repertorio: RepertorioDocument): Repertorio | null => {
   if (isGetAllCitacaoDoc(repertorio)) {
@@ -66,142 +68,173 @@ interface RepertorioContextType {
   adicionarRepertorio: (data: RepertorioFormData) => Promise<Repertorio>
   toggleFavorito: (id: string) => void
   favoritos: string[]
-  filtrarPorRecorte: (recorte: string | null) => Repertorio[]
-  filtrarPorEixo: (eixo: string | null) => Repertorio[]
-  filtrarPorModelo: (modelo: string | null) => Repertorio[]
-  pesquisar: (termo: string) => Repertorio[]
+  pesquisarRepertorios: (filters: {
+    search?: string,
+    eixos?: string[],
+    subtopicos?: string[],
+    modelo?: string[],
+    favoritedByCurrentUser?: boolean,
+    likedByCurrentUser?: boolean,
+    orderBy?: 'MaxLikes' | 'MinLikes' | 'Newest' | 'Oldest',
+    offset?: number,
+    limit?: number
+  }) => Promise<{
+    documents: Repertorio[],
+    pagination: {
+      offset: number,
+      limit: number,
+      nextPageUrl: string | null,
+      previousPageUrl: string | null,
+      totalDocuments: number
+    }
+  }>
   buscarPorId: (id: string) => Repertorio | undefined
+  currentPage: number
+  totalPages: number
+  totalRepertorios: number
+  setPage: (page: number) => void
+  isLoadingRepertorios: boolean
 }
 
 const RepertorioContext = createContext<RepertorioContextType | undefined>(undefined)
 
 export function RepertorioProvider({ children }: { children: React.ReactNode }) {
+  const { isLoggedIn } = useAuth();
   const [repertorios, setRepertorios] = useState<Repertorio[]>([])
   const [favoritos, setFavoritos] = useState<string[]>([])
-  const [isLoaded, setIsLoaded] = useState(false)
+  const [currentPage, setCurrentPage] = useState(0)
+  const [totalPages, setTotalPages] = useState(1)
+  const [totalRepertorios, setTotalRepertorios] = useState(0)
+  const [isLoadingRepertorios, setIsLoadingRepertorios] = useState(true)
+  const [currentLimit, setCurrentLimit] = useState(15);
+  const currentFilters = useRef<Parameters<typeof pesquisarRepertorios>[0]>({});
 
-  // Carregar dados do localStorage na inicialização
+  const setPage = (page: number) => {
+    console.log("Context: setPage chamado com:", page);
+    setCurrentPage(page);
+  }
+
+  const construirQueryString = (filters: {
+    search?: string,
+    eixos?: string[],
+    subtopicos?: string[],
+    modelo?: string[],
+    favoritedByCurrentUser?: boolean,
+    likedByCurrentUser?: boolean,
+    orderBy?: 'MaxLikes' | 'MinLikes' | 'Newest' | 'Oldest',
+    offset?: number,
+    limit?: number
+  }) => {
+    const params = new URLSearchParams();
+    if (filters.search) params.append('conteudo', filters.search);
+    if (filters.eixos && filters.eixos.length > 0) filters.eixos.forEach(e => params.append('topico', e));
+    if (filters.subtopicos && filters.subtopicos.length > 0) filters.subtopicos.forEach(s => params.append('subtopicos', s));
+    if (filters.modelo && filters.modelo.length > 0) filters.modelo.forEach(m => params.append('tipoRepertorio', m));
+
+    if (filters.favoritedByCurrentUser !== undefined) params.append('favoritadoPeloUsuario', String(filters.favoritedByCurrentUser));
+    if (filters.likedByCurrentUser !== undefined) params.append('likeDoUsuario', String(filters.likedByCurrentUser));
+    if (filters.orderBy) params.append('ordenarPor', filters.orderBy);
+
+    params.append('offset', String(filters.offset ?? currentPage));
+    params.append('limit', String(filters.limit ?? currentLimit));
+    return params.toString();
+  };
+
+  const pesquisarRepertorios = useCallback(async (filters: {
+    search?: string,
+    eixos?: string[],
+    subtopicos?: string[],
+    modelo?: string[],
+    favoritedByCurrentUser?: boolean,
+    likedByCurrentUser?: boolean,
+    orderBy?: 'MaxLikes' | 'MinLikes' | 'Newest' | 'Oldest',
+    offset?: number,
+    limit?: number
+  }) => {
+    currentFilters.current = filters;
+
+    setIsLoadingRepertorios(true);
+    console.log("Context: pesquisarRepertorios chamado com filtros:", filters);
+    try {
+      const queryString = construirQueryString(filters);
+      console.log("Context: Query String:", queryString);
+      const response = await getAllRepertorios(`?${queryString}`);
+      console.log("Context: Resposta da API:", response);
+
+      if (response) {
+        const mappedRepertorios = response.documentos
+          .map((repertorio) => mountRepertoire(repertorio))
+          .filter((rep): rep is Repertorio => rep !== null);
+
+        setRepertorios(mappedRepertorios);
+        setTotalRepertorios(response.paginacao.totalDocuments);
+        setTotalPages(Math.ceil(response.paginacao.totalDocuments / response.paginacao.limit));
+        setCurrentPage(Math.floor(response.paginacao.offset / response.paginacao.limit));
+        setCurrentLimit(response.paginacao.limit);
+
+        if (isLoggedIn) {
+          setFavoritos(mappedRepertorios.filter(r => r.favoritadoPeloUsuario).map(r => r.id));
+        } else {
+          setFavoritos([]);
+        }
+
+        return {
+          documents: mappedRepertorios,
+          pagination: response.paginacao
+        };
+      }
+      return { documents: [], pagination: { offset: 0, limit: 0, nextPageUrl: null, previousPageUrl: null, totalDocuments: 0 } };
+    } catch (e) {
+      console.error('Context: Erro ao buscar repertórios:', e);
+      return { documents: [], pagination: { offset: 0, limit: 0, nextPageUrl: null, previousPageUrl: null, totalDocuments: 0 } };
+    } finally {
+      setIsLoadingRepertorios(false);
+    }
+  }, [isLoggedIn, currentLimit]);
+
   useEffect(() => {
-    async function fetchRepData() {
-      try {
-        const repertorios = await getAllRepertorios('?ordenarPor=MaxLikes')
-        const mappedRepertorios = repertorios!.documentos.map((repertorio) => mountRepertoire(repertorio))
-        setRepertorios(mappedRepertorios as Repertorio[])
-      } catch (e) {
-        console.error('Erro ao carregar repertórios:', e)
-      }
+    console.log("Context: useEffect disparado. CurrentPage:", currentPage);
+    // When currentPage changes, re-fetch using the last known filters.
+    // The `offset` within `currentFilters.current` should already be correctly calculated (e.g., currentPage * 15).
+    pesquisarRepertorios(currentFilters.current);
+  }, [currentPage, isLoggedIn, pesquisarRepertorios]);
+
+
+  const toggleFavorito = async (id: string) => {
+    if (!isLoggedIn) {
+      alert("Você precisa estar logado para favoritar repertórios.");
+      return;
     }
-
-    async function fetchFavRepData() {
-      try {
-        const favRepertorios = await getAllRepertorios('?favoritadoPeloUsuario=true')
-        setFavoritos(favRepertorios!.documentos.map(repertorio => repertorio.id))
-      } catch (e) {
-        console.error('Erro ao carregar repertórios favoritos:', e)
+    const isCurrentlyFavorito = favoritos.includes(id);
+    try {
+      if (isCurrentlyFavorito) {
+        await removeFavorito(id);
+        setFavoritos((prev) => prev.filter((favId) => favId !== id));
+        setRepertorios(prev => prev.map(rep => rep.id === id ? { ...rep, favoritadoPeloUsuario: false } : rep));
+      } else {
+        await addFavorito(id);
+        setFavoritos((prev) => [...prev, id]);
+        setRepertorios(prev => rep => rep.id === id ? { ...rep, favoritadoPeloUsuario: true } : rep);
       }
+    } catch (e) {
+      console.error("Erro ao alternar favorito:", e);
     }
+  }
 
-    fetchRepData()
-    fetchFavRepData()
-    setIsLoaded(true)
-  }, [])
-
-  // // Salvar dados no localStorage quando houver mudanças
-  // useEffect(() => {
-  //   if (isLoaded) {
-  //     localStorage.setItem("repertorios", JSON.stringify(repertorios))
-  //     localStorage.setItem("favoritos", JSON.stringify(favoritos))
-  //   }
-  // }, [repertorios, favoritos, isLoaded])
-
-  // Adicionar novo repertório
   const adicionarRepertorio = async (data: RepertorioFormData): Promise<Repertorio> => {
     const novoRepertorio: Repertorio = {
       ...data,
       id: Date.now().toString(),
-      comentarios: 0,
-    } as Repertorio
-
-    setRepertorios((prev) => [novoRepertorio, ...prev])
-    return novoRepertorio
+      isPublico: true,
+      totalLikes: 0,
+      favoritadoPeloUsuario: false,
+      likeDoUsuario: false,
+      criador: { id: "mock_id", nome: "Mock User" }
+    } as Repertorio;
+    setRepertorios((prev) => [novoRepertorio, ...prev]);
+    return novoRepertorio;
   }
 
-  // Adicionar/remover dos favoritos
-  const toggleFavorito = async (id: string) => {
-    if (favoritos.includes(id)) {
-      try {
-        await removeFavorito(id)
-        setFavoritos((prev) => prev.filter((favId) => favId !== id))
-      } catch (e) { }
-    } else {
-      try {
-        await addFavorito(id)
-        setFavoritos((prev) => [...prev, id])
-      } catch (e) { }
-    }
-  }
-
-  // Filtrar por Eixo Temático
-  const filtrarPorRecorte = (recorte: string | null): Repertorio[] => {
-    if (!recorte) return repertorios
-    return repertorios.filter((rep) => rep.recorte === recorte)
-  }
-  const filtrarPorEixo = (eixo: string | null): Repertorio[] => {
-    if (!eixo) return repertorios
-    return repertorios.filter((rep) => rep.eixo === eixo)
-  }
-
-  // Filtrar por modelo
-  const filtrarPorModelo = (modelo: string | null): Repertorio[] => {
-    if (!modelo) return repertorios
-    return repertorios.filter((rep) => rep.modelo === modelo)
-  }
-
-  // Pesquisar por termo
-  const pesquisar = (termo: string): Repertorio[] => {
-    if (!termo.trim()) return repertorios
-
-    const termoBusca = termo.toLowerCase().trim()
-    return repertorios.filter((rep) => {
-      // Busca comum em todos os modelos
-      const buscaComum =
-        rep.eixo.toLowerCase().includes(termoBusca) ||
-        rep.recorte.toLowerCase().includes(termoBusca)
-
-      // Busca específica por modelo
-      switch (rep.modelo) {
-        case "obra":
-          return (
-            buscaComum ||
-            rep.titulo.toLowerCase().includes(termoBusca) ||
-            rep.autoria.toLowerCase().includes(termoBusca) ||
-            rep.sinopse.toLowerCase().includes(termoBusca)
-          )
-
-        case "artigo":
-          return (
-            buscaComum ||
-            rep.titulo.toLowerCase().includes(termoBusca) ||
-            rep.autoria.toLowerCase().includes(termoBusca) ||
-            rep.sintese.toLowerCase().includes(termoBusca) ||
-            rep.fonte.toLowerCase().includes(termoBusca)
-          )
-
-        case "citacao":
-          return (
-            buscaComum ||
-            rep.autoria.toLowerCase().includes(termoBusca) ||
-            rep.citacao.toLowerCase().includes(termoBusca) ||
-            rep.fonte?.toLowerCase().includes(termoBusca)
-          )
-
-        default:
-          return buscaComum
-      }
-    })
-  }
-
-  // Buscar repertório por ID
   const buscarPorId = (id: string): Repertorio | undefined => {
     return repertorios.find((rep) => rep.id === id)
   }
@@ -213,11 +246,13 @@ export function RepertorioProvider({ children }: { children: React.ReactNode }) 
         adicionarRepertorio,
         toggleFavorito,
         favoritos,
-        filtrarPorEixo,
-        filtrarPorRecorte,
-        filtrarPorModelo,
-        pesquisar,
+        pesquisarRepertorios,
         buscarPorId,
+        currentPage,
+        totalPages,
+        totalRepertorios,
+        setPage,
+        isLoadingRepertorios,
       }}
     >
       {children}
