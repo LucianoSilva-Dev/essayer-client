@@ -76,7 +76,7 @@ export default function FeaturedRepertoires() {
           <p className="text-[30px] text-gray-600 max-w-4xl justify-self-center">Alguns exemplos do conteúdo que você encontrará em nosso acervo</p>
         </div>
 
-        <div className="grid grid-cols-3 gap-y-8 gap-x-16 sm:grid-cols-1 md:grid-cols-2 max-w-7xl mx-auto lg:grid-cols-3">
+        <div className="grid grid-cols-2 gap-y-8 gap-x-2 lg:gap-x-16 md:grid-cols-2 max-w-7xl mx-auto lg:grid-cols-3">
           {featuredRepertoires?.documentos.length! > 0 ? 
           featuredRepertoires!.documentos.map((repertorio) => (
             mountRepertoire(repertorio)
