@@ -197,25 +197,29 @@ export default function RepertorioCard({ repertorio }: RepertorioCardProps) {
       </div>
 
       {/* Tags da categoria e modelo */}
-      <div className="flex gap-2 mb-3">
+      <div className="flex flex-wrap items-center gap-2 mb-3">
         <span
           className={`inline-block px-2 py-1 rounded-full text-xs font-medium border bg-gray-100 text-gray-800 border-gray-200`}
         >
           #{repertorio.eixo}
-        </span>
-        <span
-          className={`inline-block px-2 py-1 rounded-full text-xs font-medium border bg-gray-100 text-gray-800 border-gray-200`}
-        >
-          #{repertorio.recorte}
         </span>
         <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-700 border border-gray-200">
           <ModeloIcon size={12} className="mr-1" />
           {getModeloLabel(repertorio.modelo)}
         </span>
       </div>
-
+        
       {/* Conteúdo específico do modelo - clicável */}
-      <div onClick={handleViewDetails}>{renderContent()}</div>
+      <div onClick={handleViewDetails}>
+        {renderContent()}
+        <div className="flex flex-wrap gap-2 mt-3">
+          {repertorio.recortes.map(recorte => (
+              <button key={recorte} className="flex-3 py-1 px-4 bg-blue-100 text-sky-700 text-xs rounded-full text-center">
+                  {recorte}
+              </button>
+          ))}
+        </div>
+      </div>
     </div>
   )
 }

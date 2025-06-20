@@ -18,7 +18,7 @@ const mountRepertoire = (repertorio: RepertorioDocument): Repertorio | null => {
       citacao: repertorio.frase,
       fonte: repertorio.fonte,
       eixo: repertorio.topico,
-      recorte: repertorio.subtopicos[0],
+      recortes: repertorio.subtopicos,
       isPublico: true,
       totalLikes: repertorio.totalLikes,
       favoritadoPeloUsuario: repertorio.favoritadoPeloUsuario,
@@ -34,7 +34,7 @@ const mountRepertoire = (repertorio: RepertorioDocument): Repertorio | null => {
       autoria: repertorio.autor,
       sinopse: repertorio.sinopse,
       eixo: repertorio.topico,
-      recorte: repertorio.subtopicos[0],
+      recortes: repertorio.subtopicos,
       isPublico: true,
       totalLikes: repertorio.totalLikes,
       favoritadoPeloUsuario: repertorio.favoritadoPeloUsuario,
@@ -51,7 +51,7 @@ const mountRepertoire = (repertorio: RepertorioDocument): Repertorio | null => {
       sintese: repertorio.resumo,
       fonte: repertorio.fonte,
       eixo: repertorio.topico,
-      recorte: repertorio.subtopicos[0],
+      recortes: repertorio.subtopicos,
       isPublico: true,
       totalLikes: repertorio.totalLikes,
       favoritadoPeloUsuario: repertorio.favoritadoPeloUsuario,
@@ -214,7 +214,7 @@ export function RepertorioProvider({ children }: { children: React.ReactNode }) 
       } else {
         await addFavorito(id);
         setFavoritos((prev) => [...prev, id]);
-        setRepertorios(prev => rep => rep.id === id ? { ...rep, favoritadoPeloUsuario: true } : rep);
+        setRepertorios(prev => prev.map(rep => rep.id === id ? { ...rep, favoritadoPeloUsuario: true } : rep));
       }
     } catch (e) {
       console.error("Erro ao alternar favorito:", e);

@@ -9,7 +9,7 @@ export interface Obra {
   autoria: string
   sinopse: string
   eixo: string
-  recorte: string
+  recortes: string[] // MODIFICADO
   isPublico: boolean
   totalLikes: number
   favoritadoPeloUsuario: boolean
@@ -28,7 +28,7 @@ export interface Artigo {
   sintese: string
   fonte: string
   eixo: string
-  recorte: string
+  recortes: string[] // MODIFICADO
   isPublico: boolean
   totalLikes: number
   favoritadoPeloUsuario: boolean
@@ -46,7 +46,7 @@ export interface Citacao {
   citacao: string
   fonte?: string // Fonte é opcional para citações
   eixo: string
-  recorte: string
+  recortes: string[] // MODIFICADO
   isPublico: boolean
   totalLikes: number
   favoritadoPeloUsuario: boolean
@@ -65,7 +65,7 @@ export type RepertorioFormData = {
   modelo: ModeloRepertorio
   autoria: string
   eixo: string
-  recorte: string
+  recortes: string[] // MODIFICADO
   isPublico: boolean // Para futuros usos, se houver lógica de público/privado
 } & (
   | {

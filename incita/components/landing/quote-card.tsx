@@ -12,7 +12,7 @@ type QuoteCardProps = {
   title: string
   content: string
   eixo: string
-  recorte: string
+  recortes: string[] // MODIFICADO
   source?: string
   author?: PerfilUsuario
   likesQTD: number
@@ -26,7 +26,7 @@ export default function QuoteCard({
   title,
   content,
   eixo,
-  recorte,
+  recortes, // MODIFICADO
   source,
   author,
   likesQTD,
@@ -133,19 +133,21 @@ export default function QuoteCard({
           {/* Conteúdo */}
           <div className="mb-3">
             <p className="text-l text-gray-700 pr-12 leading-relaxed">"{content}"</p>
-            
+
           </div>
 
           {/* Botões de Tópico/Subtópico (pode ajustar depois se quiser deixar dinâmico também) */}
           <div className="flex items-center gap-2 mb-3">
             {source && <p className="text-xs text-gray-500 mt-1">Fonte: {source}</p>}
-          <div className="flex gap-2 mt-3">
-            <button className="flex-3 py-1 px-4 bg-blue-100 text-sky-700 text-xs rounded-full text-center">
-              {eixo}
-            </button>
-            <button className="flex-1 py-1 px-4 bg-blue-100 text-sky-700 text-xs rounded-full text-center">
-              {recorte}
-            </button>
+            <div className="flex flex-wrap gap-2 mt-3">
+              <button className="flex-3 py-1 px-4 bg-blue-100 text-sky-700 text-xs rounded-full text-center">
+                {eixo}
+              </button>
+              {recortes.map(recorte => (
+                <button key={recorte} className="flex-1 py-1 px-4 bg-blue-100 text-sky-700 text-xs rounded-full text-center">
+                  {recorte}
+                </button>
+              ))}
             </div>
           </div>
         </div>
