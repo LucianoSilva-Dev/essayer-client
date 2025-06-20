@@ -3,7 +3,7 @@ import { NavItem } from "./nav-item"
 
 export function NavLinks() {
   const links = [
-    { href: "/main", label: "Início" },
+    { href: "/landing", label: "Início" },
     { href: "/main", label: "Repertórios" },
     { href: "/adicionar", label: "Adicionar Repertório" },
   ]
@@ -11,7 +11,7 @@ export function NavLinks() {
   return (
     <nav className="hidden md:flex items-center space-x-8">
       {links.map((link) => (
-        <NavItem href={link.href} label={link.label} />
+        <NavItem key={link.href} href={link.href} label={link.label} />
       ))}
     </nav>
   )

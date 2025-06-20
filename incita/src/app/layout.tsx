@@ -13,6 +13,7 @@ import { CitacaoProvider } from '@/../contexts/citacao-context';
 import 'swiper/css';
 import 'swiper/css/pagination'; // Para os pontinhos de navegação
 import 'swiper/css/navigation'; // Para as setas de navegação (opcional)
+import { HeaderAzul } from '../../components/header_azul/header';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -27,14 +28,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="pt-BR">
+    <html className="scroll-smooth" lang="pt-BR">
       <body className={inter.className}>
         <AuthProvider>
           <ProfileProvider>
             <AdminProvider>
               <RepertorioProvider>
                 <CitacaoProvider>
-                  {children}
+                  <ToastContainer />
+                  <HeaderAzul />
+                  <main className="pt-25">
+                    {children}
+                  </main>
                 </CitacaoProvider>
               </RepertorioProvider>
             </AdminProvider>
