@@ -5,6 +5,7 @@ import { NavLinks } from "./nav-links"
 import { AuthButtons } from "./auth-buttons"
 import { MobileMenu } from "./mobile-menu"
 import { useState } from "react"
+import { motion, AnimatePresence } from "framer-motion"
 
 export function HeaderAzul() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -25,35 +26,34 @@ export function HeaderAzul() {
 
         <MobileMenu onClick={toggleMenu} />
 
-        {isMenuOpen && (
-          <div className="absolute top-20 left-0 right-0 bg-white z-50 p-4 shadow-md md:hidden">
-            <div className="flex flex-col space-y-4">
-              <a href="/" className="text-gray-800 text-lg font-medium">
-                Início
-              </a>
-              <a href="/repertorio" className="text-gray-800 text-lg font-medium">
-                Repertórios
-              </a>
-              <a href="/como-funciona" className="text-gray-800 text-lg font-medium">
-                Adicionar Repertório
-              </a>
-              <div className="flex flex-col space-y-2 pt-2">
-                <a
-                  href="/login"
-                  className="px-6 py-2 rounded-[10px] text-base font-medium border border-amber-400 text-amber-400 text-center"
-                >
-                  Entrar
-                </a>
-                <a
-                  href="/register"
-                  className="px-6 py-2 rounded-[10px] text-base font-medium bg-amber-400 text-white text-center"
-                >
-                  Cadastrar-se
-                </a>
+        <AnimatePresence>
+          {isMenuOpen && (
+            <motion.div 
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.3, ease: 'easeInOut' }}
+              className="absolute top-23 left-0 right-0 bg-white z-50 p-4 shadow-md md:hidden"
+            >
+              <div className="flex flex-col space-y-4">
+                <div className="flex flex-col space-y-2 pt-2">
+                  <a
+                    href="/login"
+                    className="px-6 py-2 rounded-[10px] bg-[transparent] text-base font-medium border-2 border-[#CA9C60] text-[#CA9C60] text-center"
+                  >
+                    Entrar
+                  </a>
+                  <a
+                    href="/register"
+                    className="px-6 py-2 rounded-[10px] text-base font-medium bg-[#CA9C60] text-white text-center"
+                  >
+                    Cadastrar-se
+                  </a>
+                </div>
               </div>
-            </div>
-          </div>
-        )}
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </header>
   )

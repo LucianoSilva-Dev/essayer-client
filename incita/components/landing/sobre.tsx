@@ -2,11 +2,11 @@ import { Target, Eye, Star } from "lucide-react"
 
 export default function AboutSection() {
   return (
-    <section className="py-16 px-4 md:px-6 lg:px-6 bg-[#F3F4F6] scroll-mt-25" id="sobre">
+    <section className="py-16 px-4 sm:px-2 md:px-6 lg:px-6 bg-[#F3F4F6] scroll-mt-25" id="sobre">
       <div className="max-w-[70%] mx-auto">
-        <h2 className="text-[35px] px-10 font-bold mb-6">Sobre o Incita</h2>
+        <h2 className="text-[35px] px-10 font-bold mb-6 sm:px-2">Sobre o Incita</h2>
 
-        <div className="space-y-6 px-10 mb-10">
+        <div className="space-y-6 px-10 mb-10 sm:px-2">
           <p className="text-gray-700 text-[25px]">
             O Incita nasceu da necessidade de centralizar e organizar repertórios sobre questões sociais fundamentais,
             facilitando o acesso a informações relevantes para pesquisadores, estudantes e profissionais.
@@ -18,7 +18,7 @@ export default function AboutSection() {
           </p>
         </div>
 
-        <div className="space-y-8 px-20">
+        <div className="space-y-8 px-20 sm:px-2">
           <div className="flex items-start gap-4">
             <div className="mt-1 bg-amber-100 p-2 rounded-full">
               <Target className="h-8 w-8 text-amber-600" />
@@ -31,7 +31,7 @@ export default function AboutSection() {
             </div>
           </div>
 
-          <div className="flex items-start gap-4">
+          <div className="flex items-start gap-4 sm:px-2">
             <div className="mt-1 bg-amber-100 p-2 rounded-full">
               <Eye className="h-8 w-8 text-amber-600" />
             </div>
@@ -41,7 +41,7 @@ export default function AboutSection() {
             </div>
           </div>
 
-          <div className="flex items-start gap-4">
+          <div className="flex items-start gap-4 sm:px-2">
             <div className="mt-1 bg-amber-100 p-2 rounded-full">
               <Star className="h-8 w-8 text-amber-600" />
             </div>

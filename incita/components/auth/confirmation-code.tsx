@@ -17,7 +17,7 @@ export default function VerifyCodeForm() {
       // Aqui você fará a chamada para a API para verificar o código
       // const response = await verifyResetCode({ code })
 
-      router.push("../page")
+      router.push("/login")
     } catch (e) {
       // Tratar erro
     }
@@ -51,7 +51,7 @@ export default function VerifyCodeForm() {
       </div>
 
       {/* Título */}
-      <h1 className="text-2xl font-medium text-gray-800 mb-4">Redefina sua senha</h1>
+      <h1 className="text-2xl font-medium text-gray-800 mb-4">Confirme que esse e-mail é seu</h1>
 
       {/* Descrição */}
       <p className="text-sm text-gray-600 text-center mb-8 leading-relaxed">
@@ -96,7 +96,7 @@ export default function VerifyCodeForm() {
             {isResending ? "Reenviando..." : "Não recebeu o código? Reenviar"}
           </button>
 
-          <Link href="../page" className="text-sm text-gray-500 hover:text-teal-600">
+          <Link href="/register" className="text-sm text-gray-500 hover:text-teal-600">
             Voltar
           </Link>
         </div>

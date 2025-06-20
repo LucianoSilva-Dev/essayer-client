@@ -4,13 +4,31 @@ import { Logo } from "./logo"
 import { NavLinks } from "./nav-links"
 import { AuthButtons } from "./auth-buttons"
 import { MobileMenu } from "./mobile-menu"
+import { useAuth } from '@/../contexts/auth-context'
 import { useState } from "react"
+import { motion, AnimatePresence } from "framer-motion"
+import Link from "next/link"
+import { useRouter, usePathname } from 'next/navigation'
+  
+  
 
 export function HeaderLanding() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  
+  const pathname = usePathname()
+  const router = useRouter()
+  const { isLoggedIn, logout } = useAuth()
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen)
+  }
+
+  
+  const isActive = (path: string) => pathname === path
+
+  const handleLogout = () => {
+    logout()
+    router.push('/login')
   }
 
   return (
@@ -24,36 +42,62 @@ export function HeaderLanding() {
         </div>
 
         <MobileMenu onClick={toggleMenu} />
-
-        {isMenuOpen && (
-          <div className="absolute top-20 left-0 right-0 bg-white z-50 p-4 shadow-md md:hidden">
+        <AnimatePresence>
+          {isMenuOpen && (
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.3, ease: 'easeInOut' }}
+              className="absolute top-23 left-0 right-0 bg-white z-50 p-4 shadow-md md:hidden"
+            >
+              <div className="absolute left-0 right-0 bg-white z-50 p-4 shadow-md md:hidden">
             <div className="flex flex-col space-y-4">
-              <a href="/" className="text-gray-800 text-lg font-medium">
+              <a href="#inicio" className="text-gray-800 text-lg font-medium">
                 Início
               </a>
-              <a href="/repertorio" className="text-gray-800 text-lg font-medium">
+              <a href="#repertorios" className="text-gray-800 text-lg font-medium">
                 Repertórios
               </a>
-              <a href="/como-funciona" className="text-gray-800 text-lg font-medium">
-                Adicionar Repertório
+              <a href="#como-funciona" className="text-gray-800 text-lg font-medium">
+                Como Funciona
               </a>
-              <div className="flex flex-col space-y-2 pt-2">
-                <a
-                  href="/login"
-                  className="px-6 py-2 rounded-full text-base font-medium border border-amber-400 text-amber-400 text-center"
-                >
-                  Entrar
-                </a>
-                <a
-                  href="/register"
-                  className="px-6 py-2 rounded-full text-base font-medium bg-amber-400 text-white text-center"
-                >
-                  Cadastrar-se
-                </a>
-              </div>
+              {isLoggedIn ? (
+                        <>
+                        <Link
+                          href="/main"
+                          className={`px-6 py-3 rounded-[10px] bg-[transparent] border-solid border-2 border-[#CA9C60] text-center ${isActive("/main") ? "text-black" : "text-[#CA9C60] text-[20px] hover:text-white hover:bg-[#CA9C60] transition-colors duration-300 cursor-pointer"}`}
+                        >
+                          Acessar
+                        </Link>
+                          <button
+                            onClick={handleLogout}
+                            className="px-6 py-3 rounded-[10px] bg-[#CA9C60] text-white text-[20px] hover:bg-[#a68050] duration-200 cursor-pointer"
+                          >
+                            Sair
+                          </button>
+                        </>
+                        ) : (
+                          <>
+                            <Link
+                              href="/login"
+                              className="px-6 py-3 rounded-[10px] bg-[transparent] border-solid border-2 border-[#CA9C60] text-[#CA9C60] text-[20px] hover:bg-[#CA9C60] hover:text-white duration-200 cursor-pointer"
+                            >
+                              Entrar
+                            </Link>
+                            <Link
+                              href="/register"
+                              className="px-6 py-3 rounded-[10px] bg-[#CA9C60] text-white text-[20px] hover:bg-[#a68050] duration-200 cursor-pointer"
+                            >
+                              Cadastrar-se
+                            </Link>
+                          </>
+                        )}
             </div>
-          </div>
-        )}
+          </div> 
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </header>
   )

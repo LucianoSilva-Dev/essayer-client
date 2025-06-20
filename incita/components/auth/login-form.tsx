@@ -22,7 +22,7 @@ export default function LoginForm() {
     try {
       const response = await apiLogin({ email, senha: password })
       login(response.token)
-      router.push("/")
+      router.push("/main")
     } catch (e) { }
   }
 
