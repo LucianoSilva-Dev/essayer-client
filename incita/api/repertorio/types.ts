@@ -12,7 +12,7 @@ export interface ObraDocument {
   criador: PerfilUsuario;
   tipoObra: 'livro' | 'filme' | 'música' | 'teatro';
   subtopicos: string[];
-  topico: string;
+  topicos: string[];
   favoritadoPeloUsuario: boolean;
   likeDoUsuario: boolean;
 }
@@ -27,7 +27,7 @@ export interface ArtigoDocument {
   autor: string;
   criador: PerfilUsuario;
   subtopicos: string[];
-  topico: string;
+  topicos: string[];
   favoritadoPeloUsuario: boolean;
   likeDoUsuario: boolean;
 }
@@ -41,7 +41,7 @@ export interface CitacaoDocument {
   fonte?: string;
   criador: PerfilUsuario;
   subtopicos: string[];
-  topico: string;
+  topicos: string[];
   favoritadoPeloUsuario: boolean;
   likeDoUsuario: boolean;
 }
@@ -65,7 +65,7 @@ export interface CreateCitacaoBody {
   frase: string;
   autor: string;
   subtopicos: string[];
-  topico: string;
+  topicos: string[];
   fonte?: string;
 }
 
@@ -77,7 +77,7 @@ export interface CreateArtigoBody {
   autor: string;
   fonte: string;
   subtopicos: string[];
-  topico: string;
+  topicos: string[];
 }
 
 export interface UpdateArtigoBody extends Partial<CreateArtigoBody> {}
@@ -88,7 +88,7 @@ export interface CreateObraBody {
   autor: string;
   tipoObra: 'livro' | 'filme' | 'música' | 'teatro';
   subtopicos: string[];
-  topico: string;
+  topicos: string[];
 }
 
 export interface UpdateObraBody extends Partial<CreateObraBody> {}

@@ -1,69 +1,81 @@
 'use client'
 
 import { useEffect, useState } from "react"
-import { GetAllRepertoriosResponse, RepertorioDocument } from "../../api/repertorio/types"
-import QuoteCard from "./quote-card"
+import { RepertorioDocument } from "../../api/repertorio/types"
 import { getAllRepertorios } from "../../api/repertorio"
 import { isGetAllArtigoDoc, isGetAllCitacaoDoc, isGetAllObraDoc } from "../../api/repertorio/helpers"
 import Link from "next/link"
+import type { Repertorio } from "@/../types/repertorio"
+import RepertorioCard from "../repertorio/repertorio-card"
 
-export function mountRepertoire(repertorio: RepertorioDocument) {
-  if(isGetAllCitacaoDoc(repertorio)) {
-    return (<QuoteCard
-    key={repertorio.id}
-    id={repertorio.id}
-    type={repertorio.tipoRepertorio}
-    title={repertorio.autor}
-    content={repertorio.frase}
-    eixo={repertorio.topico}
-    recortes={repertorio.subtopicos}
-    source={repertorio.fonte}
-    author={repertorio.criador}
-    likesQTD={repertorio.totalLikes}
-    likedByUser={repertorio.likeDoUsuario}
-    savedByUser={repertorio.favoritadoPeloUsuario} />)
+
+const mountFrontendRepertoire = (repertorio: RepertorioDocument): Repertorio | null => {
+  if (isGetAllCitacaoDoc(repertorio)) {
+    return {
+      id: repertorio.id,
+      modelo: "citacao",
+      autoria: repertorio.autor,
+      citacao: repertorio.frase,
+      fonte: repertorio.fonte,
+      eixos: repertorio.topicos,
+      recortes: repertorio.subtopicos,
+      isPublico: true,
+      totalLikes: repertorio.totalLikes,
+      favoritadoPeloUsuario: repertorio.favoritadoPeloUsuario,
+      likeDoUsuario: repertorio.likeDoUsuario,
+      criador: repertorio.criador
+    }
+  }
+  if (isGetAllObraDoc(repertorio)) {
+    return {
+      id: repertorio.id,
+      modelo: 'obra',
+      titulo: repertorio.titulo,
+      autoria: repertorio.autor,
+      sinopse: repertorio.sinopse,
+      eixos: repertorio.topicos,
+      tipoObra: repertorio.tipoObra,
+      recortes: repertorio.subtopicos,
+      isPublico: true,
+      totalLikes: repertorio.totalLikes,
+      favoritadoPeloUsuario: repertorio.favoritadoPeloUsuario,
+      likeDoUsuario: repertorio.likeDoUsuario,
+      criador: repertorio.criador
+    }
+  }
+  if (isGetAllArtigoDoc(repertorio)) {
+    return {
+      id: repertorio.id,
+      modelo: "artigo",
+      titulo: repertorio.titulo,
+      autoria: repertorio.autor,
+      sintese: repertorio.resumo,
+      fonte: repertorio.fonte,
+      eixos: repertorio.topicos,
+      recortes: repertorio.subtopicos,
+      isPublico: true,
+      totalLikes: repertorio.totalLikes,
+      favoritadoPeloUsuario: repertorio.favoritadoPeloUsuario,
+      likeDoUsuario: repertorio.likeDoUsuario,
+      criador: repertorio.criador
+    }
   }
 
-  if(isGetAllArtigoDoc(repertorio)) {
-    return (<QuoteCard
-    key={repertorio.id}
-    id={repertorio.id}
-    type={repertorio.tipoRepertorio}
-    title={repertorio.titulo}
-    content={repertorio.resumo}
-    eixo={repertorio.topico}
-    recortes={repertorio.subtopicos}
-    source={repertorio.fonte}
-    author={repertorio.criador}
-    likesQTD={repertorio.totalLikes}
-    likedByUser={repertorio.likeDoUsuario}
-    savedByUser={repertorio.favoritadoPeloUsuario} />)
-  }
-
-  if(isGetAllObraDoc(repertorio)) {
-    return (<QuoteCard
-    key={repertorio.id}
-    id={repertorio.id}
-    type={repertorio.tipoRepertorio}
-    title={repertorio.autor}
-    content={repertorio.sinopse}
-    eixo={repertorio.topico}
-    recortes={repertorio.subtopicos}
-    author={repertorio.criador}
-    likesQTD={repertorio.totalLikes}
-    likedByUser={repertorio.likeDoUsuario}
-    savedByUser={repertorio.favoritadoPeloUsuario} />)
-  }
+  return null
 }
 
 export default function FeaturedRepertoires() {
-  const [featuredRepertoires, setFeaturedRepertoires] = useState<GetAllRepertoriosResponse | null>(null)
+  const [featuredRepertoires, setFeaturedRepertoires] = useState<Repertorio[]>([])
   
   useEffect(() => {
     async function fetchData() {
       const response = await getAllRepertorios('?ordenarPor=MaxLikes&limit=6')
-      console.log(response)
-      if (response) setFeaturedRepertoires(response)
+      if (response) {
+        const mapped = response.documentos
+            .map(doc => mountFrontendRepertoire(doc))
+            .filter((rep): rep is Repertorio => rep !== null)
+        setFeaturedRepertoires(mapped)
+      }
     }
     fetchData()
   }, [])
@@ -76,12 +88,12 @@ export default function FeaturedRepertoires() {
           <p className="text-[30px] text-gray-600 max-w-4xl justify-self-center">Alguns exemplos do conteúdo que você encontrará em nosso acervo</p>
         </div>
 
-        <div className="grid grid-cols-3 gap-y-8 gap-x-16 sm:grid-cols-1 md:grid-cols-2 max-w-7xl mx-auto lg:grid-cols-3">
-          {featuredRepertoires?.documentos.length! > 0 ? 
-          featuredRepertoires!.documentos.map((repertorio) => (
-            mountRepertoire(repertorio)
-          ))
-          : <p className="text-[30px] text-gray-600 max-w-4xl justify-self-center">Nenhum repertorio encontrado</p>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
+          {featuredRepertoires.length > 0 ? 
+            featuredRepertoires.map((repertorio) => (
+                <RepertorioCard key={repertorio.id} repertorio={repertorio} />
+            ))
+          : <p className="text-[30px] text-gray-600 max-w-4xl justify-self-center col-span-full">Nenhum repertorio encontrado</p>
           }
 
         </div>

@@ -8,10 +8,11 @@ export interface Obra {
   titulo: string
   autoria: string
   sinopse: string
-  eixo: string
-  recortes: string[] // MODIFICADO
+  eixos: string[] 
+  recortes: string[]
   isPublico: boolean
   totalLikes: number
+  tipoObra: 'livro' | 'filme' | 'música' | 'teatro' // ADICIONADO
   favoritadoPeloUsuario: boolean
   likeDoUsuario: boolean
   criador: {
@@ -27,8 +28,8 @@ export interface Artigo {
   autoria: string
   sintese: string
   fonte: string
-  eixo: string
-  recortes: string[] // MODIFICADO
+  eixos: string[]
+  recortes: string[]
   isPublico: boolean
   totalLikes: number
   favoritadoPeloUsuario: boolean
@@ -44,9 +45,9 @@ export interface Citacao {
   modelo: "citacao"
   autoria: string
   citacao: string
-  fonte?: string // Fonte é opcional para citações
-  eixo: string
-  recortes: string[] // MODIFICADO
+  fonte?: string 
+  eixos: string[]
+  recortes: string[]
   isPublico: boolean
   totalLikes: number
   favoritadoPeloUsuario: boolean
@@ -64,9 +65,9 @@ export type Repertorio = Obra | Artigo | Citacao
 export type RepertorioFormData = {
   modelo: ModeloRepertorio
   autoria: string
-  eixo: string
-  recortes: string[] // MODIFICADO
-  isPublico: boolean // Para futuros usos, se houver lógica de público/privado
+  eixos: string[] 
+  recortes: string[]
+  isPublico: boolean 
 } & (
   | {
       modelo: "obra"
@@ -82,6 +83,6 @@ export type RepertorioFormData = {
   | {
       modelo: "citacao"
       citacao: string
-      fonte?: string // Tornar fonte opcional no form data para citação
+      fonte?: string 
     }
 )

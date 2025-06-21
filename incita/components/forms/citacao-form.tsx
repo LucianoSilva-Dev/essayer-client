@@ -1,7 +1,6 @@
 "use client"
 
 import type React from "react"
-import { useState } from "react"
 
 interface CitacaoFormData {
   autoria: string
@@ -10,25 +9,18 @@ interface CitacaoFormData {
 }
 
 interface CitacaoFormProps {
-  initialData?: CitacaoFormData
-  onDataChange: (data: CitacaoFormData) => void
+  onDataChange: (data: Partial<CitacaoFormData>) => void
   errors: Record<string, string>
+  autoria: string
+  citacao: string
+  fonte: string
 }
 
-export default function CitacaoForm({ initialData, onDataChange, errors }: CitacaoFormProps) {
-  const [formData, setFormData] = useState<CitacaoFormData>(
-    initialData || {
-      autoria: "",
-      citacao: "",
-      fonte: "",
-    },
-  )
-
+export default function CitacaoForm({ autoria, citacao, fonte, onDataChange, errors }: CitacaoFormProps) {
+  
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
-    const newData = { ...formData, [name]: value }
-    setFormData(newData)
-    onDataChange(newData)
+    onDataChange({ [name]: value });
   }
 
   return (
@@ -41,7 +33,7 @@ export default function CitacaoForm({ initialData, onDataChange, errors }: Citac
           type="text"
           id="autoria"
           name="autoria"
-          value={formData.autoria}
+          value={autoria}
           onChange={handleChange}
           className={`w-full px-3 py-2 border ${
             errors.autoria ? "border-red-500" : "border-gray-300"
@@ -58,7 +50,7 @@ export default function CitacaoForm({ initialData, onDataChange, errors }: Citac
         <textarea
           id="citacao"
           name="citacao"
-          value={formData.citacao}
+          value={citacao}
           onChange={handleChange}
           rows={4}
           className={`w-full px-3 py-2 border ${
@@ -77,7 +69,7 @@ export default function CitacaoForm({ initialData, onDataChange, errors }: Citac
           type="text"
           id="fonte"
           name="fonte"
-          value={formData.fonte}
+          value={fonte}
           onChange={handleChange}
           className={`w-full px-3 py-2 border ${
             errors.fonte ? "border-red-500" : "border-gray-300"

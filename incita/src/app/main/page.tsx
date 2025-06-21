@@ -32,7 +32,7 @@ const modelosOptions = [
 export default function Main() {
   const { repertorios, pesquisarRepertorios, totalPages, currentPage, setPage, isLoadingRepertorios, totalRepertorios } = useRepertorio()
   const [termoBusca, setTermoBusca] = useState("")
-  const [eixoAtivo, setEixoAtivo] = useState<string | null>(null)
+  const [eixosAtivos, setEixosAtivos] = useState<string[]>([])
   const [recorteAtivo, setRecorteAtivo] = useState<string | null>(null)
   const [modeloAtivo, setModeloAtivo] = useState<string | null>(null)
   const [tipoVisualizacao, setTipoVisualizacao] = useState<"todos" | "salvos">("todos")
@@ -41,18 +41,20 @@ export default function Main() {
   const [recorteOptions, setRecorteOptions] = useState<string[]>([]);
 
   useEffect(() => {
-    if (eixoAtivo && EixosTematicos[eixoAtivo as keyof typeof EixosTematicos]) {
-      setRecorteOptions(EixosTematicos[eixoAtivo as keyof typeof EixosTematicos]);
+    if (eixosAtivos.length > 0) {
+      const allRecortes = eixosAtivos.flatMap( (eixo: string) => EixosTematicos[eixo as keyof typeof EixosTematicos] || [])
+      const uniqueRecortes = [...new Set(allRecortes)]
+      setRecorteOptions(uniqueRecortes);
     } else {
-      setRecorteOptions([]);
+      setRecorteOptions(Object.values(EixosTematicos).flat());
     }
     setRecorteAtivo(null); // Reseta o recorte quando o eixo muda
-  }, [eixoAtivo]);
+  }, [eixosAtivos]);
 
   const memoizedFetchRepertorios = useCallback(async () => {
     console.log("Main: fetchRepertorios disparado.");
     const filters: Parameters<typeof pesquisarRepertorios>[0] = {
-      offset: currentPage * 15, // Corrected: Multiply currentPage by the limit (15)
+      offset: currentPage * 15,
       limit: 15,
       orderBy: ordenarPor,
     };
@@ -60,8 +62,8 @@ export default function Main() {
     if (termoBusca) {
       filters.search = termoBusca;
     }
-    if (eixoAtivo) {
-      filters.eixos = [eixoAtivo];
+    if (eixosAtivos.length > 0) {
+      filters.eixos = eixosAtivos;
     }
     if (recorteAtivo) {
       filters.subtopicos = [recorteAtivo];
@@ -77,7 +79,7 @@ export default function Main() {
   }, [
     currentPage,
     termoBusca,
-    eixoAtivo,
+    eixosAtivos,
     recorteAtivo,
     modeloAtivo,
     tipoVisualizacao,
@@ -88,6 +90,13 @@ export default function Main() {
   useEffect(() => {
     memoizedFetchRepertorios();
   }, [memoizedFetchRepertorios]);
+  
+  const handleEixoToggle = (eixo: string) => {
+    setEixosAtivos(prev => 
+      prev.includes(eixo) ? prev.filter(e => e !== eixo) : [...prev, eixo]
+    )
+    setPage(0)
+  }
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -100,7 +109,7 @@ export default function Main() {
   };
 
   const handleClearFilters = () => {
-    setEixoAtivo(null);
+    setEixosAtivos([]);
     setRecorteAtivo(null);
     setModeloAtivo(null);
     setTermoBusca("");
@@ -111,7 +120,7 @@ export default function Main() {
 
   const countActiveFilters = () => {
     let count = 0;
-    if (eixoAtivo) count++;
+    if (eixosAtivos.length > 0) count++;
     if (recorteAtivo) count++;
     if (modeloAtivo) count++;
     if (termoBusca) count++;
@@ -210,8 +219,8 @@ export default function Main() {
                     {EixoOptions.map((eixo) => (
                       <button
                         key={eixo}
-                        onClick={() => { setEixoAtivo(eixoAtivo === eixo ? null : eixo); setPage(0); }}
-                        className={`px-3 py-2 text-sm rounded-full border transition-colors ${eixo === eixoAtivo
+                        onClick={() => handleEixoToggle(eixo)}
+                        className={`px-3 py-2 text-sm rounded-full border transition-colors ${eixosAtivos.includes(eixo)
                           ? "bg-teal-100 text-teal-700 border-teal-200"
                           : "bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100"
                           }`}
@@ -222,7 +231,7 @@ export default function Main() {
                   </div>
                 </div>
 
-                {eixoAtivo && recorteOptions.length > 0 && (
+                {eixosAtivos.length > 0 && recorteOptions.length > 0 && (
                   <div className="mb-6">
                     <h3 className="text-sm font-medium text-gray-700 mb-3">Filtrar por Recorte</h3>
                     <div className="flex flex-wrap gap-2">
@@ -314,9 +323,9 @@ export default function Main() {
                       • Tipo: <span className="font-medium">{modelosOptions.find((m) => m.id === modeloAtivo)?.nome}</span>
                     </span>
                   )}
-                  {eixoAtivo && (
+                  {eixosAtivos.length > 0 && (
                     <span className="ml-1">
-                      • Eixo Temático: <span className="font-medium">{eixoAtivo}</span>
+                      • Eixo(s): <span className="font-medium">{eixosAtivos.join(', ')}</span>
                     </span>
                   )}
                   {recorteAtivo && (

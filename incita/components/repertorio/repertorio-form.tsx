@@ -19,12 +19,7 @@ type RepertorioFormProps = {
   initialData?: RepertorioFormData
 }
 
-const formatEixoKey = (key: string) => key.replace(/([A-Z])/g, ' $1').trim();
-
-const EixoOptions = Object.keys(EixosTematicos).map(key => ({
-  value: key,
-  label: formatEixoKey(key)
-}));
+const EixoOptions = Object.keys(EixosTematicos);
 
 const modelos = [
   {
@@ -55,9 +50,9 @@ async function saveRepertoire(repertoire: any) {
           autor: repertoire.autoria,
           sinopse: repertoire.sinopse,
           subtopicos: repertoire.recortes,
-          topico: formatEixoKey(repertoire.eixo),
+          topicos: repertoire.eixos,
           titulo: repertoire.titulo,
-          tipoObra: 'livro',
+          tipoObra: repertoire.tipoObra || 'livro', // Garante um valor padrão
         }
 
         await createObra(obra)
@@ -72,7 +67,7 @@ async function saveRepertoire(repertoire: any) {
           fonte: repertoire.fonte,
           subtopicos: repertoire.recortes,
           titulo: repertoire.titulo,
-          topico: formatEixoKey(repertoire.eixo),
+          topicos: repertoire.eixos,
         }
 
         await createArtigo(artigo)
@@ -86,7 +81,7 @@ async function saveRepertoire(repertoire: any) {
           frase: repertoire.citacao,
           fonte: repertoire.fonte,
           subtopicos: repertoire.recortes,
-          topico: formatEixoKey(repertoire.eixo),
+          topicos: repertoire.eixos,
         }
         await createCitacao(citacao)
         toast.success("Citação salva com sucesso!")
@@ -100,50 +95,78 @@ export default function RepertorioForm({ onSubmit, onCancel, initialData }: Repe
   const [formData, setFormData] = useState<any>(
     initialData || {
       modelo: "obra",
-      eixo: "",
+      eixos: [],
       recortes: [],
+      tipoObra: "livro", // Valor inicial para tipoObra
     },
   )
 
   const [recorteOptions, setRecorteOptions] = useState<string[]>([]);
-  const maxRecortes = recorteOptions.length < 4 ? recorteOptions.length : 4;
+  const maxRecortes = 4;
 
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [showPreview, setShowPreview] = useState(false)
 
   useEffect(() => {
-    if (formData.eixo) {
-      const recortes = EixosTematicos[formData.eixo as keyof typeof EixosTematicos];
-      setRecorteOptions(recortes ? Object.values(recortes) : []);
+    if (formData.eixos && formData.eixos.length > 0) {
+      const allRecortes = formData.eixos.flatMap( (eixo: string) => EixosTematicos[eixo as keyof typeof EixosTematicos] || [])
+      const uniqueRecortes = [...new Set(allRecortes)]
+      setRecorteOptions(uniqueRecortes);
     } else {
       setRecorteOptions([]);
     }
-  }, [formData.eixo]);
+  }, [formData.eixos]);
 
 
   const handleModeloChange = (novoModelo: ModeloRepertorio) => {
     setModeloSelecionado(novoModelo)
-    setFormData({
+    setFormData((prev: any) => ({
+      ...prev,
       modelo: novoModelo,
-      eixo: formData.eixo || "",
-      recortes: formData.recortes || [],
-    })
+       titulo: "",
+       autoria: "",
+       sinopse: "",
+       fonte: "",
+       sintese: "",
+       citacao: "",
+       tipoObra: "livro", // Reseta para o padrão ao trocar de modelo
+    }))
   }
 
-  const handleSpecificDataChange = (specificData: any) => {
-    setFormData((prev: any) => ({ ...prev, ...specificData }))
-
-    Object.keys(specificData).forEach((field) => {
-      if (errors[field]) {
-        setErrors((prev) => {
-          const newErrors = { ...prev }
-          delete newErrors[field]
-          return newErrors
-        })
-      }
-    })
+  const handleSpecificDataChange = (update: Partial<RepertorioFormData>) => {
+    setFormData((prev: any) => ({ ...prev, ...update }))
   }
+  
+  const handleEixoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value, checked } = e.target;
+    const currentEixos = formData.eixos || [];
+
+    let newEixos;
+
+    if (checked) {
+      newEixos = [...currentEixos, value];
+    } else {
+      newEixos = currentEixos.filter((eixo: string) => eixo !== value);
+    }
+
+    setFormData((prev: any) => ({
+      ...prev,
+      eixos: newEixos,
+      recortes: prev.recortes.filter((recorte: string) => 
+        newEixos.flatMap((eixo: string) => EixosTematicos[eixo as keyof typeof EixosTematicos] || []).includes(recorte)
+      )
+    }));
+
+    if (errors.eixos) {
+      setErrors((prev) => {
+        const newErrors = { ...prev };
+        delete newErrors.eixos;
+        return newErrors;
+      });
+    }
+  };
+
 
   const handleRecorteChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value, checked } = e.target;
@@ -174,34 +197,12 @@ export default function RepertorioForm({ onSubmit, onCancel, initialData }: Repe
       });
     }
   };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const { name, value } = e.target
-
-    if (name === "eixo") {
-      setFormData((prev: any) => ({
-        ...prev,
-        eixo: value,
-        recortes: []
-      }));
-    } else {
-      setFormData((prev: any) => ({ ...prev, [name]: value }))
-    }
-
-    if (errors[name]) {
-      setErrors((prev) => {
-        const newErrors = { ...prev }
-        delete newErrors[name]
-        return newErrors
-      })
-    }
-  }
-
+  
   const validateForm = (): boolean => {
     const newErrors: Record<string, string> = {}
 
-    if (!formData.eixo) {
-      newErrors.eixo = "Selecione um Eixo Temático"
+    if (!formData.eixos || formData.eixos.length === 0) {
+      newErrors.eixos = "Selecione pelo menos um Eixo Temático"
     }
 
     if (recorteOptions.length > 0) {
@@ -218,6 +219,7 @@ export default function RepertorioForm({ onSubmit, onCancel, initialData }: Repe
         if (!formData.autoria?.trim()) newErrors.autoria = "A autoria é obrigatória"
         if (!formData.sinopse?.trim()) newErrors.sinopse = "A sinopse é obrigatória"
         if (!formData.fonte?.trim()) newErrors.fonte = "A fonte é obrigatória"
+        if (!formData.tipoObra) newErrors.tipoObra = "O tipo da obra é obrigatório"
         break
       case "artigo":
         if (!formData.titulo?.trim()) newErrors.titulo = "O título é obrigatório"
@@ -261,11 +263,32 @@ export default function RepertorioForm({ onSubmit, onCancel, initialData }: Repe
   const renderSpecificForm = () => {
     switch (modeloSelecionado) {
       case "obra":
-        return <ObraForm initialData={formData} onDataChange={handleSpecificDataChange} errors={errors} />
+        return <ObraForm 
+                    onDataChange={handleSpecificDataChange} 
+                    errors={errors} 
+                    titulo={formData.titulo || ''}
+                    autoria={formData.autoria || ''}
+                    sinopse={formData.sinopse || ''}
+                    fonte={formData.fonte || ''}
+                    tipoObra={formData.tipoObra || 'livro'}
+                />
       case "artigo":
-        return <ArtigoForm initialData={formData} onDataChange={handleSpecificDataChange} errors={errors} />
+        return <ArtigoForm 
+                    onDataChange={handleSpecificDataChange} 
+                    errors={errors} 
+                    titulo={formData.titulo || ''}
+                    autoria={formData.autoria || ''}
+                    sintese={formData.sintese || ''}
+                    fonte={formData.fonte || ''}
+                />
       case "citacao":
-        return <CitacaoForm initialData={formData} onDataChange={handleSpecificDataChange} errors={errors} />
+        return <CitacaoForm 
+                    onDataChange={handleSpecificDataChange} 
+                    errors={errors} 
+                    autoria={formData.autoria || ''}
+                    citacao={formData.citacao || ''}
+                    fonte={formData.fonte || ''}
+                />
       default:
         return null
     }
@@ -320,31 +343,32 @@ export default function RepertorioForm({ onSubmit, onCancel, initialData }: Repe
           {renderSpecificForm()}
 
           <div className="mb-5">
-            <label htmlFor="eixo" className="block text-sm font-medium text-gray-700 mb-1">
-              Eixo Temático <span className="text-red-500">*</span>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Eixos Temáticos <span className="text-red-500">*</span>
             </label>
-            <select
-              id="eixo"
-              name="eixo"
-              value={formData.eixo}
-              onChange={handleChange}
-              className={`w-full px-3 py-2 border ${errors.eixo ? "border-red-500" : "border-gray-300"} rounded-md focus:outline-none focus:ring-1 focus:ring-teal-600 bg-white`}
-            >
-              <option value="">Selecione um Eixo Temático</option>
+             <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
               {EixoOptions.map((eixo) => (
-                <option key={eixo.value} value={eixo.value}>
-                  {eixo.label}
-                </option>
+                <label key={eixo} className="flex items-center space-x-2 p-2 rounded-md border border-gray-200 hover:bg-gray-50 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    name="eixos"
+                    value={eixo}
+                    checked={formData.eixos?.includes(eixo) || false}
+                    onChange={handleEixoChange}
+                    className="h-4 w-4 rounded border-gray-300 text-teal-600 focus:ring-teal-500"
+                  />
+                  <span className="text-sm text-gray-700">{eixo}</span>
+                </label>
               ))}
-            </select>
-            {errors.eixo && <p className="mt-1 text-sm text-red-500">{errors.eixo}</p>}
+            </div>
+            {errors.eixos && <p className="mt-1 text-sm text-red-500">{errors.eixos}</p>}
           </div>
 
           <div className="mb-5">
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Recortes <span className="text-red-500">*</span> (mín. 1, máx. {maxRecortes > 0 ? maxRecortes : 4})
+              Recortes <span className="text-red-500">*</span> (mín. 1, máx. {maxRecortes})
             </label>
-            <div className={`grid grid-cols-2 md:grid-cols-3 gap-2 ${!formData.eixo ? 'opacity-50 cursor-not-allowed' : ''}`}>
+            <div className={`grid grid-cols-2 md:grid-cols-3 gap-2 ${!formData.eixos || formData.eixos.length === 0 ? 'opacity-50 cursor-not-allowed' : ''}`}>
               {recorteOptions.map((recorte) => (
                 <label key={recorte} className="flex items-center space-x-2 p-2 rounded-md border border-gray-200 hover:bg-gray-50 cursor-pointer">
                   <input
@@ -353,7 +377,7 @@ export default function RepertorioForm({ onSubmit, onCancel, initialData }: Repe
                     value={recorte}
                     checked={formData.recortes?.includes(recorte) || false}
                     onChange={handleRecorteChange}
-                    disabled={!formData.eixo}
+                    disabled={!formData.eixos || formData.eixos.length === 0}
                     className="h-4 w-4 rounded border-gray-300 text-teal-600 focus:ring-teal-500"
                   />
                   <span className="text-sm text-gray-700">{recorte}</span>

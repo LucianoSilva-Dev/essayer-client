@@ -50,7 +50,6 @@ export default function RepertorioCard({ repertorio }: RepertorioCardProps) {
       }
     } catch (e) {
       console.error("Erro ao alternar like:", e);
-      // Opcional: Reverter estado local ou mostrar mensagem de erro
     }
   }
 
@@ -58,29 +57,33 @@ export default function RepertorioCard({ repertorio }: RepertorioCardProps) {
     router.push(`/repertorio/${repertorio.id}`)
   }
 
-  const getModeloIcon = (modelo: string) => {
+  const getModeloStyle = (modelo: string) => {
     switch (modelo) {
       case "obra":
-        return BookOpen
+        return "border-amber-500 text-amber-700 bg-amber-50";
       case "artigo":
-        return FileText
+        return "border-teal-500 text-teal-700 bg-teal-50";
       case "citacao":
-        return Quote
+        return "border-blue-500 text-blue-700 bg-blue-50";
       default:
-        return BookOpen
+        return "border-gray-300 text-gray-800 bg-gray-100";
     }
   }
 
-  const getModeloLabel = (modelo: string) => {
-    switch (modelo) {
-      case "obra":
-        return "Obra"
-      case "artigo":
-        return "Artigo"
-      case "citacao":
-        return "Citação"
-      default:
-        return "Obra"
+  const getModeloLabel = (repertorio: Repertorio) => {
+    switch (repertorio.modelo) {
+        case "obra":
+            if (repertorio.tipoObra) {
+                const tipo = repertorio.tipoObra.charAt(0).toUpperCase() + repertorio.tipoObra.slice(1);
+                return `Obra (${tipo})`;
+            }
+            return "Obra";
+        case "artigo":
+            return "Artigo";
+        case "citacao":
+            return "Citação";
+        default:
+            return "Repertório";
     }
   }
 
@@ -125,7 +128,7 @@ export default function RepertorioCard({ repertorio }: RepertorioCardProps) {
             <div className="mb-4">
               <p className="text-sm text-gray-700 italic line-clamp-3 mb-2">"{repertorio.citacao}"</p>
             </div>
-            {repertorio.fonte && ( // Renderiza a fonte apenas se existir
+            {repertorio.fonte && ( 
               <div className="mb-4">
                 <p className="text-xs text-gray-500">
                   <span className="font-medium">Fonte:</span> {repertorio.fonte}
@@ -140,85 +143,89 @@ export default function RepertorioCard({ repertorio }: RepertorioCardProps) {
     }
   }
 
-  const ModeloIcon = getModeloIcon(repertorio.modelo)
-
   return (
-    <div className="bg-white rounded-lg border-l-4 border-l-[#CA9C60] shadow-sm hover:shadow-md transition-shadow p-4 cursor-pointer group">
-      {/* Cabeçalho do card */}
-      <div className="flex justify-between items-center mb-3">
-        <div className="flex items-center">
-          {userProfilePictureLink ? (
-            <img
-              src={userProfilePictureLink}
-              alt={`Foto de perfil de ${repertorio.criador.nome}`}
-              className="w-6 h-6 rounded-full object-cover mr-2"
-            />
-          ) : (
-            <div className="w-6 h-6 bg-gray-800 rounded-full flex items-center justify-center mr-2">
-              <User size={14} className="text-white" />
-            </div>
-          )}
-          <span className="text-sm font-medium text-gray-800">{repertorio.criador.nome}</span>
+    <div className="bg-white rounded-lg border-l-4 border-l-[#CA9C60] shadow-sm hover:shadow-md transition-shadow p-4 cursor-pointer group flex flex-col justify-between">
+      <div>
+        {/* Cabeçalho do card */}
+        <div className="flex justify-between items-center mb-3">
+          <div className="flex items-center">
+            {userProfilePictureLink ? (
+              <img
+                src={userProfilePictureLink}
+                alt={`Foto de perfil de ${repertorio.criador.nome}`}
+                className="w-6 h-6 rounded-full object-cover mr-2"
+              />
+            ) : (
+              <div className="w-6 h-6 bg-gray-800 rounded-full flex items-center justify-center mr-2">
+                <User size={14} className="text-white" />
+              </div>
+            )}
+            <span className="text-sm font-medium text-gray-800">{repertorio.criador.nome}</span>
+          </div>
+          <div className="flex items-center space-x-3">
+            <button
+              onClick={(e) => {
+                e.stopPropagation()
+                handleViewDetails()
+              }}
+              className="text-gray-400 hover:text-[#CA9C60] transition-colors opacity-0 group-hover:opacity-100"
+              title="Ver detalhes"
+            >
+              <Eye size={16} />
+            </button>
+            <button
+              onClick={(e) => {
+                e.stopPropagation()
+                toggleFavorito(repertorio.id)
+              }}
+              className={`transition-colors ${isFavorito ? "text-blue-500" : "text-gray-400 hover:text-blue-500"}`}
+              title={isFavorito ? "Remover dos favoritos" : "Adicionar aos favoritos"}
+            >
+              <Bookmark size={16} />
+            </button>
+            <button
+              onClick={(e) => {
+                e.stopPropagation()
+                handleLike()
+              }}
+              className={`flex items-center space-x-1 transition-colors ${isLiked ? "text-blue-500" : "text-gray-400 hover:text-blue-500"
+                }`}
+              title="Curtir"
+            >
+              <ThumbsUp size={16} />
+              <span className="text-sm">{likes}</span>
+            </button>
+          </div>
         </div>
-        <div className="flex items-center space-x-3">
-          <button
-            onClick={(e) => {
-              e.stopPropagation()
-              handleViewDetails()
-            }}
-            className="text-gray-400 hover:text-[#CA9C60] transition-colors opacity-0 group-hover:opacity-100"
-            title="Ver detalhes"
-          >
-            <Eye size={16} />
-          </button>
-          <button
-            onClick={(e) => {
-              e.stopPropagation()
-              toggleFavorito(repertorio.id)
-            }}
-            className={`transition-colors ${isFavorito ? "text-blue-500" : "text-gray-400 hover:text-blue-500"}`}
-            title={isFavorito ? "Remover dos favoritos" : "Adicionar aos favoritos"}
-          >
-            <Bookmark size={16} />
-          </button>
-          <button
-            onClick={(e) => {
-              e.stopPropagation()
-              handleLike()
-            }}
-            className={`flex items-center space-x-1 transition-colors ${isLiked ? "text-blue-500" : "text-gray-400 hover:text-blue-500"
-              }`}
-            title="Curtir"
-          >
-            <ThumbsUp size={16} />
-            <span className="text-sm">{likes}</span>
-          </button>
-        </div>
-      </div>
 
-      {/* Tags da categoria e modelo */}
-      <div className="flex flex-wrap items-center gap-2 mb-3">
-        <span
-          className={`inline-block px-2 py-1 rounded-full text-xs font-medium border bg-gray-100 text-gray-800 border-gray-200`}
-        >
-          #{repertorio.eixo}
-        </span>
-        <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-700 border border-gray-200">
-          <ModeloIcon size={12} className="mr-1" />
-          {getModeloLabel(repertorio.modelo)}
-        </span>
-      </div>
-        
-      {/* Conteúdo específico do modelo - clicável */}
-      <div onClick={handleViewDetails}>
-        {renderContent()}
-        <div className="flex flex-wrap gap-2 mt-3">
-          {repertorio.recortes.map(recorte => (
-              <button key={recorte} className="flex-3 py-1 px-4 bg-blue-100 text-sky-700 text-xs rounded-full text-center">
-                  {recorte}
-              </button>
+        {/* Tags de tipo e eixos */}
+        <div className="flex flex-wrap items-center gap-2 mb-3">
+          <span className={`inline-flex items-center px-3 py-1 rounded-md text-xs font-semibold border ${getModeloStyle(repertorio.modelo)}`}>
+            #{getModeloLabel(repertorio)}
+          </span>
+          {repertorio.eixos.map(eixo => (
+             <span
+                key={eixo}
+                className={`inline-block px-2 py-1 rounded-full text-xs font-medium border bg-gray-100 text-gray-800 border-gray-200`}
+            >
+                {'#' + eixo}
+            </span>
           ))}
         </div>
+        
+        {/* Conteúdo específico do modelo - clicável */}
+        <div onClick={handleViewDetails}>
+          {renderContent()}
+        </div>
+      </div>
+
+      {/* Recortes */}
+      <div className="grid grid-cols-2 place-items-center gap-2 mt-4" onClick={handleViewDetails}>
+        {repertorio.recortes.map(recorte => (
+            <span key={recorte} className="flex-3 w-full py-1 px-3 bg-blue-100 text-sky-700 text-xs rounded-full text-center">
+                {recorte}
+            </span>
+        ))}
       </div>
     </div>
   )

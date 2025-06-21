@@ -17,7 +17,7 @@ const mountRepertoire = (repertorio: RepertorioDocument): Repertorio | null => {
       autoria: repertorio.autor,
       citacao: repertorio.frase,
       fonte: repertorio.fonte,
-      eixo: repertorio.topico,
+      eixos: repertorio.topicos,
       recortes: repertorio.subtopicos,
       isPublico: true,
       totalLikes: repertorio.totalLikes,
@@ -33,7 +33,8 @@ const mountRepertoire = (repertorio: RepertorioDocument): Repertorio | null => {
       titulo: repertorio.titulo,
       autoria: repertorio.autor,
       sinopse: repertorio.sinopse,
-      eixo: repertorio.topico,
+      eixos: repertorio.topicos,
+      tipoObra: repertorio.tipoObra, // ADICIONADO
       recortes: repertorio.subtopicos,
       isPublico: true,
       totalLikes: repertorio.totalLikes,
@@ -50,7 +51,7 @@ const mountRepertoire = (repertorio: RepertorioDocument): Repertorio | null => {
       autoria: repertorio.autor,
       sintese: repertorio.resumo,
       fonte: repertorio.fonte,
-      eixo: repertorio.topico,
+      eixos: repertorio.topicos,
       recortes: repertorio.subtopicos,
       isPublico: true,
       totalLikes: repertorio.totalLikes,
@@ -127,7 +128,7 @@ export function RepertorioProvider({ children }: { children: React.ReactNode }) 
   }) => {
     const params = new URLSearchParams();
     if (filters.search) params.append('conteudo', filters.search);
-    if (filters.eixos && filters.eixos.length > 0) filters.eixos.forEach(e => params.append('topico', e));
+    if (filters.eixos && filters.eixos.length > 0) filters.eixos.forEach(e => params.append('topicos', e));
     if (filters.subtopicos && filters.subtopicos.length > 0) filters.subtopicos.forEach(s => params.append('subtopicos', s));
     if (filters.modelo && filters.modelo.length > 0) filters.modelo.forEach(m => params.append('tipoRepertorio', m));
 
