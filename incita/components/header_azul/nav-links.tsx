@@ -1,16 +1,31 @@
 //Precisa ser adicionada a fonte poppins
+import { useAuth } from "@/../contexts/auth-context" // 1. Importar o hook
 import { NavItem } from "./nav-item"
 
 export function NavLinks() {
-  const links = [
+  const { isLoggedIn, userData } = useAuth() // 2. Obter os dados de autenticação e do usuário
+
+  const allLinks = [
     { href: "/landing", label: "Início" },
     { href: "/main", label: "Repertórios" },
-    { href: "/adicionar", label: "Adicionar Repertório" },
+    // Adicione a condição para o link de adicionar
+    { href: "/adicionar", label: "Adicionar Repertório", roles: ['professor', 'admin'] },
   ]
+
+  // 3. Filtrar os links com base no cargo do usuário
+  const filteredLinks = allLinks.filter(link => {
+    if (link.roles) {
+      // Se o link tem roles, o usuário precisa estar logado e ter um cargo compatível
+      return isLoggedIn && userData && link.roles.includes(userData.cargo)
+    }
+    // Se o link não tem roles, ele é público
+    return true
+  })
 
   return (
     <nav className="hidden md:flex items-center space-x-8">
-      {links.map((link) => (
+      {/* 4. Mapear os links filtrados */}
+      {filteredLinks.map((link) => (
         <NavItem key={link.href} href={link.href} label={link.label} />
       ))}
     </nav>

@@ -7,6 +7,7 @@ import Link from "next/link"
 import { useRepertorio } from "@/../contexts/repertorio-context"
 import RepertorioCard from "@/../components/repertorio/repertorio-card"
 import { EixosTematicos, EixoOptions } from "@/../constants/eixos"
+import { useAuth } from "@/../contexts/auth-context" // 1. Importar o hook useAuth
 
 const modelosOptions = [
   {
@@ -30,6 +31,7 @@ const modelosOptions = [
 ]
 
 export default function Main() {
+  const { userData } = useAuth() // 2. Obter os dados do usuário
   const { repertorios, pesquisarRepertorios, totalPages, currentPage, setPage, isLoadingRepertorios, totalRepertorios } = useRepertorio()
   const [termoBusca, setTermoBusca] = useState("")
   const [eixosAtivos, setEixosAtivos] = useState<string[]>([])
@@ -361,21 +363,27 @@ export default function Main() {
                       ? "Você ainda não tem repertórios salvos."
                       : "Nenhum repertório disponível. Comece adicionando um!"}
                 </p>
-                {filtrosAtivosCount > 0 ? (
-                  <button
-                    onClick={handleClearFilters}
-                    className="inline-flex items-center px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors mr-3"
-                  >
-                    Limpar filtros
-                  </button>
-                ) : null}
-                <Link
-                  href="/adicionar"
-                  className="inline-flex items-center px-4 py-2 bg-teal-600 text-white rounded-md hover:bg-teal-700 transition-colors"
-                >
-                  <Plus size={18} className="mr-2" />
-                  Adicionar novo repertório
-                </Link>
+                
+                {/* 3. Apenas professores e admins podem ver os botões de ação */}
+                {(userData?.cargo === 'professor' || userData?.cargo === 'admin') && (
+                  <>
+                    {filtrosAtivosCount > 0 ? (
+                      <button
+                        onClick={handleClearFilters}
+                        className="inline-flex items-center px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors mr-3"
+                      >
+                        Limpar filtros
+                      </button>
+                    ) : null}
+                    <Link
+                      href="/adicionar"
+                      className="inline-flex items-center px-4 py-2 bg-teal-600 text-white rounded-md hover:bg-teal-700 transition-colors"
+                    >
+                      <Plus size={18} className="mr-2" />
+                      Adicionar novo repertório
+                    </Link>
+                  </>
+                )}
               </div>
             </div>
           ) : (
