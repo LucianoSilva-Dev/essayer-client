@@ -2,12 +2,13 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { ThumbsUp, User, Bookmark, BookOpen, FileText, Quote, Eye } from "lucide-react"
+import { ThumbsUp, User, Bookmark, Eye } from "lucide-react"
 import { useRouter } from "next/navigation"
-import { useRepertorio } from "@/../contexts/repertorio-context"
 import type { Repertorio } from "@/../types/repertorio"
 import { getProfilePictureLink } from "../../api/usuario"
-import { addLike, removeLike } from "../../api/repertorio"
+import { addLike, removeLike, addFavorito, removeFavorito } from "../../api/repertorio"
+import { useAuth } from "@/../contexts/auth-context"
+import { toast } from "react-toastify"
 
 interface RepertorioCardProps {
   repertorio: Repertorio
@@ -15,10 +16,12 @@ interface RepertorioCardProps {
 
 export default function RepertorioCard({ repertorio }: RepertorioCardProps) {
   const router = useRouter()
-  const { toggleFavorito, favoritos } = useRepertorio()
+  const { isLoggedIn } = useAuth();
+  
   const [likes, setLikes] = useState(repertorio.totalLikes)
   const [isLiked, setIsLiked] = useState(repertorio.likeDoUsuario)
-  const isFavorito = favoritos.includes(repertorio.id)
+  const [isFavorito, setIsFavorito] = useState(repertorio.favoritadoPeloUsuario);
+  
   const [userProfilePictureLink, setUserProfilePictureLink] = useState<string | null>(null)
 
   useEffect(() => {
@@ -31,30 +34,45 @@ export default function RepertorioCard({ repertorio }: RepertorioCardProps) {
     fetchUserProfilePicture()
   }, [repertorio.criador?.id])
 
-  // Atualizar estado local de likes e isLiked se as props mudarem (ex: após refetch geral)
+  // Atualizar estado local se as props mudarem (ex: após refetch geral)
   useEffect(() => {
     setLikes(repertorio.totalLikes);
     setIsLiked(repertorio.likeDoUsuario);
-  }, [repertorio.totalLikes, repertorio.likeDoUsuario]);
+    setIsFavorito(repertorio.favoritadoPeloUsuario);
+  }, [repertorio.totalLikes, repertorio.likeDoUsuario, repertorio.favoritadoPeloUsuario]);
 
   const handleLike = async () => {
+    if (!isLoggedIn) return toast.error("Você precisa estar logado para curtir.");
     try {
       if (isLiked) {
         await removeLike(repertorio.id)
-        setIsLiked(false)
         setLikes((prev) => prev - 1)
       } else {
         await addLike(repertorio.id)
-        setIsLiked(true)
         setLikes((prev) => prev + 1)
       }
+      setIsLiked(!isLiked)
     } catch (e) {
-      console.error("Erro ao alternar like:", e);
+       toast.error("Erro ao processar sua curtida.");
+    }
+  }
+
+  const handleToggleFavorito = async () => {
+    if (!isLoggedIn) return toast.error("Você precisa estar logado para favoritar.");
+    try {
+      if (isFavorito) {
+        await removeFavorito(repertorio.id);
+      } else {
+        await addFavorito(repertorio.id);
+      }
+      setIsFavorito(!isFavorito);
+    } catch (err) {
+      toast.error("Erro ao salvar nos favoritos.");
     }
   }
 
   const handleViewDetails = () => {
-    router.push(`/repertorio/${repertorio.id}`)
+    router.push(`/repertorio/${repertorio.id}?type=${repertorio.modelo}`)
   }
 
   const getModeloStyle = (modelo: string) => {
@@ -96,7 +114,7 @@ export default function RepertorioCard({ repertorio }: RepertorioCardProps) {
             <p className="text-sm text-gray-600 mb-3">Por {repertorio.autoria}</p>
             <div className="mb-4">
               <p className="text-sm text-gray-700 line-clamp-4">
-                {repertorio.sinopse.length > 200 ? `${repertorio.sinopse.substring(0, 200)}...` : repertorio.sinopse}
+                {repertorio.sinopse}
               </p>
             </div>
           </>
@@ -109,7 +127,7 @@ export default function RepertorioCard({ repertorio }: RepertorioCardProps) {
             <p className="text-sm text-gray-600 mb-3">Por {repertorio.autoria}</p>
             <div className="mb-4">
               <p className="text-sm text-gray-700 line-clamp-4">
-                {repertorio.sintese.length > 200 ? `${repertorio.sintese.substring(0, 200)}...` : repertorio.sintese}
+                {repertorio.sintese}
               </p>
             </div>
             <div className="mb-4">
@@ -144,7 +162,7 @@ export default function RepertorioCard({ repertorio }: RepertorioCardProps) {
   }
 
   return (
-    <div className="bg-white rounded-lg border-l-4 border-l-[#CA9C60] shadow-sm hover:shadow-md transition-shadow p-4 cursor-pointer group flex flex-col justify-between">
+    <div className="bg-white rounded-lg border-l-4 border-l-[#CA9C60] shadow-sm hover:shadow-md transition-shadow p-4 cursor-pointer group flex flex-col justify-between" onClick={handleViewDetails}>
       <div>
         {/* Cabeçalho do card */}
         <div className="flex justify-between items-center mb-3">
@@ -176,7 +194,7 @@ export default function RepertorioCard({ repertorio }: RepertorioCardProps) {
             <button
               onClick={(e) => {
                 e.stopPropagation()
-                toggleFavorito(repertorio.id)
+                handleToggleFavorito()
               }}
               className={`transition-colors ${isFavorito ? "text-blue-500" : "text-gray-400 hover:text-blue-500"}`}
               title={isFavorito ? "Remover dos favoritos" : "Adicionar aos favoritos"}
@@ -214,14 +232,14 @@ export default function RepertorioCard({ repertorio }: RepertorioCardProps) {
         </div>
         
         {/* Conteúdo específico do modelo - clicável */}
-        <div onClick={handleViewDetails}>
+        <div>
           {renderContent()}
         </div>
       </div>
 
       {/* Recortes */}
-      <div className="grid grid-cols-2 place-items-center gap-2 mt-4" onClick={handleViewDetails}>
-        {repertorio.recortes.map(recorte => (
+      <div className="grid grid-cols-2 place-items-center gap-2 mt-4">
+        {repertorio.recortes.slice(0, 4).map(recorte => (
             <span key={recorte} className="flex-3 w-full py-1 px-3 bg-blue-100 text-sky-700 text-xs rounded-full text-center">
                 {recorte}
             </span>

@@ -1,4 +1,6 @@
 // Frontend/types/repertorio.ts
+import type { Comentario, PerfilUsuario } from "../api/types";
+
 export type ModeloRepertorio = "obra" | "artigo" | "citacao"
 
 // Interfaces para os tipos específicos de repertório
@@ -12,13 +14,12 @@ export interface Obra {
   recortes: string[]
   isPublico: boolean
   totalLikes: number
-  tipoObra: 'livro' | 'filme' | 'música' | 'teatro' // ADICIONADO
+  tipoObra: 'livro' | 'filme' | 'música' | 'teatro'
   favoritadoPeloUsuario: boolean
   likeDoUsuario: boolean
-  criador: {
-    id: string
-    nome: string
-  }
+  criador: PerfilUsuario
+  totalComentarios: number
+  comentarios: Comentario[]
 }
 
 export interface Artigo {
@@ -34,10 +35,9 @@ export interface Artigo {
   totalLikes: number
   favoritadoPeloUsuario: boolean
   likeDoUsuario: boolean
-  criador: {
-    id: string
-    nome: string
-  }
+  criador: PerfilUsuario
+  totalComentarios: number
+  comentarios: Comentario[]
 }
 
 export interface Citacao {
@@ -52,10 +52,9 @@ export interface Citacao {
   totalLikes: number
   favoritadoPeloUsuario: boolean
   likeDoUsuario: boolean
-  criador: {
-    id: string
-    nome: string
-  }
+  criador: PerfilUsuario
+  totalComentarios: number
+  comentarios: Comentario[]
 }
 
 // Tipo union para Repertorio
@@ -73,6 +72,7 @@ export type RepertorioFormData = {
       modelo: "obra"
       titulo: string
       sinopse: string
+      tipoObra: 'livro' | 'filme' | 'música' | 'teatro'
     }
   | {
       modelo: "artigo"
