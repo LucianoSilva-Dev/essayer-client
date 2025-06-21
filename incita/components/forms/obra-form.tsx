@@ -1,36 +1,30 @@
 "use client"
 
 import type React from "react"
-import { useState } from "react"
 
 interface ObraFormData {
   titulo: string
   autoria: string
   sinopse: string
   fonte: string
+  tipoObra: 'livro' | 'filme' | 'música' | 'teatro'
 }
 
 interface ObraFormProps {
-  initialData?: ObraFormData
-  onDataChange: (data: ObraFormData) => void
+  onDataChange: (data: Partial<ObraFormData>) => void
   errors: Record<string, string>
+  titulo: string
+  autoria: string
+  sinopse: string
+  fonte: string
+  tipoObra: 'livro' | 'filme' | 'música' | 'teatro'
 }
 
-export default function ObraForm({ initialData, onDataChange, errors }: ObraFormProps) {
-  const [formData, setFormData] = useState<ObraFormData>(
-    initialData || {
-      titulo: "",
-      autoria: "",
-      sinopse: "",
-      fonte: "",
-    },
-  )
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+export default function ObraForm({ titulo, autoria, sinopse, fonte, tipoObra, onDataChange, errors }: ObraFormProps) {
+  
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target
-    const newData = { ...formData, [name]: value }
-    setFormData(newData)
-    onDataChange(newData)
+    onDataChange({ [name]: value });
   }
 
   return (
@@ -43,7 +37,7 @@ export default function ObraForm({ initialData, onDataChange, errors }: ObraForm
           type="text"
           id="titulo"
           name="titulo"
-          value={formData.titulo}
+          value={titulo}
           onChange={handleChange}
           className={`w-full px-3 py-2 border ${
             errors.titulo ? "border-red-500" : "border-gray-300"
@@ -61,7 +55,7 @@ export default function ObraForm({ initialData, onDataChange, errors }: ObraForm
           type="text"
           id="autoria"
           name="autoria"
-          value={formData.autoria}
+          value={autoria}
           onChange={handleChange}
           className={`w-full px-3 py-2 border ${
             errors.autoria ? "border-red-500" : "border-gray-300"
@@ -72,13 +66,34 @@ export default function ObraForm({ initialData, onDataChange, errors }: ObraForm
       </div>
 
       <div className="mb-5">
+        <label htmlFor="tipoObra" className="block text-sm font-medium text-gray-700 mb-1">
+          Tipo de Obra <span className="text-red-500">*</span>
+        </label>
+        <select
+          id="tipoObra"
+          name="tipoObra"
+          value={tipoObra}
+          onChange={handleChange}
+          className={`w-full px-3 py-2 border ${
+            errors.tipoObra ? "border-red-500" : "border-gray-300"
+          } rounded-md focus:outline-none focus:ring-1 focus:ring-teal-600 bg-white`}
+        >
+          <option value="livro">Livro</option>
+          <option value="filme">Filme</option>
+          <option value="música">Música</option>
+          <option value="teatro">Teatro</option>
+        </select>
+        {errors.tipoObra && <p className="mt-1 text-sm text-red-500">{errors.tipoObra}</p>}
+      </div>
+      
+      <div className="mb-5">
         <label htmlFor="sinopse" className="block text-sm font-medium text-gray-700 mb-1">
           Sinopse <span className="text-red-500">*</span>
         </label>
         <textarea
           id="sinopse"
           name="sinopse"
-          value={formData.sinopse}
+          value={sinopse}
           onChange={handleChange}
           rows={6}
           className={`w-full px-3 py-2 border ${
@@ -97,7 +112,7 @@ export default function ObraForm({ initialData, onDataChange, errors }: ObraForm
           type="text"
           id="fonte"
           name="fonte"
-          value={formData.fonte}
+          value={fonte}
           onChange={handleChange}
           className={`w-full px-3 py-2 border ${
             errors.fonte ? "border-red-500" : "border-gray-300"
