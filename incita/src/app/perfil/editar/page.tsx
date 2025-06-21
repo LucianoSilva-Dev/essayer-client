@@ -11,14 +11,14 @@ import type { UserProfile } from "@/../types/profile"
 
 export default function EditarPerfilPage() {
   const router = useRouter()
-  const { isAuthenticated } = useAuth()
+  const { isLoggedIn } = useAuth()
   const { profile, updateProfile, isLoading } = useProfile()
   const [formData, setFormData] = useState<Partial<UserProfile>>({})
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   useEffect(() => {
-    if (!isAuthenticated) {
+    if (!isLoggedIn) {
       router.push("/login")
       return
     }
@@ -26,7 +26,7 @@ export default function EditarPerfilPage() {
     if (profile) {
       setFormData(profile)
     }
-  }, [isAuthenticated, profile, router])
+  }, [isLoggedIn, profile, router])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target
@@ -104,7 +104,7 @@ export default function EditarPerfilPage() {
     }
   }
 
-  if (!isAuthenticated || !profile) {
+  if (!isLoggedIn || !profile) {
     return (
       <main className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-gray-600">Carregando...</div>
