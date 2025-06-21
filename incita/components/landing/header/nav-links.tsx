@@ -4,7 +4,7 @@ import { NavItem } from "./nav-item"
 export function NavLinks() {
   const links = [
     { href: "#inicio", label: "Início" },
-    { href: "#topicos", label: "Tópicos" },
+    { href: "#topicos", label: "Eixos" },
     { href: "#repertorios", label: "Repertórios" },
     { href: "#como-funciona", label: "Como funciona" },
     { href: "#sobre", label: "Sobre" },

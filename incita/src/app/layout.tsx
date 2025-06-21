@@ -1,5 +1,6 @@
 // incita/src/app/layout.tsx
 import './globals.css';
+import './swiper-hover.css'
 import { Inter } from 'next/font/google';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
