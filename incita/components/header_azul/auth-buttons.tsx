@@ -22,8 +22,8 @@ export function AuthButtons() {
       {isLoggedIn ? (
         <>
           <Link 
-            href="/profile"
-            className={`flex items-center ${isActive("/profile") ? "text-white" : "text-gray-300 hover:text-white transition-colors"}`}>
+            href="/perfil"
+            className={`flex items-center ${isActive("/perfil") ? "text-white" : "text-gray-300 hover:text-white transition-colors"}`}>
               Ver Perfil  {/* Aqui vai a foto de perfil */}
           </Link>
           <button
