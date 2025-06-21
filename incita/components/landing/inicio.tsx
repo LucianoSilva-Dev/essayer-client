@@ -13,7 +13,7 @@ export default function HeroSection() {
               Um acervo organizado por tópicos e subtópicos para facilitar sua pesquisa e reflexão sobre questões
               sociais fundamentais.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 pt-4">
+            <div className="flex flex-col items-center md:items-start sm:flex-row gap-4 pt-4">
               <Link
                 href="#topicos"
                 className="inline-flex min-h-20 max-w-45 leading-[35px] items-center justify-center rounded-md bg-[#CA9C60] px-30 text-center text-[27px] font-medium text-white hover:bg-[#a68050] duration-300 transition-colors"

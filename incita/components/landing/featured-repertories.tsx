@@ -88,12 +88,12 @@ export default function FeaturedRepertoires() {
           <p className="text-[30px] text-gray-600 max-w-4xl justify-self-center">Alguns exemplos do conteúdo que você encontrará em nosso acervo</p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
+        <div className="grid grid-cols-2 gap-y-8 gap-x-2 lg:gap-x-16 md:grid-cols-2 max-w-7xl mx-auto lg:grid-cols-3">
           {featuredRepertoires.length > 0 ? 
             featuredRepertoires.map((repertorio) => (
                 <RepertorioCard key={repertorio.id} repertorio={repertorio} />
             ))
-          : <p className="text-[30px] text-gray-600 max-w-4xl justify-self-center col-span-full">Nenhum repertorio encontrado</p>
+          : <p className="text-[30px] text-gray-600 max-w-4xl justify-self-center">Nenhum repertorio encontrado</p>
           }
 
         </div>

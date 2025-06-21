@@ -28,7 +28,7 @@ export function AuthButtons() {
           </Link>
           <button
             onClick={handleLogout}
-            className="px-6 py-2 rounded-full border border-white/20 hover:bg-gray-800 transition-colors cursor-pointer"
+            className="px-6 py-3 rounded-[20px] bg-[#CA9C60] text-white text-[20px] hover:bg-[#a68050] duration-200 cursor-pointer"
           >
             Sair
           </button>
