@@ -140,12 +140,22 @@ function RepertorioDetalhesContent() {
   const [modalContent, setModalContent] = useState({ title: '', message: '', onConfirm: async () => { } });
   const [isModalLoading, setIsModalLoading] = useState(false);
 
+  const [authorProfilePictureLink, setAuthorProfilePictureLink] = useState<string | null>(null)
 
   const id = params.id as string
   const type = searchParams.get('type')
 
   const canEditRepertory = isLoggedIn && repertorio?.criador.id === userData?.id;
   const canDeleteRepertory = isLoggedIn && (repertorio?.criador.id === userData?.id || userData?.cargo === 'admin');
+
+  useEffect(() => {
+    async function fetchData() {
+      const data = await getProfilePictureLink(repertorio?.criador.id)
+      if (data) setAuthorProfilePictureLink(data)
+    }
+
+    if (repertorio?.criador.id) fetchData()
+  }, [repertorio?.criador.id])
 
   const fetchRepertorio = async () => {
     if (!id || !type) {
@@ -501,7 +511,13 @@ function RepertorioDetalhesContent() {
               <div className="flex items-center justify-between">
                 <div className="flex items-center">
                   <div className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center mr-3">
-                    <User size={20} className="text-white" />
+                    {authorProfilePictureLink ?
+                      (
+                        <img src={authorProfilePictureLink} alt="Foto de perfil do autor" className="w-full h-full object-cover rounded-full"/>
+                      ) : 
+                      (
+                        <User size={20} className="text-white" />
+                      )}
                   </div>
                   <div>
                     <p className="font-medium text-gray-900">{repertorio.criador?.nome || 'Usuário desconhecido'}</p>
