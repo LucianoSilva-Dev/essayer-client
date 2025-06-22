@@ -11,6 +11,7 @@ import type {
     ObraDocument,
     UpdateArtigoBody,
     UpdateCitacaoBody,
+    UpdateComentarioBody, // ADICIONADO
     UpdateObraBody,
 } from './types';
 
@@ -87,6 +88,11 @@ export const updateObra = async (id: string, data: UpdateObraBody): Promise<Gene
 
 export const addComentario = async (repertorioId: string, data: CreateComentarioBody): Promise<GenericSuccessResponse> => {
     const response = await apiClient.post(`/repertorio/${repertorioId}/comentario`, data);
+    return response.data;
+};
+
+export const updateComentario = async (repertorioId: string, comentarioId: string, data: UpdateComentarioBody): Promise<GenericSuccessResponse> => {
+    const response = await apiClient.put(`/repertorio/${repertorioId}/comentario/${comentarioId}`, data);
     return response.data;
 };
 

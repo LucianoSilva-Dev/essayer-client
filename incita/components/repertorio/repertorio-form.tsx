@@ -7,16 +7,14 @@ import type { RepertorioFormData, ModeloRepertorio } from "@/../types/repertorio
 import ObraForm from "../forms/obra-form"
 import ArtigoForm from "../forms/artigo-form"
 import CitacaoForm from "../forms/citacao-form"
-import { CreateArtigoBody, CreateCitacaoBody, CreateObraBody } from "../../api/repertorio/types"
-import { createArtigo, createCitacao, createObra } from "../../api/repertorio"
 import { toast } from "react-toastify"
-import { redirect } from 'next/navigation'
 import { EixosTematicos } from "../../constants/eixos"
 
 type RepertorioFormProps = {
   onSubmit: (data: RepertorioFormData) => Promise<void>
   onCancel: () => void
   initialData?: RepertorioFormData
+  isEditing?: boolean; // ADICIONADO
 }
 
 const EixoOptions = Object.keys(EixosTematicos);
@@ -42,62 +40,14 @@ const modelos = [
   },
 ]
 
-async function saveRepertoire(repertoire: any) {
-  switch (repertoire.modelo) {
-    case 'obra':
-      try {
-        const obra: CreateObraBody = {
-          autor: repertoire.autoria,
-          sinopse: repertoire.sinopse,
-          subtopicos: repertoire.recortes,
-          topicos: repertoire.eixos,
-          titulo: repertoire.titulo,
-          tipoObra: repertoire.tipoObra || 'livro', // Garante um valor padrão
-        }
-
-        await createObra(obra)
-        toast.success("Obra salva com sucesso!")
-      } catch (e) { }
-      break;
-    case 'artigo':
-      try {
-        const artigo: CreateArtigoBody = {
-          autor: repertoire.autoria,
-          resumo: repertoire.sintese,
-          fonte: repertoire.fonte,
-          subtopicos: repertoire.recortes,
-          titulo: repertoire.titulo,
-          topicos: repertoire.eixos,
-        }
-
-        await createArtigo(artigo)
-        toast.success("Artigo salvo com sucesso!")
-      } catch (e) { }
-      break;
-    case 'citacao':
-      try {
-        const citacao: CreateCitacaoBody = {
-          autor: repertoire.autoria,
-          frase: repertoire.citacao,
-          fonte: repertoire.fonte,
-          subtopicos: repertoire.recortes,
-          topicos: repertoire.eixos,
-        }
-        await createCitacao(citacao)
-        toast.success("Citação salva com sucesso!")
-      } catch (e) { }
-      break;
-  }
-}
-
-export default function RepertorioForm({ onSubmit, onCancel, initialData }: RepertorioFormProps) {
+export default function RepertorioForm({ onSubmit, onCancel, initialData, isEditing = false }: RepertorioFormProps) { // ADICIONADO isEditing
   const [modeloSelecionado, setModeloSelecionado] = useState<ModeloRepertorio>(initialData?.modelo || "obra")
   const [formData, setFormData] = useState<any>(
     initialData || {
       modelo: "obra",
       eixos: [],
       recortes: [],
-      tipoObra: "livro", // Valor inicial para tipoObra
+      tipoObra: "livro",
     },
   )
 
@@ -109,10 +59,17 @@ export default function RepertorioForm({ onSubmit, onCancel, initialData }: Repe
   const [showPreview, setShowPreview] = useState(false)
 
   useEffect(() => {
+    if (initialData) {
+        setFormData(initialData);
+        setModeloSelecionado(initialData.modelo);
+    }
+  }, [initialData]);
+
+  useEffect(() => {
     if (formData.eixos && formData.eixos.length > 0) {
       const allRecortes = formData.eixos.flatMap( (eixo: string) => EixosTematicos[eixo as keyof typeof EixosTematicos] || [])
       const uniqueRecortes = [...new Set(allRecortes)]
-      setRecorteOptions(uniqueRecortes);
+      setRecorteOptions(uniqueRecortes as string[]);
     } else {
       setRecorteOptions([]);
     }
@@ -120,6 +77,9 @@ export default function RepertorioForm({ onSubmit, onCancel, initialData }: Repe
 
 
   const handleModeloChange = (novoModelo: ModeloRepertorio) => {
+    // MODIFICADO: Impede a troca se estiver editando
+    if (isEditing) return;
+
     setModeloSelecionado(novoModelo)
     setFormData((prev: any) => ({
       ...prev,
@@ -130,7 +90,7 @@ export default function RepertorioForm({ onSubmit, onCancel, initialData }: Repe
        fonte: "",
        sintese: "",
        citacao: "",
-       tipoObra: "livro", // Reseta para o padrão ao trocar de modelo
+       tipoObra: "livro", 
     }))
   }
 
@@ -149,13 +109,17 @@ export default function RepertorioForm({ onSubmit, onCancel, initialData }: Repe
     } else {
       newEixos = currentEixos.filter((eixo: string) => eixo !== value);
     }
+    
+    // MODIFICADO: Garante que os recortes sejam mantidos corretamente ao desmarcar um eixo
+    const currentRecortes = formData.recortes || [];
+    const newRecortesValidos = currentRecortes.filter((recorte: string) => 
+        newEixos.flatMap((eixo: string) => EixosTematicos[eixo as keyof typeof EixosTematicos] || []).includes(recorte)
+    );
 
     setFormData((prev: any) => ({
       ...prev,
       eixos: newEixos,
-      recortes: prev.recortes.filter((recorte: string) => 
-        newEixos.flatMap((eixo: string) => EixosTematicos[eixo as keyof typeof EixosTematicos] || []).includes(recorte)
-      )
+      recortes: newRecortesValidos,
     }));
 
     if (errors.eixos) {
@@ -246,18 +210,7 @@ export default function RepertorioForm({ onSubmit, onCancel, initialData }: Repe
     }
 
     setIsSubmitting(true)
-
-    try {
-      await saveRepertoire(formData)
-      await onSubmit(formData)
-    } catch (error) {
-      console.error("Erro ao salvar repertório:", error)
-      setErrors({
-        form: "Ocorreu um erro ao salvar o repertório. Tente novamente.",
-      })
-    } finally {
-      setIsSubmitting(false)
-    }
+    await onSubmit(formData).finally(() => setIsSubmitting(false));
   }
 
   const renderSpecificForm = () => {
@@ -297,7 +250,7 @@ export default function RepertorioForm({ onSubmit, onCancel, initialData }: Repe
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden">
       <div className="bg-[#075F70] text-white p-4 flex justify-between items-center">
-        <h2 className="text-xl font-semibold">Novo Repertório</h2>
+        <h2 className="text-xl font-semibold">{isEditing ? "Editando Repertório" : "Novo Repertório"}</h2>
       </div>
 
       <div className={`${showPreview ? "grid grid-cols-1 lg:grid-cols-2 gap-6" : "block"} p-6`}>
@@ -310,7 +263,10 @@ export default function RepertorioForm({ onSubmit, onCancel, initialData }: Repe
           )}
 
           <div className="mb-6">
-            <label className="block text-sm font-medium text-gray-700 mb-3">Escolha o tipo de repertório</label>
+            <label className="block text-sm font-medium text-gray-700 mb-3">
+              {/* MODIFICADO */}
+              {isEditing ? "Tipo de Repertório" : "Escolha o tipo de repertório"}
+            </label>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {modelos.map((modelo) => {
                 const IconeModelo = modelo.icone
@@ -319,10 +275,11 @@ export default function RepertorioForm({ onSubmit, onCancel, initialData }: Repe
                     key={modelo.id}
                     type="button"
                     onClick={() => handleModeloChange(modelo.id)}
+                    disabled={isEditing}
                     className={`p-4 border-2 rounded-lg text-left transition-colors ${modeloSelecionado === modelo.id
                       ? "border-teal-600 bg-teal-50"
                       : "border-gray-200 hover:border-gray-300"
-                      }`}
+                      } disabled:opacity-70 disabled:cursor-not-allowed disabled:bg-gray-100 disabled:hover:border-gray-200`}
                   >
                     <div className="flex items-center mb-2">
                       <IconeModelo

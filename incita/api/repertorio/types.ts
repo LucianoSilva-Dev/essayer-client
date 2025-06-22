@@ -67,6 +67,10 @@ export interface CreateComentarioBody {
   texto: string;
 }
 
+export interface UpdateComentarioBody {
+  texto: string;
+}
+
 export interface CreateCitacaoBody {
   frase: string;
   autor: string;

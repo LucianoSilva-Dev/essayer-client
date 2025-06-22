@@ -2,19 +2,27 @@
 
 import { useEffect, useState, Suspense } from "react"
 import { useParams, useRouter, useSearchParams } from "next/navigation"
-import { ArrowLeft, Bookmark, ThumbsUp, Share2, BookOpen, FileText, Quote, User, Send } from "lucide-react"
+import { ArrowLeft, Bookmark, ThumbsUp, Share2, BookOpen, FileText, Quote, User, Send, Trash2, Edit } from "lucide-react"
 import type { Repertorio } from "@/../types/repertorio"
 import type { Comentario } from '@/../api/types'
-import { getArtigoById, getCitacaoById, getObraById, addComentario, addLike, removeLike, addFavorito, removeFavorito } from "@/../api/repertorio"
+import { getArtigoById, getCitacaoById, getObraById, addComentario, addLike, removeLike, addFavorito, removeFavorito, deleteRepertorio, updateComentario, deleteComentario } from "@/../api/repertorio"
 import type { RepertorioDocument } from "@/../api/repertorio/types"
 import { mountRepertoire } from "@/app/utils"
 import { useAuth } from "@/../contexts/auth-context"
 import Loading from "./loading"
 import { toast } from "react-toastify"
 import { getProfilePictureLink } from "@/../api/usuario"
+import ConfirmationModal from "@/../components/shared/confirmation-modal"
 
-function CommentCard({ comentario }: { comentario: Comentario }) {
+function CommentCard({ comentario, repertorioId, onCommentUpdate, openModal }: { comentario: Comentario, repertorioId: string, onCommentUpdate: () => void, openModal: (options: any) => void }) {
+  const { userData, isLoggedIn } = useAuth();
   const [authorProfilePictureLink, setAuthorProfilePictureLink] = useState<string | null>(null)
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedText, setEditedText] = useState(comentario.texto);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const canEdit = isLoggedIn && (userData?.id === comentario.usuario.id);
+  const canDelete = isLoggedIn && (userData?.id === comentario.usuario.id || userData?.cargo === 'admin')
 
   useEffect(() => {
     async function fetchData() {
@@ -25,6 +33,43 @@ function CommentCard({ comentario }: { comentario: Comentario }) {
     if (comentario.usuario) fetchData()
   }, [comentario.usuario])
 
+  const handleEdit = () => {
+    setIsEditing(true);
+  }
+
+  const handleCancel = () => {
+    setIsEditing(false);
+    setEditedText(comentario.texto);
+  }
+
+  const handleSave = async () => {
+    if (!editedText.trim()) return toast.error("O comentário não pode ficar vazio.");
+    setIsSubmitting(true);
+    try {
+      await updateComentario(repertorioId, comentario.id, { texto: editedText });
+      toast.success("Comentário atualizado!");
+      onCommentUpdate();
+      setIsEditing(false);
+    } catch (e) {
+      console.error("Erro ao atualizar o comentário:", e);
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
+
+  const handleDelete = () => {
+    openModal({
+      title: 'Excluir Comentário',
+      message: 'Tem certeza que deseja excluir este comentário? Esta ação é permanente.',
+      onConfirm: async () => {
+        await deleteComentario(repertorioId, comentario.id);
+        toast.success("Comentário excluído!");
+        onCommentUpdate();
+      }
+    });
+  }
+
+
   return (
     <div className="flex items-start space-x-4 py-4">
       <div className="w-10 h-10 bg-gray-200 rounded-full flex-shrink-0 overflow-hidden">
@@ -34,9 +79,41 @@ function CommentCard({ comentario }: { comentario: Comentario }) {
           <User size={24} className="text-gray-500 m-2" />
         )}
       </div>
-      <div>
-        <p className="font-semibold text-gray-800">{comentario.usuario.nome}</p>
-        <p className="text-gray-600">{comentario.texto}</p>
+      <div className="flex-1">
+        <div className="flex justify-between items-start">
+          <div>
+            <p className="font-semibold text-gray-800">{comentario.usuario.nome}</p>
+            {!isEditing ? (
+              <p className="text-gray-600">{comentario.texto}</p>
+            ) : (
+              <div className="w-full mt-2">
+                <textarea
+                  value={editedText}
+                  onChange={(e) => setEditedText(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-teal-600"
+                  rows={3}
+                  disabled={isSubmitting}
+                />
+                <div className="flex space-x-2 mt-2">
+                  <button onClick={handleSave} disabled={isSubmitting} className="px-3 py-1 bg-teal-600 text-white text-sm rounded-md hover:bg-teal-700 disabled:opacity-50">
+                    {isSubmitting ? 'Salvando...' : 'Salvar'}
+                  </button>
+                  <button onClick={handleCancel} className="px-3 py-1 bg-gray-200 text-sm rounded-md hover:bg-gray-300">Cancelar</button>
+                </div>
+              </div>
+            )}
+          </div>
+          <div className="flex space-x-2 text-gray-500">
+            {canEdit && !isEditing && (
+              <button onClick={handleEdit} className="hover:text-teal-600"><Edit size={16} /></button>
+            )}
+
+            {canDelete && !isEditing && (
+              <button onClick={handleDelete} className="hover:text-red-600"><Trash2 size={16} /></button>
+            )}
+
+          </div>
+        </div>
       </div>
     </div>
   )
@@ -46,9 +123,9 @@ function RepertorioDetalhesContent() {
   const params = useParams()
   const searchParams = useSearchParams()
   const router = useRouter()
-  
+
   const { userData, isLoggedIn } = useAuth()
-  
+
   const [repertorio, setRepertorio] = useState<Repertorio | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -59,30 +136,38 @@ function RepertorioDetalhesContent() {
   const [newComment, setNewComment] = useState("")
   const [isSubmittingComment, setIsSubmittingComment] = useState(false)
 
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [modalContent, setModalContent] = useState({ title: '', message: '', onConfirm: async () => { } });
+  const [isModalLoading, setIsModalLoading] = useState(false);
+
+
   const id = params.id as string
   const type = searchParams.get('type')
 
+  const canEditRepertory = isLoggedIn && repertorio?.criador.id === userData?.id;
+  const canDeleteRepertory = isLoggedIn && (repertorio?.criador.id === userData?.id || userData?.cargo === 'admin');
+
   const fetchRepertorio = async () => {
     if (!id || !type) {
-        setError("Informações do repertório incompletas.");
-        setLoading(false);
-        return;
+      setError("Informações do repertório incompletas.");
+      setLoading(false);
+      return;
     }
     setLoading(true)
     try {
       let repertorioDoc: RepertorioDocument | null = null;
-      switch(type) {
+      switch (type) {
         case 'obra':
           repertorioDoc = await getObraById(id);
-          repertorioDoc = {...repertorioDoc, tipoRepertorio: 'Obra'}
+          repertorioDoc = { ...repertorioDoc, tipoRepertorio: 'Obra' }
           break;
         case 'artigo':
           repertorioDoc = await getArtigoById(id);
-          repertorioDoc = {...repertorioDoc, tipoRepertorio: 'Artigo'}
+          repertorioDoc = { ...repertorioDoc, tipoRepertorio: 'Artigo' }
           break;
         case 'citacao':
           repertorioDoc = await getCitacaoById(id);
-          repertorioDoc = {...repertorioDoc, tipoRepertorio: 'Citacao'}
+          repertorioDoc = { ...repertorioDoc, tipoRepertorio: 'Citacao' }
           break;
         default:
           throw new Error("Tipo de repertório inválido");
@@ -90,7 +175,7 @@ function RepertorioDetalhesContent() {
 
       if (repertorioDoc) {
         const mounted = mountRepertoire(repertorioDoc)
-        if(mounted) {
+        if (mounted) {
           setRepertorio(mounted)
           setIsLiked(mounted.likeDoUsuario)
           setLikes(mounted.totalLikes)
@@ -112,6 +197,42 @@ function RepertorioDetalhesContent() {
     fetchRepertorio()
   }, [id, type])
 
+  const openConfirmationModal = (options: { title: string; message: string; onConfirm: () => Promise<void> }) => {
+    setModalContent(options);
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleConfirmAction = async () => {
+    setIsModalLoading(true);
+    try {
+      await modalContent.onConfirm();
+    } catch (e) {
+      console.error("Erro na ação de confirmação:", e);
+    } finally {
+      setIsModalLoading(false);
+      setIsDeleteModalOpen(false);
+    }
+  };
+
+
+  const handleDeleteRepertorio = () => {
+    if (!repertorio) return;
+    openConfirmationModal({
+      title: "Excluir Repertório",
+      message: "Tem certeza que deseja excluir este repertório? Esta ação é permanente e não pode ser desfeita.",
+      onConfirm: async () => {
+        await deleteRepertorio(repertorio.id);
+        toast.success("Repertório excluído com sucesso!");
+        router.push('/main');
+      }
+    });
+  };
+
+  const handleEditRepertorio = () => {
+    if (!repertorio) return;
+    router.push(`/repertorio/${id}/editar?type=${repertorio.modelo}`);
+  }
+
   const handleLike = async () => {
     if (!isLoggedIn) return toast.error("Você precisa estar logado para curtir.");
     if (!repertorio) return;
@@ -126,10 +247,10 @@ function RepertorioDetalhesContent() {
       }
       setIsLiked(!isLiked);
     } catch (err) {
-      toast.error("Erro ao processar sua curtida.");
+      console.error("Erro ao processar sua curtida:", err);
     }
   }
-  
+
   const handleToggleFavorito = async () => {
     if (!isLoggedIn) return toast.error("Você precisa estar logado para favoritar.");
     if (!repertorio) return;
@@ -142,7 +263,7 @@ function RepertorioDetalhesContent() {
       }
       setIsFavorito(!isFavorito);
     } catch (err) {
-      toast.error("Erro ao salvar nos favoritos.");
+      console.error("Erro ao salvar nos favoritos:", err);
     }
   }
 
@@ -173,9 +294,9 @@ function RepertorioDetalhesContent() {
       await addComentario(repertorio.id, { texto: newComment });
       setNewComment("");
       toast.success("Comentário adicionado!");
-      await fetchRepertorio(); // Re-fetch data to show the new comment
+      await fetchRepertorio();
     } catch (err) {
-      toast.error("Erro ao adicionar comentário.");
+      console.error("Erro ao adicionar comentário.", err);
     } finally {
       setIsSubmittingComment(false);
     }
@@ -184,7 +305,7 @@ function RepertorioDetalhesContent() {
   if (loading) return <Loading />
 
   if (error) {
-     return (
+    return (
       <main className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <p className="text-red-600 mb-4">{error}</p>
@@ -307,6 +428,15 @@ function RepertorioDetalhesContent() {
 
   return (
     <main className="min-h-screen bg-gray-50">
+      <ConfirmationModal
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        onConfirm={handleConfirmAction}
+        title={modalContent.title}
+        message={modalContent.message}
+        confirmText="Excluir"
+        isLoading={isModalLoading}
+      />
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-4xl mx-auto">
           <div className="flex items-center justify-between">
@@ -317,7 +447,27 @@ function RepertorioDetalhesContent() {
               <ArrowLeft size={20} className="mr-2" />
               Voltar
             </button>
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2">
+              {canEditRepertory && (
+                <button
+                  onClick={handleEditRepertorio}
+                  className="flex items-center px-3 py-2 text-gray-600 hover:text-teal-600 transition-colors"
+                  title="Editar Repertório"
+                >
+                  <Edit size={18} className="mr-1" />
+                  Editar
+                </button>
+              )}
+              {canDeleteRepertory && (
+                <button
+                  onClick={handleDeleteRepertorio}
+                  className="flex items-center px-3 py-2 text-gray-600 hover:text-red-600 transition-colors"
+                  title="Excluir Repertório"
+                >
+                  <Trash2 size={18} className="mr-1" />
+                  Excluir
+                </button>
+              )}
               <button
                 onClick={handleShare}
                 className="flex items-center px-3 py-2 text-gray-600 hover:text-[#CA9C60] transition-colors"
@@ -328,9 +478,8 @@ function RepertorioDetalhesContent() {
               </button>
               <button
                 onClick={handleToggleFavorito}
-                className={`flex items-center px-3 py-2 transition-colors ${
-                  isFavorito ? "text-blue-600 hover:text-blue-700" : "text-gray-600 hover:text-blue-600"
-                }`}
+                className={`flex items-center px-3 py-2 transition-colors ${isFavorito ? "text-blue-600 hover:text-blue-700" : "text-gray-600 hover:text-blue-600"
+                  }`}
                 title={isFavorito ? "Remover dos favoritos" : "Adicionar aos favoritos"}
               >
                 <Bookmark size={18} className="mr-1" />
@@ -338,9 +487,8 @@ function RepertorioDetalhesContent() {
               </button>
               <button
                 onClick={handleLike}
-                className={`flex items-center px-3 py-2 transition-colors ${
-                  isLiked ? "text-blue-600 hover:text-blue-700" : "text-gray-600 hover:text-blue-600"
-                }`}
+                className={`flex items-center px-3 py-2 transition-colors ${isLiked ? "text-blue-600 hover:text-blue-700" : "text-gray-600 hover:text-blue-600"
+                  }`}
                 title="Curtir"
               >
                 <ThumbsUp size={18} className="mr-1" />
@@ -352,7 +500,7 @@ function RepertorioDetalhesContent() {
             <div className="bg-gray-50 px-6 py-4 border-b border-gray-200">
               <div className="flex items-center justify-between">
                 <div className="flex items-center">
-                   <div className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center mr-3">
+                  <div className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center mr-3">
                     <User size={20} className="text-white" />
                   </div>
                   <div>
@@ -366,11 +514,11 @@ function RepertorioDetalhesContent() {
               {renderContent()}
             </div>
           </div>
-          
+
           <div className="mt-8 bg-white rounded-lg shadow-lg p-6">
-            <h3 className="text-xl font-semibold text-gray-900 mb-4">Comentários ({repertorio.totalComentarios})</h3>
-            
-            {(userData?.cargo === 'professor' || userData?.cargo === 'admin') && (
+            <h3 className="text-xl font-semibold text-gray-900 mb-4">Comentários ({repertorio.comentarios.length})</h3>
+
+            {isLoggedIn && (
               <form onSubmit={handleCommentSubmit} className="flex items-start space-x-4 mb-6">
                 <textarea
                   value={newComment}
@@ -389,7 +537,7 @@ function RepertorioDetalhesContent() {
             <div className="space-y-4 divide-y divide-gray-200">
               {repertorio.comentarios && repertorio.comentarios.length > 0 ? (
                 repertorio.comentarios.map((comentario) => (
-                  <CommentCard key={comentario.id} comentario={comentario} />
+                  <CommentCard key={comentario.id} comentario={comentario} repertorioId={repertorio.id} onCommentUpdate={fetchRepertorio} openModal={openConfirmationModal} />
                 ))
               ) : (
                 <div className="text-center py-4 text-gray-500">
@@ -405,9 +553,9 @@ function RepertorioDetalhesContent() {
 }
 
 export default function RepertorioDetalhesPage() {
-    return (
-        <Suspense fallback={<Loading />}>
-            <RepertorioDetalhesContent />
-        </Suspense>
-    )
+  return (
+    <Suspense fallback={<Loading />}>
+      <RepertorioDetalhesContent />
+    </Suspense>
+  )
 }
