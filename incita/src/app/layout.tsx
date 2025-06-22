@@ -9,12 +9,15 @@ import { ProfileProvider } from '@/../contexts/profile-context';
 import { AdminProvider } from '@/../contexts/admin-context';
 import { RepertorioProvider } from '@/../contexts/repertorio-context';
 import { CitacaoProvider } from '@/../contexts/citacao-context';
+import Router from 'next/router'
+import NProgress from 'nprogress'
 
 // Import Swiper styles
 import 'swiper/css';
 import 'swiper/css/pagination'; // Para os pontinhos de navegação
 import 'swiper/css/navigation'; // Para as setas de navegação (opcional)
 import { HeaderAzul } from '../../components/header_azul/header';
+import Head from 'next/head';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -22,6 +25,18 @@ export const metadata = {
   title: 'Incita',
   description: 'Sua plataforma de repertórios para redação',
 };
+
+//Configuração para adicionar animação de carregamento entre páginas
+Router.events.on('routeChangeStart', () => {
+  NProgress.start();
+});
+
+Router.events.on('routeChangeComplete', () => {
+  NProgress.done();
+});
+Router.events.on('routeChangeError', () => {
+  NProgress.done();
+});
 
 export default function RootLayout({
   children,

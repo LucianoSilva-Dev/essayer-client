@@ -126,13 +126,21 @@ const MainTopics = () => {
     <section className="w-full py-16 bg-gray-100 scroll-mt-25" id="topicos">
       <div className="container mx-auto px-4 text-center">
         <motion.h2 
-        className="text-3xl font-bold mb-10 text-gray-800"
+        className="text-[45px] font-bold mb-2 text-gray-800"
           // initial={{ opacity: 0, y: 30 }}
           // animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
           // transition={{ duration: 0.6 }}
           >
-            Principais Eixos Temáticos
+            Eixos Temáticos
           </motion.h2>
+          <motion.p
+          //ANIMAÇÕES COM FRAMER-MOTION QUE NÃO DERAM CERTO (AINDA)
+          // initial={{ opacity: 0, y: 30 }}
+          // animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+          // transition={{ duration: 0.6 }} 
+          className="text-[30px] text-gray-600 max-w-4xl justify-self-center">Explore os repertórios organizados por eixos temáticos para facilitar sua pesquisa.</motion.p>
+
+          
 
         <div className="relative">
           <Swiper

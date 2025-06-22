@@ -145,7 +145,7 @@ function RepertorioDetalhesContent() {
   const id = params.id as string
   const type = searchParams.get('type')
 
-  const canEditRepertory = isLoggedIn && repertorio?.criador.id === userData?.id;
+  const canEditRepertory = isLoggedIn && (repertorio?.criador.id === userData?.id || userData?.cargo === 'admin');
   const canDeleteRepertory = isLoggedIn && (repertorio?.criador.id === userData?.id || userData?.cargo === 'admin');
 
   useEffect(() => {
