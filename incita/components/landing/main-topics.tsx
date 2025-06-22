@@ -12,6 +12,8 @@ import { Tag } from "./card/tag"
 import { Scale, BookOpen, HeartPulse, Leaf, Brain, Palette, Cpu, BarChart3 } from "lucide-react"
 import { useState, useRef, useCallback } from "react"
 import type { Swiper as SwiperType } from "swiper"
+import { motion } from "framer-motion"
+import { useInView } from "framer-motion"
 
 interface Topic {
   id: string
@@ -116,11 +118,21 @@ const MainTopics = () => {
       swiperRef.current.autoplay.start()
     }
   }, [])
+  
+  const ref = useRef(null)
+  const isInView = useInView(ref, { once: true, margin: "-100px" })
 
   return (
     <section className="w-full py-16 bg-gray-100 scroll-mt-25" id="topicos">
       <div className="container mx-auto px-4 text-center">
-        <h2 className="text-3xl font-bold mb-10 text-gray-800">Principais Eixos Temáticos</h2>
+        <motion.h2 
+        className="text-3xl font-bold mb-10 text-gray-800"
+          // initial={{ opacity: 0, y: 30 }}
+          // animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+          // transition={{ duration: 0.6 }}
+          >
+            Principais Eixos Temáticos
+          </motion.h2>
 
         <div className="relative">
           <Swiper
