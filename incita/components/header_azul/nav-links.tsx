@@ -8,7 +8,7 @@ export function NavLinks() {
   const allLinks = [
     { href: "/landing", label: "Início" },
     { href: "/main", label: "Repertórios" },
-    // Adicione a condição para o link de adicionar
+      //Condição adicionada com base nas roles do usuário
     { href: "/adicionar", label: "Adicionar Repertório", roles: ['professor', 'admin'] },
   ]
 
