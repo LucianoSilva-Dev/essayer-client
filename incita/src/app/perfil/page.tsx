@@ -6,17 +6,19 @@ import { useAuth } from "@/../contexts/auth-context"
 import { useProfile } from "@/../contexts/profile-context"
 import AlunoProfileComponent from "@/../components/profile/UserAccount"
 import ProfessorProfileComponent from "@/../components/profile/ProfAccount"
+import Loading from "./loading"
 
 export default function PerfilPage() {
   const router = useRouter()
-  const { isLoggedIn } = useAuth()
-  const { profile, updateProfile, uploadAvatar, isLoading } = useProfile()
+  const { isLoggedIn, isLoading: isAuthLoading } = useAuth()
+  const { profile, uploadAvatar, isLoading: isProfileLoading } = useProfile()
 
   useEffect(() => {
-    if (!isLoggedIn) {
+    // Apenas redireciona quando a verificação de autenticação terminar e o usuário não estiver logado
+    if (!isAuthLoading && !isLoggedIn) {
       router.push("/login")
     }
-  }, [isLoggedIn, router])
+  }, [isLoggedIn, isAuthLoading, router])
 
   const handleEdit = () => {
     router.push("/perfil/editar")
@@ -31,12 +33,14 @@ export default function PerfilPage() {
     }
   }
 
-  if (!isLoggedIn || !profile) {
-    return (
-      <main className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-gray-600">Carregando perfil...</div>
-      </main>
-    )
+  // Mostra a tela de carregamento enquanto a autenticação ou o perfil estão sendo carregados
+  if (isAuthLoading || !profile) {
+    return <Loading />
+  }
+
+  // Medida de segurança extra, embora o useEffect já vá redirecionar
+  if (!isLoggedIn) {
+    return <Loading />
   }
 
   return (
@@ -47,14 +51,14 @@ export default function PerfilPage() {
             profile={profile}
             onEdit={handleEdit}
             onAvatarUpload={handleAvatarUpload}
-            isLoading={isLoading}
+            isLoading={isProfileLoading}
           />
         ) : (
           <ProfessorProfileComponent
             profile={profile}
             onEdit={handleEdit}
             onAvatarUpload={handleAvatarUpload}
-            isLoading={isLoading}
+            isLoading={isProfileLoading}
           />
         )}
       </div>

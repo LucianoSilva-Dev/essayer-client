@@ -39,12 +39,18 @@ export default function Header() {
 
         <div className="flex items-center space-x-4">
           {isLoggedIn ? (
+          <>
+            <Link
+              href="/perfil"
+              className={`flex items-center ${isActive("/perfil") ? "text-white" : "text-gray-300 hover:text-white transition-colors"}`}>   
+              </Link>
             <button
               onClick={handleLogout}
               className="px-6 py-2 rounded-full border border-white/20 hover:bg-gray-800 transition-colors cursor-pointer"
             >
               Sair
             </button>
+            </>
           ) : (
             <>
               <Link

@@ -5,31 +5,9 @@ import { useState, useEffect, useCallback } from "react"
 import { Search, Filter, Plus, BookOpen, FileText, Quote, ChevronLeft, ChevronRight } from "lucide-react"
 import Link from "next/link"
 import { useRepertorio } from "@/../contexts/repertorio-context"
-import type { ModeloRepertorio } from "@/../types/repertorio"
 import RepertorioCard from "@/../components/repertorio/repertorio-card"
-
-const eixoOptions = [
-  "Artes e Cultura",
-  "Ciências Humanas",
-  "Ciências Exatas",
-  "Tecnologia",
-  "Atualidades",
-  "Filosofia",
-  "Sociologia",
-  "História",
-  "Literatura",
-  "Educação",
-]
-
-const recorteOptions = [
-  "Inteligência Artificial",
-  "Ética",
-  "Inovação",
-  "Desigualdade Social",
-  "Meio Ambiente",
-  "Saúde Pública",
-  "Outro",
-]
+import { EixosTematicos, EixoOptions } from "@/../constants/eixos"
+import { useAuth } from "@/../contexts/auth-context" // 1. Importar o hook useAuth
 
 const modelosOptions = [
   {
@@ -53,19 +31,32 @@ const modelosOptions = [
 ]
 
 export default function Main() {
+  const { userData } = useAuth() // 2. Obter os dados do usuário
   const { repertorios, pesquisarRepertorios, totalPages, currentPage, setPage, isLoadingRepertorios, totalRepertorios } = useRepertorio()
   const [termoBusca, setTermoBusca] = useState("")
-  const [eixoAtivo, setEixoAtivo] = useState<string | null>(null)
+  const [eixosAtivos, setEixosAtivos] = useState<string[]>([])
   const [recorteAtivo, setRecorteAtivo] = useState<string | null>(null)
   const [modeloAtivo, setModeloAtivo] = useState<string | null>(null)
   const [tipoVisualizacao, setTipoVisualizacao] = useState<"todos" | "salvos">("todos")
   const [showFilters, setShowFilters] = useState(false)
   const [ordenarPor, setOrdenarPor] = useState<'MaxLikes' | 'MinLikes' | 'Newest' | 'Oldest'>('Newest');
+  const [recorteOptions, setRecorteOptions] = useState<string[]>([]);
+
+  useEffect(() => {
+    if (eixosAtivos.length > 0) {
+      const allRecortes = eixosAtivos.flatMap( (eixo: string) => EixosTematicos[eixo as keyof typeof EixosTematicos] || [])
+      const uniqueRecortes = [...new Set(allRecortes)]
+      setRecorteOptions(uniqueRecortes);
+    } else {
+      setRecorteOptions(Object.values(EixosTematicos).flat());
+    }
+    setRecorteAtivo(null); // Reseta o recorte quando o eixo muda
+  }, [eixosAtivos]);
 
   const memoizedFetchRepertorios = useCallback(async () => {
     console.log("Main: fetchRepertorios disparado.");
     const filters: Parameters<typeof pesquisarRepertorios>[0] = {
-      offset: currentPage * 15, // Corrected: Multiply currentPage by the limit (15)
+      offset: currentPage * 15,
       limit: 15,
       orderBy: ordenarPor,
     };
@@ -73,8 +64,8 @@ export default function Main() {
     if (termoBusca) {
       filters.search = termoBusca;
     }
-    if (eixoAtivo) {
-      filters.eixos = [eixoAtivo];
+    if (eixosAtivos.length > 0) {
+      filters.eixos = eixosAtivos;
     }
     if (recorteAtivo) {
       filters.subtopicos = [recorteAtivo];
@@ -90,7 +81,7 @@ export default function Main() {
   }, [
     currentPage,
     termoBusca,
-    eixoAtivo,
+    eixosAtivos,
     recorteAtivo,
     modeloAtivo,
     tipoVisualizacao,
@@ -101,6 +92,13 @@ export default function Main() {
   useEffect(() => {
     memoizedFetchRepertorios();
   }, [memoizedFetchRepertorios]);
+  
+  const handleEixoToggle = (eixo: string) => {
+    setEixosAtivos(prev => 
+      prev.includes(eixo) ? prev.filter(e => e !== eixo) : [...prev, eixo]
+    )
+    setPage(0)
+  }
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -113,7 +111,7 @@ export default function Main() {
   };
 
   const handleClearFilters = () => {
-    setEixoAtivo(null);
+    setEixosAtivos([]);
     setRecorteAtivo(null);
     setModeloAtivo(null);
     setTermoBusca("");
@@ -124,7 +122,7 @@ export default function Main() {
 
   const countActiveFilters = () => {
     let count = 0;
-    if (eixoAtivo) count++;
+    if (eixosAtivos.length > 0) count++;
     if (recorteAtivo) count++;
     if (modeloAtivo) count++;
     if (termoBusca) count++;
@@ -147,21 +145,19 @@ export default function Main() {
           <div className="flex justify-center gap-4 mb-8">
             <button
               onClick={() => { setTipoVisualizacao("salvos"); setPage(0); }}
-              className={`px-6 py-3 rounded-full border-2 transition-colors cursor-pointer ${
-                tipoVisualizacao === "salvos"
-                  ? "bg-teal-600 text-white border-teal-600"
-                  : "bg-white text-teal-600 border-teal-600 hover:bg-teal-50"
-              }`}
+              className={`px-6 py-3 rounded-full border-2 transition-colors cursor-pointer ${tipoVisualizacao === "salvos"
+                ? "bg-teal-600 text-white border-teal-600"
+                : "bg-white text-teal-600 border-teal-600 hover:bg-teal-50"
+                }`}
             >
               Repertórios salvos
             </button>
             <button
               onClick={() => { setTipoVisualizacao("todos"); setPage(0); }}
-              className={`px-6 py-3 rounded-full border-2 transition-colors cursor-pointer ${
-                tipoVisualizacao === "todos"
-                  ? "bg-teal-600 text-white border-teal-600"
-                  : "bg-white text-teal-600 border-teal-600 hover:bg-teal-50"
-              }`}
+              className={`px-6 py-3 rounded-full border-2 transition-colors cursor-pointer ${tipoVisualizacao === "todos"
+                ? "bg-teal-600 text-white border-teal-600"
+                : "bg-white text-teal-600 border-teal-600 hover:bg-teal-50"
+                }`}
             >
               Repertórios
             </button>
@@ -183,9 +179,8 @@ export default function Main() {
                 <button
                   type="button"
                   onClick={() => setShowFilters(!showFilters)}
-                  className={`pr-4 transition-colors relative ${
-                    showFilters ? "text-teal-600" : "text-gray-400 hover:text-gray-600"
-                  }`}
+                  className={`pr-4 transition-colors relative ${showFilters ? "text-teal-600" : "text-gray-400 hover:text-gray-600"
+                    }`}
                 >
                   <Filter size={20} />
                   {filtrosAtivosCount > 0 && (
@@ -209,9 +204,8 @@ export default function Main() {
                         <button
                           key={modelo.id}
                           onClick={() => { setModeloAtivo(isActive ? null : modelo.id); setPage(0); }}
-                          className={`flex items-center px-3 py-2 text-sm rounded-full border transition-colors ${
-                            isActive ? modelo.cor : "bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100"
-                          }`}
+                          className={`flex items-center px-3 py-2 text-sm rounded-full border transition-colors ${isActive ? modelo.cor : "bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100"
+                            }`}
                         >
                           <IconeModelo size={14} className="mr-1.5" />
                           {modelo.nome}
@@ -224,15 +218,14 @@ export default function Main() {
                 <div className="mb-6">
                   <h3 className="text-sm font-medium text-gray-700 mb-3">Filtrar por Eixo Temático</h3>
                   <div className="flex flex-wrap gap-2">
-                    {eixoOptions.map((eixo) => (
+                    {EixoOptions.map((eixo) => (
                       <button
                         key={eixo}
-                        onClick={() => { setEixoAtivo(eixoAtivo === eixo ? null : eixo); setPage(0); }}
-                        className={`px-3 py-2 text-sm rounded-full border transition-colors ${
-                          eixo === eixoAtivo
-                            ? "bg-teal-100 text-teal-700 border-teal-200"
-                            : "bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100"
-                        }`}
+                        onClick={() => handleEixoToggle(eixo)}
+                        className={`px-3 py-2 text-sm rounded-full border transition-colors ${eixosAtivos.includes(eixo)
+                          ? "bg-teal-100 text-teal-700 border-teal-200"
+                          : "bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100"
+                          }`}
                       >
                         {eixo}
                       </button>
@@ -240,65 +233,63 @@ export default function Main() {
                   </div>
                 </div>
 
-                <div className="mb-6">
-                  <h3 className="text-sm font-medium text-gray-700 mb-3">Filtrar por Recorte</h3>
-                  <div className="flex flex-wrap gap-2">
-                    {recorteOptions.map((recorte) => (
-                      <button
-                        key={recorte}
-                        onClick={() => { setRecorteAtivo(recorteAtivo === recorte ? null : recorte); setPage(0); }}
-                        className={`px-3 py-2 text-sm rounded-full border transition-colors ${
-                          recorte === recorteAtivo
+                {eixosAtivos.length > 0 && recorteOptions.length > 0 && (
+                  <div className="mb-6">
+                    <h3 className="text-sm font-medium text-gray-700 mb-3">Filtrar por Recorte</h3>
+                    <div className="flex flex-wrap gap-2">
+                      {recorteOptions.map((recorte) => (
+                        <button
+                          key={recorte}
+                          onClick={() => { setRecorteAtivo(recorteAtivo === recorte ? null : recorte); setPage(0); }}
+                          className={`px-3 py-2 text-sm rounded-full border transition-colors ${recorte === recorteAtivo
                             ? "bg-teal-100 text-teal-700 border-teal-200"
                             : "bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100"
-                        }`}
-                      >
-                        {recorte}
-                      </button>
-                    ))}
+                            }`}
+                        >
+                          {recorte}
+                        </button>
+                      ))}
+                    </div>
                   </div>
-                </div>
+                )}
+
 
                 <div className="mb-6">
                   <h3 className="text-sm font-medium text-gray-700 mb-3">Ordenar por</h3>
                   <div className="flex flex-wrap gap-2">
                     <button
                       onClick={() => { setOrdenarPor('Newest'); setPage(0); }}
-                      className={`px-3 py-2 text-sm rounded-full border transition-colors ${
-                        ordenarPor === 'Newest'
-                          ? "bg-blue-100 text-blue-700 border-blue-200"
-                          : "bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100"
-                      }`}
+                      className={`px-3 py-2 text-sm rounded-full border transition-colors ${ordenarPor === 'Newest'
+                        ? "bg-blue-100 text-blue-700 border-blue-200"
+                        : "bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100"
+                        }`}
                     >
                       Mais Novos
                     </button>
                     <button
                       onClick={() => { setOrdenarPor('Oldest'); setPage(0); }}
-                      className={`px-3 py-2 text-sm rounded-full border transition-colors ${
-                        ordenarPor === 'Oldest'
-                          ? "bg-blue-100 text-blue-700 border-blue-200"
-                          : "bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100"
-                      }`}
+                      className={`px-3 py-2 text-sm rounded-full border transition-colors ${ordenarPor === 'Oldest'
+                        ? "bg-blue-100 text-blue-700 border-blue-200"
+                        : "bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100"
+                        }`}
                     >
                       Mais Antigos
                     </button>
                     <button
                       onClick={() => { setOrdenarPor('MaxLikes'); setPage(0); }}
-                      className={`px-3 py-2 text-sm rounded-full border transition-colors ${
-                        ordenarPor === 'MaxLikes'
-                          ? "bg-blue-100 text-blue-700 border-blue-200"
-                          : "bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100"
-                      }`}
+                      className={`px-3 py-2 text-sm rounded-full border transition-colors ${ordenarPor === 'MaxLikes'
+                        ? "bg-blue-100 text-blue-700 border-blue-200"
+                        : "bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100"
+                        }`}
                     >
                       Mais Curtidos
                     </button>
                     <button
                       onClick={() => { setOrdenarPor('MinLikes'); setPage(0); }}
-                      className={`px-3 py-2 text-sm rounded-full border transition-colors ${
-                        ordenarPor === 'MinLikes'
-                          ? "bg-blue-100 text-blue-700 border-blue-200"
-                          : "bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100"
-                      }`}
+                      className={`px-3 py-2 text-sm rounded-full border transition-colors ${ordenarPor === 'MinLikes'
+                        ? "bg-blue-100 text-blue-700 border-blue-200"
+                        : "bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100"
+                        }`}
                     >
                       Menos Curtidos
                     </button>
@@ -334,9 +325,9 @@ export default function Main() {
                       • Tipo: <span className="font-medium">{modelosOptions.find((m) => m.id === modeloAtivo)?.nome}</span>
                     </span>
                   )}
-                  {eixoAtivo && (
+                  {eixosAtivos.length > 0 && (
                     <span className="ml-1">
-                      • Eixo Temático: <span className="font-medium">{eixoAtivo}</span>
+                      • Eixo(s): <span className="font-medium">{eixosAtivos.join(', ')}</span>
                     </span>
                   )}
                   {recorteAtivo && (
@@ -348,8 +339,8 @@ export default function Main() {
                     <span className="ml-1">
                       • Ordenação: <span className="font-medium">
                         {ordenarPor === 'MaxLikes' ? 'Mais Curtidos' :
-                         ordenarPor === 'MinLikes' ? 'Menos Curtidos' :
-                         ordenarPor === 'Newest' ? 'Mais Novos' : 'Mais Antigos'}
+                          ordenarPor === 'MinLikes' ? 'Menos Curtidos' :
+                            ordenarPor === 'Newest' ? 'Mais Novos' : 'Mais Antigos'}
                       </span>
                     </span>
                   )}
@@ -372,21 +363,27 @@ export default function Main() {
                       ? "Você ainda não tem repertórios salvos."
                       : "Nenhum repertório disponível. Comece adicionando um!"}
                 </p>
-                {filtrosAtivosCount > 0 ? (
-                  <button
-                    onClick={handleClearFilters}
-                    className="inline-flex items-center px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors mr-3"
-                  >
-                    Limpar filtros
-                  </button>
-                ) : null}
-                <Link
-                  href="/adicionar"
-                  className="inline-flex items-center px-4 py-2 bg-teal-600 text-white rounded-md hover:bg-teal-700 transition-colors"
-                >
-                  <Plus size={18} className="mr-2" />
-                  Adicionar novo repertório
-                </Link>
+                
+                {/* 3. Apenas professores e admins podem ver os botões de ação */}
+                {(userData?.cargo === 'professor' || userData?.cargo === 'admin') && (
+                  <>
+                    {filtrosAtivosCount > 0 ? (
+                      <button
+                        onClick={handleClearFilters}
+                        className="inline-flex items-center px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors mr-3"
+                      >
+                        Limpar filtros
+                      </button>
+                    ) : null}
+                    <Link
+                      href="/adicionar"
+                      className="inline-flex items-center px-4 py-2 bg-teal-600 text-white rounded-md hover:bg-teal-700 transition-colors"
+                    >
+                      <Plus size={18} className="mr-2" />
+                      Adicionar novo repertório
+                    </Link>
+                  </>
+                )}
               </div>
             </div>
           ) : (
@@ -411,19 +408,18 @@ export default function Main() {
                     const isEllipsis = Math.abs(currentPage - index) > 2 && index !== 0 && index !== totalPages - 1;
 
                     if (isWithinRange) {
-                        return (
-                            <button
-                                key={index}
-                                onClick={() => handlePageChange(index)}
-                                className={`px-4 py-2 rounded-full ${
-                                    currentPage === index ? "bg-teal-600 text-white" : "bg-white text-gray-700 hover:bg-gray-100"
-                                }`}
-                            >
-                                {index + 1}
-                            </button>
-                        );
+                      return (
+                        <button
+                          key={index}
+                          onClick={() => handlePageChange(index)}
+                          className={`px-4 py-2 rounded-full ${currentPage === index ? "bg-teal-600 text-white" : "bg-white text-gray-700 hover:bg-gray-100"
+                            }`}
+                        >
+                          {index + 1}
+                        </button>
+                      );
                     } else if (isEllipsis && (index === currentPage - 3 || index === currentPage + 3)) {
-                        return <span key={`ellipsis-${index}`} className="px-2 py-2 text-gray-700">...</span>;
+                      return <span key={`ellipsis-${index}`} className="px-2 py-2 text-gray-700">...</span>;
                     }
                     return null;
                   })}

@@ -1,7 +1,6 @@
 "use client"
 
 import type React from "react"
-import { useState } from "react"
 
 interface ArtigoFormData {
   titulo: string
@@ -11,26 +10,19 @@ interface ArtigoFormData {
 }
 
 interface ArtigoFormProps {
-  initialData?: ArtigoFormData
-  onDataChange: (data: ArtigoFormData) => void
+  onDataChange: (data: Partial<ArtigoFormData>) => void
   errors: Record<string, string>
+  titulo: string
+  autoria: string
+  sintese: string
+  fonte: string
 }
 
-export default function ArtigoForm({ initialData, onDataChange, errors }: ArtigoFormProps) {
-  const [formData, setFormData] = useState<ArtigoFormData>(
-    initialData || {
-      titulo: "",
-      autoria: "",
-      sintese: "",
-      fonte: "",
-    },
-  )
+export default function ArtigoForm({ titulo, autoria, sintese, fonte, onDataChange, errors }: ArtigoFormProps) {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
-    const newData = { ...formData, [name]: value }
-    setFormData(newData)
-    onDataChange(newData)
+    onDataChange({ [name]: value });
   }
 
   return (
@@ -43,7 +35,7 @@ export default function ArtigoForm({ initialData, onDataChange, errors }: Artigo
           type="text"
           id="titulo"
           name="titulo"
-          value={formData.titulo}
+          value={titulo}
           onChange={handleChange}
           className={`w-full px-3 py-2 border ${
             errors.titulo ? "border-red-500" : "border-gray-300"
@@ -61,7 +53,7 @@ export default function ArtigoForm({ initialData, onDataChange, errors }: Artigo
           type="text"
           id="autoria"
           name="autoria"
-          value={formData.autoria}
+          value={autoria}
           onChange={handleChange}
           className={`w-full px-3 py-2 border ${
             errors.autoria ? "border-red-500" : "border-gray-300"
@@ -78,7 +70,7 @@ export default function ArtigoForm({ initialData, onDataChange, errors }: Artigo
         <textarea
           id="sintese"
           name="sintese"
-          value={formData.sintese}
+          value={sintese}
           onChange={handleChange}
           rows={6}
           className={`w-full px-3 py-2 border ${
@@ -97,7 +89,7 @@ export default function ArtigoForm({ initialData, onDataChange, errors }: Artigo
           type="text"
           id="fonte"
           name="fonte"
-          value={formData.fonte}
+          value={fonte}
           onChange={handleChange}
           className={`w-full px-3 py-2 border ${
             errors.fonte ? "border-red-500" : "border-gray-300"

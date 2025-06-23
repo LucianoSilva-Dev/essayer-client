@@ -15,13 +15,13 @@ interface ProfileContextType {
 const ProfileContext = createContext<ProfileContextType | undefined>(undefined)
 
 export function ProfileProvider({ children }: { children: React.ReactNode }) {
-  const { isAuthenticated } = useAuth()
+  const { isLoggedIn } = useAuth()
   const [profile, setProfile] = useState<UserProfile | null>(null)
   const [isLoading, setIsLoading] = useState(false)
 
   // Carregar perfil do localStorage
   useEffect(() => {
-    if (isAuthenticated) {
+    if (isLoggedIn) {
       const storedProfile = localStorage.getItem("userProfile")
       if (storedProfile) {
         setProfile(JSON.parse(storedProfile))
@@ -56,7 +56,7 @@ export function ProfileProvider({ children }: { children: React.ReactNode }) {
         localStorage.setItem("userProfile", JSON.stringify(defaultProfile))
       }
     }
-  }, [isAuthenticated])
+  }, [isLoggedIn])
 
   // Salvar perfil no localStorage
   useEffect(() => {

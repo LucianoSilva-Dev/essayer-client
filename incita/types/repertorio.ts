@@ -1,4 +1,6 @@
 // Frontend/types/repertorio.ts
+import type { Comentario, PerfilUsuario } from "../api/types";
+
 export type ModeloRepertorio = "obra" | "artigo" | "citacao"
 
 // Interfaces para os tipos específicos de repertório
@@ -8,16 +10,16 @@ export interface Obra {
   titulo: string
   autoria: string
   sinopse: string
-  eixo: string
-  recorte: string
+  eixos: string[] 
+  recortes: string[]
   isPublico: boolean
   totalLikes: number
+  tipoObra: 'livro' | 'filme' | 'música' | 'teatro'
   favoritadoPeloUsuario: boolean
   likeDoUsuario: boolean
-  criador: {
-    id: string
-    nome: string
-  }
+  criador: PerfilUsuario
+  totalComentarios: number
+  comentarios: Comentario[]
 }
 
 export interface Artigo {
@@ -27,16 +29,15 @@ export interface Artigo {
   autoria: string
   sintese: string
   fonte: string
-  eixo: string
-  recorte: string
+  eixos: string[]
+  recortes: string[]
   isPublico: boolean
   totalLikes: number
   favoritadoPeloUsuario: boolean
   likeDoUsuario: boolean
-  criador: {
-    id: string
-    nome: string
-  }
+  criador: PerfilUsuario
+  totalComentarios: number
+  comentarios: Comentario[]
 }
 
 export interface Citacao {
@@ -44,17 +45,16 @@ export interface Citacao {
   modelo: "citacao"
   autoria: string
   citacao: string
-  fonte?: string // Fonte é opcional para citações
-  eixo: string
-  recorte: string
+  fonte?: string 
+  eixos: string[]
+  recortes: string[]
   isPublico: boolean
   totalLikes: number
   favoritadoPeloUsuario: boolean
   likeDoUsuario: boolean
-  criador: {
-    id: string
-    nome: string
-  }
+  criador: PerfilUsuario
+  totalComentarios: number
+  comentarios: Comentario[]
 }
 
 // Tipo union para Repertorio
@@ -64,14 +64,15 @@ export type Repertorio = Obra | Artigo | Citacao
 export type RepertorioFormData = {
   modelo: ModeloRepertorio
   autoria: string
-  eixo: string
-  recorte: string
-  isPublico: boolean // Para futuros usos, se houver lógica de público/privado
+  eixos: string[] 
+  recortes: string[]
+  isPublico: boolean 
 } & (
   | {
       modelo: "obra"
       titulo: string
       sinopse: string
+      tipoObra: 'livro' | 'filme' | 'música' | 'teatro'
     }
   | {
       modelo: "artigo"
@@ -82,6 +83,6 @@ export type RepertorioFormData = {
   | {
       modelo: "citacao"
       citacao: string
-      fonte?: string // Tornar fonte opcional no form data para citação
+      fonte?: string 
     }
 )
