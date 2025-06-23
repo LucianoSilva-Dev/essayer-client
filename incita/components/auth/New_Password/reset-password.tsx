@@ -4,7 +4,8 @@ import { useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { EyeOff, Eye } from "lucide-react"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
+import { updatePassword } from "../../../api/usuario"
 
 export default function ResetPasswordForm() {
   const [newPassword, setNewPassword] = useState("")
@@ -13,9 +14,11 @@ export default function ResetPasswordForm() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const router = useRouter()
+  const searchParams = useSearchParams()
 
   const passwordsMatch = newPassword === confirmPassword && newPassword.length > 0
   const isFormValid = newPassword.length >= 6 && passwordsMatch
+  const id = searchParams.get('id')
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -24,14 +27,11 @@ export default function ResetPasswordForm() {
 
     setIsSubmitting(true)
     try {
-      // Aqui você fará a chamada para a API para redefinir a senha
-      // const response = await resetPassword({ newPassword })
+      if(!id) {return}
+      await updatePassword(id, {senha: newPassword})
 
-      // Redirecionar para login com mensagem de sucesso
       router.push("/login?message=password-reset-success")
-    } catch (e) {
-      // Tratar erro
-    } finally {
+    } catch (e) { } finally {
       setIsSubmitting(false)
     }
   }

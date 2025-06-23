@@ -28,5 +28,5 @@ export interface ProfessorCreateBody {
 }
 
 export interface CreateUsuarioResponse {
-    id: string;
+  id: string;
 }

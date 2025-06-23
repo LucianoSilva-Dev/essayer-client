@@ -13,6 +13,8 @@ import { handleAxiosError } from "@/app/utils"
 import { useRouter } from "next/navigation"
 
 import type { UserRegistration } from "@/../types/user"
+import { CreateUsuarioBody } from "../../api/usuario/types"
+import { createUser } from "../../api/usuario"
 
 interface FormProfessorProps {
   onSubmit: (userData: UserRegistration) => Promise<void>
@@ -76,20 +78,27 @@ export default function FormProfessor(props: FormProfessorProps) {
     }
 
     try {
-      const { name, email, password } = formData
-      const response = await axios.post(`${API_BASE_URL}/auth/register`, { name, email, password })
-      toast.success(response.data.message as string)
-      router.push("/login")
-    } catch (e) {
-      console.log("Erro:" + "\n" + e)
-      handleAxiosError(e)
-    }
+      const { name, email, password, curriculoLattes } = formData
+      const usuario: CreateUsuarioBody = {
+        nome: name,
+        senha: password,
+        email
+      }
+      const { id } = await createUser(usuario)
+
+      const query = new URLSearchParams({
+        id,
+        lattes: curriculoLattes
+      })
+
+      router.push(`/register/confirmation?${query}`)
+    } catch (e) { }
 
   }
 
   return (
     <div className="w-full max-w-auto mx-auto flex flex-col items-center">
-      
+
 
       {/* Título */}
       <h1 className="text-2xl font-medium text-gray-800 mb-8">Crie sua conta</h1>
@@ -138,19 +147,19 @@ export default function FormProfessor(props: FormProfessorProps) {
         </div>
 
         <div className="mb-4">
-        <label htmlFor="curriculoLattes" className="block text-sm font-medium text-gray-700 mb-1">
-          Currículo Lattes
-        </label>
-        <input
-          type="url"
-          id="curriculoLattes"
-          name="curriculoLattes"
-          value={formData.curriculoLattes}
-          onChange={handleChange}
+          <label htmlFor="curriculoLattes" className="block text-sm font-medium text-gray-700 mb-1">
+            Currículo Lattes
+          </label>
+          <input
+            type="url"
+            id="curriculoLattes"
+            name="curriculoLattes"
+            value={formData.curriculoLattes}
+            onChange={handleChange}
             className="w-full px-3 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-teal-600"
             required
-        />
-      </div>
+          />
+        </div>
 
         <div className="mb-4">
           <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
