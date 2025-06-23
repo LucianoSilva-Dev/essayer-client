@@ -10,8 +10,10 @@ import axios from 'axios'
 import { API_BASE_URL } from "@/app/constants"
 import { toast } from "react-toastify"
 import { handleAxiosError } from "@/app/utils"
-import { useRouter } from "next/navigation"
+import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import type { UserRegistration } from "@/../types/user"
+import { createUser } from "../../api/usuario"
+import { CreateUsuarioBody } from "../../api/usuario/types"
 interface FormAlunoProps {
   onSubmit: (userData: UserRegistration) => Promise<void>
   isSubmitting: boolean
@@ -36,7 +38,7 @@ export default function FormAluno(props: FormAlunoProps) {
   })
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value, type} = e.target
+    const { name, value, type } = e.target
     const checked = type === "checkbox" ? (e.target as HTMLInputElement).checked : undefined
     setFormData((prev) => ({ ...prev, [name]: value }))
 
@@ -75,13 +77,15 @@ export default function FormAluno(props: FormAlunoProps) {
 
     try {
       const { name, email, password } = formData
-      const response = await axios.post(`${API_BASE_URL}/auth/register`, { name, email, password })
-      toast.success(response.data.message as string)
-      router.push("/login")
-    } catch (e) {
-      console.log("Erro:" + "\n" + e)
-      handleAxiosError(e)
-    }
+      const usuario: CreateUsuarioBody = {
+        nome: name,
+        senha: password,
+        email
+      }
+      const { id } = await createUser(usuario)
+
+      router.push(`/register/confirmation?id=${id}`)
+    } catch (e) { }
 
   }
 

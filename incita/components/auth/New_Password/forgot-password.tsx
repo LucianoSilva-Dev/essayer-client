@@ -4,6 +4,7 @@ import { useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
+import { createRequisicaoSenha } from "../../../api/requisicao-senha"
 
 export default function ForgotPasswordForm() {
   const [email, setEmail] = useState("")
@@ -13,14 +14,10 @@ export default function ForgotPasswordForm() {
     e.preventDefault()
 
     try {
-      // Aqui você fará a chamada para a API para enviar o código
-      // const response = await sendResetCode({ email })
+      const {id} = await createRequisicaoSenha({email})
 
-      // Redirecionar para a tela de inserção do código
-      router.push("/forgot-password/verify-code")
-    } catch (e) {
-      // Tratar erro
-    }
+      router.push(`/forgot-password/verify-code?id=${id}`)
+    } catch (e) { }
   }
 
   return (

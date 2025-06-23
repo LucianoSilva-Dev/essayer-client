@@ -9,14 +9,14 @@ import ProfessorProfileComponent from "@/../components/profile/ProfAccount"
 
 export default function PerfilPage() {
   const router = useRouter()
-  const { isAuthenticated } = useAuth()
+  const { isLoggedIn } = useAuth()
   const { profile, updateProfile, uploadAvatar, isLoading } = useProfile()
 
   useEffect(() => {
-    if (!isAuthenticated) {
+    if (!isLoggedIn) {
       router.push("/login")
     }
-  }, [isAuthenticated, router])
+  }, [isLoggedIn, router])
 
   const handleEdit = () => {
     router.push("/perfil/editar")
@@ -31,7 +31,7 @@ export default function PerfilPage() {
     }
   }
 
-  if (!isAuthenticated || !profile) {
+  if (!isLoggedIn || !profile) {
     return (
       <main className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-gray-600">Carregando perfil...</div>

@@ -5,9 +5,10 @@ import Image from "next/image"
 import Link from "next/link"
 import { EyeOff, Eye } from "lucide-react"
 import { toast } from "react-toastify"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { useAuth } from '@/../contexts/auth-context'
 import { login as apiLogin } from '../../api/auth/index'
+import { createProfessorRequest } from "../../api/usuario"
 
 export default function LoginForm() {
   const { login } = useAuth()
@@ -16,16 +17,24 @@ export default function LoginForm() {
   const [password, setPassword] = useState("")
   const router = useRouter()
 
+  const searchParams = useSearchParams()
+  const lattes = searchParams.get('lattes')
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
     try {
       const response = await apiLogin({ email, senha: password })
       login(response.token)
-      router.push("/")
+
+      if(lattes){
+        await createProfessorRequest({lattes})
+      }
+
+      router.push("/main")
     } catch (e) { }
   }
-
+ 
   return (
     <div className="w-full max-w-xl mx-auto flex flex-col items-center shadow-lg px-8 py-8">
       {/* Logo */}

@@ -4,7 +4,7 @@ import { NavItem } from "./nav-item"
 export function NavLinks() {
   const links = [
     { href: "/main", label: "Início" },
-    { href: "/main", label: "Repertórios" },
+    { href: "/main?", label: "Repertórios" },
     { href: "/adicionar", label: "Adicionar Repertório" },
   ]
 

@@ -3,22 +3,27 @@ import type React from "react"
 import { useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
+import { validateRequisicaoSenha } from "../../../api/requisicao-senha"
 
 export default function VerifyCodeForm() {
   const [code, setCode] = useState("")
   const [isResending, setIsResending] = useState(false)
   const router = useRouter()
+  const searchParams = useSearchParams()
+
+  const id = searchParams.get('id')
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
     try {
-      // Aqui você fará a chamada para a API para verificar o código
-      // const response = await verifyResetCode({ code })
+      if(!id) {return}
 
-      // Redirecionar para a tela de nova senha
-      router.push("/forgot-password/reset-password")
+      await validateRequisicaoSenha(id, {codigo: code})
+
+      router.push(`/forgot-password/reset-password?id=${id}`)
+
     } catch (e) {
       // Tratar erro
     }

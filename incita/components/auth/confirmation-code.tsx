@@ -3,24 +3,29 @@ import type React from "react"
 import { useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
+import { validateRequisicaoSenha } from "../../api/requisicao-senha"
 
 export default function VerifyCodeForm() {
   const [code, setCode] = useState("")
   const [isResending, setIsResending] = useState(false)
   const router = useRouter()
+  const searchParams = useSearchParams()
+
+  const id = searchParams.get('id')
+  const lattes = searchParams.get('lattes')
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
     try {
-      // Aqui você fará a chamada para a API para verificar o código
-      // const response = await verifyResetCode({ code })
+      if (!id) { return }
 
-      router.push("../page")
-    } catch (e) {
-      // Tratar erro
-    }
+      await validateRequisicaoSenha(id, { codigo: code })
+
+      router.push(`/login?lattes=${lattes}`)
+
+    } catch (e) { }
   }
 
   const handleCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -33,12 +38,8 @@ export default function VerifyCodeForm() {
   const handleResendCode = async () => {
     setIsResending(true)
     try {
-      // Aqui você fará a chamada para reenviar o código
-      // await resendResetCode()
-      // Mostrar mensagem de sucesso
-    } catch (e) {
-      // Tratar erro
-    } finally {
+      router.push('/register')
+    } catch (e) { } finally {
       setIsResending(false)
     }
   }
