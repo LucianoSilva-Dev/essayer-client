@@ -12,7 +12,11 @@ import { Repertorio } from "../../types/repertorio";
 export const handleAxiosError = (error: unknown) => {
 	if (isAxiosError(error)) {
 		const axiosError = error as AxiosError<{ error?: string, errors?: string[] }>;
-		const { response } = axiosError;
+		const { response, config } = axiosError;
+
+		if (response?.status === 404 && config?.url?.includes('/usuario/foto/')) {
+			return Promise.reject(error); // Reject without showing a toast
+		}
 
 		if (!response) {
 			toast.error('Erro de conexão. Verifique sua internet e tente novamente.');
