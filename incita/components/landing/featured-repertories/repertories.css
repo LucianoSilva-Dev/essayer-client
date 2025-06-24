@@ -1,0 +1,19 @@
+.repertorio-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* Desktop: 3 colunas */
+  gap: 16px;
+}
+
+/* Tablet: 2 colunas, 3 linhas */
+@media (max-width: 1024px) {
+  .repertorio-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Mobile: 1 coluna, 3 linhas */
+@media (max-width: 600px) {
+  .repertorio-grid {
+    grid-template-columns: 1fr;
+  }
+}

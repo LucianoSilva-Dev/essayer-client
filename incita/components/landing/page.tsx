@@ -1,6 +1,6 @@
 import Hero from "../landing/inicio"
 import MainTopics from "../landing/main-topics"
-import Repertories from "../landing/featured-repertories"
+import Repertories from "./featured-repertories/featured-repertories"
 import FAQ from "../landing/como-funciona"
 import CTA from "../landing/sobre"
 import Footer from "../landing/footer"

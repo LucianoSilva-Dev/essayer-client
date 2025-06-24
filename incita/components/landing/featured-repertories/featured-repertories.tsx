@@ -1,12 +1,12 @@
 'use client'
 
-import { useEffect, useState } from "react"
-import { RepertorioDocument } from "../../api/repertorio/types"
-import { getAllRepertorios } from "../../api/repertorio"
-import { isGetAllArtigoDoc, isGetAllCitacaoDoc, isGetAllObraDoc } from "../../api/repertorio/helpers"
+import React, { useEffect, useState } from "react"
+import { RepertorioDocument } from "../../../api/repertorio/types"
+import { getAllRepertorios } from "../../../api/repertorio"
+import { isGetAllArtigoDoc, isGetAllCitacaoDoc, isGetAllObraDoc } from "../../../api/repertorio/helpers"
 import Link from "next/link"
 import type { Repertorio } from "@/../types/repertorio"
-import RepertorioCard from "../repertorio/repertorio-card"
+import RepertorioCard from "../../repertorio/repertorio-card"
 
 
 const mountFrontendRepertoire = (repertorio: RepertorioDocument): Repertorio | null => {
@@ -23,7 +23,9 @@ const mountFrontendRepertoire = (repertorio: RepertorioDocument): Repertorio | n
       totalLikes: repertorio.totalLikes,
       favoritadoPeloUsuario: repertorio.favoritadoPeloUsuario,
       likeDoUsuario: repertorio.likeDoUsuario,
-      criador: repertorio.criador
+      criador: repertorio.criador,
+      totalComentarios: repertorio.totalComentarios ?? 0,
+      comentarios: repertorio.comentarios ?? []
     }
   }
   if (isGetAllObraDoc(repertorio)) {
@@ -40,7 +42,9 @@ const mountFrontendRepertoire = (repertorio: RepertorioDocument): Repertorio | n
       totalLikes: repertorio.totalLikes,
       favoritadoPeloUsuario: repertorio.favoritadoPeloUsuario,
       likeDoUsuario: repertorio.likeDoUsuario,
-      criador: repertorio.criador
+      criador: repertorio.criador,
+      totalComentarios: repertorio.totalComentarios ?? 0,
+      comentarios: repertorio.comentarios ?? []
     }
   }
   if (isGetAllArtigoDoc(repertorio)) {
@@ -57,7 +61,9 @@ const mountFrontendRepertoire = (repertorio: RepertorioDocument): Repertorio | n
       totalLikes: repertorio.totalLikes,
       favoritadoPeloUsuario: repertorio.favoritadoPeloUsuario,
       likeDoUsuario: repertorio.likeDoUsuario,
-      criador: repertorio.criador
+      criador: repertorio.criador,
+      totalComentarios: repertorio.totalComentarios ?? 0,
+      comentarios: repertorio.comentarios ?? []
     }
   }
 
@@ -80,17 +86,30 @@ export default function FeaturedRepertoires() {
     fetchData()
   }, [])
 
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth <= 600);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  const displayedRepertoires = isMobile
+    ? featuredRepertoires.slice(0, 3)
+    : featuredRepertoires;
+
   return (
-    <section className="py-12 px-4 bg-[#F3F4F6] scroll-mt-25" id="repertorios">
+    <section className="py-12 px-4 bg-[#F3F4F6] scroll-mt-25" id="repertorios">  
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-10 flex-column justify-center">
           <h2 className="text-[45px] font-bold mb-2">Repertórios em destaque</h2>
           <p className="text-[30px] text-gray-600 max-w-4xl justify-self-center">Alguns exemplos do conteúdo que você encontrará em nosso acervo</p>
         </div>
 
-        <div className="grid grid-cols-2 gap-y-8 gap-x-2 lg:gap-x-16 md:grid-cols-2 max-w-7xl mx-auto lg:grid-cols-3">
-          {featuredRepertoires.length > 0 ? 
-            featuredRepertoires.map((repertorio) => (
+        <div className="grid grid-cols-1 gap-y-8 gap-x-2 lg:gap-x-16 md:grid-cols-2 max-w-7xl mx-auto lg:grid-cols-3">
+          {displayedRepertoires.length > 0 ? 
+            displayedRepertoires.map((repertorio) => (
                 <RepertorioCard key={repertorio.id} repertorio={repertorio} />
             ))
           : <p className="text-[30px] text-gray-600 max-w-4xl justify-self-center">Nenhum repertorio encontrado</p>

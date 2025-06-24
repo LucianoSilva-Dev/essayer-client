@@ -451,7 +451,7 @@ function RepertorioDetalhesContent() {
         <div className="max-w-4xl mx-auto">
           <div className="flex items-center justify-between">
             <button
-              onClick={() => router.back()}
+              onClick={() => router.push("/main")}
               className="flex items-center text-gray-600 hover:text-gray-900 transition-colors"
             >
               <ArrowLeft size={20} className="mr-2" />

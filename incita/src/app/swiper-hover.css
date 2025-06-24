@@ -16,7 +16,7 @@
 
 /* Efeito de blur suave */
 .mySwiper .swiper-slide.blur-sm {
-  filter: blur(2px);
+  filter: blur(1px);
   transform: scale(0.95);
 }
 
