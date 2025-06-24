@@ -5,12 +5,21 @@ import { ArrowLeft, Edit3, EyeOff, Eye, User, HelpCircle, LogOut } from "lucide-
 import { useState } from "react"
 import { useAuth } from '@/../contexts/auth-context'
 import { useRouter } from "next/navigation"
+import { getProfilePictureLink, updateProfilePicture, uploadProfilePicture, deleteProfilePicture } from "@/../api/usuario"
+import { get } from "http"
 
 export default function Component() {
   const router = useRouter()
   const [isEditing, setIsEditing] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   const { isLoggedIn, userData, logout } = useAuth()
+  const [profilePictureLink, setProfilePictureLink] = useState<string | null>(null)
+
+  React.useEffect(() => {
+    if (userData?.id) {
+      getProfilePictureLink(userData.id).then(setProfilePictureLink)
+    }
+  }, [userData?.id])
 
   const handleLogout = () => {
     logout()
@@ -63,10 +72,13 @@ export default function Component() {
                 Salvar
               </button>
             )}
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            {/* Profile Image */}
+            <div className="flex justify-center lg:justify-start">
+              <img
+                src={profilePictureLink || "/default-profile.png"}
+                alt="Foto de perfil"
+                className="w-80 h-80 rounded-full object-cover"
+              />
+            </div>
             <div className="flex justify-center lg:justify-start">
               <div className="w-80 h-80 bg-[#dcdcdd] rounded-full"></div>
             </div>
@@ -116,7 +128,7 @@ export default function Component() {
                   </label>
                   <input
                     id="email"
-                    defaultValue="xablaueusoouomagopa@gmail.com"
+                    defaultValue="email@gmail.com"
                     className="bg-[#e5eff0] border-0 text-[#616060] h-12 rounded-md cursor-not-allowed"
                     readOnly
                   />

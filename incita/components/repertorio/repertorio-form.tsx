@@ -276,10 +276,10 @@ export default function RepertorioForm({ onSubmit, onCancel, initialData, isEdit
                     type="button"
                     onClick={() => handleModeloChange(modelo.id)}
                     disabled={isEditing}
-                    className={`p-4 border-2 rounded-lg text-left transition-colors ${modeloSelecionado === modelo.id
+                    className={`p-4 border-2 rounded-lg text-left transition-colors shadow-md ${modeloSelecionado === modelo.id
                       ? "border-teal-600 bg-teal-50"
-                      : "border-gray-200 hover:border-gray-300"
-                      } disabled:opacity-70 disabled:cursor-not-allowed disabled:bg-gray-100 disabled:hover:border-gray-200`}
+                      : "border-gray-200 hover:border-gray-300 "
+                      } disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:shadow-lg disabled:bg-gray-100 disable:hover:shadow-lg disabled:hover:border-gray-200`}
                   >
                     <div className="flex items-center mb-2">
                       <IconeModelo

@@ -36,7 +36,7 @@ export default function Component() {
             <span className="text-lg font-medium">Voltar</span>
           </button>
 
-          {/* <div className="flex items-center space-x-4">
+          { <div className="flex items-center space-x-4">
             <div className="flex items-center space-x-2">
               <HelpCircle className="w-5 h-5 text-[#616060]" />
               <span className="text-[#363535] font-medium">Status atual da conta</span>
@@ -45,7 +45,7 @@ export default function Component() {
             <button className="text-[#616060] hover:text-[#363535] transition-colors text-sm">
               Ver mensagem de retorno
             </button>
-          </div> */}
+          </div> }
         </div>
 
         {/* Edit Profile Section */}
@@ -120,7 +120,7 @@ export default function Component() {
                   </label>
                   <input
                     id="email"
-                    defaultValue="xablaueusoouomagopa@gmail.com"
+                    defaultValue="email@gmail.com"
                     className="bg-[#e5eff0] border-0 text-[#616060] w-full h-12 pl-2 rounded-md cursor-not-allowed"
                     readOnly
                   />

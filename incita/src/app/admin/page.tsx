@@ -6,6 +6,7 @@ import { useAdmin } from "../../../contexts/admin-context"
 import ProfessoresList from "../../../components/admin/professor-list"
 import RepertoriosList from "../../../components/admin/repertorio-list"
 
+
 type TabType = "educadores" | "repertorios"
 type StatusType = "pendentes" | "aprovados" | "recusados"
 
