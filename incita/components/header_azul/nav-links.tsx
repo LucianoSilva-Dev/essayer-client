@@ -10,6 +10,7 @@ export function NavLinks() {
     { href: "/main", label: "Repertórios" },
       //Condição adicionada com base nas roles do usuário
     { href: "/adicionar", label: "Adicionar Repertório", roles: ['professor', 'admin'] },
+    { href: "/admin", label: "Admin", roles: 'admin' },
   ]
 
   // 3. Filtrar os links com base no cargo do usuário
