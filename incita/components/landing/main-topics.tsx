@@ -12,8 +12,7 @@ import { Tag } from "./card/tag"
 import { Scale, BookOpen, HeartPulse, Leaf, Brain, Palette, Cpu, BarChart3 } from "lucide-react"
 import { useState, useRef, useCallback } from "react"
 import type { Swiper as SwiperType } from "swiper"
-import { motion } from "framer-motion"
-import { useInView } from "framer-motion"
+import { motion, useInView } from "framer-motion"
 
 interface Topic {
   id: string
@@ -123,91 +122,101 @@ const MainTopics = () => {
   const isInView = useInView(ref, { once: true, margin: "-100px" })
 
   return (
-    <section className="w-full py-16 bg-gray-100 scroll-mt-25" id="topicos">
+    <section className="w-full py-16 bg-gray-100 scroll-mt-25" id="topicos" ref={ref}>
       <div className="container mx-auto px-4 text-center">
-        <motion.h2 
-        className="text-[45px] font-bold mb-2 text-gray-800"
-          // initial={{ opacity: 0, y: 30 }}
-          // animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-          // transition={{ duration: 0.6 }}
-          >
-            Eixos Temáticos
-          </motion.h2>
-          <motion.p
-          //ANIMAÇÕES COM FRAMER-MOTION QUE NÃO DERAM CERTO (AINDA)
-          // initial={{ opacity: 0, y: 30 }}
-          // animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-          // transition={{ duration: 0.6 }} 
-          className="text-[30px] text-gray-600 max-w-4xl justify-self-center">Explore os repertórios organizados por eixos temáticos para facilitar sua pesquisa.</motion.p>
-
-          
-
+        <motion.h2
+          className="text-[45px] font-bold mb-2 text-gray-800"
+          initial={{ opacity: 0, y: 30 }}
+          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+          transition={{ duration: 0.6 }}
+        >
+          Eixos Temáticos
+        </motion.h2>
+        <motion.p
+          className="text-[30px] text-gray-600 max-w-4xl justify-self-center"
+          initial={{ opacity: 0, y: 30 }}
+          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+        >
+          Explore os repertórios organizados por eixos temáticos para facilitar sua pesquisa.
+        </motion.p>
         <div className="relative">
-          <Swiper
-            modules={[Pagination, Navigation, Autoplay]}
-            speed={1000}
-            spaceBetween={10}
-            slidesPerView={1}
-            pagination={{
-              clickable: true,
-              dynamicBullets: true,
-            }}
-            navigation={true}
-            autoplay={{
-              delay: 5000,
-              disableOnInteraction: false,
-            }}
-            loop={true}
-            breakpoints={{
-              640: {
-                slidesPerView: 2,
-                spaceBetween: 20,
-              },
-              768: {
-                slidesPerView: 2,
-                spaceBetween: 30,
-              },
-              1024: {
-                slidesPerView: 3,
-                spaceBetween: 40,
-              },
-            }}
-            //Definir altura mínima e auto-height
-            style={{
-              minHeight: "28rem", // Altura mínima maior que os cards
-              paddingTop: "2rem",
-              paddingBottom: "4rem",
-            }}
-            autoHeight={true}
-            className={`mySwiper ${hoveredCard ? "hover-active" : ""}`}
-            onSwiper={(swiper) => {
-              swiperRef.current = swiper
-            }}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+            transition={{ duration: 0.7, delay: 0.4 }}
           >
-            {mainTopics.map((topic) => (
-              <SwiperSlide
-                key={topic.id}
-                className={`h-auto transition-all duration-300 ${
-                  hoveredCard && hoveredCard !== topic.id
-                    ? "blur-sm opacity-70 scale-95"
-                    : "blur-none opacity-100 scale-100"
-                }`}
-              >
-                <div onMouseEnter={() => handleCardHover(topic.id)} onMouseLeave={handleCardLeave} className="h-full">
-                  <Card>
-                    <CardIcon>{topic.icon}</CardIcon>
-                    <CardTitle>{topic.title}</CardTitle>
-                    <CardDescription>{topic.description}</CardDescription>
-                    <TagList>
-                      {topic.tags.map((tag) => (
-                        <Tag key={tag}>{tag}</Tag>
-                      ))}
-                    </TagList>
-                  </Card>
-                </div>
-              </SwiperSlide>
-            ))}
-          </Swiper>
+            <Swiper
+              modules={[Pagination, Navigation, Autoplay]}
+              speed={1000}
+              spaceBetween={10}
+              slidesPerView={1}
+              pagination={{
+                clickable: true,
+                dynamicBullets: true,
+              }}
+              navigation={true}
+              autoplay={{
+                delay: 5000,
+                disableOnInteraction: false,
+              }}
+              loop={true}
+              breakpoints={{
+                640: {
+                  slidesPerView: 2,
+                  spaceBetween: 20,
+                },
+                768: {
+                  slidesPerView: 2,
+                  spaceBetween: 30,
+                },
+                1024: {
+                  slidesPerView: 3,
+                  spaceBetween: 40,
+                },
+              }}
+              style={{
+                minHeight: "28rem",
+                paddingTop: "2rem",
+                paddingBottom: "4rem",
+              }}
+              autoHeight={true}
+              className={`mySwiper ${hoveredCard ? "hover-active" : ""}`}
+              onSwiper={(swiper) => {
+                swiperRef.current = swiper
+              }}
+            >
+              {mainTopics.map((topic, idx) => (
+                <motion.div
+                  key={topic.id}
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+                  transition={{ duration: 0.5, delay: 0.5 + idx * 0.1 }}
+                >
+                  <SwiperSlide
+                    className={`h-auto transition-all duration-300 ${
+                      hoveredCard && hoveredCard !== topic.id
+                        ? "blur-sm opacity-70 scale-95"
+                        : "blur-none opacity-100 scale-100"
+                    }`}
+                  >
+                    <div onMouseEnter={() => handleCardHover(topic.id)} onMouseLeave={handleCardLeave} className="h-full">
+                      <Card>
+                        <CardIcon>{topic.icon}</CardIcon>
+                        <CardTitle>{topic.title}</CardTitle>
+                        <CardDescription>{topic.description}</CardDescription>
+                        <TagList>
+                          {topic.tags.map((tag) => (
+                            <Tag key={tag}>{tag}</Tag>
+                          ))}
+                        </TagList>
+                      </Card>
+                    </div>
+                  </SwiperSlide>
+                </motion.div>
+              ))}
+            </Swiper>
+          </motion.div>
         </div>
       </div>
     </section>

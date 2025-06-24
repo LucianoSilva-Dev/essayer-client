@@ -62,7 +62,7 @@ const Inicio = () => {
             {/* Card de fundo esquerdo */}
             <motion.div
               className="absolute top-0 left-0 transform scale-75 blur-sm opacity-60 z-10"
-              initial={{ opacity: 0, scale: 0.5, rotate: -10, y: -100, x: 50 }}
+              initial={{ opacity: 0, scale: 0.5, rotate: -10, y: 100, x: 100 }}
               animate={{ opacity: 0.6, scale: 0.75, rotate: 0, y: 0, x: 0 }}
               transition={{ duration: 1, delay: 0.8 }}
             >
@@ -131,7 +131,7 @@ const Inicio = () => {
             {/* Card de fundo direito */}
             <motion.div
               className="absolute bottom-0 right-0 transform scale-75 blur-sm opacity-60 z-20"
-              initial={{ opacity: 0, scale: 0.5, rotate: 10, y: 100, x: -50 }}
+              initial={{ opacity: 0, scale: 0.5, rotate: 10, y: -100, x: -100 }}
               animate={{ opacity: 0.6, scale: 0.75, rotate: 0, y: 0, x: 0}}
               transition={{ duration: 1, delay: 1 }}
             >

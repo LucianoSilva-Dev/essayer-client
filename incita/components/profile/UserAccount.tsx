@@ -21,13 +21,17 @@ export default function Component() {
     router.push('/forgot-password')
   }
 
+  const handleVoltar = () => {
+    router.push('/main')
+  }
+
   return (
     <div className="min-h-screen bg-[#F9FAFB]">
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-6 py-8">
         {/* Top Section */}
         <div className="flex items-center justify-between mb-8">
-          <button className="flex items-center space-x-2 text-[#616060] hover:text-[#363535] transition-colors">
+          <button onClick={handleVoltar} className="flex items-center space-x-2 text-[#616060] hover:text-[#363535] transition-colors">
             <ArrowLeft className="w-5 h-5" />
             <span className="text-lg font-medium">Voltar</span>
           </button>

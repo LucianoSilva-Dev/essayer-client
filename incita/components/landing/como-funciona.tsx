@@ -14,7 +14,7 @@ type FuncionalidadeItem = {
 const FuncionalidadeCard = ({ item }: { item: FuncionalidadeItem }) => {
   return (
     <div className="bg-white rounded-lg p-6 shadow-2xl">
-      <div className={`${item.corFundo} w-16 h-16 rounded-lg flex items-center justify-center mb-4`}>{item.icone}</div>
+      <div className={`${item.corFundo} w-20 h-16 rounded-lg flex items-center justify-center mb-4`}>{item.icone}</div>
       <h3 className="text-3xl font-bold mb-2">{item.titulo}</h3>
       <p className="text-gray-700 text-3xl">{item.descricao}</p>
     </div>
@@ -52,7 +52,7 @@ export default function ComoFunciona() {
 
   return (
     <section className="py-16 bg-[#F3F4F6] scroll-mt-25" id="como-funciona">
-      <div className="container mx-auto px-[100px] flex-column justify-center">
+      <div className="container mx-auto px-[50px] flex-column justify-center">
         <h2 className="text-[40px] font-bold text-center mb-6">Como funciona</h2>
         <h1 className="text-[30px] font-light text-center mb-12 max-w-4xl justify-self-center">
           Aprenda a navegar e aproveitar ao máximo nosso acervo de repertórios
