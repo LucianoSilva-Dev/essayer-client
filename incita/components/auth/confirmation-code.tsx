@@ -4,7 +4,7 @@ import { useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { useRouter, useSearchParams } from "next/navigation"
-import { validateRequisicaoSenha } from "../../api/requisicao-senha"
+import { validateUser } from "../../api/requisicao-usuario"
 
 export default function VerifyCodeForm() {
   const [code, setCode] = useState("")
@@ -21,7 +21,7 @@ export default function VerifyCodeForm() {
     try {
       if (!id) { return }
 
-      await validateRequisicaoSenha(id, { codigo: code })
+      await validateUser(id, { codigo: code })
 
       router.push(`/login?lattes=${lattes}`)
 
