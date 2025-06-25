@@ -361,7 +361,7 @@ export default function Main() {
                     ? "Nenhum repertório encontrado com os filtros aplicados."
                     : tipoVisualizacao === "salvos"
                       ? "Você ainda não tem repertórios salvos."
-                      : "Nenhum repertório disponível. Comece adicionando um!"}
+                      : "Nenhum repertório disponível."}
                 </p>
                 
                 {/* 3. Apenas professores e admins podem ver os botões de ação */}

@@ -40,7 +40,7 @@ export default function RootLayout({
                 <CitacaoProvider>
                   <ToastContainer />
                   <HeaderAzul />
-                  <main className="pt-25">
+                  <main className="pt-25 relative">
                     <PageTransition>
                     {children}
                     </PageTransition>

@@ -6,10 +6,11 @@ export function NavLinks() {
   const { isLoggedIn, userData } = useAuth() // 2. Obter os dados de autenticação e do usuário
 
   const allLinks = [
-    { href: "/landing", label: "Início" },
+    { href: "/main", label: "Início" },
     { href: "/main", label: "Repertórios" },
       //Condição adicionada com base nas roles do usuário
     { href: "/adicionar", label: "Adicionar Repertório", roles: ['professor', 'admin'] },
+    { href: "/admin", label: "Admin", roles: 'admin' },
   ]
 
   // 3. Filtrar os links com base no cargo do usuário
@@ -26,7 +27,7 @@ export function NavLinks() {
     <nav className="hidden md:flex items-center space-x-8">
       {/* 4. Mapear os links filtrados */}
       {filteredLinks.map((link) => (
-        <NavItem key={link.href} href={link.href} label={link.label} />
+        <NavItem href={link.href} label={link.label} />
       ))}
     </nav>
   )

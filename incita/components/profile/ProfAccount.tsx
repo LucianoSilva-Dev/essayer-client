@@ -13,12 +13,21 @@ interface ProfessorProfileProps {
   onAvatarUpload: (file: File) => void
   isLoading: boolean
 }
+import { getProfilePictureLink, updateProfilePicture, uploadProfilePicture, deleteProfilePicture } from "@/../api/usuario"
+import { get } from "http"
 
 export default function Component({ profile, onEdit, onAvatarUpload, isLoading }: ProfessorProfileProps) {
   const router = useRouter()
   const [isEditing, setIsEditing] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   const { isLoggedIn, userData, logout } = useAuth()
+  const [profilePictureLink, setProfilePictureLink] = useState<string | null>(null)
+
+  React.useEffect(() => {
+    if (userData?.id) {
+      getProfilePictureLink(userData.id).then(setProfilePictureLink)
+    }
+  }, [userData?.id])
 
   const handleLogout = () => {
     logout()
@@ -29,13 +38,17 @@ export default function Component({ profile, onEdit, onAvatarUpload, isLoading }
     router.push('/forgot-password')
   }
 
+  const handleVoltar = () => {
+    router.push('/main')
+  }
+
   return (
     <div className="min-h-screen bg-[#f1f1f2]">
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-6 py-8">
         {/* Top Section */}
         <div className="flex items-center justify-between mb-8">
-          <button onClick={() => router.back()} className="flex items-center space-x-2 text-[#616060] hover:text-[#363535] transition-colors">
+          <button onClick={handleVoltar} className="flex items-center space-x-2 text-[#616060] hover:text-[#363535] transition-colors">
             <ArrowLeft className="w-5 h-5" />
             <span className="text-lg font-medium">Voltar</span>
           </button>
@@ -71,10 +84,13 @@ export default function Component({ profile, onEdit, onAvatarUpload, isLoading }
                 Salvar
               </button>
             )}
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            {/* Profile Image */}
+            <div className="flex justify-center lg:justify-start">
+              <img
+                src={profilePictureLink || "/default-profile.png"}
+                alt="Foto de perfil"
+                className="w-80 h-80 rounded-full object-cover"
+              />
+            </div>
             <div className="flex justify-center lg:justify-start">
               <div className="w-80 h-80 bg-[#dcdcdd] rounded-full"></div>
             </div>

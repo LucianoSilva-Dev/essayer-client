@@ -6,9 +6,16 @@ import { AuthButtons } from "./auth-buttons"
 import { MobileMenu } from "./mobile-menu"
 import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
+import { usePathname } from "next/navigation" // Importa o hook
 
 export function HeaderAzul() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const pathname = usePathname() // Obtém o pathname atual
+
+  // Não renderiza o header na landing page
+  if (pathname === "/landing") {
+    return null
+  }
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen)
