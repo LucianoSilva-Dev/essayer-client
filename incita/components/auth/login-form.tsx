@@ -27,7 +27,7 @@ export default function LoginForm() {
       const response = await apiLogin({ email, senha: password })
       login(response.token)
 
-      if(lattes){
+      if(lattes && lattes !== "null"){
         await createProfessorRequest({lattes})
       }
 

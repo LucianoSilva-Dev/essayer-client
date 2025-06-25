@@ -3,8 +3,8 @@ import type React from "react"
 import { useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { useRouter, useSearchParams } from "next/navigation"
-import { validateRequisicaoSenha } from "../../../api/requisicao-senha"
+import { redirect, useRouter, useSearchParams } from "next/navigation"
+import { createRequisicaoSenha, validateRequisicaoSenha } from "../../../api/requisicao-senha"
 
 export default function VerifyCodeForm() {
   const [code, setCode] = useState("")
@@ -13,6 +13,7 @@ export default function VerifyCodeForm() {
   const searchParams = useSearchParams()
 
   const id = searchParams.get('id')
+  const email = searchParams.get('email')
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -39,9 +40,13 @@ export default function VerifyCodeForm() {
   const handleResendCode = async () => {
     setIsResending(true)
     try {
-      // Aqui você fará a chamada para reenviar o código
-      // await resendResetCode()
-      // Mostrar mensagem de sucesso
+
+      if(!email){
+        redirect('/forgot-password')
+      }
+
+      await createRequisicaoSenha({email})
+
     } catch (e) {
       // Tratar erro
     } finally {

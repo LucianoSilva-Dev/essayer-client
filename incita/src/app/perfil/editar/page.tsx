@@ -184,7 +184,7 @@ export default function EditarPerfilPage() {
                       E-mail <span className="text-red-500">*</span>
                     </label>
                     <input
-                      type="email"
+                      type="email" 
                       id="email"
                       name="email"
                       value={formData.email || ""}

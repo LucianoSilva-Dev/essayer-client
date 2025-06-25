@@ -88,7 +88,8 @@ export default function FormProfessor(props: FormProfessorProps) {
 
       const query = new URLSearchParams({
         id,
-        lattes: curriculoLattes
+        lattes: curriculoLattes,
+        email
       })
 
       router.push(`/register/confirmation?${query}`)

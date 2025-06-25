@@ -16,7 +16,12 @@ export default function ForgotPasswordForm() {
     try {
       const {id} = await createRequisicaoSenha({email})
 
-      router.push(`/forgot-password/verify-code?id=${id}`)
+      const query = new URLSearchParams({
+        id, 
+        email
+      })
+
+      router.push(`/forgot-password/verify-code?${query}`)
     } catch (e) { }
   }
 

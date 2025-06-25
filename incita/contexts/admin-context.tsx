@@ -5,6 +5,8 @@ import { createContext, useContext, useState, useEffect, useCallback } from "rea
 import type { RepertorioPendente, ProfessorPendente } from "../types/admin"
 import { getAllRequisicaoProfessor, updateStatus } from "../api/requisicao-professor"
 import { getRequisicaoProfessorResponse } from "../api/requisicao-professor/types"
+import { useAuth } from "./auth-context"
+import { redirect } from "next/navigation"
 
 const mountProfessor = (requisicao: getRequisicaoProfessorResponse): ProfessorPendente => {
   if (requisicao.requisitante) {
@@ -15,7 +17,7 @@ const mountProfessor = (requisicao: getRequisicaoProfessorResponse): ProfessorPe
       status: requisicao.status,
       curriculoLattes: requisicao.lattes,
       dataSubmissao: requisicao.createdAt
-    }
+    } 
   } else {
     return {
       id: requisicao.id,
@@ -42,6 +44,7 @@ interface AdminContextType {
 const AdminContext = createContext<AdminContextType | undefined>(undefined)
 
 export function AdminProvider({ children }: { children: React.ReactNode }) {
+  const {isLoggedIn} = useAuth()
   const [repertoriosPendentes, setRepertoriosPendentes] = useState<RepertorioPendente[]>([])
   const [professoresPendentes, setProfessoresPendentes] = useState<ProfessorPendente[]>([])
   const [isLoaded, setIsLoaded] = useState(false)
@@ -56,7 +59,7 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
 
       setProfessoresPendentes(professores)
     } catch (e) {
-      console.log("error");
+      console.log(e);
     }
   }, [])
 
@@ -146,7 +149,7 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
     setRepertoriosPendentes(repertoriosExemplo)
     getProfessores()
     setIsLoaded(true)
-  }, [])
+  }, [isLoggedIn])
 
   const aprovarRepertorio = (id: string, feedback?: string) => {
     setRepertoriosPendentes((prev) =>

@@ -84,7 +84,12 @@ export default function FormAluno(props: FormAlunoProps) {
       }
       const { id } = await createUser(usuario)
 
-      router.push(`/register/confirmation?id=${id}`)
+      const query = new URLSearchParams({
+        id,
+        email
+      })
+
+      router.push(`/register/confirmation?${query}`)
     } catch (e) { }
 
   }

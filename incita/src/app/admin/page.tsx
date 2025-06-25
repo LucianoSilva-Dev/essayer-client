@@ -5,15 +5,22 @@ import { Users, FileText, Clock, CheckCircle, XCircle } from "lucide-react"
 import { useAdmin } from "../../../contexts/admin-context"
 import ProfessoresList from "../../../components/admin/professor-list"
 import RepertoriosList from "../../../components/admin/repertorio-list"
+import { useAuth } from "../../../contexts/auth-context"
+import { redirect } from "next/navigation"
 
 
 type TabType = "educadores" | "repertorios"
 type StatusType = "pendentes" | "aprovados" | "recusados" 
 
 export default function AdminPage() {
+  const {userData} = useAuth()
   const [activeTab, setActiveTab] = useState<TabType>("educadores")
   const [activeStatus, setActiveStatus] = useState<StatusType>("pendentes")
   const { getRepertoriosPorStatus, getProfessoresPorStatus } = useAdmin()
+
+  if(userData?.cargo !== "admin"){
+    redirect('/main')
+  }
 
   const getStatusCounts = () => {
     if (activeTab === "educadores") {

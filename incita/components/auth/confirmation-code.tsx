@@ -3,8 +3,9 @@ import type React from "react"
 import { useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { useRouter, useSearchParams } from "next/navigation"
+import { redirect, useRouter, useSearchParams } from "next/navigation"
 import { validateUser } from "../../api/requisicao-usuario"
+import { createUser } from "../../api/usuario"
 
 export default function VerifyCodeForm() {
   const [code, setCode] = useState("")
@@ -13,6 +14,7 @@ export default function VerifyCodeForm() {
   const searchParams = useSearchParams()
 
   const id = searchParams.get('id')
+  const email = searchParams.get('email')
   const lattes = searchParams.get('lattes')
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -38,7 +40,15 @@ export default function VerifyCodeForm() {
   const handleResendCode = async () => {
     setIsResending(true)
     try {
-      router.push('/register')
+      if(!email){
+        redirect('/register')
+      }
+      
+      await createUser({
+        nome: "placeholder",
+        senha: "Placeholder0!",
+        email
+      })
     } catch (e) { } finally {
       setIsResending(false)
     }
