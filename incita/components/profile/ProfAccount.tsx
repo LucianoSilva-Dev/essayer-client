@@ -84,6 +84,9 @@ export default function Component({ profile, onEdit, onAvatarUpload, isLoading }
                 Salvar
               </button>
             )}
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             <div className="flex justify-center lg:justify-start">
               <img
                 src={profilePictureLink || "/default-profile.png"}
@@ -91,9 +94,9 @@ export default function Component({ profile, onEdit, onAvatarUpload, isLoading }
                 className="w-80 h-80 rounded-full object-cover"
               />
             </div>
-            <div className="flex justify-center lg:justify-start">
+            {/* <div className="flex justify-center lg:justify-start">
               <div className="w-80 h-80 bg-[#dcdcdd] rounded-full"></div>
-            </div>
+            </div> */}
 
             {/* Form Fields */}
             <div className="space-y-6">

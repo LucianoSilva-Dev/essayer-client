@@ -91,8 +91,15 @@ export default function Component({ profile, onEdit, onAvatarUpload, isLoading }
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             {/* Profile Image */}
             <div className="flex justify-center lg:justify-start">
-              <div className="w-80 h-80 bg-[#dcdcdd] rounded-full"></div>
+              <img
+                src={profilePictureLink || "/default-profile.png"}
+                alt="Foto de perfil"
+                className="w-80 h-80 rounded-full object-cover"
+              />
             </div>
+            {/* <div className="flex justify-center lg:justify-start">
+              <div className="w-80 h-80 bg-[#dcdcdd] rounded-full"></div>
+            </div> */}
 
             {/* Form Fields */}
             <div className="space-y-6">
