@@ -8,14 +8,16 @@ import { ArrowLeft, Save, X } from "lucide-react"
 import { useAuth } from "@/../contexts/auth-context"
 import { useProfile } from "@/../contexts/profile-context"
 import type { UserProfile } from "@/../types/profile"
+import { updateProfilePicture } from "../../../../api/usuario"
 
 export default function EditarPerfilPage() {
   const router = useRouter()
-  const { isLoggedIn } = useAuth()
+  const { isLoggedIn, userData } = useAuth()
   const { profile, updateProfile, isLoading } = useProfile()
   const [formData, setFormData] = useState<Partial<UserProfile>>({})
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [foto, setFoto] = useState<File>()
 
   useEffect(() => {
     if (!isLoggedIn) {
@@ -44,6 +46,14 @@ export default function EditarPerfilPage() {
         delete newErrors[name]
         return newErrors
       })
+    }
+  }
+
+  const handleChangeFoto = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files
+    
+    if(files && files.length > 0){
+      setFoto(files[0])
     }
   }
 
@@ -93,6 +103,11 @@ export default function EditarPerfilPage() {
 
     try {
       await updateProfile(formData)
+
+      if(foto && userData){
+        await updateProfilePicture(userData.id, foto)
+      }
+
       router.push("/perfil")
     } catch (error) {
       console.error("Erro ao atualizar perfil:", error)
@@ -194,6 +209,15 @@ export default function EditarPerfilPage() {
                       } rounded-md focus:outline-none focus:ring-1 focus:ring-[#CA9C60]`}
                     />
                     {errors.email && <p className="mt-1 text-sm text-red-500">{errors.email}</p>}
+                  </div>
+
+                  <div>
+                    <label htmlFor="avatar">Avatar</label>
+                    <input 
+                      type="file" 
+                      id="avatar"
+                      name="avatar"
+                      onChange={handleChangeFoto}/>
                   </div>
 
                   {/* <div className="md:col-span-2">
