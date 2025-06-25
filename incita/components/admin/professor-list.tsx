@@ -6,7 +6,7 @@ import { useAdmin } from "../../contexts/admin-context"
 import type { ProfessorPendente } from "../../types/admin"
 
 interface ProfessoresListProps {
-  status: "pendentes" | "aprovados" | "recusados"
+  status: undefined | "aprovados" | "recusados"
 }
 
 export default function ProfessoresList({ status }: ProfessoresListProps) {
@@ -14,7 +14,7 @@ export default function ProfessoresList({ status }: ProfessoresListProps) {
   const [selectedProfessor, setSelectedProfessor] = useState<ProfessorPendente | null>(null)
 
   const professores = getProfessoresPorStatus(
-    status === "pendentes" ? "pendente" : status === "aprovados" ? "aprovado" : "recusado",
+    status === undefined ? undefined : status === "aprovados" ? "aprovado" : "recusado",
   )
 
   const formatDate = (dateString: string) => {
@@ -27,9 +27,9 @@ export default function ProfessoresList({ status }: ProfessoresListProps) {
     }).format(new Date(dateString))
   }
 
-  const getStatusColor = (status: string) => {
+  const getStatusColor = (status: string | undefined) => {
     switch (status) {
-      case "pendente":
+      case undefined:
         return "bg-orange-100 text-orange-800"
       case "aprovado":
         return "bg-green-100 text-green-800"
@@ -45,10 +45,10 @@ export default function ProfessoresList({ status }: ProfessoresListProps) {
       <div className="p-8 text-center">
         <User size={48} className="mx-auto text-gray-400 mb-4" />
         <h3 className="text-lg font-medium text-gray-900 mb-2">
-          Nenhum professor {status === "pendentes" ? "pendente" : status.slice(0, -1)}
+          Nenhum professor {status === undefined ? undefined : status.slice(0, -1)}
         </h3>
         <p className="text-gray-500">
-          {status === "pendentes"
+          {status === undefined
             ? "Não há solicitações de professores aguardando aprovação."
             : `Não há professores ${status}.`}
         </p>
@@ -72,21 +72,20 @@ export default function ProfessoresList({ status }: ProfessoresListProps) {
                 </div>
                 <div>
                   <h3 className="font-medium text-gray-900">
-                    {professor.nome} {professor.sobrenome}
+                    {professor.nome}
                   </h3>
                   <div className="flex items-center space-x-2 text-sm text-gray-500">
                     <Mail size={14} />
                     <span>{professor.email}</span>
                   </div>
-                  {professor.instituicao && <p className="text-sm text-gray-500">{professor.instituicao}</p>}
                 </div>
               </div>
               <div className="text-right">
                 <span
                   className={`inline-block px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(professor.status)}`}
                 >
-                  {professor.status === "pendente"
-                    ? "Pendente"
+                  {professor.status === undefined
+                    ? "pendente"
                     : professor.status === "aprovado"
                       ? "Aprovado"
                       : "Recusado"}
@@ -149,10 +148,6 @@ function ProfessorModal({ professor, onClose }: ProfessorModalProps) {
                 <label className="block text-sm font-medium text-gray-700 mb-1">Nome</label>
                 <div className="bg-gray-100 rounded-lg p-3">{professor.nome}</div>
               </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Sobrenome</label>
-                <div className="bg-gray-100 rounded-lg p-3">{professor.sobrenome}</div>
-              </div>
             </div>
 
             <div>
@@ -174,23 +169,9 @@ function ProfessorModal({ professor, onClose }: ProfessorModalProps) {
                 </a>
               </div>
             </div>
-
-            {professor.instituicao && (
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Instituição</label>
-                <div className="bg-gray-100 rounded-lg p-3">{professor.instituicao}</div>
-              </div>
-            )}
-
-            {professor.areaAtuacao && (
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Área de Atuação</label>
-                <div className="bg-gray-100 rounded-lg p-3">{professor.areaAtuacao}</div>
-              </div>
-            )}
           </div>
 
-          {professor.status === "pendente" && (
+          {professor.status === undefined && (
             <>
               <div className="mb-6">
                 <label className="block text-sm font-medium text-gray-700 mb-2">Feedback do administrador</label>
@@ -220,13 +201,6 @@ function ProfessorModal({ professor, onClose }: ProfessorModalProps) {
                 </button>
               </div>
             </>
-          )}
-
-          {professor.feedbackAdmin && (
-            <div className="mt-6 p-4 bg-gray-50 rounded-lg">
-              <h4 className="font-medium text-gray-900 mb-2">Feedback do Administrador</h4>
-              <p className="text-gray-700">{professor.feedbackAdmin}</p>
-            </div>
           )}
         </div>
       </div>

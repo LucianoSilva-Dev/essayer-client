@@ -64,9 +64,9 @@ export default function EditarPerfilPage() {
       newErrors.nome = "Nome é obrigatório"
     }
 
-    if (!formData.sobrenome?.trim()) {
-      newErrors.sobrenome = "Sobrenome é obrigatório"
-    }
+    // if (!formData.sobrenome?.trim()) {
+    //   newErrors.sobrenome = "Sobrenome é obrigatório"
+    // }
 
     if (!formData.email?.trim()) {
       newErrors.email = "E-mail é obrigatório"
@@ -162,7 +162,7 @@ export default function EditarPerfilPage() {
                     {errors.nome && <p className="mt-1 text-sm text-red-500">{errors.nome}</p>}
                   </div>
 
-                  <div>
+                  {/* <div>
                     <label htmlFor="sobrenome" className="block text-sm font-medium text-gray-700 mb-1">
                       Sobrenome <span className="text-red-500">*</span>
                     </label>
@@ -177,7 +177,7 @@ export default function EditarPerfilPage() {
                       } rounded-md focus:outline-none focus:ring-1 focus:ring-[#CA9C60]`}
                     />
                     {errors.sobrenome && <p className="mt-1 text-sm text-red-500">{errors.sobrenome}</p>}
-                  </div>
+                  </div> */}
 
                   <div className="md:col-span-2">
                     <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
@@ -196,7 +196,7 @@ export default function EditarPerfilPage() {
                     {errors.email && <p className="mt-1 text-sm text-red-500">{errors.email}</p>}
                   </div>
 
-                  <div className="md:col-span-2">
+                  {/* <div className="md:col-span-2">
                     <label htmlFor="bio" className="block text-sm font-medium text-gray-700 mb-1">
                       Biografia
                     </label>
@@ -209,12 +209,12 @@ export default function EditarPerfilPage() {
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#CA9C60]"
                       placeholder="Conte um pouco sobre você..."
                     />
-                  </div>
+                  </div> */}
                 </div>
               </div>
 
               {/* Campos específicos por tipo */}
-              {profile.tipo === "aluno" && (
+              {/* {profile.tipo === "aluno" && (
                 <div className="mb-8">
                   <h2 className="text-xl font-semibold text-gray-900 mb-4">Informações Acadêmicas</h2>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -274,7 +274,7 @@ export default function EditarPerfilPage() {
                     </div>
                   </div>
                 </div>
-              )}
+              )} */}
 
               {profile.tipo === "professor" && (
                 <div className="mb-8">
@@ -297,7 +297,7 @@ export default function EditarPerfilPage() {
                       {errors.curriculoLattes && <p className="mt-1 text-sm text-red-500">{errors.curriculoLattes}</p>}
                     </div>
 
-                    <div>
+                    {/* <div>
                       <label htmlFor="instituicao" className="block text-sm font-medium text-gray-700 mb-1">
                         Instituição
                       </label>
@@ -309,9 +309,9 @@ export default function EditarPerfilPage() {
                         onChange={handleChange}
                         className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#CA9C60]"
                       />
-                    </div>
+                    </div> */}
 
-                    <div>
+                    {/* <div>
                       <label htmlFor="areaAtuacao" className="block text-sm font-medium text-gray-700 mb-1">
                         Área de Atuação
                       </label>
@@ -335,9 +335,9 @@ export default function EditarPerfilPage() {
                         <option value="literatura">Literatura</option>
                         <option value="outros">Outros</option>
                       </select>
-                    </div>
+                    </div> */}
 
-                    <div>
+                    {/* <div>
                       <label htmlFor="titulacao" className="block text-sm font-medium text-gray-700 mb-1">
                         Titulação
                       </label>
@@ -354,9 +354,9 @@ export default function EditarPerfilPage() {
                         <option value="doutorado">Doutorado</option>
                         <option value="pos-doutorado">Pós-Doutorado</option>
                       </select>
-                    </div>
+                    </div> */}
 
-                    <div>
+                    {/* <div>
                       <label htmlFor="experiencia" className="block text-sm font-medium text-gray-700 mb-1">
                         Anos de Experiência
                       </label>
@@ -369,11 +369,11 @@ export default function EditarPerfilPage() {
                         onChange={handleChange}
                         className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#CA9C60]"
                       />
-                    </div>
+                    </div> */}
                   </div>
 
                   {/* Disponibilidade */}
-                  <div className="mt-6">
+                  {/* <div className="mt-6">
                     <h3 className="text-lg font-medium text-gray-900 mb-3">Disponibilidade</h3>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                       <label className="flex items-center">
@@ -406,7 +406,7 @@ export default function EditarPerfilPage() {
                         <span className="ml-2 text-sm text-gray-700">Aulas Particulares</span>
                       </label>
                     </div>
-                  </div>
+                  </div> */}
                 </div>
               )}
 
@@ -421,6 +421,7 @@ export default function EditarPerfilPage() {
                   Cancelar
                 </button>
                 <button
+                  onClick={handleSubmit}
                   type="submit"
                   disabled={isSubmitting || isLoading}
                   className="flex items-center px-4 py-2 border border-transparent rounded-md text-white bg-[#CA9C60] hover:bg-[#B8935A] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#CA9C60] disabled:opacity-50"

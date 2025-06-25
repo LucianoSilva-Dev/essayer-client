@@ -6,6 +6,9 @@ export interface Usuario {
   id: string;
   nome: string;
   cargo: UserCargo;
+  email: string,
+  createdAt: string,
+  lattes?: string
 }
 
 export interface CreateUsuarioBody {

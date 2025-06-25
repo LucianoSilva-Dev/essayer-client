@@ -7,7 +7,7 @@ import ProfessoresList from "../../../components/admin/professor-list"
 import RepertoriosList from "../../../components/admin/repertorio-list"
 
 type TabType = "educadores" | "repertorios"
-type StatusType = "pendentes" | "aprovados" | "recusados"
+type StatusType = "pendentes" | "aprovados" | "recusados" 
 
 export default function AdminPage() {
   const [activeTab, setActiveTab] = useState<TabType>("educadores")
@@ -17,7 +17,7 @@ export default function AdminPage() {
   const getStatusCounts = () => {
     if (activeTab === "educadores") {
       return {
-        pendentes: getProfessoresPorStatus("pendente").length,
+        pendentes: getProfessoresPorStatus(undefined).length,
         aprovados: getProfessoresPorStatus("aprovado").length,
         recusados: getProfessoresPorStatus("recusado").length,
       }
@@ -114,7 +114,7 @@ export default function AdminPage() {
         {/* Conteúdo */}
         <div className="bg-white rounded-lg shadow-sm">
           {activeTab === "educadores" ? (
-            <ProfessoresList status={activeStatus} />
+            <ProfessoresList status={activeStatus == "pendentes" ? undefined : activeStatus} />
           ) : (
             <RepertoriosList status={activeStatus} />
           )}

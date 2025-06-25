@@ -1,9 +1,10 @@
 "use client"
 
 import type React from "react"
-import { createContext, useContext, useState, useEffect } from "react"
+import { createContext, useContext, useState, useEffect, useCallback } from "react"
 import type { UserProfile, AlunoProfile } from "@/../types/profile"
 import { useAuth } from "./auth-context"
+import { getUserById, updateUser } from "../api/usuario"
 
 interface ProfileContextType {
   profile: UserProfile | null
@@ -15,9 +16,32 @@ interface ProfileContextType {
 const ProfileContext = createContext<ProfileContextType | undefined>(undefined)
 
 export function ProfileProvider({ children }: { children: React.ReactNode }) {
-  const { isLoggedIn } = useAuth()
+  const { isLoggedIn, userData } = useAuth()
   const [profile, setProfile] = useState<UserProfile | null>(null)
   const [isLoading, setIsLoading] = useState(false)
+
+  const getUser = useCallback(async (id: string) => {
+    try {
+
+      console.log("getting user:");
+
+      const user = await getUserById(id)
+
+      console.log(user);
+
+      setProfile({
+        id: user.id,
+        nome: user.nome,
+        tipo: user.cargo,
+        email: user.email,
+        dataCadastro: user.createdAt,
+        curriculoLattes: user.lattes
+      })
+
+    } catch (e) {
+      console.log(e);
+    }
+  }, [])
 
   // Carregar perfil do localStorage
   useEffect(() => {
@@ -52,9 +76,12 @@ export function ProfileProvider({ children }: { children: React.ReactNode }) {
             redacoes: 3,
           },
         }
-        setProfile(defaultProfile)
-        localStorage.setItem("userProfile", JSON.stringify(defaultProfile))
+        if (userData) {
+          getUser(userData?.id)
+        }
       }
+    } else {
+      setProfile(null)
     }
   }, [isLoggedIn])
 
@@ -68,15 +95,17 @@ export function ProfileProvider({ children }: { children: React.ReactNode }) {
   const updateProfile = async (data: Partial<UserProfile>) => {
     setIsLoading(true)
     try {
-      // Simular delay da API
-      await new Promise((resolve) => setTimeout(resolve, 1000))
-
-      setProfile((prev) => (prev ? { ...prev, ...data } : null))
+      if (profile) {
+        await updateUser(profile?.id, data)
+      }
     } catch (error) {
       console.error("Erro ao atualizar perfil:", error)
       throw error
     } finally {
       setIsLoading(false)
+      if (profile) {
+        getUser(profile.id)
+      }
     }
   }
 

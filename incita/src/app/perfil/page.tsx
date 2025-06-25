@@ -46,7 +46,7 @@ export default function PerfilPage() {
   return (
     <main className="min-h-screen bg-gray-50 py-8">
       <div className="container mx-auto px-4">
-        {profile.tipo === "aluno" ? (
+        {profile.tipo !== "professor" ? (
           <AlunoProfileComponent
             profile={profile}
             onEdit={handleEdit}

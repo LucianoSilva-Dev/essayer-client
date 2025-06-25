@@ -1,8 +1,32 @@
 "use client"
 
 import type React from "react"
-import { createContext, useContext, useState, useEffect } from "react"
+import { createContext, useContext, useState, useEffect, useCallback } from "react"
 import type { RepertorioPendente, ProfessorPendente } from "../types/admin"
+import { getAllRequisicaoProfessor, updateStatus } from "../api/requisicao-professor"
+import { getRequisicaoProfessorResponse } from "../api/requisicao-professor/types"
+
+const mountProfessor = (requisicao: getRequisicaoProfessorResponse): ProfessorPendente => {
+  if (requisicao.requisitante) {
+    return {
+      id: requisicao.id,
+      nome: requisicao.requisitante.nome,
+      email: requisicao.requisitante.email,
+      status: requisicao.status,
+      curriculoLattes: requisicao.lattes,
+      dataSubmissao: requisicao.createdAt
+    }
+  } else {
+    return {
+      id: requisicao.id,
+      nome: "[excluído]",
+      email: "[excluído]",
+      status: requisicao.status,
+      curriculoLattes: requisicao.lattes,
+      dataSubmissao: requisicao.createdAt
+    }
+  }
+}
 
 interface AdminContextType {
   repertoriosPendentes: RepertorioPendente[]
@@ -12,7 +36,7 @@ interface AdminContextType {
   aprovarProfessor: (id: string, feedback?: string) => void
   recusarProfessor: (id: string, feedback: string) => void
   getRepertoriosPorStatus: (status: "pendente" | "aprovado" | "recusado") => RepertorioPendente[]
-  getProfessoresPorStatus: (status: "pendente" | "aprovado" | "recusado") => ProfessorPendente[]
+  getProfessoresPorStatus: (status: undefined | "aprovado" | "recusado") => ProfessorPendente[]
 }
 
 const AdminContext = createContext<AdminContextType | undefined>(undefined)
@@ -21,6 +45,20 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
   const [repertoriosPendentes, setRepertoriosPendentes] = useState<RepertorioPendente[]>([])
   const [professoresPendentes, setProfessoresPendentes] = useState<ProfessorPendente[]>([])
   const [isLoaded, setIsLoaded] = useState(false)
+
+  const getProfessores = useCallback(async () => {
+    try {
+      const requisicoes = await getAllRequisicaoProfessor()
+
+      const professores = requisicoes.map(req => {
+        return mountProfessor(req)
+      })
+
+      setProfessoresPendentes(professores)
+    } catch (e) {
+      console.log("error");
+    }
+  }, [])
 
   // Carregar dados iniciais
   useEffect(() => {
@@ -90,29 +128,23 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
       {
         id: "prof1",
         nome: "João",
-        sobrenome: "Silva",
         email: "joao.silva@email.com",
         curriculoLattes: "http://lattes.cnpq.br/1234567890",
-        instituicao: "UFMG",
-        areaAtuacao: "filosofia",
         dataSubmissao: new Date().toISOString(),
-        status: "pendente",
+        status: undefined,
       },
       {
         id: "prof2",
         nome: "Maria",
-        sobrenome: "Santos",
         email: "maria.santos@email.com",
         curriculoLattes: "http://lattes.cnpq.br/0987654321",
-        instituicao: "USP",
-        areaAtuacao: "literatura",
         dataSubmissao: new Date().toISOString(),
         status: "aprovado",
       },
     ]
 
     setRepertoriosPendentes(repertoriosExemplo)
-    setProfessoresPendentes(professoresExemplo)
+    getProfessores()
     setIsLoaded(true)
   }, [])
 
@@ -121,14 +153,14 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
       prev.map((rep) =>
         rep.id === id
           ? {
-              ...rep,
-              status: {
-                ...rep.status,
-                status: "aprovado",
-                dataRevisao: new Date().toISOString(),
-                feedbackAdmin: feedback,
-              },
-            }
+            ...rep,
+            status: {
+              ...rep.status,
+              status: "aprovado",
+              dataRevisao: new Date().toISOString(),
+              feedbackAdmin: feedback,
+            },
+          }
           : rep,
       ),
     )
@@ -139,52 +171,42 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
       prev.map((rep) =>
         rep.id === id
           ? {
-              ...rep,
-              status: {
-                ...rep.status,
-                status: "recusado",
-                dataRevisao: new Date().toISOString(),
-                feedbackAdmin: feedback,
-              },
-            }
+            ...rep,
+            status: {
+              ...rep.status,
+              status: "recusado",
+              dataRevisao: new Date().toISOString(),
+              feedbackAdmin: feedback,
+            },
+          }
           : rep,
       ),
     )
   }
 
-  const aprovarProfessor = (id: string, feedback?: string) => {
-    setProfessoresPendentes((prev) =>
-      prev.map((prof) =>
-        prof.id === id
-          ? {
-              ...prof,
-              status: "aprovado",
-              feedbackAdmin: feedback,
-            }
-          : prof,
-      ),
-    )
+  const aprovarProfessor = async (id: string) => {
+    try{
+      await updateStatus(id, {status: "aprovado"})
+    } catch(e) {
+      console.log(e);
+    }
+    getProfessores()
   }
 
-  const recusarProfessor = (id: string, feedback: string) => {
-    setProfessoresPendentes((prev) =>
-      prev.map((prof) =>
-        prof.id === id
-          ? {
-              ...prof,
-              status: "recusado",
-              feedbackAdmin: feedback,
-            }
-          : prof,
-      ),
-    )
+  const recusarProfessor = async (id: string, feedback: string) => {
+    try{
+      await updateStatus(id, {status: "recusado", motivo: feedback})
+    } catch(e) {
+      console.log(e);
+    }
+    getProfessores()
   }
 
   const getRepertoriosPorStatus = (status: "pendente" | "aprovado" | "recusado") => {
     return repertoriosPendentes.filter((rep) => rep.status.status === status)
   }
 
-  const getProfessoresPorStatus = (status: "pendente" | "aprovado" | "recusado") => {
+  const getProfessoresPorStatus = (status: undefined | "aprovado" | "recusado") => {
     return professoresPendentes.filter((prof) => prof.status === status)
   }
 

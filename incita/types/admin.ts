@@ -24,12 +24,8 @@ export interface RepertorioPendente {
 export interface ProfessorPendente {
   id: string
   nome: string
-  sobrenome: string
   email: string
   curriculoLattes: string
-  instituicao?: string
-  areaAtuacao?: string
   dataSubmissao: string
-  status: "pendente" | "aprovado" | "recusado"
-  feedbackAdmin?: string
+  status: undefined | "aprovado" | "recusado"
 }

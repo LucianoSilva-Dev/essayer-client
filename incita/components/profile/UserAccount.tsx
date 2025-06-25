@@ -5,8 +5,17 @@ import { ArrowLeft, Edit3, EyeOff, Eye, User, HelpCircle, LogOut } from "lucide-
 import { useState } from "react"
 import { useAuth } from '@/../contexts/auth-context'
 import { useRouter } from "next/navigation"
+import { UserProfile } from "../../types/profile"
 
-export default function Component() {
+interface AlunoProfileProps {
+  profile: UserProfile
+  onEdit: () => void
+  onAvatarUpload: (file: File) => void
+  isLoading: boolean
+}
+
+
+export default function Component({ profile, onEdit, onAvatarUpload, isLoading }: AlunoProfileProps) {
   const router = useRouter()
   const [isEditing, setIsEditing] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
@@ -27,7 +36,7 @@ export default function Component() {
       <div className="max-w-7xl mx-auto px-6 py-8">
         {/* Top Section */}
         <div className="flex items-center justify-between mb-8">
-          <button className="flex items-center space-x-2 text-[#616060] hover:text-[#363535] transition-colors">
+          <button onClick={() => router.back()} className="flex items-center space-x-2 text-[#616060] hover:text-[#363535] transition-colors">
             <ArrowLeft className="w-5 h-5" />
             <span className="text-lg font-medium">Voltar</span>
           </button>
@@ -48,7 +57,7 @@ export default function Component() {
         <div className="bg-white rounded-lg p-8 shadow-sm">
           <div className="flex items-center justify-between mb-8">
             <button
-              onClick={() => setIsEditing(!isEditing)}
+              onClick={onEdit}
               className="flex items-center space-x-2 hover:opacity-80 transition-opacity"
             >
               <Edit3 className="w-6 h-6 text-[#363535]" />
@@ -81,17 +90,7 @@ export default function Component() {
                   <input
                     id="nome"
                     placeholder="Nome"
-                    className={`bg-[#e5eff0] border-0 text-[#616060] h-12 pl-2 rounded-md ${!isEditing ? "cursor-not-allowed" : ""}`}
-                    readOnly={!isEditing}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label htmlFor="sobrenome" className="text-[#363535] font-medium text-lg">
-                    Sobrenome
-                  </label>
-                  <input
-                    id="sobrenome"
-                    placeholder="Sobrenome"
+                    value={profile.nome}
                     className={`bg-[#e5eff0] border-0 text-[#616060] h-12 pl-2 rounded-md ${!isEditing ? "cursor-not-allowed" : ""}`}
                     readOnly={!isEditing}
                   />
@@ -116,7 +115,7 @@ export default function Component() {
                   </label>
                   <input
                     id="email"
-                    defaultValue="xablaueusoouomagopa@gmail.com"
+                    value={profile.email}
                     className="bg-[#e5eff0] border-0 text-[#616060] w-full h-12 pl-2 rounded-md cursor-not-allowed"
                     readOnly
                   />
