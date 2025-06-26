@@ -82,7 +82,7 @@ const containerVariants = {
 
 const fadeUpVariants = {
   hidden: { opacity: 0, y: 40, scale: 0.98 },
-  show: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.7, ease: [0.42, 0, 0.58, 1] } },
+  show: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.7, ease: "easeInOut" } },
 }
 
 export default function FeaturedRepertoires() {
@@ -144,7 +144,7 @@ export default function FeaturedRepertoires() {
         </motion.div>
 
         <motion.div
-          className="grid grid-cols-1 gap-y-8 gap-x-2 lg:gap-x-16 md:grid-cols-2 max-w-7xl mx-auto lg:grid-cols-3"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
           variants={containerVariants}
         >
           {displayedRepertoires.length > 0 ? 
@@ -154,12 +154,15 @@ export default function FeaturedRepertoires() {
                 variants={fadeUpVariants}
                 transition={{ duration: 0.6, delay: idx * 0.15 }}
                 whileHover={{ scale: 1.03, boxShadow: "0 8px 32px rgba(7,95,112,0.10)" }}
+                className="h-full w-full flex"
               >
-                <RepertorioCard repertorio={repertorio} />
+                <div className="w-full h-full flex"> 
+          <RepertorioCard repertorio={repertorio} />
+                </div>
               </motion.div>
             ))
           : <motion.p
-              className="text-[30px] text-gray-600 max-w-4xl justify-self-center"
+              className="text-[30px] text-gray-600 justify-self-center"
               variants={fadeUpVariants}
             >
               Nenhum repertorio encontrado

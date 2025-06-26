@@ -162,7 +162,7 @@ export default function RepertorioCard({ repertorio }: RepertorioCardProps) {
   }
 
   return (
-    <div className="bg-white rounded-lg border-l-4 border-l-[#CA9C60] shadow-sm hover:shadow-md transition p-4 cursor-pointer group flex flex-col justify-between hover:scale-110 duration-400 ease-in-out" onClick={handleViewDetails}>
+    <div className="bg-white h-full w-full flex rounded-lg border-l-4 border-l-[#CA9C60] shadow-sm hover:shadow-md transition p-4 cursor-pointer group flex flex-col justify-between hover:scale-110 duration-400 ease-in-out" onClick={handleViewDetails}>
       <div>
         {/* Cabeçalho do card */}
         <div className="flex justify-between items-center mb-3">
