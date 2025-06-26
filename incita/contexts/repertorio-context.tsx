@@ -108,10 +108,8 @@ export function RepertorioProvider({ children }: { children: React.ReactNode }) 
   const [totalRepertorios, setTotalRepertorios] = useState(0)
   const [isLoadingRepertorios, setIsLoadingRepertorios] = useState(true)
   const [currentLimit, setCurrentLimit] = useState(15);
-  const currentFilters = useRef<Parameters<typeof pesquisarRepertorios>[0]>({});
 
   const setPage = (page: number) => {
-    console.log("Context: setPage chamado com:", page);
     setCurrentPage(page);
   }
 
@@ -136,7 +134,7 @@ export function RepertorioProvider({ children }: { children: React.ReactNode }) 
     if (filters.likedByCurrentUser !== undefined) params.append('likeDoUsuario', String(filters.likedByCurrentUser));
     if (filters.orderBy) params.append('ordenarPor', filters.orderBy);
 
-    params.append('offset', String(filters.offset ?? currentPage));
+    params.append('offset', String(filters.offset ?? 0));
     params.append('limit', String(filters.limit ?? currentLimit));
     return params.toString();
   };
@@ -152,15 +150,10 @@ export function RepertorioProvider({ children }: { children: React.ReactNode }) 
     offset?: number,
     limit?: number
   }) => {
-    currentFilters.current = filters;
-
     setIsLoadingRepertorios(true);
-    console.log("Context: pesquisarRepertorios chamado com filtros:", filters);
     try {
       const queryString = construirQueryString(filters);
-      console.log("Context: Query String:", queryString);
       const response = await getAllRepertorios(`?${queryString}`);
-      console.log("Context: Resposta da API:", response);
 
       if (response) {
         const mappedRepertorios = response.documentos
@@ -170,7 +163,6 @@ export function RepertorioProvider({ children }: { children: React.ReactNode }) 
         setRepertorios(mappedRepertorios);
         setTotalRepertorios(response.paginacao.totalDocuments);
         setTotalPages(Math.ceil(response.paginacao.totalDocuments / response.paginacao.limit));
-        setCurrentPage(Math.floor(response.paginacao.offset / response.paginacao.limit));
         setCurrentLimit(response.paginacao.limit);
 
         if (isLoggedIn) {
@@ -192,14 +184,6 @@ export function RepertorioProvider({ children }: { children: React.ReactNode }) 
       setIsLoadingRepertorios(false);
     }
   }, [isLoggedIn, currentLimit]);
-
-  useEffect(() => {
-    console.log("Context: useEffect disparado. CurrentPage:", currentPage);
-    // When currentPage changes, re-fetch using the last known filters.
-    // The `offset` within `currentFilters.current` should already be correctly calculated (e.g., currentPage * 15).
-    pesquisarRepertorios(currentFilters.current);
-  }, [currentPage, isLoggedIn, pesquisarRepertorios]);
-
 
   const toggleFavorito = async (id: string) => {
     if (!isLoggedIn) {
