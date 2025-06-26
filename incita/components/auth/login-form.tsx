@@ -1,6 +1,5 @@
 "use client"
-import type React from "react"
-import { useState } from "react"
+import React, { useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { EyeOff, Eye } from "lucide-react"
@@ -11,11 +10,19 @@ import { login as apiLogin } from '../../api/auth/index'
 import { createProfessorRequest } from "../../api/usuario"
 
 export default function LoginForm() {
-  const { login } = useAuth()
+  const { login, isLoggedIn } = useAuth()
   const [showPassword, setShowPassword] = useState(false)
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const router = useRouter()
+
+  // Redireciona se já estiver logado
+  React.useEffect(() => {
+    if (isLoggedIn) {
+      toast.info("Você já está logado.")
+      router.replace("/perfil")
+    }
+  }, [isLoggedIn, router])
 
   const searchParams = useSearchParams()
   const lattes = searchParams.get('lattes')

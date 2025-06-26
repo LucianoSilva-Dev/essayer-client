@@ -92,7 +92,7 @@ export default function Component({ profile, onEdit, onAvatarUpload, isLoading }
             {/* Profile Image */}
             <div className="flex justify-center lg:justify-start">
               <img
-                src={profilePictureLink || "/default-profile.png"}
+                src={profilePictureLink || "/placeholder-user.jpg"}
                 alt="Foto de perfil"
                 className="w-80 h-80 rounded-full object-cover"
               />

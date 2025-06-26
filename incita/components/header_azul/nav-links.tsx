@@ -27,7 +27,7 @@ export function NavLinks() {
     <nav className="hidden md:flex items-center space-x-8">
       {/* 4. Mapear os links filtrados */}
       {filteredLinks.map((link) => (
-        <NavItem href={link.href} label={link.label} />
+        <NavItem key={`${link.href}-${link.label}`} href={link.href} label={link.label} />
       ))}
     </nav>
   )
