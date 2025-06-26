@@ -103,7 +103,7 @@ export default function Component({ profile, onEdit, onAvatarUpload, isLoading }
 
             {/* Form Fields */}
             <div className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 gap-6">
                 <div className="space-y-2">
                   <label htmlFor="nome" className="text-[#363535] font-medium text-lg">
                     Nome

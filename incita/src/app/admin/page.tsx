@@ -66,7 +66,7 @@ export default function AdminPage() {
                   <span>Educadores</span>
                 </div>
               </button>
-              <button
+              {/* <button
                 onClick={() => setActiveTab("repertorios")}
                 className={`py-4 px-2 border-b-2 font-medium text-sm ${
                   activeTab === "repertorios"
@@ -78,7 +78,7 @@ export default function AdminPage() {
                   <FileText size={18} />
                   <span>Repertórios</span>
                 </div>
-              </button>
+              </button> */}
             </nav>
           </div>
 

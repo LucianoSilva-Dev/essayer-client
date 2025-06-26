@@ -84,7 +84,11 @@ export default function EditarPerfilPage() {
       newErrors.email = "E-mail inválido"
     }
 
-    if (profile?.tipo === "professor" && !formData.curriculoLattes?.trim()) {
+    if (
+      profile?.tipo === "professor" &&
+      "curriculoLattes" in formData &&
+      !formData.curriculoLattes?.trim()
+    ) {
       newErrors.curriculoLattes = "Currículo Lattes é obrigatório para professores"
     }
 
@@ -211,13 +215,14 @@ export default function EditarPerfilPage() {
                     {errors.email && <p className="mt-1 text-sm text-red-500">{errors.email}</p>}
                   </div>
 
-                  <div>
-                    <label htmlFor="avatar">Avatar</label>
+                  <div className="flex items-center">
+                    <label htmlFor="avatar" className="mr-2">Avatar</label>
                     <input 
                       type="file" 
                       id="avatar"
                       name="avatar"
-                      onChange={handleChangeFoto}/>
+                      onChange={handleChangeFoto}
+                      className="block w-full text-sm text-gray-700 border-2 border-gray-300 rounded-md cursor-pointer bg-white focus:outline-none focus:ring-1 focus:ring-[#CA9C60]"/>
                   </div>
 
                   {/* <div className="md:col-span-2">
@@ -312,7 +317,11 @@ export default function EditarPerfilPage() {
                         type="url"
                         id="curriculoLattes"
                         name="curriculoLattes"
-                        value={formData.curriculoLattes || ""}
+                        value={
+                          "curriculoLattes" in formData
+                            ? (formData as any).curriculoLattes || ""
+                            : ""
+                        }
                         onChange={handleChange}
                         className={`w-full px-3 py-2 border ${
                           errors.curriculoLattes ? "border-red-500" : "border-gray-300"
