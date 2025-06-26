@@ -534,7 +534,7 @@ function RepertorioDetalhesContent() {
           <div className="mt-8 bg-white rounded-lg shadow-lg p-6">
             <h3 className="text-xl font-semibold text-gray-900 mb-4">Comentários ({repertorio.comentarios.length})</h3>
 
-            {isLoggedIn && (
+            {isLoggedIn && userData?.cargo !== "aluno" && (
               <form onSubmit={handleCommentSubmit} className="flex items-start space-x-4 mb-6">
                 <textarea
                   value={newComment}
@@ -549,7 +549,7 @@ function RepertorioDetalhesContent() {
                 </button>
               </form>
             )}
-
+            
             <div className="space-y-4 divide-y divide-gray-200">
               {repertorio.comentarios && repertorio.comentarios.length > 0 ? (
                 repertorio.comentarios.map((comentario) => (
