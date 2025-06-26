@@ -146,8 +146,11 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
       },
     ]
 
-    setRepertoriosPendentes(repertoriosExemplo)
-    getProfessores()
+    setRepertoriosPendentes(repertoriosExemplo) 
+    if(isLoggedIn){
+      getProfessores()
+    }
+    
     setIsLoaded(true)
   }, [isLoggedIn])
 

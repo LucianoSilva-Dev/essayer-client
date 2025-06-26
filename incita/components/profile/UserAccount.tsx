@@ -92,7 +92,7 @@ export default function Component({ profile, onEdit, onAvatarUpload, isLoading }
             {/* Profile Image */}
             <div className="flex justify-center lg:justify-start">
               <img
-                src={profilePictureLink || "/placeholder-user.jpg"}
+                src={profilePictureLink || "/perfil.png"}
                 alt="Foto de perfil"
                 className="w-80 h-80 rounded-full object-cover"
               />
@@ -112,7 +112,7 @@ export default function Component({ profile, onEdit, onAvatarUpload, isLoading }
                     id="nome"
                     placeholder="Nome"
                     value={profile.nome}
-                    className={`bg-[#e5eff0] border-0 text-[#616060] h-12 pl-2 rounded-md ${!isEditing ? "cursor-not-allowed" : ""}`}
+                    className={`bg-[#e5eff0] border-0 text-[#616060] w-full h-12 pl-2 rounded-md ${!isEditing ? "cursor-not-allowed" : ""}`}
                     readOnly={!isEditing}
                   />
                 </div>
