@@ -104,7 +104,7 @@ export default function ObraForm({ titulo, autoria, sinopse, fonte, tipoObra, on
         {errors.sinopse && <p className="mt-1 text-sm text-red-500">{errors.sinopse}</p>}
       </div>
 
-      {/*<div className="mb-5">
+      <div className="mb-5">
         <label htmlFor="fonte" className="block text-sm font-medium text-gray-700 mb-1">
           Fonte <span className="text-red-500">*</span>
         </label>
@@ -120,7 +120,7 @@ export default function ObraForm({ titulo, autoria, sinopse, fonte, tipoObra, on
           placeholder="Ex: Editora Companhia das Letras, 2009"
         />
         {errors.fonte && <p className="mt-1 text-sm text-red-500">{errors.fonte}</p>} 
-      </div>*/}
+      </div>
     </>
   )
 }

@@ -9,6 +9,8 @@ import ArtigoForm from "../forms/artigo-form"
 import CitacaoForm from "../forms/citacao-form"
 import { toast } from "react-toastify"
 import { EixosTematicos } from "../../constants/eixos"
+import { CreateArtigoBody, CreateCitacaoBody, CreateObraBody } from "../../api/repertorio/types"
+import { createArtigo, createCitacao, createObra } from "../../api/repertorio"
 
 type RepertorioFormProps = {
   onSubmit: (data: RepertorioFormData) => Promise<void>
@@ -40,6 +42,54 @@ const modelos = [
   },
 ]
 
+async function saveRepertoire(repertoire: any) {
+  switch (repertoire.modelo) {
+    case 'obra':
+      try {
+        const obra: CreateObraBody = {
+          autor: repertoire.autoria,
+          sinopse: repertoire.sinopse,
+          subtopicos: repertoire.recortes,
+          topicos: repertoire.eixos,
+          titulo: repertoire.titulo,
+          tipoObra: repertoire.tipoObra || 'livro', // Garante um valor padrão
+        }
+
+        await createObra(obra)
+        toast.success("Obra salva com sucesso!")
+      } catch (e) { }
+      break;
+    case 'artigo':
+      try {
+        const artigo: CreateArtigoBody = {
+          autor: repertoire.autoria,
+          resumo: repertoire.sintese,
+          fonte: repertoire.fonte,
+          subtopicos: repertoire.recortes,
+          titulo: repertoire.titulo,
+          topicos: repertoire.eixos,
+        }
+
+        await createArtigo(artigo)
+        toast.success("Artigo salvo com sucesso!")
+      } catch (e) { }
+      break;
+    case 'citacao':
+      try {
+        const citacao: CreateCitacaoBody = {
+          autor: repertoire.autoria,
+          frase: repertoire.citacao,
+          fonte: repertoire.fonte,
+          subtopicos: repertoire.recortes,
+          topicos: repertoire.eixos,
+        }
+        await createCitacao(citacao)
+        toast.success("Citação salva com sucesso!")
+      } catch (e) { }
+      break;
+  }
+}
+
 export default function RepertorioForm({ onSubmit, onCancel, initialData, isEditing = false }: RepertorioFormProps) { // ADICIONADO isEditing
   const [modeloSelecionado, setModeloSelecionado] = useState<ModeloRepertorio>(initialData?.modelo || "obra")
   const [formData, setFormData] = useState<any>(
@@ -60,14 +110,14 @@ export default function RepertorioForm({ onSubmit, onCancel, initialData, isEdit
 
   useEffect(() => {
     if (initialData) {
-        setFormData(initialData);
-        setModeloSelecionado(initialData.modelo);
+      setFormData(initialData);
+      setModeloSelecionado(initialData.modelo);
     }
   }, [initialData]);
 
   useEffect(() => {
     if (formData.eixos && formData.eixos.length > 0) {
-      const allRecortes = formData.eixos.flatMap( (eixo: string) => EixosTematicos[eixo as keyof typeof EixosTematicos] || [])
+      const allRecortes = formData.eixos.flatMap((eixo: string) => EixosTematicos[eixo as keyof typeof EixosTematicos] || [])
       const uniqueRecortes = [...new Set(allRecortes)]
       setRecorteOptions(uniqueRecortes as string[]);
     } else {
@@ -84,20 +134,20 @@ export default function RepertorioForm({ onSubmit, onCancel, initialData, isEdit
     setFormData((prev: any) => ({
       ...prev,
       modelo: novoModelo,
-       titulo: "",
-       autoria: "",
-       sinopse: "",
-       fonte: "",
-       sintese: "",
-       citacao: "",
-       tipoObra: "livro", 
+      titulo: "",
+      autoria: "",
+      sinopse: "",
+      fonte: "",
+      sintese: "",
+      citacao: "",
+      tipoObra: "livro",
     }))
   }
 
   const handleSpecificDataChange = (update: Partial<RepertorioFormData>) => {
     setFormData((prev: any) => ({ ...prev, ...update }))
   }
-  
+
   const handleEixoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value, checked } = e.target;
     const currentEixos = formData.eixos || [];
@@ -109,11 +159,11 @@ export default function RepertorioForm({ onSubmit, onCancel, initialData, isEdit
     } else {
       newEixos = currentEixos.filter((eixo: string) => eixo !== value);
     }
-    
+
     // MODIFICADO: Garante que os recortes sejam mantidos corretamente ao desmarcar um eixo
     const currentRecortes = formData.recortes || [];
-    const newRecortesValidos = currentRecortes.filter((recorte: string) => 
-        newEixos.flatMap((eixo: string) => EixosTematicos[eixo as keyof typeof EixosTematicos] || []).includes(recorte)
+    const newRecortesValidos = currentRecortes.filter((recorte: string) =>
+      newEixos.flatMap((eixo: string) => EixosTematicos[eixo as keyof typeof EixosTematicos] || []).includes(recorte)
     );
 
     setFormData((prev: any) => ({
@@ -161,7 +211,7 @@ export default function RepertorioForm({ onSubmit, onCancel, initialData, isEdit
       });
     }
   };
-  
+
   const validateForm = (): boolean => {
     const newErrors: Record<string, string> = {}
 
@@ -210,38 +260,49 @@ export default function RepertorioForm({ onSubmit, onCancel, initialData, isEdit
     }
 
     setIsSubmitting(true)
-    await onSubmit(formData).finally(() => setIsSubmitting(false));
+
+    try {
+      await saveRepertoire(formData)
+      await onSubmit(formData)
+    } catch (error) {
+      console.error("Erro ao salvar repertório:", error)
+      setErrors({
+        form: "Ocorreu um erro ao salvar o repertório. Tente novamente.",
+      })
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   const renderSpecificForm = () => {
     switch (modeloSelecionado) {
       case "obra":
-        return <ObraForm 
-                    onDataChange={handleSpecificDataChange} 
-                    errors={errors} 
-                    titulo={formData.titulo || ''}
-                    autoria={formData.autoria || ''}
-                    sinopse={formData.sinopse || ''}
-                    fonte={formData.fonte || ''}
-                    tipoObra={formData.tipoObra || 'livro'}
-                />
+        return <ObraForm
+          onDataChange={handleSpecificDataChange}
+          errors={errors}
+          titulo={formData.titulo || ''}
+          autoria={formData.autoria || ''}
+          sinopse={formData.sinopse || ''}
+          fonte={formData.fonte || ''}
+          tipoObra={formData.tipoObra || 'livro'}
+        />
       case "artigo":
-        return <ArtigoForm 
-                    onDataChange={handleSpecificDataChange} 
-                    errors={errors} 
-                    titulo={formData.titulo || ''}
-                    autoria={formData.autoria || ''}
-                    sintese={formData.sintese || ''}
-                    fonte={formData.fonte || ''}
-                />
+        return <ArtigoForm
+          onDataChange={handleSpecificDataChange}
+          errors={errors}
+          titulo={formData.titulo || ''}
+          autoria={formData.autoria || ''}
+          sintese={formData.sintese || ''}
+          fonte={formData.fonte || ''}
+        />
       case "citacao":
-        return <CitacaoForm 
-                    onDataChange={handleSpecificDataChange} 
-                    errors={errors} 
-                    autoria={formData.autoria || ''}
-                    citacao={formData.citacao || ''}
-                    fonte={formData.fonte || ''}
-                />
+        return <CitacaoForm
+          onDataChange={handleSpecificDataChange}
+          errors={errors}
+          autoria={formData.autoria || ''}
+          citacao={formData.citacao || ''}
+          fonte={formData.fonte || ''}
+        />
       default:
         return null
     }
@@ -303,7 +364,7 @@ export default function RepertorioForm({ onSubmit, onCancel, initialData, isEdit
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Eixos Temáticos <span className="text-red-500">*</span>
             </label>
-             <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
               {EixoOptions.map((eixo) => (
                 <label key={eixo} className="flex items-center space-x-2 p-2 rounded-md border border-gray-200 hover:bg-gray-50 cursor-pointer">
                   <input
