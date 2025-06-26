@@ -44,7 +44,7 @@ interface AdminContextType {
 const AdminContext = createContext<AdminContextType | undefined>(undefined)
 
 export function AdminProvider({ children }: { children: React.ReactNode }) {
-  const {isLoggedIn} = useAuth()
+  const {isLoggedIn, userData} = useAuth()
   const [repertoriosPendentes, setRepertoriosPendentes] = useState<RepertorioPendente[]>([])
   const [professoresPendentes, setProfessoresPendentes] = useState<ProfessorPendente[]>([])
   const [isLoaded, setIsLoaded] = useState(false)
@@ -147,7 +147,7 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
     ]
 
     setRepertoriosPendentes(repertoriosExemplo) 
-    if(isLoggedIn){
+    if(isLoggedIn && userData?.cargo === "admin"){
       getProfessores()
     }
     
