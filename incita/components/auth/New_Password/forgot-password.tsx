@@ -5,10 +5,12 @@ import Image from "next/image"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { createRequisicaoSenha } from "../../../api/requisicao-senha"
+import { useAuth } from "../../../contexts/auth-context"
 
 export default function ForgotPasswordForm() {
   const [email, setEmail] = useState("")
   const router = useRouter()
+  const { isLoggedIn } = useAuth()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -64,11 +66,13 @@ export default function ForgotPasswordForm() {
           Enviar código
         </button>
 
-        <div className="flex justify-center">
-          <Link href="/login" className="text-sm text-gray-500 hover:text-teal-600">
-            Voltar ao login
-          </Link>
-        </div>
+        {!isLoggedIn && ( // Só mostra se NÃO estiver logado
+          <div className="flex justify-center">
+            <Link href="/login" className="text-sm text-gray-500 hover:text-teal-600">
+              Voltar ao login
+            </Link>
+          </div>
+        )}
       </form>
     </div>
   )
