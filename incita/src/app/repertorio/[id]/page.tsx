@@ -84,7 +84,7 @@ function CommentCard({ comentario, repertorioId, onCommentUpdate, openModal }: {
           <div>
             <p className="font-semibold text-gray-800">{comentario.usuario.nome}</p>
             {!isEditing ? (
-              <p className="text-gray-600">{comentario.texto}</p>
+              <p className="text-gray-600 whitespace-pre-wrap">{comentario.texto}</p>
             ) : (
               <div className="w-full mt-2">
                 <textarea

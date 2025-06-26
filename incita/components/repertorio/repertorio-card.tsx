@@ -113,7 +113,7 @@ export default function RepertorioCard({ repertorio }: RepertorioCardProps) {
             <h3 className="text-lg font-bold text-gray-900 mb-1">{repertorio.titulo}</h3>
             <p className="text-sm text-gray-600 mb-3">Por {repertorio.autoria}</p>
             <div className="mb-4">
-              <p className="text-sm text-gray-700 line-clamp-4">
+              <p className="text-sm text-gray-700 line-clamp-4 whitespace-pre-wrap">
                 {repertorio.sinopse}
               </p>
             </div>
@@ -126,7 +126,7 @@ export default function RepertorioCard({ repertorio }: RepertorioCardProps) {
             <h3 className="text-lg font-bold text-gray-900 mb-1">{repertorio.titulo}</h3>
             <p className="text-sm text-gray-600 mb-3">Por {repertorio.autoria}</p>
             <div className="mb-4">
-              <p className="text-sm text-gray-700 line-clamp-4">
+              <p className="text-sm text-gray-700 line-clamp-4 whitespace-pre-wrap">
                 {repertorio.sintese}
               </p>
             </div>
@@ -144,7 +144,7 @@ export default function RepertorioCard({ repertorio }: RepertorioCardProps) {
             <h3 className="text-lg font-bold text-gray-900 mb-1">{repertorio.autoria}</h3>
             <p className="text-sm text-gray-600 mb-3">Citação</p>
             <div className="mb-4">
-              <p className="text-sm text-gray-700 italic line-clamp-3 mb-2">"{repertorio.citacao}"</p>
+              <p className="text-sm text-gray-700 italic mb-2 line-clamp-3 whitespace-pre-wrap">"{repertorio.citacao}"</p>
             </div>
             {repertorio.fonte && ( 
               <div className="mb-4">

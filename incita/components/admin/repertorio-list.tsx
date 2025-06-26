@@ -112,7 +112,7 @@ export default function RepertoriosList({ status }: RepertoriosListProps) {
             <p className="text-sm text-gray-600 mb-3">Professor: {repertorio.autorNome}</p>
 
             {/* Conteúdo preview */}
-            <p className="text-sm text-gray-700 line-clamp-3 mb-3">
+            <p className="text-sm text-gray-700 mb-3 line-clamp-3 whitespace-pre-wrap">
               {repertorio.conteudo.length > 100 ? `${repertorio.conteudo.substring(0, 100)}...` : repertorio.conteudo}
             </p>
 
