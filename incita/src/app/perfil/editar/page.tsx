@@ -222,6 +222,7 @@ export default function EditarPerfilPage() {
                       id="avatar"
                       name="avatar"
                       onChange={handleChangeFoto}
+                      accept=".jpg, .jpeg, .png, .webp"
                       className="block w-full text-sm text-gray-700 border-2 border-gray-300 rounded-md cursor-pointer bg-white focus:outline-none focus:ring-1 focus:ring-[#CA9C60]"/>
                   </div>
 

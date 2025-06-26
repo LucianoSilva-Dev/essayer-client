@@ -6,6 +6,7 @@ import Link from "next/link"
 import { redirect, useRouter, useSearchParams } from "next/navigation"
 import { validateUser } from "../../api/requisicao-usuario"
 import { createUser } from "../../api/usuario"
+import { toast } from "react-toastify"
 
 export default function VerifyCodeForm() {
   const [code, setCode] = useState("")
@@ -24,6 +25,8 @@ export default function VerifyCodeForm() {
       if (!id) { return }
 
       await validateUser(id, { codigo: code })
+
+      toast.success("Usuário criado com sucesso")
 
       router.push(`/login?lattes=${lattes}`)
 

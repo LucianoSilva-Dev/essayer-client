@@ -15,10 +15,11 @@ export default function LoginForm() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const router = useRouter()
+  const [alreadyLogged, setAlreadylogged] = useState(true)
 
   // Redireciona se já estiver logado
   React.useEffect(() => {
-    if (isLoggedIn) {
+    if (isLoggedIn && alreadyLogged) {
       toast.info("Você já está logado.")
       router.replace("/perfil")
     }
@@ -31,6 +32,7 @@ export default function LoginForm() {
     e.preventDefault()
 
     try {
+      setAlreadylogged(false)
       const response = await apiLogin({ email, senha: password })
       login(response.token)
       
