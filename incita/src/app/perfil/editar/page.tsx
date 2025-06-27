@@ -10,6 +10,7 @@ import { useProfile } from "@/../contexts/profile-context"
 import type { UserProfile } from "@/../types/profile"
 import { updateProfilePicture } from "../../../../api/usuario"
 
+
 export default function EditarPerfilPage() {
   const router = useRouter()
   const { isLoggedIn, userData } = useAuth()
@@ -181,23 +182,6 @@ export default function EditarPerfilPage() {
                     {errors.nome && <p className="mt-1 text-sm text-red-500">{errors.nome}</p>}
                   </div>
 
-                  {/* <div>
-                    <label htmlFor="sobrenome" className="block text-sm font-medium text-gray-700 mb-1">
-                      Sobrenome <span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      type="text"
-                      id="sobrenome"
-                      name="sobrenome"
-                      value={formData.sobrenome || ""}
-                      onChange={handleChange}
-                      className={`w-full px-3 py-2 border ${
-                        errors.sobrenome ? "border-red-500" : "border-gray-300"
-                      } rounded-md focus:outline-none focus:ring-1 focus:ring-[#CA9C60]`}
-                    />
-                    {errors.sobrenome && <p className="mt-1 text-sm text-red-500">{errors.sobrenome}</p>}
-                  </div> */}
-
                   <div className="md:col-span-2">
                     <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
                       E-mail <span className="text-red-500">*</span>
@@ -215,234 +199,24 @@ export default function EditarPerfilPage() {
                     {errors.email && <p className="mt-1 text-sm text-red-500">{errors.email}</p>}
                   </div>
 
-                  <div className="flex items-center">
-                    <label htmlFor="avatar" className="mr-2">Avatar</label>
+                  <div className="md:col-span-2">
+                    <label htmlFor="avatar" className="block text-sm font-medium text-gray-700 mb-1">
+                      Avatar
+                    </label>
                     <input 
                       type="file" 
                       id="avatar"
                       name="avatar"
                       onChange={handleChangeFoto}
                       accept=".jpg, .jpeg, .png, .webp"
-                      className="block w-full text-sm text-gray-700 border-2 border-gray-300 rounded-md cursor-pointer bg-white focus:outline-none focus:ring-1 focus:ring-[#CA9C60]"/>
-                  </div>
-
-                  {/* <div className="md:col-span-2">
-                    <label htmlFor="bio" className="block text-sm font-medium text-gray-700 mb-1">
-                      Biografia
-                    </label>
-                    <textarea
-                      id="bio"
-                      name="bio"
-                      rows={4}
-                      value={formData.bio || ""}
-                      onChange={handleChange}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#CA9C60]"
-                      placeholder="Conte um pouco sobre você..."
+                      className={`w-full px-3 py-2 border ${
+                        errors.avatar ? "border-red-500" : "border-gray-300"
+                      } rounded-md focus:outline-none focus:ring-1 focus:ring-[#CA9C60] file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-[#CA9C60]/10 file:text-[#CA9C60]`}
                     />
-                  </div> */}
+                    {errors.avatar && <p className="mt-1 text-sm text-red-500">{errors.avatar}</p>}
+                  </div>
                 </div>
               </div>
-
-              {/* Campos específicos por tipo */}
-              {/* {profile.tipo === "aluno" && (
-                <div className="mb-8">
-                  <h2 className="text-xl font-semibold text-gray-900 mb-4">Informações Acadêmicas</h2>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <label htmlFor="escola" className="block text-sm font-medium text-gray-700 mb-1">
-                        Escola
-                      </label>
-                      <input
-                        type="text"
-                        id="escola"
-                        name="escola"
-                        value={formData.escola || ""}
-                        onChange={handleChange}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#CA9C60]"
-                      />
-                    </div>
-
-                    <div>
-                      <label htmlFor="serie" className="block text-sm font-medium text-gray-700 mb-1">
-                        Série
-                      </label>
-                      <select
-                        id="serie"
-                        name="serie"
-                        value={formData.serie || ""}
-                        onChange={handleChange}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#CA9C60] bg-white"
-                      >
-                        <option value="">Selecione sua série</option>
-                        <option value="6ano">6º Ano</option>
-                        <option value="7ano">7º Ano</option>
-                        <option value="8ano">8º Ano</option>
-                        <option value="9ano">9º Ano</option>
-                        <option value="1medio">1º Ano - Ensino Médio</option>
-                        <option value="2medio">2º Ano - Ensino Médio</option>
-                        <option value="3medio">3º Ano - Ensino Médio</option>
-                        <option value="superior">Ensino Superior</option>
-                        <option value="pos">Pós-graduação</option>
-                      </select>
-                    </div>
-
-                    <div>
-                      <label htmlFor="nivel" className="block text-sm font-medium text-gray-700 mb-1">
-                        Nível
-                      </label>
-                      <select
-                        id="nivel"
-                        name="nivel"
-                        value={formData.nivel || ""}
-                        onChange={handleChange}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#CA9C60] bg-white"
-                      >
-                        <option value="iniciante">Iniciante</option>
-                        <option value="intermediario">Intermediário</option>
-                        <option value="avancado">Avançado</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-              )} */}
-
-              {profile.tipo === "professor" && (
-                <div className="mb-8">
-                  <h2 className="text-xl font-semibold text-gray-900 mb-4">Informações Profissionais</h2>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="md:col-span-2">
-                      <label htmlFor="curriculoLattes" className="block text-sm font-medium text-gray-700 mb-1">
-                        Currículo Lattes <span className="text-red-500">*</span>
-                      </label>
-                      <input
-                        type="url"
-                        id="curriculoLattes"
-                        name="curriculoLattes"
-                        value={
-                          "curriculoLattes" in formData
-                            ? (formData as any).curriculoLattes || ""
-                            : ""
-                        }
-                        onChange={handleChange}
-                        className={`w-full px-3 py-2 border ${
-                          errors.curriculoLattes ? "border-red-500" : "border-gray-300"
-                        } rounded-md focus:outline-none focus:ring-1 focus:ring-[#CA9C60]`}
-                      />
-                      {errors.curriculoLattes && <p className="mt-1 text-sm text-red-500">{errors.curriculoLattes}</p>}
-                    </div>
-
-                    {/* <div>
-                      <label htmlFor="instituicao" className="block text-sm font-medium text-gray-700 mb-1">
-                        Instituição
-                      </label>
-                      <input
-                        type="text"
-                        id="instituicao"
-                        name="instituicao"
-                        value={formData.instituicao || ""}
-                        onChange={handleChange}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#CA9C60]"
-                      />
-                    </div> */}
-
-                    {/* <div>
-                      <label htmlFor="areaAtuacao" className="block text-sm font-medium text-gray-700 mb-1">
-                        Área de Atuação
-                      </label>
-                      <select
-                        id="areaAtuacao"
-                        name="areaAtuacao"
-                        value={formData.areaAtuacao || ""}
-                        onChange={handleChange}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#CA9C60] bg-white"
-                      >
-                        <option value="">Selecione sua área</option>
-                        <option value="linguagens">Linguagens e suas Tecnologias</option>
-                        <option value="matematica">Matemática e suas Tecnologias</option>
-                        <option value="natureza">Ciências da Natureza e suas Tecnologias</option>
-                        <option value="humanas">Ciências Humanas e Sociais Aplicadas</option>
-                        <option value="redacao">Redação e Produção Textual</option>
-                        <option value="filosofia">Filosofia</option>
-                        <option value="sociologia">Sociologia</option>
-                        <option value="historia">História</option>
-                        <option value="geografia">Geografia</option>
-                        <option value="literatura">Literatura</option>
-                        <option value="outros">Outros</option>
-                      </select>
-                    </div> */}
-
-                    {/* <div>
-                      <label htmlFor="titulacao" className="block text-sm font-medium text-gray-700 mb-1">
-                        Titulação
-                      </label>
-                      <select
-                        id="titulacao"
-                        name="titulacao"
-                        value={formData.titulacao || ""}
-                        onChange={handleChange}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#CA9C60] bg-white"
-                      >
-                        <option value="graduacao">Graduação</option>
-                        <option value="especializacao">Especialização</option>
-                        <option value="mestrado">Mestrado</option>
-                        <option value="doutorado">Doutorado</option>
-                        <option value="pos-doutorado">Pós-Doutorado</option>
-                      </select>
-                    </div> */}
-
-                    {/* <div>
-                      <label htmlFor="experiencia" className="block text-sm font-medium text-gray-700 mb-1">
-                        Anos de Experiência
-                      </label>
-                      <input
-                        type="number"
-                        id="experiencia"
-                        name="experiencia"
-                        min="0"
-                        value={formData.experiencia || ""}
-                        onChange={handleChange}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#CA9C60]"
-                      />
-                    </div> */}
-                  </div>
-
-                  {/* Disponibilidade */}
-                  {/* <div className="mt-6">
-                    <h3 className="text-lg font-medium text-gray-900 mb-3">Disponibilidade</h3>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                      <label className="flex items-center">
-                        <input
-                          type="checkbox"
-                          checked={formData.disponibilidade?.orientacao || false}
-                          onChange={(e) => handleNestedChange("disponibilidade", "orientacao", e.target.checked)}
-                          className="h-4 w-4 text-[#CA9C60] focus:ring-[#CA9C60] border-gray-300 rounded"
-                        />
-                        <span className="ml-2 text-sm text-gray-700">Orientação</span>
-                      </label>
-
-                      <label className="flex items-center">
-                        <input
-                          type="checkbox"
-                          checked={formData.disponibilidade?.consultoria || false}
-                          onChange={(e) => handleNestedChange("disponibilidade", "consultoria", e.target.checked)}
-                          className="h-4 w-4 text-[#CA9C60] focus:ring-[#CA9C60] border-gray-300 rounded"
-                        />
-                        <span className="ml-2 text-sm text-gray-700">Consultoria</span>
-                      </label>
-
-                      <label className="flex items-center">
-                        <input
-                          type="checkbox"
-                          checked={formData.disponibilidade?.aulas || false}
-                          onChange={(e) => handleNestedChange("disponibilidade", "aulas", e.target.checked)}
-                          className="h-4 w-4 text-[#CA9C60] focus:ring-[#CA9C60] border-gray-300 rounded"
-                        />
-                        <span className="ml-2 text-sm text-gray-700">Aulas Particulares</span>
-                      </label>
-                    </div>
-                  </div> */}
-                </div>
-              )}
 
               {/* Botões de Ação */}
               <div className="flex justify-end space-x-4">
