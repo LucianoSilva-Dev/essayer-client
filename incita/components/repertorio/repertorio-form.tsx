@@ -262,8 +262,12 @@ export default function RepertorioForm({ onSubmit, onCancel, initialData, isEdit
     setIsSubmitting(true)
 
     try {
-      await saveRepertoire(formData)
-      await onSubmit(formData)
+      if (isEditing) {
+        await onSubmit(formData);
+      } else {
+        await saveRepertoire(formData);
+        await onSubmit(formData)
+      }
     } catch (error) {
       console.error("Erro ao salvar repertório:", error)
       setErrors({
