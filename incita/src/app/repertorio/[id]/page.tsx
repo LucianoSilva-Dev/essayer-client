@@ -385,7 +385,7 @@ function RepertorioDetalhesContent() {
             </div>
             <div>
               <h2 className="text-2xl font-semibold text-gray-900 mb-4">Sinopse</h2>
-              <p className="text-gray-700 leading-relaxed text-lg">{repertorio.sinopse}</p>
+              <pre className="text-gray-700 leading-relaxed text-lg">{repertorio.sinopse}</pre>
             </div>
           </div>
         )
@@ -402,7 +402,7 @@ function RepertorioDetalhesContent() {
             </div>
             <div>
               <h2 className="text-2xl font-semibold text-gray-900 mb-4">Síntese</h2>
-              <p className="text-gray-700 leading-relaxed text-lg">{repertorio.sintese}</p>
+              <pre className="text-gray-700 leading-relaxed text-lg">{repertorio.sintese}</pre>
             </div>
             <div>
               <h2 className="text-2xl font-semibold text-gray-900 mb-4">Fonte</h2>
