@@ -81,7 +81,7 @@ function EditarRepertorioContent() {
                     toast.error("Repertório não encontrado.");
                     router.push('/main');
                 }
-            } catch (error) {
+            } catch {
                 toast.error("Erro ao carregar dados para edição.");
                 router.push('/main');
             } finally {

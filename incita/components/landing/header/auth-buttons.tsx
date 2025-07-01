@@ -2,8 +2,6 @@ import { useAuth } from '@/../contexts/auth-context'
 import { useRouter, usePathname } from 'next/navigation'
 import Image from "next/image"
 import Link from "next/link"
-import { useEffect } from "react"
-import Img from "react"
 
 export function AuthButtons() {
   const pathname = usePathname()

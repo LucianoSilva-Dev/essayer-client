@@ -7,6 +7,7 @@ import { useProfile } from "@/../contexts/profile-context"
 import AlunoProfileComponent from "@/../components/profile/UserAccount"
 import ProfessorProfileComponent from "@/../components/profile/ProfAccount"
 import Loading from "./loading"
+import { AdminProfile, AlunoProfile, ProfessorProfile } from "../../../types/profile"
 
 export default function PerfilPage() {
   const router = useRouter()
@@ -64,4 +65,18 @@ export default function PerfilPage() {
       </div>
     </main>
   )
+}
+
+export interface AlunoProfileProps {
+  profile: AlunoProfile | AdminProfile
+  onEdit: () => void
+  onAvatarUpload: (file: File) => Promise<void>
+  isLoading: boolean
+}
+
+export interface ProfessorProfileProps {
+  profile: ProfessorProfile
+  onEdit: () => void
+  onAvatarUpload: (file: File) => Promise<void>
+  isLoading: boolean
 }

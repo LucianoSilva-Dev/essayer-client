@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Users, FileText, Clock, CheckCircle, XCircle } from "lucide-react"
+import { Users, Clock, CheckCircle, XCircle } from "lucide-react"
 import { useAdmin } from "../../../contexts/admin-context"
 import ProfessoresList from "../../../components/admin/professor-list"
 import RepertoriosList from "../../../components/admin/repertorio-list"

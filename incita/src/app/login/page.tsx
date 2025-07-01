@@ -1,4 +1,3 @@
-import Header from "../../../components/header"
 import LoginForm from "../../../components/auth/login-form"
 
 export default function Home() {

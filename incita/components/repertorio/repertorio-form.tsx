@@ -106,7 +106,7 @@ export default function RepertorioForm({ onSubmit, onCancel, initialData, isEdit
 
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [showPreview, setShowPreview] = useState(false)
+  const [showPreview] = useState(false)
 
   useEffect(() => {
     if (initialData) {

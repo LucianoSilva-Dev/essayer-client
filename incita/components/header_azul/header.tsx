@@ -38,8 +38,6 @@ export function HeaderAzul() {
     router.push('/login')
   }
 
-  const isActive = (path: string) => pathname === path
-
   // Não renderiza o header na landing page
   if (pathname === "/landing") {
     return null

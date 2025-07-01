@@ -1,31 +1,25 @@
 "use client"
 
 import type React from "react"
-
 import { useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { EyeOff, Eye } from "lucide-react"
-import axios from 'axios'
-import { API_BASE_URL } from "@/app/constants"
-import { toast } from "react-toastify"
-import { handleAxiosError } from "@/app/utils"
 import { useRouter } from "next/navigation"
-
-import type { UserRegistration } from "@/../types/user"
 import { CreateUsuarioBody } from "../../api/usuario/types"
 import { createUser } from "../../api/usuario"
+import { UserRegistration } from "../../types/user"
 
-interface FormProfessorProps {
+type FormProfessorProps = {
   onSubmit: (userData: UserRegistration) => Promise<void>
   isSubmitting: boolean
   showPassword: boolean
   setShowPassword: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-export default function FormProfessor(props: FormProfessorProps) {
+export default function FormProfessor({ onSubmit, isSubmitting, showPassword, setShowPassword }: FormProfessorProps) {
   const router = useRouter()
-  const [showPassword, setShowPassword] = useState(false)
+  const [showPasswordState, setShowPasswordState] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [formData, setFormData] = useState({
     name: "",
@@ -43,7 +37,6 @@ export default function FormProfessor(props: FormProfessorProps) {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type } = e.target
-    const checked = type === "checkbox" ? (e.target as HTMLInputElement).checked : undefined
     setFormData((prev) => ({ ...prev, [name]: value }))
 
     // Validação de senha
@@ -170,7 +163,7 @@ export default function FormProfessor(props: FormProfessorProps) {
             <input
               id="password"
               name="password"
-              type={showPassword ? "text" : "password"}
+              type={showPasswordState ? "text" : "password"}
               value={formData.password}
               onChange={handleChange}
               className={`w-full px-3 py-3 border ${errors.password ? "border-red-500" : "border-gray-300"} rounded-md focus:outline-none focus:ring-1 focus:ring-teal-600`}
@@ -179,9 +172,9 @@ export default function FormProfessor(props: FormProfessorProps) {
             <button
               type="button"
               className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"
-              onClick={() => setShowPassword(!showPassword)}
+              onClick={() => setShowPasswordState(!showPasswordState)}
             >
-              {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+              {showPasswordState ? <EyeOff size={20} /> : <Eye size={20} />}
             </button>
           </div>
           {errors.password && <p className="mt-1 text-sm text-red-500">{errors.password}</p>}

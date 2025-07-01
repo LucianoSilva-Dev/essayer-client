@@ -58,16 +58,6 @@ export default function EditarPerfilPage() {
     }
   }
 
-  const handleNestedChange = (section: string, field: string, value: any) => {
-    setFormData((prev) => ({
-      ...prev,
-      [section]: {
-        ...(prev as any)[section],
-        [field]: value,
-      },
-    }))
-  }
-
   const validateForm = (): boolean => {
     const newErrors: Record<string, string> = {}
 

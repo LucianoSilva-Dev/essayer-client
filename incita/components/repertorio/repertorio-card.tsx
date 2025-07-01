@@ -9,6 +9,7 @@ import { getProfilePictureLink } from "../../api/usuario"
 import { addLike, removeLike, addFavorito, removeFavorito } from "../../api/repertorio"
 import { useAuth } from "@/../contexts/auth-context"
 import { toast } from "react-toastify"
+import Image from "next/image"
 
 interface RepertorioCardProps {
   repertorio: Repertorio
@@ -52,7 +53,7 @@ export default function RepertorioCard({ repertorio }: RepertorioCardProps) {
         setLikes((prev) => prev + 1)
       }
       setIsLiked(!isLiked)
-    } catch (e) {
+    } catch {
        toast.error("Erro ao processar sua curtida.");
     }
   }
@@ -66,7 +67,7 @@ export default function RepertorioCard({ repertorio }: RepertorioCardProps) {
         await addFavorito(repertorio.id);
       }
       setIsFavorito(!isFavorito);
-    } catch (err) {
+    } catch {
       toast.error("Erro ao salvar nos favoritos.");
     }
   }
@@ -144,7 +145,9 @@ export default function RepertorioCard({ repertorio }: RepertorioCardProps) {
             <h3 className="text-lg font-bold text-gray-900 mb-1">{repertorio.autoria}</h3>
             <p className="text-sm text-gray-600 mb-3">Citação</p>
             <div className="mb-4">
-              <p className="text-sm text-gray-700 italic mb-2 line-clamp-3 whitespace-pre-wrap">"{repertorio.citacao}"</p>
+              <p className="text-sm text-gray-700 italic mb-2 line-clamp-3 whitespace-pre-wrap">
+                &quot;{repertorio.citacao}&quot;
+              </p>
             </div>
             {repertorio.fonte && ( 
               <div className="mb-4">
@@ -168,9 +171,11 @@ export default function RepertorioCard({ repertorio }: RepertorioCardProps) {
         <div className="flex justify-between items-center mb-3">
           <div className="flex items-center">
             {userProfilePictureLink ? (
-              <img
+              <Image
                 src={userProfilePictureLink}
                 alt={`Foto de perfil de ${repertorio.criador.nome}`}
+                width={24}
+                height={24}
                 className="w-6 h-6 rounded-full object-cover mr-2"
               />
             ) : (

@@ -1,10 +1,9 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { Bookmark, ThumbsUp } from "lucide-react"
-import { addFavorito, addLike, removeFavorito, removeLike } from "../../api/repertorio"
 import { PerfilUsuario } from "../../api/types"
 import { getProfilePictureLink } from "../../api/usuario"
+import Image from "next/image"
 
 type QuoteCardProps = {
   id: string
@@ -12,10 +11,9 @@ type QuoteCardProps = {
   title: string
   content: string
   eixo: string
-  recortes: string[] // MODIFICADO
+  recortes: string[]
   source?: string
   author?: PerfilUsuario
-  likesQTD: number
   likedByUser: boolean
   savedByUser: boolean
 }
@@ -26,16 +24,10 @@ export default function QuoteCard({
   title,
   content,
   eixo,
-  recortes, // MODIFICADO
+  recortes,
   source,
   author,
-  likesQTD,
-  likedByUser,
-  savedByUser,
-
 }: QuoteCardProps) {
-  const [liked, setLiked] = useState(likedByUser)
-  const [saved, setSaved] = useState(savedByUser)
   const [authorProfilePictureLink, setAuthorProfilePictureLink] = useState<string | null>(null)
 
   useEffect(() => {
@@ -43,42 +35,8 @@ export default function QuoteCard({
       const data = await getProfilePictureLink(author?.id)
       if (data) setAuthorProfilePictureLink(data)
     }
-
     if (author) fetchData()
-  }, [])
-
-  const handleLike = async () => {
-    if (liked) {
-      try {
-        await removeLike(id)
-        setLiked(false)
-      } catch (e) { }
-
-    }
-    else {
-      try {
-        await addLike(id)
-        setLiked(true)
-      } catch (e) { }
-    }
-  }
-
-  const handleSave = async () => {
-    if (saved) {
-      try {
-        await removeFavorito(id)
-        setSaved(false)
-      } catch (e) { }
-
-    }
-    else {
-      try {
-        await addFavorito(id)
-        setSaved(true)
-      } catch (e) { }
-
-    }
-  }
+  }, [author])
 
   return (
     <div className="relative w-full hover:scale-105 duration-150">
@@ -90,9 +48,11 @@ export default function QuoteCard({
               <div className="w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden">
                 {
                   authorProfilePictureLink ? (
-                    <img
+                    <Image
                       src={authorProfilePictureLink}
                       alt="Foto de perfil do autor"
+                      width={24}
+                      height={24}
                       className="w-full h-full object-cover"
                     />
                   ) : (
@@ -102,21 +62,7 @@ export default function QuoteCard({
               </div>
               <span className="text-sm text-gray-600">{author?.nome ?? "Autor desconhecido"}</span>
             </div>
-            <div className="flex items-center gap-2">
-              {/* <button
-                onClick={handleSave}
-                className={`p-1 rounded-full transition-colors ${saved ? "border-yellow-600" : "border-gray-300 hover:border-yellow-600"}`}
-              >
-                <Bookmark className={`h-4 w-4 ${saved ? "text-yellow-600 fill-current" : "text-gray-400"}`} />
-              </button>
-              <button
-                onClick={handleLike}
-                className={`p-1 rounded-full transition-colors ${liked ? "border-yellow-600" : "border-gray-300 hover:border-yellow-600"}`}
-              >
-                <ThumbsUp className={`h-4 w-4 ${liked ? "text-yellow-600 fill-current" : "text-gray-400"}`} />
-              </button> 
-              <span className="text-xs text-gray-500">{likesQTD}</span>*/}
-            </div>
+            {/* Botões removidos pois não são usados */}
           </div>
 
           {/* Tag com tipo (ex: #citação) */}
@@ -132,11 +78,10 @@ export default function QuoteCard({
 
           {/* Conteúdo */}
           <div className="mb-3">
-            <p className="text-l text-gray-700 pr-12 leading-relaxed">"{content}"</p>
-
+            <p className="text-l text-gray-700 pr-12 leading-relaxed">&quot;{content}&quot;</p>
           </div>
 
-          {/* Botões de Tópico/Subtópico (pode ajustar depois se quiser deixar dinâmico também) */}
+          {/* Botões de Tópico/Subtópico */}
           <div className="flex items-center gap-2 mb-3">
             {source && <p className="text-xs text-gray-500 mt-1">Fonte: {source}</p>}
             <div className="flex flex-wrap gap-2 mt-3">

@@ -1,29 +1,28 @@
 "use client"
 
 import type React from "react"
-
 import { useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { EyeOff, Eye } from "lucide-react"
-import axios from 'axios'
-import { API_BASE_URL } from "@/app/constants"
-import { toast } from "react-toastify"
-import { handleAxiosError } from "@/app/utils"
-import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import type { UserRegistration } from "@/../types/user"
+import type { Dispatch, SetStateAction } from "react"
 import { createUser } from "../../api/usuario"
 import { CreateUsuarioBody } from "../../api/usuario/types"
+
 interface FormAlunoProps {
   onSubmit: (userData: UserRegistration) => Promise<void>
   isSubmitting: boolean
   showPassword: boolean
-  setShowPassword: React.Dispatch<React.SetStateAction<boolean>>
+  setShowPassword: Dispatch<SetStateAction<boolean>>
 }
 
-export default function FormAluno(props: FormAlunoProps) {
-  const router = useRouter()
-  const [showPassword, setShowPassword] = useState(false)
+export default function FormAluno({
+  onSubmit,
+  isSubmitting,
+  showPassword,
+  setShowPassword,
+}: FormAlunoProps) {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [formData, setFormData] = useState({
     name: "",
@@ -39,7 +38,6 @@ export default function FormAluno(props: FormAlunoProps) {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type } = e.target
-    const checked = type === "checkbox" ? (e.target as HTMLInputElement).checked : undefined
     setFormData((prev) => ({ ...prev, [name]: value }))
 
     // Validação de senha
@@ -64,10 +62,8 @@ export default function FormAluno(props: FormAlunoProps) {
     }
   }
 
-
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault()
 
     // Verificar se as senhas coincidem
     if (formData.password !== formData.confirmPassword) {
@@ -89,29 +85,20 @@ export default function FormAluno(props: FormAlunoProps) {
         email
       })
 
-      router.push(`/register/confirmation?${query}`)
-    } catch (e) { }
-
+      window.location.href = `/register/confirmation?${query}`
+    } catch {}
   }
 
   return (
     <div className="w-full max-w-auto mx-auto flex flex-col items-center">
-
-      {/* Título */}
       <h1 className="text-2xl font-medium text-gray-800 mb-8">Crie sua conta</h1>
-
-      {/* Botão Google */}
       <button className="flex items-center justify-center gap-2 w-full border border-gray-300 rounded-md py-3 px-4 mb-8 hover:bg-gray-50 transition-colors">
         <Image src="/google-icon.svg" alt="Google" width={20} height={20} />
         <span className="text-gray-700">Continuar com o Google</span>
       </button>
-
-      {/* Divisor */}
       <div className="w-full flex items-center mb-8">
         <div className="flex-grow h-px bg-gray-200"></div>
       </div>
-
-      {/* Formulário */}
       <form onSubmit={handleSubmit} className="w-full">
         <div className="mb-4">
           <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
@@ -127,7 +114,6 @@ export default function FormAluno(props: FormAlunoProps) {
             required
           />
         </div>
-
         <div className="mb-4">
           <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
             Email
@@ -142,7 +128,6 @@ export default function FormAluno(props: FormAlunoProps) {
             required
           />
         </div>
-
         <div className="mb-4">
           <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
             Senha
@@ -168,7 +153,6 @@ export default function FormAluno(props: FormAlunoProps) {
           {errors.password && <p className="mt-1 text-sm text-red-500">{errors.password}</p>}
           <p className="mt-1 text-xs text-gray-500">A senha deve ter pelo menos 8 caracteres</p>
         </div>
-
         <div className="mb-6">
           <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-1">
             Confirmar senha
@@ -193,14 +177,12 @@ export default function FormAluno(props: FormAlunoProps) {
           </div>
           {errors.confirmPassword && <p className="mt-1 text-sm text-red-500">{errors.confirmPassword}</p>}
         </div>
-
         <button
           type="submit"
           className="w-full bg-teal-800 hover:bg-teal-700 text-white py-3 px-4 rounded-md transition-colors mb-4"
         >
           Criar conta
         </button>
-
         <div className="text-center text-sm text-gray-600">
           Já tem uma conta?{" "}
           <Link href="/login" className="text-teal-600 hover:text-teal-700">

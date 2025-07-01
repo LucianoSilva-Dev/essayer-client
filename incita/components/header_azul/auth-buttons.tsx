@@ -7,7 +7,6 @@ import { getProfilePictureLink } from "../../api/usuario"
 
 
 export function AuthButtons() {
-  const pathname = usePathname()
   const router = useRouter()
   const { isLoggedIn, logout, userData } = useAuth()
   const [profilePic, setProfilePic] = useState<string | null>(null)
@@ -28,8 +27,6 @@ export function AuthButtons() {
     logout()
     router.push('/login')
   }
-
-  const isActive = (path: string) => pathname === path
 
   return (
     <div className="flex items-center space-x-4">

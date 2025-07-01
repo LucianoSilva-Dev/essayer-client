@@ -3,14 +3,12 @@
 import { useEffect } from "react"
 import { useRouter } from "next/navigation"
 import RepertorioForm from "../../../components/repertorio/repertorio-form"
-import { useRepertorio } from "@/../contexts/repertorio-context"
 import { useAuth } from "@/../contexts/auth-context" // 1. Importar o useAuth
 import { toast } from "react-toastify"
 import Loading from "./loading" // Pode criar um componente de loading simples se não tiver
 
 export default function AdicionarRepertorio() {
   const router = useRouter()
-  const { adicionarRepertorio } = useRepertorio()
   const { userData, isLoading, isLoggedIn } = useAuth() // 2. Obter dados de autenticação
 
   // 3. Efeito para verificar permissão e redirecionar

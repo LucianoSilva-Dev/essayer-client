@@ -4,6 +4,7 @@ import type React from "react"
 import { Search, Award, PenTool } from "lucide-react"
 import { motion, useInView, useAnimation } from "framer-motion"
 import { useRef, useEffect } from "react"
+import { easeInOut } from "framer-motion"
 
 // Tipo para os itens de funcionalidade
 type FuncionalidadeItem = {
@@ -41,8 +42,7 @@ const cardVariants = {
     y: 0,
     transition: {
       duration: custom === 1 ? 0.9 : 0.7,
-      delay: custom === 1 ? 0 : 0.2,
-      ease: [0.42, 0, 0.58, 1],
+      ease: easeInOut,
     },
   }),
 }

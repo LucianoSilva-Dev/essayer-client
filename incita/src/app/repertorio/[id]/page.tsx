@@ -14,7 +14,17 @@ import { toast } from "react-toastify"
 import { getProfilePictureLink } from "@/../api/usuario"
 import ConfirmationModal from "@/../components/shared/confirmation-modal"
 
-function CommentCard({ comentario, repertorioId, onCommentUpdate, openModal }: { comentario: Comentario, repertorioId: string, onCommentUpdate: () => void, openModal: (options: any) => void }) {
+function CommentCard({
+  comentario,
+  repertorioId,
+  onCommentUpdate,
+  openModal,
+}: {
+  comentario: Comentario
+  repertorioId: string
+  onCommentUpdate: () => void
+  openModal: (options: { title: string; message: string; onConfirm: () => Promise<void> }) => void
+}) {
   const { userData, isLoggedIn } = useAuth();
   const [authorProfilePictureLink, setAuthorProfilePictureLink] = useState<string | null>(null)
   const [isEditing, setIsEditing] = useState(false);
@@ -204,6 +214,7 @@ function RepertorioDetalhesContent() {
   }
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     fetchRepertorio()
   }, [id, type])
 
@@ -421,7 +432,7 @@ function RepertorioDetalhesContent() {
               <h1 className="text-4xl font-bold text-gray-900 mb-2">{repertorio.autoria}</h1>
             </div>
             <div className="bg-gray-50 border-l-4 border-[#CA9C60] p-8 rounded-r-lg">
-              <blockquote className="text-2xl text-gray-800 italic leading-relaxed">"{repertorio.citacao}"</blockquote>
+              <blockquote className="text-2xl text-gray-800 italic leading-relaxed">&quot;{repertorio.citacao}&quot;</blockquote>
             </div>
             {repertorio.fonte && (
               <div>
@@ -513,7 +524,7 @@ function RepertorioDetalhesContent() {
                   <div className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center mr-3">
                     {authorProfilePictureLink ?
                       (
-                        <img src={authorProfilePictureLink} alt="Foto de perfil do autor" className="w-full h-full object-cover rounded-full"/>
+                        <img src={authorProfilePictureLink} alt="Foto de perfil do autor" width={40} height={40} className="w-full h-full object-cover rounded-full"/>
                       ) : 
                       (
                         <User size={20} className="text-white" />

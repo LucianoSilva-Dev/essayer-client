@@ -2,9 +2,8 @@
 
 import { useState } from "react"
 import Image from "next/image"
-import Link from "next/link"
-import  FormAluno  from "./register-aluno"
-import  FormProfessor  from "./register-professor"
+import FormAluno from "./register-aluno"
+import FormProfessor from "./register-professor"
 import type { UserType, UserRegistration } from "@/../types/user"
 import router from "next/router"
 
@@ -36,18 +35,15 @@ export function RegisterForm() {
 
   return (
     <div className="w-full max-w-xl mx-auto flex flex-col items-center min-h-screen py-8 shadow-xl">
-      
       {/* Logo */}
-            <div className="mb-6">
-              <Image src="/favicon_2d.png" alt="Incita Logo" width={180} height={120} priority />
-            </div>
+      <div className="mb-6">
+        <Image src="/favicon_2d.png" alt="Incita Logo" width={180} height={120} priority />
+      </div>
 
       <div className="bg-white rounded-lg shadow-md p-8 w-full">
-
         {/* Pergunta e seleção de tipo */}
         <div className="mb-6">
           <h2 className="text-lg font-medium text-gray-800 text-center mb-4">Quem é você?</h2>
-
           <div className="flex gap-2 mb-6">
             <button
               type="button"

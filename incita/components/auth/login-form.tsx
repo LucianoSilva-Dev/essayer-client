@@ -23,7 +23,7 @@ export default function LoginForm() {
       toast.info("Você já está logado.")
       router.replace("/perfil")
     }
-  }, [isLoggedIn, router])
+  }, [isLoggedIn, router, alreadyLogged])
 
   const searchParams = useSearchParams()
   const lattes = searchParams.get('lattes')

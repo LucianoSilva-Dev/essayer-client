@@ -1,27 +1,22 @@
 "use client"
 
 import React from "react"
-import { ArrowLeft, Edit3, EyeOff, Eye, User, HelpCircle, LogOut } from "lucide-react"
+import { ArrowLeft, Edit3, LogOut } from "lucide-react"
 import { useState } from "react"
 import { useAuth } from '@/../contexts/auth-context'
 import { useRouter } from "next/navigation"
-import { ProfessorProfile } from "../../types/profile"
+import { getProfilePictureLink } from "@/../api/usuario"
+import Image from "next/image"
+import type { ProfessorProfileProps } from "@/../src/app/perfil/page"
 
-interface ProfessorProfileProps {
-  profile: ProfessorProfile
-  onEdit: () => void
-  onAvatarUpload: (file: File) => void
-  isLoading: boolean
-}
-import { getProfilePictureLink, updateProfilePicture, uploadProfilePicture, deleteProfilePicture } from "@/../api/usuario"
-import { get } from "http"
-
-export default function Component({ profile, onEdit, onAvatarUpload, isLoading }: ProfessorProfileProps) {
+export default function Component({
+  profile,
+  onEdit,
+}: ProfessorProfileProps) {
   const router = useRouter()
   const [isEditing, setIsEditing] = useState(false)
-  const [showPassword, setShowPassword] = useState(false)
-  const { isLoggedIn, userData, logout } = useAuth()
   const [profilePictureLink, setProfilePictureLink] = useState<string | null>(null)
+  const { logout, userData } = useAuth()
 
   React.useEffect(() => {
     if (userData?.id) {
@@ -52,17 +47,6 @@ export default function Component({ profile, onEdit, onAvatarUpload, isLoading }
             <ArrowLeft className="w-5 h-5" />
             <span className="text-lg font-medium">Voltar</span>
           </button>
-
-          {/* <div className="flex items-center space-x-4">
-            <div className="flex items-center space-x-2">
-              <HelpCircle className="w-5 h-5 text-[#616060]" />
-              <span className="text-[#363535] font-medium">Status atual da conta</span>
-              <span className="bg-[#ca9c60] text-white px-3 py-1 rounded-md text-sm font-medium">Reprovado</span>
-            </div>
-            <button className="text-[#616060] hover:text-[#363535] transition-colors text-sm">
-              Ver mensagem de retorno
-            </button>
-          </div> */}
         </div>
 
         {/* Edit Profile Section */}
@@ -88,15 +72,15 @@ export default function Component({ profile, onEdit, onAvatarUpload, isLoading }
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             <div className="flex justify-center lg:justify-start">
-              <img
+              <Image
                 src={profilePictureLink || "/perfil.png"}
                 alt="Foto de perfil"
+                width={320}
+                height={320}
                 className="w-80 h-80 rounded-full object-cover"
+                priority
               />
             </div>
-            {/* <div className="flex justify-center lg:justify-start">
-              <div className="w-80 h-80 bg-[#dcdcdd] rounded-full"></div>
-            </div> */}
 
             {/* Form Fields */}
             <div className="space-y-6">
@@ -127,17 +111,6 @@ export default function Component({ profile, onEdit, onAvatarUpload, isLoading }
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* <div className="space-y-2">
-                  <label htmlFor="sobrenome" className="text-[#363535] font-medium text-lg">
-                    Sobrenome
-                  </label>
-                  <input
-                    id="sobrenome"
-                    placeholder="Sobrenome"
-                    className={`bg-[#e5eff0] border-0 text-[#616060] h-12 rounded-md ${!isEditing ? "cursor-not-allowed" : ""}`}
-                    readOnly={!isEditing}
-                  />
-                </div> */}
                 <div className="space-y-2">
                   <label htmlFor="email" className="text-[#363535] font-medium text-lg">
                     Email

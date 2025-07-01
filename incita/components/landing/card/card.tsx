@@ -17,4 +17,3 @@ export function Card({ children }: CardProps) {
     </div>
   )
 }
-5
