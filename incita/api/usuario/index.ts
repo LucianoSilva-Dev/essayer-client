@@ -49,9 +49,9 @@ export const deleteUser = async (id: string): Promise<GenericSuccessResponse> =>
 
 export const getProfilePictureLink = async (id: string | null | undefined): Promise<string | null> => {
     if (!id) return null
-    const foto = await apiClient.get(`/usuario/foto/${id}`, { responseType: 'blob' })
+    const foto = await apiClient.get(`/usuario/foto/${id}`)
     if (!foto.data) return null
-    return URL.createObjectURL(foto.data)
+    return foto.data.fotoUrl
 }
 
 export const uploadProfilePicture = async (id: string, file: File): Promise<GenericSuccessResponse> => {
