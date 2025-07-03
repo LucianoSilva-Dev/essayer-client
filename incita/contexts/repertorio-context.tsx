@@ -1,155 +1,233 @@
+// GeminiContext/Frontend/contexts/repertorio-context.tsx
 "use client"
 
 import type React from "react"
-import type { RepertorioData } from "@/../components/repertorio_form"
+import { createContext, useContext, useState, useEffect, useCallback, useRef } from "react"
+import type { Repertorio, RepertorioFormData } from "@/../types/repertorio"
+import { RepertorioDocument, GetAllRepertoriosResponse } from "../api/repertorio/types"
+import { isGetAllArtigoDoc, isGetAllCitacaoDoc, isGetAllObraDoc } from "../api/repertorio/helpers"
+import { addFavorito, getAllRepertorios, removeFavorito } from "../api/repertorio"
+import { useAuth } from "./auth-context"
 
-import { createContext, useContext, useState, useEffect } from "react"
+const mountRepertoire = (repertorio: RepertorioDocument): Repertorio | null => {
+  if (isGetAllCitacaoDoc(repertorio)) {
+    return {
+      id: repertorio.id,
+      modelo: "citacao",
+      autoria: repertorio.autor,
+      citacao: repertorio.frase,
+      fonte: repertorio.fonte,
+      eixos: repertorio.topicos,
+      recortes: repertorio.subtopicos,
+      isPublico: true,
+      totalLikes: repertorio.totalLikes,
+      favoritadoPeloUsuario: repertorio.favoritadoPeloUsuario,
+      likeDoUsuario: repertorio.likeDoUsuario,
+      criador: repertorio.criador,
+      totalComentarios: repertorio.totalComentarios ?? 0,
+      comentarios: repertorio.comentarios ?? []
+    }
+  }
+  if (isGetAllObraDoc(repertorio)) {
+    return {
+      id: repertorio.id,
+      modelo: 'obra',
+      titulo: repertorio.titulo,
+      autoria: repertorio.autor,
+      sinopse: repertorio.sinopse,
+      eixos: repertorio.topicos,
+      tipoObra: repertorio.tipoObra, // ADICIONADO
+      recortes: repertorio.subtopicos,
+      isPublico: true,
+      totalLikes: repertorio.totalLikes,
+      favoritadoPeloUsuario: repertorio.favoritadoPeloUsuario,
+      likeDoUsuario: repertorio.likeDoUsuario,
+      criador: repertorio.criador,
+      totalComentarios: repertorio.totalComentarios ?? 0,
+      comentarios: repertorio.comentarios ?? []
+    }
+  }
+  if (isGetAllArtigoDoc(repertorio)) {
+    return {
+      id: repertorio.id,
+      modelo: "artigo",
+      titulo: repertorio.titulo,
+      autoria: repertorio.autor,
+      sintese: repertorio.resumo,
+      fonte: repertorio.fonte,
+      eixos: repertorio.topicos,
+      recortes: repertorio.subtopicos,
+      isPublico: true,
+      totalLikes: repertorio.totalLikes,
+      favoritadoPeloUsuario: repertorio.favoritadoPeloUsuario,
+      likeDoUsuario: repertorio.likeDoUsuario,
+      criador: repertorio.criador,
+      totalComentarios: repertorio.totalComentarios ?? 0,
+      comentarios: repertorio.comentarios ?? []
+    }
+  }
 
-// Estendendo o tipo RepertorioData para incluir id e data de criação
-export interface Repertorio extends RepertorioData {
-  id: string
-  criadoEm: string
-  comentarios: number
+  return null
 }
 
 interface RepertorioContextType {
   repertorios: Repertorio[]
-  adicionarRepertorio: (data: RepertorioData) => Promise<Repertorio>
-  removerRepertorio: (id: string) => void
-  atualizarRepertorio: (id: string, data: RepertorioData) => Promise<Repertorio>
+  adicionarRepertorio: (data: RepertorioFormData) => Promise<Repertorio>
   toggleFavorito: (id: string) => void
   favoritos: string[]
-  filtrarPorCategoria: (categoria: string | null) => Repertorio[]
-  pesquisar: (termo: string) => Repertorio[]
+  pesquisarRepertorios: (filters: {
+    search?: string,
+    eixos?: string[],
+    subtopicos?: string[],
+    modelo?: string[],
+    favoritedByCurrentUser?: boolean,
+    likedByCurrentUser?: boolean,
+    orderBy?: 'MaxLikes' | 'MinLikes' | 'Newest' | 'Oldest',
+    offset?: number,
+    limit?: number
+  }) => Promise<{
+    documents: Repertorio[],
+    pagination: {
+      offset: number,
+      limit: number,
+      nextPageUrl: string | null,
+      previousPageUrl: string | null,
+      totalDocuments: number
+    }
+  }>
+  buscarPorId: (id: string) => Repertorio | undefined
+  currentPage: number
+  totalPages: number
+  totalRepertorios: number
+  setPage: (page: number) => void
+  isLoadingRepertorios: boolean
 }
 
 const RepertorioContext = createContext<RepertorioContextType | undefined>(undefined)
 
 export function RepertorioProvider({ children }: { children: React.ReactNode }) {
+  const { isLoggedIn } = useAuth();
   const [repertorios, setRepertorios] = useState<Repertorio[]>([])
   const [favoritos, setFavoritos] = useState<string[]>([])
-  const [isLoaded, setIsLoaded] = useState(false)
+  const [currentPage, setCurrentPage] = useState(0)
+  const [totalPages, setTotalPages] = useState(1)
+  const [totalRepertorios, setTotalRepertorios] = useState(0)
+  const [isLoadingRepertorios, setIsLoadingRepertorios] = useState(true)
+  const [currentLimit, setCurrentLimit] = useState(15);
 
-  // Carregar dados do localStorage na inicialização
-  useEffect(() => {
-    const storedRepertorios = localStorage.getItem("repertorios")
-    const storedFavoritos = localStorage.getItem("favoritos")
+  const setPage = (page: number) => {
+    setCurrentPage(page);
+  }
 
-    if (storedRepertorios) {
-      setRepertorios(JSON.parse(storedRepertorios))
-    } else {
-      // Dados iniciais de exemplo
-      setRepertorios([
-        {
-          id: "1",
-          titulo: "Desigualdade Social no Brasil",
-          conteudo:
-            "A desigualdade social no Brasil tem raízes históricas que remontam ao período colonial. Segundo dados do IBGE, o país possui um dos maiores índices de concentração de renda do mundo, com os 10% mais ricos detendo mais de 40% da renda nacional.",
-          fonte: "IBGE, 2022",
-          categoria: "Sociologia",
-          tags: ["desigualdade", "brasil", "economia"],
-          isPublico: true,
-          criadoEm: new Date().toISOString(),
-          comentarios: 3,
-        },
-        {
-          id: "2",
-          titulo: "Inteligência Artificial e Ética",
-          conteudo:
-            "O desenvolvimento acelerado da inteligência artificial levanta questões éticas importantes sobre privacidade, vieses algorítmicos e o futuro do trabalho. Especialistas como Stuart Russell defendem a necessidade de alinhar os objetivos da IA com valores humanos.",
-          fonte: "Human Compatible, Stuart Russell, 2019",
-          categoria: "Tecnologia",
-          tags: ["ia", "ética", "tecnologia"],
-          isPublico: true,
-          criadoEm: new Date().toISOString(),
-          comentarios: 5,
-        },
-        {
-          id: "3",
-          titulo: "Aquecimento Global",
-          conteudo:
-            "O IPCC (Painel Intergovernamental sobre Mudanças Climáticas) alerta que, sem reduções significativas nas emissões de gases de efeito estufa, o aquecimento global poderá ultrapassar 1,5°C acima dos níveis pré-industriais entre 2030 e 2052.",
-          fonte: "Relatório IPCC, 2021",
-          categoria: "Ciência",
-          tags: ["clima", "meio ambiente", "sustentabilidade"],
-          isPublico: true,
-          criadoEm: new Date().toISOString(),
-          comentarios: 2,
-        },
-      ])
+  const construirQueryString = (filters: {
+    search?: string,
+    eixos?: string[],
+    subtopicos?: string[],
+    modelo?: string[],
+    favoritedByCurrentUser?: boolean,
+    likedByCurrentUser?: boolean,
+    orderBy?: 'MaxLikes' | 'MinLikes' | 'Newest' | 'Oldest',
+    offset?: number,
+    limit?: number
+  }) => {
+    const params = new URLSearchParams();
+    if (filters.search) params.append('conteudo', filters.search);
+    if (filters.eixos && filters.eixos.length > 0) filters.eixos.forEach(e => params.append('topicos', e));
+    if (filters.subtopicos && filters.subtopicos.length > 0) filters.subtopicos.forEach(s => params.append('subtopicos', s));
+    if (filters.modelo && filters.modelo.length > 0) filters.modelo.forEach(m => params.append('tipoRepertorio', m));
+
+    if (filters.favoritedByCurrentUser !== undefined) params.append('favoritadoPeloUsuario', String(filters.favoritedByCurrentUser));
+    if (filters.likedByCurrentUser !== undefined) params.append('likeDoUsuario', String(filters.likedByCurrentUser));
+    if (filters.orderBy) params.append('ordenarPor', filters.orderBy);
+
+    params.append('offset', String(filters.offset ?? 0));
+    params.append('limit', String(filters.limit ?? currentLimit));
+    return params.toString();
+  };
+
+  const pesquisarRepertorios = useCallback(async (filters: {
+    search?: string,
+    eixos?: string[],
+    subtopicos?: string[],
+    modelo?: string[],
+    favoritedByCurrentUser?: boolean,
+    likedByCurrentUser?: boolean,
+    orderBy?: 'MaxLikes' | 'MinLikes' | 'Newest' | 'Oldest',
+    offset?: number,
+    limit?: number
+  }) => {
+    setIsLoadingRepertorios(true);
+    try {
+      const queryString = construirQueryString(filters);
+      const response = await getAllRepertorios(`?${queryString}`);
+
+      if (response) {
+        const mappedRepertorios = response.documentos
+          .map((repertorio) => mountRepertoire(repertorio))
+          .filter((rep): rep is Repertorio => rep !== null);
+
+        setRepertorios(mappedRepertorios);
+        setTotalRepertorios(response.paginacao.totalDocuments);
+        setTotalPages(Math.ceil(response.paginacao.totalDocuments / response.paginacao.limit));
+        setCurrentLimit(response.paginacao.limit);
+
+        if (isLoggedIn) {
+          setFavoritos(mappedRepertorios.filter(r => r.favoritadoPeloUsuario).map(r => r.id));
+        } else {
+          setFavoritos([]);
+        }
+
+        return {
+          documents: mappedRepertorios,
+          pagination: response.paginacao
+        };
+      }
+      return { documents: [], pagination: { offset: 0, limit: 0, nextPageUrl: null, previousPageUrl: null, totalDocuments: 0 } };
+    } catch (e) {
+      console.error('Context: Erro ao buscar repertórios:', e);
+      return { documents: [], pagination: { offset: 0, limit: 0, nextPageUrl: null, previousPageUrl: null, totalDocuments: 0 } };
+    } finally {
+      setIsLoadingRepertorios(false);
     }
+  }, [isLoggedIn, currentLimit]);
 
-    if (storedFavoritos) {
-      setFavoritos(JSON.parse(storedFavoritos))
+  const toggleFavorito = async (id: string) => {
+    if (!isLoggedIn) {
+      alert("Você precisa estar logado para favoritar repertórios.");
+      return;
     }
-
-    setIsLoaded(true)
-  }, [])
-
-  // Salvar dados no localStorage quando houver mudanças
-  useEffect(() => {
-    if (isLoaded) {
-      localStorage.setItem("repertorios", JSON.stringify(repertorios))
-      localStorage.setItem("favoritos", JSON.stringify(favoritos))
+    const isCurrentlyFavorito = favoritos.includes(id);
+    try {
+      if (isCurrentlyFavorito) {
+        await removeFavorito(id);
+        setFavoritos((prev) => prev.filter((favId) => favId !== id));
+        setRepertorios(prev => prev.map(rep => rep.id === id ? { ...rep, favoritadoPeloUsuario: false } : rep));
+      } else {
+        await addFavorito(id);
+        setFavoritos((prev) => [...prev, id]);
+        setRepertorios(prev => prev.map(rep => rep.id === id ? { ...rep, favoritadoPeloUsuario: true } : rep));
+      }
+    } catch (e) {
+      console.error("Erro ao alternar favorito:", e);
     }
-  }, [repertorios, favoritos, isLoaded])
+  }
 
-  // Adicionar novo repertório
-  const adicionarRepertorio = async (data: RepertorioData): Promise<Repertorio> => {
+  const adicionarRepertorio = async (data: RepertorioFormData): Promise<Repertorio> => {
     const novoRepertorio: Repertorio = {
       ...data,
       id: Date.now().toString(),
-      criadoEm: new Date().toISOString(),
-      comentarios: 0,
-    }
-
-    setRepertorios((prev) => [novoRepertorio, ...prev])
-    return novoRepertorio
+      isPublico: true,
+      totalLikes: 0,
+      favoritadoPeloUsuario: false,
+      likeDoUsuario: false,
+      criador: { id: "mock_id", nome: "Mock User" }
+    } as Repertorio;
+    setRepertorios((prev) => [novoRepertorio, ...prev]);
+    return novoRepertorio;
   }
 
-  // Remover repertório
-  const removerRepertorio = (id: string) => {
-    setRepertorios((prev) => prev.filter((rep) => rep.id !== id))
-    setFavoritos((prev) => prev.filter((favId) => favId !== id))
-  }
-
-  // Atualizar repertório existente
-  const atualizarRepertorio = async (id: string, data: RepertorioData): Promise<Repertorio> => {
-    const repertorioAtualizado = {
-      ...data,
-      id,
-      criadoEm: repertorios.find((r) => r.id === id)?.criadoEm || new Date().toISOString(),
-      comentarios: repertorios.find((r) => r.id === id)?.comentarios || 0,
-    }
-
-    setRepertorios((prev) => prev.map((rep) => (rep.id === id ? repertorioAtualizado : rep)))
-
-    return repertorioAtualizado
-  }
-
-  // Adicionar/remover dos favoritos
-  const toggleFavorito = (id: string) => {
-    setFavoritos((prev) => (prev.includes(id) ? prev.filter((favId) => favId !== id) : [...prev, id]))
-  }
-
-  // Filtrar por categoria
-  const filtrarPorCategoria = (categoria: string | null): Repertorio[] => {
-    if (!categoria) return repertorios
-    return repertorios.filter((rep) => rep.categoria === categoria)
-  }
-
-  // Pesquisar por termo
-  const pesquisar = (termo: string): Repertorio[] => {
-    if (!termo.trim()) return repertorios
-
-    const termoBusca = termo.toLowerCase().trim()
-    return repertorios.filter(
-      (rep) =>
-        rep.titulo.toLowerCase().includes(termoBusca) ||
-        rep.conteudo.toLowerCase().includes(termoBusca) ||
-        rep.fonte.toLowerCase().includes(termoBusca) ||
-        rep.tags.some((tag) => tag.toLowerCase().includes(termoBusca)),
-    )
+  const buscarPorId = (id: string): Repertorio | undefined => {
+    return repertorios.find((rep) => rep.id === id)
   }
 
   return (
@@ -157,12 +235,15 @@ export function RepertorioProvider({ children }: { children: React.ReactNode }) 
       value={{
         repertorios,
         adicionarRepertorio,
-        removerRepertorio,
-        atualizarRepertorio,
         toggleFavorito,
         favoritos,
-        filtrarPorCategoria,
-        pesquisar,
+        pesquisarRepertorios,
+        buscarPorId,
+        currentPage,
+        totalPages,
+        totalRepertorios,
+        setPage,
+        isLoadingRepertorios,
       }}
     >
       {children}

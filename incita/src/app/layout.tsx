@@ -1,39 +1,57 @@
-import type React from "react"
-import type { Metadata } from "next"
-import { Inter } from "next/font/google"
-import Header from "@/../components/header"
-import { RepertorioProvider } from "@/../contexts/repertorio-context"
-import { CitacaoProvider } from "@/../contexts/citacao-context"
-import { ToastContainer } from "react-toastify"
-import "./globals.css"
-import { AuthProvider } from "../../contexts/auth-context"
+// incita/src/app/layout.tsx
+import './globals.css';
+import './swiper-hover.css'
+import { Inter } from 'next/font/google';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { AuthProvider } from '@/../contexts/auth-context';
+import { ProfileProvider } from '@/../contexts/profile-context';
+import { AdminProvider } from '@/../contexts/admin-context';
+import { RepertorioProvider } from '@/../contexts/repertorio-context';
+import { CitacaoProvider } from '@/../contexts/citacao-context';
+import { PageTransition } from '@/../components/page-transition';
 
-const inter = Inter({ subsets: ["latin"] })
+// Import Swiper styles
+import 'swiper/css';
+import 'swiper/css/pagination'; // Para os pontinhos de navegação
+import 'swiper/css/navigation'; // Para as setas de navegação (opcional)
+import { HeaderAzul } from '../../components/header_azul/header';
 
-export const metadata: Metadata = {
-  title: "Incita - Turbine suas redações",
-  description: "Plataforma para praticar e melhorar suas redações",
-}
+const inter = Inter({ subsets: ['latin'] });
+
+export const metadata = {
+  title: 'Incita',
+  description: 'Sua plataforma de repertórios para redação',
+};
+
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
-    <html lang="pt-BR">
+    <html className="scroll-smooth" lang="pt-BR">
       <body className={inter.className}>
         <AuthProvider>
-          <RepertorioProvider>
-            <CitacaoProvider>
-              <Header />
-              {children}
-              <ToastContainer theme="light" autoClose={5000} />
-            </CitacaoProvider>
-          </RepertorioProvider>
+          <ProfileProvider>
+            <AdminProvider>
+              <RepertorioProvider>
+                <CitacaoProvider>
+                  <ToastContainer />
+                  <HeaderAzul />
+                  <main className="pt-25 relative">
+                    <PageTransition>
+                    {children}
+                    </PageTransition>
+                  </main>
+                </CitacaoProvider>
+              </RepertorioProvider>
+            </AdminProvider>
+          </ProfileProvider>
         </AuthProvider>
-
+        <ToastContainer position="bottom-right" autoClose={5000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
       </body>
     </html>
-  )
+  );
 }
