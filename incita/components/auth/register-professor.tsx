@@ -17,7 +17,7 @@ type FormProfessorProps = {
   setShowPassword: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-export default function FormProfessor({ onSubmit, isSubmitting, showPassword, setShowPassword }: FormProfessorProps) {
+export default function FormProfessor({}: FormProfessorProps) {
   const router = useRouter()
   const [showPasswordState, setShowPasswordState] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
@@ -36,7 +36,7 @@ export default function FormProfessor({ onSubmit, isSubmitting, showPassword, se
   })
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value, type } = e.target
+    const { name, value } = e.target
     setFormData((prev) => ({ ...prev, [name]: value }))
 
     // Validação de senha
@@ -86,7 +86,7 @@ export default function FormProfessor({ onSubmit, isSubmitting, showPassword, se
       })
 
       router.push(`/register/confirmation?${query}`)
-    } catch (e) { }
+    } catch { }
 
   }
 

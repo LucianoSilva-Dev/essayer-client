@@ -23,7 +23,9 @@ const mountRepertoire = (repertorio: RepertorioDocument): Repertorio | null => {
       totalLikes: repertorio.totalLikes,
       favoritadoPeloUsuario: repertorio.favoritadoPeloUsuario,
       likeDoUsuario: repertorio.likeDoUsuario,
-      criador: repertorio.criador
+      criador: repertorio.criador,
+      totalComentarios: repertorio.totalComentarios ?? 0,
+      comentarios: repertorio.comentarios ?? []
     }
   }
   if (isGetAllObraDoc(repertorio)) {
@@ -40,7 +42,9 @@ const mountRepertoire = (repertorio: RepertorioDocument): Repertorio | null => {
       totalLikes: repertorio.totalLikes,
       favoritadoPeloUsuario: repertorio.favoritadoPeloUsuario,
       likeDoUsuario: repertorio.likeDoUsuario,
-      criador: repertorio.criador
+      criador: repertorio.criador,
+      totalComentarios: repertorio.totalComentarios ?? 0,
+      comentarios: repertorio.comentarios ?? []
     }
   }
   if (isGetAllArtigoDoc(repertorio)) {
@@ -57,7 +61,9 @@ const mountRepertoire = (repertorio: RepertorioDocument): Repertorio | null => {
       totalLikes: repertorio.totalLikes,
       favoritadoPeloUsuario: repertorio.favoritadoPeloUsuario,
       likeDoUsuario: repertorio.likeDoUsuario,
-      criador: repertorio.criador
+      criador: repertorio.criador,
+      totalComentarios: repertorio.totalComentarios ?? 0,
+      comentarios: repertorio.comentarios ?? []
     }
   }
 

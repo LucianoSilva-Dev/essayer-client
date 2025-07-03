@@ -31,7 +31,7 @@ export default function ResetPasswordForm() {
       await updatePassword(id, {senha: newPassword})
 
       router.push("/login?message=password-reset-success")
-    } catch (e) { } finally {
+    } catch { } finally {
       setIsSubmitting(false)
     }
   }

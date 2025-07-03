@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client"
 
 import type React from "react"
@@ -42,7 +43,7 @@ const modelos = [
   },
 ]
 
-async function saveRepertoire(repertoire: any) {
+async function saveRepertoire(repertoire: RepertorioFormData) {
   switch (repertoire.modelo) {
     case 'obra':
       try {
@@ -57,7 +58,7 @@ async function saveRepertoire(repertoire: any) {
 
         await createObra(obra)
         toast.success("Obra salva com sucesso!")
-      } catch (e) { }
+      } catch { }
       break;
     case 'artigo':
       try {
@@ -72,7 +73,7 @@ async function saveRepertoire(repertoire: any) {
 
         await createArtigo(artigo)
         toast.success("Artigo salvo com sucesso!")
-      } catch (e) { }
+      } catch { }
       break;
     case 'citacao':
       try {
@@ -85,7 +86,7 @@ async function saveRepertoire(repertoire: any) {
         }
         await createCitacao(citacao)
         toast.success("Citação salva com sucesso!")
-      } catch (e) { }
+      } catch { }
       break;
   }
 }

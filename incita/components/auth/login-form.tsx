@@ -41,7 +41,7 @@ export default function LoginForm() {
       }
       
       router.push("/main")
-    } catch (e) { }
+    } catch { }
   }
  
   return (

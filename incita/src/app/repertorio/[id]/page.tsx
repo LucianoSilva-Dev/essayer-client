@@ -2,6 +2,7 @@
 
 import { useEffect, useState, Suspense } from "react"
 import { useParams, useRouter, useSearchParams } from "next/navigation"
+import Image from "next/image"
 import { ArrowLeft, Bookmark, ThumbsUp, Share2, BookOpen, FileText, Quote, User, Send, Trash2, Edit } from "lucide-react"
 import type { Repertorio } from "@/../types/repertorio"
 import type { Comentario } from '@/../api/types'
@@ -84,7 +85,7 @@ function CommentCard({
     <div className="flex items-start space-x-4 py-4">
       <div className="w-10 h-10 bg-gray-200 rounded-full flex-shrink-0 overflow-hidden">
         {authorProfilePictureLink ? (
-          <img src={authorProfilePictureLink} alt={`Foto de ${comentario.usuario.nome}`} className="w-full h-full object-cover" />
+          <Image src={authorProfilePictureLink} alt={`Foto de ${comentario.usuario.nome}`} className="w-full h-full object-cover" />
         ) : (
           <User size={24} className="text-gray-500 m-2" />
         )}
@@ -206,15 +207,15 @@ function RepertorioDetalhesContent() {
       } else {
         setError("Repertório não encontrado.")
       }
-    } catch (err) {
+    } catch {
       setError("Erro ao buscar o repertório. Tente novamente mais tarde.")
     } finally {
       setLoading(false)
     }
   }
 
+  
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     fetchRepertorio()
   }, [id, type])
 
@@ -524,7 +525,7 @@ function RepertorioDetalhesContent() {
                   <div className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center mr-3">
                     {authorProfilePictureLink ?
                       (
-                        <img src={authorProfilePictureLink} alt="Foto de perfil do autor" width={40} height={40} className="w-full h-full object-cover rounded-full"/>
+                        <Image src={authorProfilePictureLink} alt="Foto de perfil do autor" width={40} height={40} className="w-full h-full object-cover rounded-full"/>
                       ) : 
                       (
                         <User size={20} className="text-white" />

@@ -127,16 +127,19 @@ export default function FeaturedRepertoires() {
       >
         <motion.div
           className="text-center mb-10 flex-column justify-center"
+          // @ts-expect-error: Framer Motion variants não são tipadas corretamente
           variants={fadeUpVariants}
         >
           <motion.h2
             className="text-[45px] font-bold mb-2"
+            // @ts-expect-error: Framer Motion variants não são tipadas corretamente
             variants={fadeUpVariants}
           >
             Repertórios em destaque
           </motion.h2>
           <motion.p
             className="text-[30px] text-gray-600 max-w-4xl justify-self-center"
+            // @ts-expect-error: Framer Motion variants não são tipadas corretamente
             variants={fadeUpVariants}
           >
             Alguns exemplos do conteúdo que você encontrará em nosso acervo
@@ -150,8 +153,9 @@ export default function FeaturedRepertoires() {
           {displayedRepertoires.length > 0 ? 
             displayedRepertoires.map((repertorio, idx) => (
               <motion.div
-                key={repertorio.id}
-                variants={fadeUpVariants}
+              key={repertorio.id}
+              // @ts-expect-error: Framer Motion variants não são tipadas corretamente
+              variants={fadeUpVariants}
                 transition={{ duration: 0.6, delay: idx * 0.15 }}
                 whileHover={{ scale: 1.03, boxShadow: "0 8px 32px rgba(7,95,112,0.10)" }}
                 className="h-full w-full flex"
@@ -163,6 +167,7 @@ export default function FeaturedRepertoires() {
             ))
           : <motion.p
               className="text-[30px] text-gray-600 justify-self-center"
+              // @ts-expect-error: Framer Motion variants não são tipadas corretamente
               variants={fadeUpVariants}
             >
               Nenhum repertorio encontrado
@@ -172,6 +177,7 @@ export default function FeaturedRepertoires() {
 
         <motion.div
           className="mt-10 text-center"
+          // @ts-expect-error: Framer Motion variants não são tipadas corretamente
           variants={fadeUpVariants}
         >
           <Link

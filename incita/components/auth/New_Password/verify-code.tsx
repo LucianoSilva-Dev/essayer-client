@@ -25,8 +25,8 @@ export default function VerifyCodeForm() {
 
       router.push(`/forgot-password/reset-password?id=${id}`)
 
-    } catch (e) {
-      // Tratar erro
+    } catch {
+
     }
   }
 
@@ -47,8 +47,8 @@ export default function VerifyCodeForm() {
 
       await createRequisicaoSenha({email})
 
-    } catch (e) {
-      // Tratar erro
+    } catch {
+    
     } finally {
       setIsResending(false)
     }

@@ -19,7 +19,6 @@ type QuoteCardProps = {
 }
 
 export default function QuoteCard({
-  id,
   type,
   title,
   content,

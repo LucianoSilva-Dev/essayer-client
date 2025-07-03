@@ -24,7 +24,7 @@ export default function ForgotPasswordForm() {
       })
 
       router.push(`/forgot-password/verify-code?${query}`)
-    } catch (e) { }
+    } catch { }
   }
 
   return (

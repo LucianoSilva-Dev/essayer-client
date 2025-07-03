@@ -146,17 +146,22 @@ const MainTopics = () => {
       >
         <motion.h2
           className="text-[45px] font-bold mb-2 text-gray-800"
+          // @ts-expect-error: Framer Motion variants não são tipadas corretamente
           variants={fadeUpVariants}
         >
           Eixos Temáticos
         </motion.h2>
         <motion.p
           className="text-[30px] text-gray-600 max-w-4xl justify-self-center"
+          // @ts-expect-error: Framer Motion variants não são tipadas corretamente
           variants={fadeUpVariants}
         >
           Explore os repertórios organizados por eixos temáticos para facilitar sua pesquisa.
         </motion.p>
-        <motion.div className="relative" variants={fadeUpVariants}>
+        <motion.div 
+        className="relative" 
+        // @ts-expect-error: Framer Motion variants não são tipadas corretamente
+        variants={fadeUpVariants}>
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
@@ -212,6 +217,7 @@ const MainTopics = () => {
                     }`}
                 >
                   <motion.div
+                  // @ts-expect-error: Framer Motion variants não são tipadas corretamente
                     variants={fadeUpVariants}
                     initial="hidden"
                     animate="show"

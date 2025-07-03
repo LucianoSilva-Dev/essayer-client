@@ -30,7 +30,7 @@ export default function VerifyCodeForm() {
 
       router.push(`/login?lattes=${lattes}`)
 
-    } catch (e) { }
+    } catch { }
   }
 
   const handleCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -52,7 +52,7 @@ export default function VerifyCodeForm() {
         senha: "Placeholder0!",
         email
       })
-    } catch (e) { } finally {
+    } catch { } finally {
       setIsResending(false)
     }
   }

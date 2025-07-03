@@ -33,24 +33,34 @@ export default function AboutSection() {
       >
         <motion.h2
           className="text-[35px] px-0 font-bold mb-6 sm:px-2"
+          // @ts-expect-error: Framer Motion variants não são tipadas corretamente
           variants={fadeUpVariants}
         >
           Sobre o Incita
         </motion.h2>
 
         <motion.div className="space-y-6 px-0 mb-10 sm:px-2" variants={containerVariants}>
-          <motion.p className="text-gray-700 text-[25px]" variants={fadeUpVariants}>
+          <motion.p 
+          className="text-gray-700 text-[25px]" 
+          // @ts-expect-error: Framer Motion variants não são tipadas corretamente
+          variants={fadeUpVariants}>
             O Incita nasceu da necessidade de centralizar e organizar repertórios sobre questões sociais fundamentais,
             facilitando o acesso a informações relevantes para pesquisadores, estudantes e profissionais.
           </motion.p>
-          <motion.p className="text-gray-700 text-[25px]" variants={fadeUpVariants}>
+          <motion.p 
+          className="text-gray-700 text-[25px]" 
+          // @ts-expect-error: Framer Motion variants não são tipadas corretamente
+          variants={fadeUpVariants}>
             Nosso objetivo é criar uma plataforma onde conhecimento e reflexão sobre os pilares da sociedade possam ser
             facilmente acessados e compartilhados.
           </motion.p>
         </motion.div>
 
         <motion.div className="space-y-8 px-0 sm:px-2" variants={containerVariants}>
-          <motion.div className="flex items-start gap-4" variants={fadeUpVariants}>
+          <motion.div 
+          className="flex items-start gap-4" 
+          // @ts-expect-error: Framer Motion variants não são tipadas corretamente
+          variants={fadeUpVariants}>
             <div className="mt-1 bg-amber-100 p-2 rounded-full">
               <Target className="h-8 w-8 text-amber-600" />
             </div>
@@ -62,7 +72,9 @@ export default function AboutSection() {
             </div>
           </motion.div>
 
-          <motion.div className="flex items-start gap-4 sm:px-2" variants={fadeUpVariants}>
+          <motion.div className="flex items-start gap-4 sm:px-2" 
+          // @ts-expect-error: Framer Motion variants não são tipadas corretamente
+          variants={fadeUpVariants}>
             <div className="mt-1 bg-amber-100 p-2 rounded-full">
               <Eye className="h-8 w-8 text-amber-600" />
             </div>
@@ -72,7 +84,9 @@ export default function AboutSection() {
             </div>
           </motion.div>
 
-          <motion.div className="flex items-start gap-4 sm:px-2" variants={fadeUpVariants}>
+          <motion.div className="flex items-start gap-4 sm:px-2"
+          // @ts-expect-error: Framer Motion variants não são tipadas corretamente
+          variants={fadeUpVariants}>
             <div className="mt-1 bg-amber-100 p-2 rounded-full">
               <Star className="h-8 w-8 text-amber-600" />
             </div>
