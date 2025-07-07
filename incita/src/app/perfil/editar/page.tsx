@@ -8,7 +8,7 @@ import { ArrowLeft, Save, X } from "lucide-react"
 import { useAuth } from "@/../contexts/auth-context"
 import { useProfile } from "@/../contexts/profile-context"
 import type { UserProfile } from "@/../types/profile"
-import { updateProfilePicture } from "../../../../api/usuario"
+import { updateProfilePicture } from "../../../../apiCalls/usuario"
 
 
 export default function EditarPerfilPage() {

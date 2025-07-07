@@ -1,5 +1,5 @@
 // Frontend/types/repertorio.ts
-import type { Comentario, PerfilUsuario } from "../api/types";
+import type { Comentario, PerfilUsuario } from "../apiCalls/types";
 
 export type ModeloRepertorio = "obra" | "artigo" | "citacao"
 

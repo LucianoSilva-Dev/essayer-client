@@ -4,7 +4,7 @@ import { useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { redirect, useRouter, useSearchParams } from "next/navigation"
-import { createRequisicaoSenha, validateRequisicaoSenha } from "../../../api/requisicao-senha"
+import { createRequisicaoSenha, validateRequisicaoSenha } from "../../../apiCalls/requisicao-senha"
 
 export default function VerifyCodeForm() {
   const [code, setCode] = useState("")

@@ -1,8 +1,8 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { PerfilUsuario } from "../../api/types"
-import { getProfilePictureLink } from "../../api/usuario"
+import { PerfilUsuario } from "../../apiCalls/types"
+import { getProfilePictureLink } from "../../apiCalls/usuario"
 import Image from "next/image"
 
 type QuoteCardProps = {

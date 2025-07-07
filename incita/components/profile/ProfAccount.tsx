@@ -5,7 +5,7 @@ import { ArrowLeft, Edit3, LogOut } from "lucide-react"
 import { useState } from "react"
 import { useAuth } from '@/../contexts/auth-context'
 import { useRouter } from "next/navigation"
-import { getProfilePictureLink } from "@/../api/usuario"
+import { getProfilePictureLink } from "@/../apiCalls/usuario"
 import Image from "next/image"
 import type { ProfessorProfileProps } from "@/../src/app/perfil/page"
 

@@ -5,7 +5,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { EyeOff, Eye } from "lucide-react"
 import { useRouter, useSearchParams } from "next/navigation"
-import { updatePassword } from "../../../api/usuario"
+import { updatePassword } from "../../../apiCalls/usuario"
 
 export default function ResetPasswordForm() {
   const [newPassword, setNewPassword] = useState("")

@@ -6,8 +6,8 @@ import Image from "next/image"
 import Link from "next/link"
 import { EyeOff, Eye } from "lucide-react"
 import { useRouter } from "next/navigation"
-import { CreateUsuarioBody } from "../../api/usuario/types"
-import { createUser } from "../../api/usuario"
+import { CreateUsuarioBody } from "../../apiCalls/usuario/types"
+import { createUser } from "../../apiCalls/usuario"
 import { UserRegistration } from "../../types/user"
 
 type FormProfessorProps = {

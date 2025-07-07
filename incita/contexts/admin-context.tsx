@@ -3,8 +3,8 @@
 import type React from "react"
 import { createContext, useContext, useState, useEffect, useCallback } from "react"
 import type { RepertorioPendente, ProfessorPendente } from "../types/admin"
-import { getAllRequisicaoProfessor, updateStatus } from "../api/requisicao-professor"
-import { getRequisicaoProfessorResponse } from "../api/requisicao-professor/types"
+import { getAllRequisicaoProfessor, updateStatus } from "../apiCalls/requisicao-professor"
+import { getRequisicaoProfessorResponse } from "../apiCalls/requisicao-professor/types"
 import { useAuth } from "./auth-context"
 import { redirect } from "next/navigation"
 

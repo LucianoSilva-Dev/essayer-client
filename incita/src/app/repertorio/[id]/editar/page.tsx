@@ -6,8 +6,8 @@ import { toast } from "react-toastify";
 import RepertorioForm from "@/../components/repertorio/repertorio-form";
 import Loading from "../loading";
 import type { RepertorioFormData } from "@/../types/repertorio";
-import { getArtigoById, getCitacaoById, getObraById, updateArtigo, updateCitacao, updateObra } from "@/../api/repertorio";
-import type { RepertorioDocument, UpdateArtigoBody, UpdateCitacaoBody, UpdateObraBody } from "@/../api/repertorio/types";
+import { getArtigoById, getCitacaoById, getObraById, updateArtigo, updateCitacao, updateObra } from "@/../apiCalls/repertorio";
+import type { RepertorioDocument, UpdateArtigoBody, UpdateCitacaoBody, UpdateObraBody } from "@/../apiCalls/repertorio/types";
 import { mountRepertoire } from "@/app/utils";
 import { useAuth } from "@/../contexts/auth-context";
 
