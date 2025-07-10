@@ -66,7 +66,7 @@ export function AuthButtons() {
         <>
           <Link
             href="/login"
-            className="px-6 py-3 rounded-[10px] border border-white/30 text-white text-[20px] hover:bg-[#CA9C60] hover:border-[#CA9C60] duration-300 transition-colors"
+            className="px-6 py-3 rounded-[10px] border-2 border-white/30 text-white text-[20px] hover:bg-[#CA9C60] hover:border-[#CA9C60] duration-300 transition-colors"
           >
             Entrar
           </Link>

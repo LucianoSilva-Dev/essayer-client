@@ -6,7 +6,7 @@ export function NavLinks() {
   const { isLoggedIn, userData } = useAuth() // 2. Obter os dados de autenticação e do usuário
 
   const allLinks = [
-    { href: "/main", label: "Início" },
+    //{ href: "/main", label: "Início" },
     { href: "/main", label: "Repertórios" },
       //Condição adicionada com base nas roles do usuário
     { href: "/adicionar", label: "Adicionar Repertório", roles: ['professor', 'admin'] },

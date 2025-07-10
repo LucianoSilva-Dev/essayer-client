@@ -74,7 +74,7 @@ export default function Component({
             {/* Profile Image */}
             <div className="flex justify-center lg:justify-start">
               <Image
-                src={profilePictureLink || "/perfil.png"}
+                src={profilePictureLink || "/perfil.svg"}
                 alt="Foto de perfil"
                 width={320}
                 height={320}

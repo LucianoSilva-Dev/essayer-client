@@ -97,16 +97,16 @@ export default function FormProfessor({}: FormProfessorProps) {
       {/* Título */}
       <h1 className="text-2xl font-medium text-gray-800 mb-8">Crie sua conta</h1>
 
-      {/* Botão Google */}
+      {/* Botão Google 
       <button className="flex items-center justify-center gap-2 w-full border border-gray-300 rounded-md py-3 px-4 mb-8 hover:bg-gray-50 transition-colors">
         <Image src="/google-icon.svg" alt="Google" width={20} height={20} />
         <span className="text-gray-700">Continuar com o Google</span>
-      </button>
+      </button> */}
 
-      {/* Divisor */}
+      {/* Divisor 
       <div className="w-full flex items-center mb-8">
         <div className="flex-grow h-px bg-gray-200"></div>
-      </div>
+      </div> */}
 
       {/* Formulário */}
       <form onSubmit={handleSubmit} className="w-full">

@@ -73,7 +73,7 @@ export default function Component({
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             <div className="flex justify-center lg:justify-start">
               <Image
-                src={profilePictureLink || "/perfil.png"}
+                src={profilePictureLink || "/perfil.svg"}
                 alt="Foto de perfil"
                 width={320}
                 height={320}

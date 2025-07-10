@@ -135,7 +135,7 @@ export default function Main() {
   return (
     <main className="min-h-screen bg-gray-50">
       <div className="container mx-auto px-4 py-8">
-        <div className="text-center mb-8">
+        <div className="text-center mb-8 lg:mb-12 mt-4">
           <h1 className="text-4xl font-bold text-gray-800 mb-6">
             Pronto para turbinar
             <br />

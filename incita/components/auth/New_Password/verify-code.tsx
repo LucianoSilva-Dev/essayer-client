@@ -66,7 +66,8 @@ export default function VerifyCodeForm() {
 
       {/* Descrição */}
       <p className="text-sm text-gray-600 text-center mb-8 leading-relaxed">
-        Insira o código de 8 caracteres que enviamos para seu email
+        Insira o código de 8 caracteres que enviamos para seu email <br/>
+        <span className="text-red">(Confira a caixa de SPAM)</span>
       </p>
 
       {/* Formulário */}

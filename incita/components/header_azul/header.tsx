@@ -49,7 +49,7 @@ export function HeaderAzul() {
 
   return (
     <header className="fixed top-0 w-full bg-[#075F70] z-50 border-b rounded-b-[2em]">
-      <div className="container mx-auto px-4 py-2 flex items-center justify-between">
+      <div className="container mx-auto px-4 py-0 flex items-center justify-between">
         <Logo />
 
         <div className="hidden md:flex items-center justify-between flex-1 ml-8">
