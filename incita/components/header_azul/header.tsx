@@ -69,7 +69,7 @@ export function HeaderAzul() {
               className="absolute top-23 left-0 right-0 bg-white z-50 p-4 shadow-md md:hidden"
             >
               <div className="flex flex-col space-y-4 mb-4">
-                <NavItem href="/main" label="Início" />
+                {/* <NavItem href="/main" label="Início" /> */}
                 <NavItem href="/main" label="Repertórios" />
                 {isLoggedIn && (userData?.cargo === "professor" || userData?.cargo === "admin") && (
                   <NavItem href="/adicionar" label="Adicionar Repertório" />

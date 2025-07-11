@@ -36,7 +36,7 @@ export function HeaderLanding() {
       initial={{ opacity: 0, y: -50 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 1, ease: "easeInOut" }}
-      className="fixed top-0 w-full bg-white z-50 border-b border-white rounded-b-[2em]"
+      className="fixed top-0 w-full max-w-[100vw] bg-white z-50 border-b border-white rounded-b-[2em] shadow-sm"
     >
       <div className="container mx-auto px-4 py-0 flex items-center justify-between">
         <Logo />
@@ -54,7 +54,7 @@ export function HeaderLanding() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.3, ease: 'easeInOut' }}
-              className="absolute top-23 left-0 right-0 bg-white z-50 p-4 shadow-md md:hidden"
+              className="absolute top-24 left-0 right-0 bg-white z-40 p-4 shadow-md md:hidden"
             >
               <div className="absolute left-0 right-0 bg-white z-50 p-4 shadow-md md:hidden">
             <div className="flex flex-col space-y-4">
@@ -86,13 +86,13 @@ export function HeaderLanding() {
                           <>
                             <Link
                               href="/login"
-                              className="px-6 py-3 rounded-[10px] bg-[transparent] border-solid border-2 border-[#CA9C60] text-[#CA9C60] text-[20px] hover:bg-[#CA9C60] hover:text-white duration-200 cursor-pointer"
+                              className="px-6 py-3 rounded-[10px] bg-[transparent] border-solid border-2 border-[#CA9C60] text-[#CA9C60] text-[20px] hover:bg-[#CA9C60] text-center hover:text-white duration-200 cursor-pointer"
                             >
                               Entrar
                             </Link>
                             <Link
                               href="/register"
-                              className="px-6 py-3 rounded-[10px] bg-[#CA9C60] text-white text-[20px] hover:bg-[#a68050] duration-200 cursor-pointer"
+                              className="px-6 py-3 rounded-[10px] bg-[#CA9C60] text-white text-[20px] text-center hover:bg-[#a68050] duration-200 cursor-pointer"
                             >
                               Cadastrar-se
                             </Link>

@@ -7,6 +7,7 @@ interface MobileMenuProps {
   onClick: () => void
 }
 
+
 export function MobileMenu({ onClick }: MobileMenuProps) {
   return (
     <Button variant="ghost" size="icon" className="md:hidden" onClick={onClick}>
