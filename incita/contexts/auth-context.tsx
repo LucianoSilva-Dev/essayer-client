@@ -1,6 +1,6 @@
 'use client'
 import { createContext, useContext, useEffect, useState } from 'react'
-import { Usuario } from '../api/usuario/types'
+import { Usuario } from '../apiCalls/usuario/types'
 import { jwtDecode } from 'jwt-decode'
 import { toast } from 'react-toastify'
 

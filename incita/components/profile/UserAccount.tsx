@@ -6,7 +6,7 @@ import { useState } from "react"
 import { useAuth } from '@/../contexts/auth-context'
 import { useRouter } from "next/navigation"
 import type { AlunoProfileProps } from "@/../src/app/perfil/page"
-import { getProfilePictureLink } from "@/../api/usuario"
+import { getProfilePictureLink } from "@/../apiCalls/usuario"
 import Image from "next/image"
 
 export default function Component({

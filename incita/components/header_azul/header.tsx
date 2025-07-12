@@ -11,7 +11,7 @@ import Link from "next/link"
 import { useAuth } from "../../contexts/auth-context"
 import { useRouter } from "next/navigation"
 import Image from "next/image"
-import { getProfilePictureLink } from "../../api/usuario"
+import { getProfilePictureLink } from "../../apiCalls/usuario"
 import { NavLinks } from "./nav-links"
 
 export function HeaderAzul() {

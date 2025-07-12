@@ -2,9 +2,9 @@
 
 import React, { useEffect, useState, useRef } from "react"
 import { motion, useInView } from "framer-motion"
-import { RepertorioDocument } from "../../../api/repertorio/types"
-import { getAllRepertorios } from "../../../api/repertorio"
-import { isGetAllArtigoDoc, isGetAllCitacaoDoc, isGetAllObraDoc } from "../../../api/repertorio/helpers"
+import { RepertorioDocument } from "../../../apiCalls/repertorio/types"
+import { getAllRepertorios } from "../../../apiCalls/repertorio"
+import { isGetAllArtigoDoc, isGetAllCitacaoDoc, isGetAllObraDoc } from "../../../apiCalls/repertorio/helpers"
 import Link from "next/link"
 import type { Repertorio } from "@/../types/repertorio"
 import RepertorioCard from "../../repertorio/repertorio-card"

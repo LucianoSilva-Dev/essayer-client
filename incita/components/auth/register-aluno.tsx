@@ -8,8 +8,8 @@ import Link from "next/link"
 import { EyeOff, Eye } from "lucide-react"
 import { useRouter } from "next/navigation"
 import type { UserRegistration } from "@/../types/user"
-import { createUser } from "../../api/usuario"
-import { CreateUsuarioBody } from "../../api/usuario/types"
+import { createUser } from "../../apiCalls/usuario"
+import { CreateUsuarioBody } from "../../apiCalls/usuario/types"
 interface FormAlunoProps {
   onSubmit: (userData: UserRegistration) => Promise<void>
   isSubmitting: boolean

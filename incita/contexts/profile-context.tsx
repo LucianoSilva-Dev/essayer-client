@@ -4,7 +4,7 @@ import type React from "react"
 import { createContext, useContext, useState, useEffect, useCallback } from "react"
 import type { UserProfile, AlunoProfile } from "@/../types/profile"
 import { useAuth } from "./auth-context"
-import { getUserById, updateUser } from "../api/usuario"
+import { getUserById, updateUser } from "../apiCalls/usuario"
 
 interface ProfileContextType {
   profile: UserProfile | null

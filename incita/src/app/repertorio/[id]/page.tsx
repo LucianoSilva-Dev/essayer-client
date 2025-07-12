@@ -5,14 +5,14 @@ import { useParams, useRouter, useSearchParams } from "next/navigation"
 import Image from "next/image"
 import { ArrowLeft, Bookmark, ThumbsUp, Share2, BookOpen, FileText, Quote, User, Send, Trash2, Edit } from "lucide-react"
 import type { Repertorio } from "@/../types/repertorio"
-import type { Comentario } from '@/../api/types'
-import { getArtigoById, getCitacaoById, getObraById, addComentario, addLike, removeLike, addFavorito, removeFavorito, deleteRepertorio, updateComentario, deleteComentario } from "@/../api/repertorio"
-import type { RepertorioDocument } from "@/../api/repertorio/types"
+import type { Comentario } from '@/../apiCalls/types'
+import { getArtigoById, getCitacaoById, getObraById, addComentario, addLike, removeLike, addFavorito, removeFavorito, deleteRepertorio, updateComentario, deleteComentario } from "@/../apiCalls/repertorio"
+import type { RepertorioDocument } from "@/../apiCalls/repertorio/types"
 import { mountRepertoire } from "@/app/utils"
 import { useAuth } from "@/../contexts/auth-context"
 import Loading from "./loading"
 import { toast } from "react-toastify"
-import { getProfilePictureLink } from "@/../api/usuario"
+import { getProfilePictureLink } from "@/../apiCalls/usuario"
 import ConfirmationModal from "@/../components/shared/confirmation-modal"
 
 function CommentCard({

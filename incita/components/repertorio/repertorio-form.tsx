@@ -10,8 +10,8 @@ import ArtigoForm from "../forms/artigo-form"
 import CitacaoForm from "../forms/citacao-form"
 import { toast } from "react-toastify"
 import { EixosTematicos } from "../../constants/eixos"
-import { CreateArtigoBody, CreateCitacaoBody, CreateObraBody } from "../../api/repertorio/types"
-import { createArtigo, createCitacao, createObra } from "../../api/repertorio"
+import { CreateArtigoBody, CreateCitacaoBody, CreateObraBody } from "../../apiCalls/repertorio/types"
+import { createArtigo, createCitacao, createObra } from "../../apiCalls/repertorio"
 
 type RepertorioFormProps = {
   onSubmit: (data: RepertorioFormData) => Promise<void>

@@ -6,8 +6,8 @@ import { EyeOff, Eye } from "lucide-react"
 import { toast } from "react-toastify"
 import { useRouter, useSearchParams } from "next/navigation"
 import { useAuth } from '@/../contexts/auth-context'
-import { login as apiLogin } from '../../api/auth/index'
-import { createProfessorRequest } from "../../api/usuario"
+import { login as apiLogin } from '../../apiCalls/auth/index'
+import { createProfessorRequest } from "../../apiCalls/usuario"
 
 export default function LoginForm() {
   const { login, isLoggedIn } = useAuth()

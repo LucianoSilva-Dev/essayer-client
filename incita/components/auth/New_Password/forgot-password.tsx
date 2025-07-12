@@ -4,7 +4,7 @@ import { useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { createRequisicaoSenha } from "../../../api/requisicao-senha"
+import { createRequisicaoSenha } from "../../../apiCalls/requisicao-senha"
 import { useAuth } from "../../../contexts/auth-context"
 
 export default function ForgotPasswordForm() {

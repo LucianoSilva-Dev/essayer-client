@@ -3,7 +3,7 @@ import { useRouter } from 'next/navigation'
 import Image from "next/image"
 import Link from "next/link"
 import { useEffect, useState } from "react"
-import { getProfilePictureLink } from "../../api/usuario"
+import { getProfilePictureLink } from "../../apiCalls/usuario"
 
 
 export function AuthButtons() {
