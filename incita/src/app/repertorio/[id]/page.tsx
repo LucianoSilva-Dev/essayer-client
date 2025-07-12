@@ -85,7 +85,7 @@ function CommentCard({
     <div className="flex items-start space-x-4 py-4">
       <div className="w-10 h-10 bg-gray-200 rounded-full flex-shrink-0 overflow-hidden">
         {authorProfilePictureLink ? (
-          <Image src={authorProfilePictureLink} alt={`Foto de ${comentario.usuario.nome}`} className="w-full h-full object-cover" />
+          <Image width={36} height={36} src={authorProfilePictureLink} alt={`Foto de ${comentario.usuario.nome}`} className="w-full h-full object-cover" />
         ) : (
           <User size={24} className="text-gray-500 m-2" />
         )}
