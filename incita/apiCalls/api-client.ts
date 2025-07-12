@@ -1,9 +1,13 @@
 import axios from 'axios';
 import { API_BASE_URL } from '@/app/constants';
 import { handleAxiosError } from '@/app/utils'; // Importando seu utilitário
+import { setupCache } from 'axios-cache-interceptor'
 
-const apiClient = axios.create({
+const apiClient = setupCache(axios.create({
   baseURL: API_BASE_URL,
+}), {
+  ttl: 1000 * 60 * 2,
+  location: "client"
 });
 
 // Interceptor para adicionar o token JWT em todas as requisições
