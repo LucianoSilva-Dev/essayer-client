@@ -1,6 +1,6 @@
 "use client"
 
-import type React from "react"
+import React from "react"
 import { useState } from "react"
 //import Image from "next/image"
 import Link from "next/link"
@@ -9,6 +9,8 @@ import { useRouter } from "next/navigation"
 import { CreateUsuarioBody } from "../../apiCalls/usuario/types"
 import { createUser } from "../../apiCalls/usuario"
 import { UserRegistration } from "../../types/user"
+import { useAuth } from "../../contexts/auth-context"
+import { toast } from "react-toastify"
 
 type FormProfessorProps = {
   onSubmit: (userData: UserRegistration) => Promise<void>
@@ -19,6 +21,7 @@ type FormProfessorProps = {
 
 export default function FormProfessor({}: FormProfessorProps) {
   const router = useRouter()
+  const {isLoggedIn} = useAuth()
   const [showPasswordState, setShowPasswordState] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [formData, setFormData] = useState({
@@ -34,6 +37,14 @@ export default function FormProfessor({}: FormProfessorProps) {
     password: "",
     confirmPassword: "",
   })
+
+  // Redireciona se já estiver logado
+  React.useEffect(() => {
+    if(isLoggedIn){
+      toast.info("Você já está logado.")
+      router.replace("/perfil")
+    }
+  }, [isLoggedIn, router])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
