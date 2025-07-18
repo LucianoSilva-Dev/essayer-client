@@ -29,9 +29,9 @@ export default function ConfirmationModal({
       {isOpen && (
         <motion.div
           initial={{ opacity: 0 }}
-          animate={{ opacity: 0.8 }}
+          animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4" // Adicionado p-4 para garantir espaçamento
           onClick={onClose}
         >
           <motion.div
@@ -39,15 +39,18 @@ export default function ConfirmationModal({
             animate={{ scale: 1, opacity: 1, y: 0 }}
             exit={{ scale: 0.9, opacity: 0, y: -20 }}
             transition={{ duration: 0.2 }}
-            className="relative bg-white rounded-lg shadow-xl w-full max-w-md mx-4"
+            className="relative bg-white rounded-lg shadow-xl w-full max-w-md" // Removido mx-4, pois o padding no pai já cuida disso
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="p-6">
-              <div className="flex items-start space-x-4">
+            {/* O padding agora é responsivo */}
+            <div className="p-4 sm:p-6">
+              {/* O layout agora é vertical em telas pequenas e horizontal em maiores */}
+              <div className="sm:flex sm:items-start">
                 <div className="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
                   <AlertTriangle className="h-6 w-6 text-red-600" aria-hidden="true" />
                 </div>
-                <div className="mt-0 text-left">
+                {/* O texto agora centraliza em telas pequenas */}
+                <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
                   <h3 className="text-lg leading-6 font-medium text-gray-900" id="modal-title">
                     {title}
                   </h3>
@@ -59,7 +62,8 @@ export default function ConfirmationModal({
                 </div>
               </div>
             </div>
-            <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse rounded-b-lg">
+            {/* A área dos botões já é responsiva, mas ajustamos o padding para consistência */}
+            <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse rounded-b-lg">
               <button
                 type="button"
                 disabled={isLoading}
