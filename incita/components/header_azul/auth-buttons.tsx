@@ -16,6 +16,7 @@ export function AuthButtons() {
       if (isLoggedIn && userData?.id) {
         const url = await getProfilePictureLink(userData.id)
         setProfilePic(url)
+         console.log("DADOS", userData)
       } else {
         setProfilePic(null)
       }
@@ -32,6 +33,10 @@ export function AuthButtons() {
     <div className="flex items-center space-x-4">
       {isLoggedIn ? (
         <>
+          <span className="text-white text-[20px] font-bold">
+            Olá, 
+            {userData?.nome || ""}
+          </span>
           <button
             onClick={() => router.push("/perfil")}
             className="flex items-center focus:outline-none"
@@ -50,16 +55,11 @@ export function AuthButtons() {
               </span>
             ) : (
               <div className="w-9 h-9 rounded-full bg-gray-300 flex items-center justify-center text-gray-600 font-bold">
-                {userData?.nome?.[0] || "U"}
+                {userData?.nome?.[0] || ""}
               </div>
             )}
           </button>
-          <button
-            onClick={handleLogout}
-            className="px-6 py-3 rounded-[20px] bg-[#CA9C60] text-white text-[20px] hover:bg-[#a68050] duration-200 cursor-pointer"
-          >
-            Sair
-          </button>
+          
         </>
 
       ) : (
