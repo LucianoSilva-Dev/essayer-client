@@ -7,6 +7,8 @@ import Link from "next/link"
 import { useRepertorio } from "@/../contexts/repertorio-context"
 import RepertorioCard from "@/../components/repertorio/repertorio-card"
 import { EixosTematicos, EixoOptions } from "@/../constants/eixos"
+import Skeleton from "react-loading-skeleton"
+import "react-loading-skeleton/dist/skeleton.css"
 import { useAuth } from "@/../contexts/auth-context" // 1. Importar o hook useAuth
 
 const modelosOptions = [
@@ -351,7 +353,7 @@ export default function Main() {
 
           {isLoadingRepertorios ? (
             <div className="text-center py-12">
-              <p className="text-gray-500">Carregando repertórios...</p>
+              <Skeleton count={7} height={25} width={'90%'} />
             </div>
           ) : repertorios.length === 0 ? (
             <div className="text-center py-12">
