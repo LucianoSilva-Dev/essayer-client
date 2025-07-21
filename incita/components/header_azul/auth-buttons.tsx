@@ -8,7 +8,7 @@ import { getProfilePictureLink } from "../../apiCalls/usuario"
 
 export function AuthButtons() {
   const router = useRouter()
-  const { isLoggedIn, logout, userData } = useAuth()
+  const { isLoggedIn, userData } = useAuth()
   const [profilePic, setProfilePic] = useState<string | null>(null)
 
   useEffect(() => {
@@ -23,11 +23,6 @@ export function AuthButtons() {
     }
     fetchProfilePic()
   }, [isLoggedIn, userData])
-
-  const handleLogout = () => {
-    logout()
-    router.push('/login')
-  }
 
   return (
     <div className="flex items-center space-x-4">

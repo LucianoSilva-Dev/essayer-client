@@ -67,7 +67,7 @@ export default function EditarPerfilPage() {
       await deleteProfilePicture(userData.id)
       setFoto(undefined)
       toast.success("Foto de perfil removida!")
-    } catch (error) {
+    } catch {
       toast.error("Erro ao remover foto de perfil.")
     } finally {
       setIsDeletingFoto(false)
