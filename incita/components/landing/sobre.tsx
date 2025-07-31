@@ -61,8 +61,8 @@ export default function AboutSection() {
           className="flex items-start gap-4" 
           // @ts-expect-error: Framer Motion variants não são tipadas corretamente
           variants={fadeUpVariants}>
-            <div className="mt-1 bg-amber-100 p-2 rounded-full">
-              <Target className="h-8 w-8 text-amber-600" />
+            <div className="mt-1 bg-[#FAF5EF] p-2 rounded-full">
+              <Target className="h-8 w-8 text-[#ca9c60]" />
             </div>
             <div>
               <h3 className="text-lg font-semibold mb-1 text-[25px]">Missão</h3>
@@ -75,8 +75,8 @@ export default function AboutSection() {
           <motion.div className="flex items-start gap-4 sm:px-2" 
           // @ts-expect-error: Framer Motion variants não são tipadas corretamente
           variants={fadeUpVariants}>
-            <div className="mt-1 bg-amber-100 p-2 rounded-full">
-              <Eye className="h-8 w-8 text-amber-600" />
+            <div className="mt-1 bg-[#FAF5EF] p-2 rounded-full">
+              <Eye className="h-8 w-8 text-[#ca9c60]" />
             </div>
             <div>
               <h3 className="text-lg font-semibold mb-1 text-[25px]">Visão</h3>
@@ -87,8 +87,8 @@ export default function AboutSection() {
           <motion.div className="flex items-start gap-4 sm:px-2"
           // @ts-expect-error: Framer Motion variants não são tipadas corretamente
           variants={fadeUpVariants}>
-            <div className="mt-1 bg-amber-100 p-2 rounded-full">
-              <Star className="h-8 w-8 text-amber-600" />
+            <div className="mt-1 bg-[#FAF5EF] p-2 rounded-full">
+              <Star className="h-8 w-8 text-[#ca9c60]" />
             </div>
             <div>
               <h3 className="text-lg font-semibold mb-1 text-[25px]">Valores</h3>

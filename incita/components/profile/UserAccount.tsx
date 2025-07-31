@@ -54,7 +54,7 @@ export default function Component({
           <div className="flex items-center justify-between mb-8">
             <button
               onClick={onEdit}
-              className="flex items-center space-x-2 hover:opacity-80 transition-opacity"
+              className="flex items-center space-x-2 cursor-pointer hover:opacity-80 transition-opacity"
             >
               <Edit3 className="w-6 h-6 text-[#363535]" />
               <h1 className="text-2xl font-semibold text-[#363535]">{isEditing ? "Editando dados" : "Editar dados"}</h1>
@@ -74,11 +74,11 @@ export default function Component({
             {/* Profile Image */}
             <div className="flex justify-center lg:justify-start">
               <Image
-                src={profilePictureLink || "/perfil.png"}
+                src={profilePictureLink || "/perfil.svg"}
                 alt="Foto de perfil"
                 width={320}
                 height={320}
-                className="w-80 h-80 rounded-full object-cover"
+                className="w-80 h-80 rounded-full object-cover shadow-2xl"
                 priority
               />
             </div>

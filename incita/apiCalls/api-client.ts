@@ -6,8 +6,8 @@ import { setupCache } from 'axios-cache-interceptor'
 const apiClient = setupCache(axios.create({
   baseURL: API_BASE_URL,
 }), {
-  ttl: 1000 * 60 * 2,
-  location: "client"
+  ttl: 0,
+  location: 'client'
 });
 
 // Interceptor para adicionar o token JWT em todas as requisições

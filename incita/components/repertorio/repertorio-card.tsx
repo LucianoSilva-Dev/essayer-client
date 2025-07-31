@@ -231,7 +231,7 @@ export default function RepertorioCard({ repertorio }: RepertorioCardProps) {
                 key={eixo}
                 className={`inline-block px-2 py-1 rounded-full text-xs font-medium border bg-gray-100 text-gray-800 border-gray-200`}
             >
-                {'#' + eixo}
+                {eixo}
             </span>
           ))}
         </div>
@@ -245,7 +245,7 @@ export default function RepertorioCard({ repertorio }: RepertorioCardProps) {
       {/* Recortes */}
       <div className="grid grid-cols-2 place-items-center gap-2 mt-4">
         {repertorio.recortes.slice(0, 4).map(recorte => (
-            <span key={recorte} className="flex-3 w-full py-1 px-3 bg-blue-100 text-sky-700 text-xs rounded-full text-center">
+            <span key={recorte} className="flex-3 w-full py-1 px-3 bg-[#E5EFF0] text-[#075F70] text-xs rounded-full text-center">
                 {recorte}
             </span>
         ))}

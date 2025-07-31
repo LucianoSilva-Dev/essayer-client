@@ -1,15 +1,16 @@
 "use client"
 
-import type React from "react"
-
+import React from "react"
 import { useState } from "react"
-import Image from "next/image"
+// import Image from "next/image"
 import Link from "next/link"
 import { EyeOff, Eye } from "lucide-react"
 import { useRouter } from "next/navigation"
 import type { UserRegistration } from "@/../types/user"
 import { createUser } from "../../apiCalls/usuario"
 import { CreateUsuarioBody } from "../../apiCalls/usuario/types"
+import { useAuth } from "../../contexts/auth-context"
+import { toast } from "react-toastify"
 interface FormAlunoProps {
   onSubmit: (userData: UserRegistration) => Promise<void>
   isSubmitting: boolean
@@ -20,6 +21,7 @@ interface FormAlunoProps {
 export default function FormAluno({}: FormAlunoProps) {
   const router = useRouter()
   const [showPassword, setShowPassword] = useState(false)
+  const {isLoggedIn} = useAuth()
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [formData, setFormData] = useState({
     name: "",
@@ -32,6 +34,14 @@ export default function FormAluno({}: FormAlunoProps) {
     password: "",
     confirmPassword: "",
   })
+
+  // Redireciona se já estiver logado
+  React.useEffect(() => {
+    if (isLoggedIn) {
+      toast.info("Você já está logado.")
+      router.replace("/perfil")
+    }
+  }, [isLoggedIn, router])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -95,16 +105,16 @@ export default function FormAluno({}: FormAlunoProps) {
       {/* Título */}
       <h1 className="text-2xl font-medium text-gray-800 mb-8">Crie sua conta</h1>
 
-      {/* Botão Google */}
+      {/* Botão Google 
       <button className="flex items-center justify-center gap-2 w-full border border-gray-300 rounded-md py-3 px-4 mb-8 hover:bg-gray-50 transition-colors">
         <Image src="/google-icon.svg" alt="Google" width={20} height={20} />
         <span className="text-gray-700">Continuar com o Google</span>
-      </button>
+      </button> */}
 
-      {/* Divisor */}
+      {/* Divisor 
       <div className="w-full flex items-center mb-8">
         <div className="flex-grow h-px bg-gray-200"></div>
-      </div>
+      </div> */}
 
       {/* Formulário */}
       <form onSubmit={handleSubmit} className="w-full">

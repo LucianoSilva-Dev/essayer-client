@@ -15,6 +15,7 @@ interface ProfileContextType {
 
 const ProfileContext = createContext<ProfileContextType | undefined>(undefined)
 
+
 export function ProfileProvider({ children }: { children: React.ReactNode }) {
   const { isLoggedIn, userData } = useAuth()
   const [profile, setProfile] = useState<UserProfile | null>(null)

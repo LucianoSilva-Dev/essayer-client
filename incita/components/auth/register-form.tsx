@@ -1,16 +1,29 @@
 "use client"
 
-import { useState } from "react"
+import { /*useEffect,*/ useState } from "react"
 import Image from "next/image"
 import FormAluno from "./register-aluno"
 import FormProfessor from "./register-professor"
 import type { UserType, UserRegistration } from "@/../types/user"
 import router from "next/router"
+// import { toast } from "react-toastify"
+// import { useAuth } from "../../contexts/auth-context"
+//import React from "react"
 
 export function RegisterForm() {
   const [userType, setUserType] = useState<UserType>("aluno")
+  // const { login, isLoggedIn } = useAuth()
   const [showPassword, setShowPassword] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  // const [alreadyLogged, setAlreadylogged] = useState(true)
+
+    // // Redireciona se já estiver logado
+    // React.useEffect(() => {
+    //   if (isLoggedIn && alreadyLogged) {
+    //     toast.info("Você já está logado.")
+    //     router.replace("/perfil")
+    //   }
+    // }, [isLoggedIn, router, alreadyLogged])
 
   const handleSubmit = async (userData: UserRegistration) => {
     setIsSubmitting(true)

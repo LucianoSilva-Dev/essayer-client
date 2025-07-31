@@ -49,7 +49,7 @@ export function HeaderAzul() {
 
   return (
     <header className="fixed top-0 w-full bg-[#075F70] z-50 border-b rounded-b-[2em]">
-      <div className="container mx-auto px-4 py-2 flex items-center justify-between">
+      <div className="container mx-auto px-4 py-0 flex items-center justify-between">
         <Logo />
 
         <div className="hidden md:flex items-center justify-between flex-1 ml-8">
@@ -69,7 +69,7 @@ export function HeaderAzul() {
               className="absolute top-23 left-0 right-0 bg-white z-50 p-4 shadow-md md:hidden"
             >
               <div className="flex flex-col space-y-4 mb-4">
-                <NavItem href="/main" label="Início" />
+                {/* <NavItem href="/main" label="Início" /> */}
                 <NavItem href="/main" label="Repertórios" />
                 {isLoggedIn && (userData?.cargo === "professor" || userData?.cargo === "admin") && (
                   <NavItem href="/adicionar" label="Adicionar Repertório" />
