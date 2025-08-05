@@ -153,7 +153,7 @@ export default function FormProfessor({}: FormProfessorProps) {
 
         <div className="mb-4">
           <label htmlFor="curriculoLattes" className="block text-sm font-medium text-gray-700 mb-1">
-            Currículo Lattes
+           Link do Currículo Lattes
           </label>
           <input
             type="url"
@@ -163,6 +163,7 @@ export default function FormProfessor({}: FormProfessorProps) {
             onChange={handleChange}
             className="w-full px-3 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-teal-600"
             required
+            placeholder="https://lattes.cnpq.br/"
           />
         </div>
 
