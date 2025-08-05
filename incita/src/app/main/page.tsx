@@ -284,7 +284,7 @@ export default function Main() {
                         : "bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100"
                         }`}
                     >
-                      Menos Curtidos
+                      Mais Curtidos
                     </button>
                     <button
                       onClick={() => { setOrdenarPor('MinLikes'); setPage(0); }}
@@ -293,7 +293,7 @@ export default function Main() {
                         : "bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100"
                         }`}
                     >
-                      Mais Curtidos
+                      Menos Curtidos
                     </button>
                   </div>
                 </div>

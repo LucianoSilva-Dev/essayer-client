@@ -30,8 +30,8 @@ export function AuthButtons() {
         <>
           <span className="text-white text-[20px] font-bold">
             Olá, 
-            {userData?.nome || ""}
-          </span>
+            {" " + userData?.nome.split(" ")[0] || ""}
+            </span>
           <button
             onClick={() => router.push("/perfil")}
             className="flex items-center focus:outline-none"
@@ -49,7 +49,7 @@ export function AuthButtons() {
                 />
               </span>
             ) : (
-              <div className="w-9 h-9 rounded-full bg-gray-300 flex items-center justify-center text-gray-600 font-bold">
+              <div className="w-9 h-9 rounded-full bg-gray-300 flex items-center justify-center text-gray-600 font-bold cursor-pointer">
                 {userData?.nome?.[0] || ""}
               </div>
             )}

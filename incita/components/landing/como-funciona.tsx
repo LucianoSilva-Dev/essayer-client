@@ -47,7 +47,7 @@ export default function ComoFunciona() {
       descricao: "Professores capacitados e confiáveis, preparados para oferecer conteúdos de alta qualidade.",
       corFundo: "bg-amber-50",
     },
-    /*{
+    {
       id: 3,
       icone: <PenTool className="w-8 h-8 text-amber-500" />,
       titulo: "Pratique redações",
@@ -55,7 +55,7 @@ export default function ComoFunciona() {
         "Pratique suas redações online com temas aleatórios e cronômetro para treinar como se fosse a prova de verdade.",
       corFundo: "bg-amber-50",
     },
-    */
+    
   ]
 
   return (

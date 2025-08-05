@@ -191,7 +191,7 @@ export default function RepertorioCard({ repertorio }: RepertorioCardProps) {
                 e.stopPropagation()
                 handleViewDetails()
               }}
-              className="text-gray-400 hover:text-[#CA9C60] transition-colors opacity-0 group-hover:opacity-100"
+              className="text-gray-400 hover:text-[#CA9C60] transition-colors opacity-0 group-hover:opacity-100 focus:opacity-100"
               title="Ver detalhes"
             >
               <Eye size={16} />
