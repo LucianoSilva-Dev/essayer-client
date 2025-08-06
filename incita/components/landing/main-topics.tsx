@@ -13,6 +13,7 @@ import { Scale, BookOpen, HeartPulse, Leaf, Brain, Palette, Cpu, BarChart3 } fro
 import { useState, useRef, useCallback } from "react"
 import type { Swiper as SwiperType } from "swiper"
 import { motion, useInView } from "framer-motion"
+import Link from "next/link"
 
 interface Topic {
   id: string
@@ -229,48 +230,55 @@ const MainTopics = () => {
                       onMouseLeave={handleCardLeave}
                       className="h-full"
                     >
-                      <Card>
-                        <CardIcon>
-                          <motion.div
-                            initial={{ scale: 0.7, opacity: 0 }}
-                            animate={{ scale: 1, opacity: 1 }}
-                            transition={{ duration: 0.5, delay: 0.2 + idx * 0.1 }}
-                          >
-                            {topic.icon}
-                          </motion.div>
-                        </CardIcon>
-                        <CardTitle>
-                          <motion.span
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.5, delay: 0.3 + idx * 0.1 }}
-                          >
-                            {topic.title}
-                          </motion.span>
-                        </CardTitle>
-                        <CardDescription>
-                          <motion.span
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.5, delay: 0.35 + idx * 0.1 }}
-                          >
-                            {topic.description}
-                          </motion.span>
-                        </CardDescription>
-                        <TagList>
-                          {topic.tags.map((tag, tagIdx) => (
+                      <Link
+                        href="/main"
+                        className="block h-full focus:outline-none focus:ring-2 focus:ring-teal-600"
+                        aria-label={`Ir para a página principal do tópico ${topic.title}`}
+                        tabIndex={0}
+                      >
+                        <Card>
+                          <CardIcon>
                             <motion.div
-                              key={tag}
-                              custom={tagIdx}
-                              variants={tagVariants}
-                              initial="hidden"
-                              animate="show"
+                              initial={{ scale: 0.7, opacity: 0 }}
+                              animate={{ scale: 1, opacity: 1 }}
+                              transition={{ duration: 0.5, delay: 0.2 + idx * 0.1 }}
                             >
-                              <Tag>{tag}</Tag>
+                              {topic.icon}
                             </motion.div>
-                          ))}
-                        </TagList>
-                      </Card>
+                          </CardIcon>
+                          <CardTitle>
+                            <motion.span
+                              initial={{ opacity: 0, y: 10 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              transition={{ duration: 0.5, delay: 0.3 + idx * 0.1 }}
+                            >
+                              {topic.title}
+                            </motion.span>
+                          </CardTitle>
+                          <CardDescription>
+                            <motion.span
+                              initial={{ opacity: 0, y: 10 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              transition={{ duration: 0.5, delay: 0.35 + idx * 0.1 }}
+                            >
+                              {topic.description}
+                            </motion.span>
+                          </CardDescription>
+                          <TagList>
+                            {topic.tags.map((tag, tagIdx) => (
+                              <motion.div
+                                key={tag}
+                                custom={tagIdx}
+                                variants={tagVariants}
+                                initial="hidden"
+                                animate="show"
+                              >
+                                <Tag>{tag}</Tag>
+                              </motion.div>
+                            ))}
+                          </TagList>
+                        </Card>
+                      </Link>
                     </div>
                   </motion.div>
                 </SwiperSlide>

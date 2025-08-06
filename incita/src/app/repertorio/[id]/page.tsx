@@ -15,120 +15,7 @@ import { toast } from "react-toastify"
 import { getProfilePictureLink } from "@/../apiCalls/usuario"
 import ConfirmationModal from "@/../components/shared/confirmation-modal"
 
-function CommentCard({
-  comentario,
-  repertorioId,
-  onCommentUpdate,
-  openModal,
-}: {
-  comentario: Comentario
-  repertorioId: string
-  onCommentUpdate: () => void
-  openModal: (options: { title: string; message: string; onConfirm: () => Promise<void> }) => void
-}) {
-  const { userData, isLoggedIn } = useAuth();
-  const [authorProfilePictureLink, setAuthorProfilePictureLink] = useState<string | null>(null)
-  const [isEditing, setIsEditing] = useState(false);
-  const [editedText, setEditedText] = useState(comentario.texto);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const canEdit = isLoggedIn && (userData?.id === comentario.usuario.id);
-  const canDelete = isLoggedIn && (userData?.id === comentario.usuario.id || userData?.cargo === 'admin')
-
-  useEffect(() => {
-    async function fetchData() {
-      const data = await getProfilePictureLink(comentario.usuario?.id)
-      if (data) setAuthorProfilePictureLink(data)
-    }
-
-    if (comentario.usuario) fetchData()
-  }, [comentario.usuario])
-
-  const handleEdit = () => {
-    setIsEditing(true);
-  }
-
-  const handleCancel = () => {
-    setIsEditing(false);
-    setEditedText(comentario.texto);
-  }
-
-  const handleSave = async () => {
-    if (!editedText.trim()) return toast.error("O comentário não pode ficar vazio.");
-    setIsSubmitting(true);
-    try {
-      await updateComentario(repertorioId, comentario.id, { texto: editedText });
-      toast.success("Comentário atualizado!");
-      onCommentUpdate();
-      setIsEditing(false);
-    } catch (e) {
-      console.error("Erro ao atualizar o comentário:", e);
-    } finally {
-      setIsSubmitting(false);
-    }
-  }
-
-  const handleDelete = () => {
-    openModal({
-      title: 'Excluir Comentário',
-      message: 'Tem certeza que deseja excluir este comentário? Esta ação é permanente.',
-      onConfirm: async () => {
-        await deleteComentario(repertorioId, comentario.id);
-        toast.success("Comentário excluído!");
-        onCommentUpdate();
-      }
-    });
-  }
-
-
-  return (
-    <div className="flex items-start space-x-4 py-4">
-      <div className="w-10 h-10 bg-gray-200 rounded-full flex-shrink-0 overflow-hidden">
-        {authorProfilePictureLink ? (
-          <Image width={36} height={36} src={authorProfilePictureLink} alt={`Foto de ${comentario.usuario.nome}`} className="w-full h-full object-cover" />
-        ) : (
-          <User size={24} className="text-gray-500 m-2" />
-        )}
-      </div>
-      <div className="flex-1">
-        <div className="flex justify-between items-start">
-          <div>
-            <p className="font-semibold text-gray-800">{comentario.usuario.nome}</p>
-            {!isEditing ? (
-              <p className="text-gray-600 whitespace-pre-wrap">{comentario.texto}</p>
-            ) : (
-              <div className="w-full mt-2">
-                <textarea
-                  value={editedText}
-                  onChange={(e) => setEditedText(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-teal-600"
-                  rows={3}
-                  disabled={isSubmitting}
-                />
-                <div className="flex space-x-2 mt-2">
-                  <button onClick={handleSave} disabled={isSubmitting} className="px-3 py-1 bg-teal-600 text-white text-sm rounded-md hover:bg-teal-700 disabled:opacity-50">
-                    {isSubmitting ? 'Salvando...' : 'Salvar'}
-                  </button>
-                  <button onClick={handleCancel} className="px-3 py-1 bg-gray-200 text-sm rounded-md hover:bg-gray-300">Cancelar</button>
-                </div>
-              </div>
-            )}
-          </div>
-          <div className="flex space-x-2 text-gray-500">
-            {canEdit && !isEditing && (
-              <button onClick={handleEdit} className="hover:text-teal-600"><Edit size={16} /></button>
-            )}
-
-            {canDelete && !isEditing && (
-              <button onClick={handleDelete} className="hover:text-red-600"><Trash2 size={16} /></button>
-            )}
-
-          </div>
-        </div>
-      </div>
-    </div>
-  )
-}
+// O componente CommentCard não precisa de alterações, pois seu layout flex já é adaptável.
 
 function RepertorioDetalhesContent() {
   const params = useParams()
@@ -214,9 +101,10 @@ function RepertorioDetalhesContent() {
     }
   }
 
-  
+
   useEffect(() => {
     fetchRepertorio()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, type])
 
   const openConfirmationModal = (options: { title: string; message: string; onConfirm: () => Promise<void> }) => {
@@ -250,6 +138,7 @@ function RepertorioDetalhesContent() {
     });
   };
 
+  // ... (outras funções handle, como handleLike, handleToggleFavorito, etc. permanecem as mesmas)
   const handleEditRepertorio = () => {
     if (!repertorio) return;
     router.push(`/repertorio/${id}/editar?type=${repertorio.modelo}`);
@@ -328,7 +217,7 @@ function RepertorioDetalhesContent() {
 
   if (error) {
     return (
-      <main className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <main className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
         <div className="text-center">
           <p className="text-red-600 mb-4">{error}</p>
           <button
@@ -389,15 +278,15 @@ function RepertorioDetalhesContent() {
           <div className="space-y-6">
             <div className="text-center border-b border-[#CA9C60] pb-6">
               <div className="flex items-center justify-center mb-4">
-                <ModeloIcon size={32} className="text-[#CA9C60] mr-3" />
+                <ModeloIcon size={28} className="text-[#CA9C60] mr-3" />
                 <span className="text-lg font-medium text-[#CA9C60]">{getModeloLabel(repertorio.modelo)}</span>
               </div>
-              <h1 className="text-4xl font-bold text-gray-900 mb-2">{repertorio.titulo}</h1>
-              <p className="text-xl text-gray-600">Por {repertorio.autoria}</p>
+              <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">{repertorio.titulo}</h1>
+              <p className="text-lg md:text-xl text-gray-600">Por {repertorio.autoria}</p>
             </div>
             <div>
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">Sinopse</h2>
-              <pre className="text-gray-700 leading-relaxed text-lg">{repertorio.sinopse}</pre>
+              <h2 className="text-xl md:text-2xl font-semibold text-gray-900 mb-4">Sinopse</h2>
+              <pre className="text-gray-700 leading-relaxed text-base md:text-lg whitespace-pre-wrap font-sans">{repertorio.sinopse}</pre>
             </div>
           </div>
         )
@@ -405,20 +294,20 @@ function RepertorioDetalhesContent() {
         return (
           <div className="space-y-6">
             <div className="text-center border-b border-[#CA9C60] pb-6">
-              <div className="flex items-center justify-center mb-4">
-                <ModeloIcon size={32} className="text-[#CA9C60] mr-3" />
+               <div className="flex items-center justify-center mb-4">
+                <ModeloIcon size={28} className="text-[#CA9C60] mr-3" />
                 <span className="text-lg font-medium text-[#CA9C60]">{getModeloLabel(repertorio.modelo)}</span>
               </div>
-              <h1 className="text-4xl font-bold text-gray-900 mb-2">{repertorio.titulo}</h1>
-              <p className="text-xl text-gray-600">Por {repertorio.autoria}</p>
+              <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">{repertorio.titulo}</h1>
+              <p className="text-lg md:text-xl text-gray-600">Por {repertorio.autoria}</p>
             </div>
             <div>
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">Síntese</h2>
-              <pre className="text-gray-700 leading-relaxed text-lg">{repertorio.sintese}</pre>
+              <h2 className="text-xl md:text-2xl font-semibold text-gray-900 mb-4">Síntese</h2>
+              <pre className="text-gray-700 leading-relaxed text-base md:text-lg whitespace-pre-wrap font-sans">{repertorio.sintese}</pre>
             </div>
             <div>
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">Fonte</h2>
-              <p className="text-gray-600 italic">{repertorio.fonte}</p>
+              <h2 className="text-xl md:text-2xl font-semibold text-gray-900 mb-4">Fonte</h2>
+              <p className="text-gray-600 italic text-base md:text-lg">{repertorio.fonte}</p>
             </div>
           </div>
         )
@@ -426,19 +315,19 @@ function RepertorioDetalhesContent() {
         return (
           <div className="space-y-6">
             <div className="text-center border-b border-[#CA9C60] pb-6">
-              <div className="flex items-center justify-center mb-4">
-                <ModeloIcon size={32} className="text-[#CA9C60] mr-3" />
+               <div className="flex items-center justify-center mb-4">
+                <ModeloIcon size={28} className="text-[#CA9C60] mr-3" />
                 <span className="text-lg font-medium text-[#CA9C60]">{getModeloLabel(repertorio.modelo)}</span>
               </div>
-              <h1 className="text-4xl font-bold text-gray-900 mb-2">{repertorio.autoria}</h1>
+              <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">{repertorio.autoria}</h1>
             </div>
-            <div className="bg-gray-50 border-l-4 border-[#CA9C60] p-8 rounded-r-lg">
-              <blockquote className="text-2xl text-gray-800 italic leading-relaxed">&quot;{repertorio.citacao}&quot;</blockquote>
+            <div className="bg-gray-50 border-l-4 border-[#CA9C60] p-6 md:p-8 rounded-r-lg">
+              <blockquote className="text-xl md:text-2xl text-gray-800 italic leading-relaxed">&quot;{repertorio.citacao}&quot;</blockquote>
             </div>
             {repertorio.fonte && (
               <div>
-                <h2 className="text-2xl font-semibold text-gray-900 mb-4">Fonte</h2>
-                <p className="text-gray-600 italic">{repertorio.fonte}</p>
+                <h2 className="text-xl md:text-2xl font-semibold text-gray-900 mb-4">Fonte</h2>
+                <p className="text-gray-600 italic text-base md:text-lg">{repertorio.fonte}</p>
               </div>
             )}
           </div>
@@ -459,109 +348,105 @@ function RepertorioDetalhesContent() {
         confirmText="Excluir"
         isLoading={isModalLoading}
       />
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-6 md:py-8">
         <div className="max-w-4xl mx-auto">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <button
               onClick={() => router.push("/main")}
-              className="flex items-center text-gray-600 hover:text-gray-900 transition-colors"
+              className="flex items-center text-gray-600 hover:text-gray-900 transition-colors self-start"
             >
               <ArrowLeft size={20} className="mr-2" />
               Voltar
             </button>
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center space-x-1 sm:space-x-2 flex-wrap">
               {canEditRepertory && (
                 <button
                   onClick={handleEditRepertorio}
-                  className="flex items-center px-3 py-2 text-gray-600 hover:text-teal-600 transition-colors"
+                  className="flex items-center px-2 py-2 text-sm text-gray-600 hover:text-teal-600 transition-colors"
                   title="Editar Repertório"
                 >
-                  <Edit size={18} className="mr-1" />
-                  Editar
+                  <Edit size={16} className="mr-1" />
+                  <span className="hidden sm:inline">Editar</span>
                 </button>
               )}
               {canDeleteRepertory && (
                 <button
                   onClick={handleDeleteRepertorio}
-                  className="flex items-center px-3 py-2 text-gray-600 hover:text-red-600 transition-colors"
+                  className="flex items-center px-2 py-2 text-sm text-gray-600 hover:text-red-600 transition-colors"
                   title="Excluir Repertório"
                 >
-                  <Trash2 size={18} className="mr-1" />
-                  Excluir
+                  <Trash2 size={16} className="mr-1" />
+                  <span className="hidden sm:inline">Excluir</span>
                 </button>
               )}
               <button
                 onClick={handleShare}
-                className="flex items-center px-3 py-2 text-gray-600 hover:text-[#CA9C60] transition-colors"
+                className="flex items-center px-2 py-2 text-sm text-gray-600 hover:text-[#CA9C60] transition-colors"
                 title="Compartilhar"
               >
-                <Share2 size={18} className="mr-1" />
-                Compartilhar
+                <Share2 size={16} className="mr-1" />
+                <span className="hidden sm:inline">Compartilhar</span>
               </button>
               <button
                 onClick={handleToggleFavorito}
-                className={`flex items-center px-3 py-2 transition-colors ${isFavorito ? "text-blue-600 hover:text-blue-700" : "text-gray-600 hover:text-blue-600"
-                  }`}
+                className={`flex items-center px-2 py-2 text-sm transition-colors ${isFavorito ? "text-blue-600 hover:text-blue-700" : "text-gray-600 hover:text-blue-600"}`}
                 title={isFavorito ? "Remover dos favoritos" : "Adicionar aos favoritos"}
               >
-                <Bookmark size={18} className="mr-1" />
-                {isFavorito ? "Favoritado" : "Favoritar"}
+                <Bookmark size={16} className="mr-1" />
+                <span className="hidden sm:inline">{isFavorito ? "Favorito" : "Favoritar"}</span>
               </button>
               <button
                 onClick={handleLike}
-                className={`flex items-center px-3 py-2 transition-colors ${isLiked ? "text-blue-600 hover:text-blue-700" : "text-gray-600 hover:text-blue-600"
-                  }`}
+                className={`flex items-center px-2 py-2 text-sm transition-colors ${isLiked ? "text-blue-600 hover:text-blue-700" : "text-gray-600 hover:text-blue-600"}`}
                 title="Curtir"
               >
-                <ThumbsUp size={18} className="mr-1" />
+                <ThumbsUp size={16} className="mr-1" />
                 {likes}
               </button>
             </div>
           </div>
           <div className="bg-white rounded-lg shadow-lg border-l-4 border-l-[#CA9C60] overflow-hidden mt-4">
-            <div className="bg-gray-50 px-6 py-4 border-b border-gray-200">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center">
-                  <div className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center mr-3">
-                    {authorProfilePictureLink ?
-                      (
-                        <Image src={authorProfilePictureLink} alt="Foto de perfil do autor" width={40} height={40} className="w-full h-full object-cover rounded-full"/>
-                      ) : 
-                      (
-                        <User size={20} className="text-white" />
-                      )}
-                  </div>
-                  <div>
-                    <p className="font-medium text-gray-900">{repertorio.criador?.nome || 'Usuário desconhecido'}</p>
-                  </div>
+            <div className="bg-gray-50 px-4 sm:px-6 py-4 border-b border-gray-200">
+              <div className="flex items-center">
+                <div className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center mr-3 flex-shrink-0">
+                  {authorProfilePictureLink ?
+                    (
+                      <Image src={authorProfilePictureLink} alt="Foto de perfil do autor" width={40} height={40} className="w-full h-full object-cover rounded-full"/>
+                    ) :
+                    (
+                      <User size={20} className="text-white" />
+                    )}
+                </div>
+                <div>
+                  <p className="font-medium text-gray-900">{repertorio.criador?.nome || 'Usuário desconhecido'}</p>
                 </div>
               </div>
             </div>
 
-            <div className="p-8">
+            <div className="p-4 sm:p-6 md:p-8">
               {renderContent()}
             </div>
           </div>
 
-          <div className="mt-8 bg-white rounded-lg shadow-lg p-6">
-            <h3 className="text-xl font-semibold text-gray-900 mb-4">Comentários ({repertorio.comentarios.length})</h3>
+          <div className="mt-8 bg-white rounded-lg shadow-lg p-4 sm:p-6">
+            <h3 className="text-lg md:text-xl font-semibold text-gray-900 mb-4">Comentários ({repertorio.comentarios.length})</h3>
 
             {isLoggedIn && userData?.cargo !== "aluno" && (
-              <form onSubmit={handleCommentSubmit} className="flex items-start space-x-4 mb-6">
+              <form onSubmit={handleCommentSubmit} className="flex items-start space-x-2 md:space-x-4 mb-6">
                 <textarea
                   value={newComment}
                   onChange={(e) => setNewComment(e.target.value)}
                   placeholder="Adicione um comentário..."
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-teal-600"
-                  rows={4}
+                  rows={3}
                   disabled={isSubmittingComment}
                 />
-                <button type="submit" disabled={isSubmittingComment || !newComment.trim()} className="px-4 py-2 bg-teal-600 text-white rounded-md hover:bg-teal-700 disabled:opacity-50">
+                <button type="submit" disabled={isSubmittingComment || !newComment.trim()} className="p-2 md:px-4 md:py-2 bg-teal-600 text-white rounded-md hover:bg-teal-700 disabled:opacity-50">
                   <Send size={20} />
                 </button>
               </form>
             )}
-            
+
             <div className="space-y-4 divide-y divide-gray-200">
               {repertorio.comentarios && repertorio.comentarios.length > 0 ? (
                 repertorio.comentarios.map((comentario) => (
@@ -585,5 +470,121 @@ export default function RepertorioDetalhesPage() {
     <Suspense fallback={<Loading />}>
       <RepertorioDetalhesContent />
     </Suspense>
+  )
+}
+
+// O componente CommentCard pode ser movido para seu próprio arquivo se preferir
+function CommentCard({
+  comentario,
+  repertorioId,
+  onCommentUpdate,
+  openModal,
+}: {
+  comentario: Comentario
+  repertorioId: string
+  onCommentUpdate: () => void
+  openModal: (options: { title: string; message: string; onConfirm: () => Promise<void> }) => void
+}) {
+  const { userData, isLoggedIn } = useAuth();
+  const [authorProfilePictureLink, setAuthorProfilePictureLink] = useState<string | null>(null)
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedText, setEditedText] = useState(comentario.texto);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const canEdit = isLoggedIn && (userData?.id === comentario.usuario.id);
+  const canDelete = isLoggedIn && (userData?.id === comentario.usuario.id || userData?.cargo === 'admin')
+
+  useEffect(() => {
+    async function fetchData() {
+      const data = await getProfilePictureLink(comentario.usuario?.id)
+      if (data) setAuthorProfilePictureLink(data)
+    }
+
+    if (comentario.usuario) fetchData()
+  }, [comentario.usuario])
+
+  const handleEdit = () => {
+    setIsEditing(true);
+  }
+
+  const handleCancel = () => {
+    setIsEditing(false);
+    setEditedText(comentario.texto);
+  }
+
+  const handleSave = async () => {
+    if (!editedText.trim()) return toast.error("O comentário não pode ficar vazio.");
+    setIsSubmitting(true);
+    try {
+      await updateComentario(repertorioId, comentario.id, { texto: editedText });
+      toast.success("Comentário atualizado!");
+      onCommentUpdate();
+      setIsEditing(false);
+    } catch (e) {
+      console.error("Erro ao atualizar o comentário:", e);
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
+
+  const handleDelete = () => {
+    openModal({
+      title: 'Excluir Comentário',
+      message: 'Tem certeza que deseja excluir este comentário? Esta ação é permanente.',
+      onConfirm: async () => {
+        await deleteComentario(repertorioId, comentario.id);
+        toast.success("Comentário excluído!");
+        onCommentUpdate();
+      }
+    });
+  }
+
+
+  return (
+    <div className="flex items-start space-x-3 md:space-x-4 py-4">
+      <div className="w-9 h-9 md:w-10 md:h-10 bg-gray-200 rounded-full flex-shrink-0 overflow-hidden">
+        {authorProfilePictureLink ? (
+          <Image width={40} height={40} src={authorProfilePictureLink} alt={`Foto de ${comentario.usuario.nome}`} className="w-full h-full object-cover" />
+        ) : (
+          <User size={24} className="text-gray-500 m-2" />
+        )}
+      </div>
+      <div className="flex-1">
+        <div className="flex justify-between items-start">
+          <div>
+            <p className="font-semibold text-gray-800 text-sm md:text-base">{comentario.usuario.nome}</p>
+            {!isEditing ? (
+              <p className="text-gray-600 whitespace-pre-wrap text-sm md:text-base">{comentario.texto}</p>
+            ) : (
+              <div className="w-full mt-2">
+                <textarea
+                  value={editedText}
+                  onChange={(e) => setEditedText(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-teal-600 text-sm"
+                  rows={3}
+                  disabled={isSubmitting}
+                />
+                <div className="flex space-x-2 mt-2">
+                  <button onClick={handleSave} disabled={isSubmitting} className="px-3 py-1 bg-teal-600 text-white text-sm rounded-md hover:bg-teal-700 disabled:opacity-50">
+                    {isSubmitting ? 'Salvando...' : 'Salvar'}
+                  </button>
+                  <button onClick={handleCancel} className="px-3 py-1 bg-gray-200 text-sm rounded-md hover:bg-gray-300">Cancelar</button>
+                </div>
+              </div>
+            )}
+          </div>
+          <div className="flex space-x-2 text-gray-500 flex-shrink-0 ml-2">
+            {canEdit && !isEditing && (
+              <button onClick={handleEdit} className="hover:text-teal-600"><Edit size={16} /></button>
+            )}
+
+            {canDelete && !isEditing && (
+              <button onClick={handleDelete} className="hover:text-red-600"><Trash2 size={16} /></button>
+            )}
+
+          </div>
+        </div>
+      </div>
+    </div>
   )
 }

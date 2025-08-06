@@ -8,7 +8,9 @@ import { ArrowLeft, Save, X } from "lucide-react"
 import { useAuth } from "@/../contexts/auth-context"
 import { useProfile } from "@/../contexts/profile-context"
 import type { UserProfile } from "@/../types/profile"
-import { updateProfilePicture } from "../../../../apiCalls/usuario"
+import { updateProfilePicture, deleteProfilePicture } from "../../../../apiCalls/usuario"
+import { toast } from "react-toastify"
+import { AxiosError } from "axios"
 
 
 export default function EditarPerfilPage() {
@@ -19,6 +21,7 @@ export default function EditarPerfilPage() {
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [foto, setFoto] = useState<File>()
+  const [isDeletingFoto, setIsDeletingFoto] = useState(false)
 
   useEffect(() => {
     if (!isLoggedIn) {
@@ -55,6 +58,29 @@ export default function EditarPerfilPage() {
     
     if(files && files.length > 0){
       setFoto(files[0])
+    }
+  }
+
+  const handleRemoveFoto = async () => {
+    if (!userData) return
+    setIsDeletingFoto(true)
+    try {
+      await deleteProfilePicture(userData.id)
+      setFoto(undefined)
+      toast.success("Foto de perfil removida!")
+    } catch (e) {
+      if (e instanceof AxiosError) {
+        switch (e.response?.status) {
+          case 404:
+            toast.error("Como vou remover uma foto que não existe animal.")
+            break
+          default:
+            toast.error("Erro ao remover foto de perfil.")
+            break
+        }
+      }
+    } finally {
+      setIsDeletingFoto(false)
     }
   }
 
@@ -204,6 +230,15 @@ export default function EditarPerfilPage() {
                       } rounded-md focus:outline-none focus:ring-1 focus:ring-[#CA9C60] file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-[#CA9C60]/10 file:text-[#CA9C60]`}
                     />
                     {errors.avatar && <p className="mt-1 text-sm text-red-500">{errors.avatar}</p>}
+                    <button
+                      type="button"
+                      onClick={handleRemoveFoto}
+                      disabled={isDeletingFoto || isLoading}
+                      className="mt-2 flex items-center px-4 py-2 border border-red-300 rounded-md text-red-700 bg-white hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 disabled:opacity-50"
+                    >
+                      <X size={18} className="mr-2" />
+                      {isDeletingFoto ? "Removendo..." : "Remover foto de perfil"}
+                    </button>
                   </div>
                 </div>
               </div>

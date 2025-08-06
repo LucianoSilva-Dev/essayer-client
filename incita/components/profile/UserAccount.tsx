@@ -108,7 +108,7 @@ export default function Component({
                   <input
                     id="email"
                     value={profile.email}
-                    className="bg-[#e5eff0] border-0 text-[#616060] w-full h-12 pl-2 rounded-md cursor-not-allowed"
+                    className="bg-[#e5eff0] pl-2 border-0 text-[#616060] w-full h-12 pl-2 rounded-md cursor-not-allowed"
                     readOnly
                   />
                 </div>

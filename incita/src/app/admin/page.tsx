@@ -17,6 +17,7 @@ export default function AdminPage() {
   const [activeTab, setActiveTab] = useState<TabType>("educadores")
   const [activeStatus, setActiveStatus] = useState<StatusType>("pendentes")
   const { getRepertoriosPorStatus, getProfessoresPorStatus } = useAdmin()
+  const [isLoading] = useState(false)
 
   if(userData?.cargo !== "admin"){
     redirect('/main')
@@ -42,7 +43,7 @@ export default function AdminPage() {
 
   return (
     <main className="min-h-screen bg-gray-50">
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-2 sm:px-4 py-8">
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-800 mb-2">Painel Administrativo</h1>
@@ -52,14 +53,21 @@ export default function AdminPage() {
         {/* Tabs principais */}
         <div className="bg-white rounded-lg shadow-sm mb-6">
           <div className="border-b border-gray-200">
-            <nav className="flex space-x-8 px-6">
+            <nav
+              className="flex flex-nowrap overflow-x-auto space-x-2 sm:space-x-8 px-2 sm:px-6"
+              role="tablist"
+              aria-label="Painel de navegação principal"
+            >
               <button
                 onClick={() => setActiveTab("educadores")}
-                className={`py-4 px-2 border-b-2 font-medium text-sm ${
+                className={`py-4 px-2 border-b-2 font-medium text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 ${
                   activeTab === "educadores"
                     ? "border-teal-500 text-teal-600"
                     : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
                 }`}
+                role="tab"
+                aria-selected={activeTab === "educadores"}
+                tabIndex={activeTab === "educadores" ? 0 : -1}
               >
                 <div className="flex items-center space-x-2">
                   <Users size={18} />
@@ -68,11 +76,14 @@ export default function AdminPage() {
               </button>
               {/* <button
                 onClick={() => setActiveTab("repertorios")}
-                className={`py-4 px-2 border-b-2 font-medium text-sm ${
+                className={`py-4 px-2 border-b-2 font-medium text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 ${
                   activeTab === "repertorios"
                     ? "border-teal-500 text-teal-600"
                     : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
                 }`}
+                role="tab"
+                aria-selected={activeTab === "repertorios"}
+                tabIndex={activeTab === "repertorios" ? 0 : -1}
               >
                 <div className="flex items-center space-x-2">
                   <FileText size={18} />
@@ -84,12 +95,16 @@ export default function AdminPage() {
 
           {/* Sub-tabs de status */}
           <div className="px-6 py-4">
-            <div className="flex space-x-6">
+            <div className="flex flex-nowrap overflow-x-auto space-x-2 sm:space-x-6">
               <button
                 onClick={() => setActiveStatus("pendentes")}
-                className={`flex items-center space-x-2 px-4 py-2 rounded-lg font-medium text-sm transition-colors ${
+                className={`flex items-center space-x-2 px-4 py-2 rounded-lg font-medium text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-orange-500 ${
                   activeStatus === "pendentes" ? "bg-orange-100 text-orange-700" : "text-gray-600 hover:bg-gray-100"
                 }`}
+                role="tab"
+                aria-selected={activeStatus === "pendentes"}
+                tabIndex={activeStatus === "pendentes" ? 0 : -1}
+                aria-label="Requisições pendentes"
               >
                 <Clock size={16} />
                 <span>Requisições pendentes</span>
@@ -97,9 +112,13 @@ export default function AdminPage() {
               </button>
               <button
                 onClick={() => setActiveStatus("aprovados")}
-                className={`flex items-center space-x-2 px-4 py-2 rounded-lg font-medium text-sm transition-colors ${
+                className={`flex items-center space-x-2 px-4 py-2 rounded-lg font-medium text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-green-500 ${
                   activeStatus === "aprovados" ? "bg-green-100 text-green-700" : "text-gray-600 hover:bg-gray-100"
                 }`}
+                role="tab"
+                aria-selected={activeStatus === "aprovados"}
+                tabIndex={activeStatus === "aprovados" ? 0 : -1}
+                aria-label="Requisições autorizadas"
               >
                 <CheckCircle size={16} />
                 <span>Requisições autorizadas</span>
@@ -107,9 +126,13 @@ export default function AdminPage() {
               </button>
               <button
                 onClick={() => setActiveStatus("recusados")}
-                className={`flex items-center space-x-2 px-4 py-2 rounded-lg font-medium text-sm transition-colors ${
+                className={`flex items-center space-x-2 px-4 py-2 rounded-lg font-medium text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-red-500 ${
                   activeStatus === "recusados" ? "bg-red-100 text-red-700" : "text-gray-600 hover:bg-gray-100"
                 }`}
+                role="tab"
+                aria-selected={activeStatus === "recusados"}
+                tabIndex={activeStatus === "recusados" ? 0 : -1}
+                aria-label="Requisições recusadas"
               >
                 <XCircle size={16} />
                 <span>Requisições recusadas</span>
@@ -121,10 +144,24 @@ export default function AdminPage() {
 
         {/* Conteúdo */}
         <div className="bg-white rounded-lg shadow-sm">
-          {activeTab === "educadores" ? (
+          {isLoading ? (
+            <div className="p-8">
+              <div className="space-y-4">
+                {[...Array(3)].map((_, i) => (
+                  <div key={i} className="animate-pulse flex items-center space-x-4">
+                    <div className="rounded-full bg-gray-200 h-10 w-10" />
+                    <div className="flex-1">
+                      <div className="h-4 bg-gray-200 rounded w-1/2 mb-2" />
+                      <div className="h-3 bg-gray-200 rounded w-1/3" />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ) : activeTab === "educadores" ? (
             <ProfessoresList status={activeStatus == "pendentes" ? undefined : activeStatus} />
           ) : (
-            <RepertoriosList status={activeStatus} />
+            <RepertoriosList status={activeStatus}/>
           )}
         </div>
       </div>

@@ -9,7 +9,6 @@ import { ProfileProvider } from '@/../contexts/profile-context';
 import { AdminProvider } from '@/../contexts/admin-context';
 import { RepertorioProvider } from '@/../contexts/repertorio-context';
 import { CitacaoProvider } from '@/../contexts/citacao-context';
-import { PageTransition } from '@/../components/page-transition';
 
 // Import Swiper styles
 import 'swiper/css';
@@ -40,10 +39,9 @@ export default function RootLayout({
                 <CitacaoProvider>
                   <ToastContainer />
                   <HeaderAzul />
+                  {/* Removido o PageTransition para evitar conflitos de renderização */}
                   <main className="pt-25 relative">
-                    <PageTransition>
                     {children}
-                    </PageTransition>
                   </main>
                 </CitacaoProvider>
               </RepertorioProvider>
