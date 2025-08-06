@@ -52,7 +52,7 @@ export default function ComoFunciona() {
       icone: <PenTool className="w-8 h-8 text-amber-500" />,
       titulo: "Pratique redações",
       descricao:
-        "Pratique suas redações online com temas aleatórios e cronômetro para treinar como se fosse a prova de verdade.",
+        "Pratique suas redações online com temas aleatórios e cronômetro para treinar como se fosse a prova de verdade. (Em Breve)",
       corFundo: "bg-amber-50",
     },
     
