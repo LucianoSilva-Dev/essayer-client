@@ -19,9 +19,9 @@ type FormProfessorProps = {
   setShowPassword: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-export default function FormProfessor({}: FormProfessorProps) {
+export default function FormProfessor({ }: FormProfessorProps) {
   const router = useRouter()
-  const {isLoggedIn} = useAuth()
+  const { isLoggedIn } = useAuth()
   const [showPasswordState, setShowPasswordState] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [formData, setFormData] = useState({
@@ -40,7 +40,7 @@ export default function FormProfessor({}: FormProfessorProps) {
 
   // Redireciona se já estiver logado
   React.useEffect(() => {
-    if(isLoggedIn){
+    if (isLoggedIn) {
       toast.info("Você já está logado.")
       router.replace("/perfil")
     }

@@ -18,12 +18,15 @@ interface RepertorioCardProps {
 export default function RepertorioCard({ repertorio }: RepertorioCardProps) {
   const router = useRouter()
   const { isLoggedIn } = useAuth();
-  
+
   const [likes, setLikes] = useState(repertorio.totalLikes)
   const [isLiked, setIsLiked] = useState(repertorio.likeDoUsuario)
   const [isFavorito, setIsFavorito] = useState(repertorio.favoritadoPeloUsuario);
-  
+
   const [userProfilePictureLink, setUserProfilePictureLink] = useState<string | null>(null)
+
+  const [liking, setLiking] = useState(false)
+  const [favouriting, setFavouriting] = useState(false)
 
   useEffect(() => {
     async function fetchUserProfilePicture() {
@@ -44,7 +47,9 @@ export default function RepertorioCard({ repertorio }: RepertorioCardProps) {
 
   const handleLike = async () => {
     if (!isLoggedIn) return toast.error("Você precisa estar logado para curtir.");
+    if (liking) return
     try {
+      setLiking(true);
       if (isLiked) {
         await removeLike(repertorio.id)
         setLikes((prev) => prev - 1)
@@ -53,22 +58,28 @@ export default function RepertorioCard({ repertorio }: RepertorioCardProps) {
         setLikes((prev) => prev + 1)
       }
       setIsLiked(!isLiked)
+      setLiking(false)
     } catch {
-       toast.error("Erro ao processar sua curtida.");
+      toast.error("Erro ao processar sua curtida.");
+      setLiking(false)
     }
   }
 
   const handleToggleFavorito = async () => {
     if (!isLoggedIn) return toast.error("Você precisa estar logado para favoritar.");
+    if (favouriting) return
     try {
+      setFavouriting(true)
       if (isFavorito) {
         await removeFavorito(repertorio.id);
       } else {
         await addFavorito(repertorio.id);
       }
       setIsFavorito(!isFavorito);
+      setFavouriting(false)
     } catch {
       toast.error("Erro ao salvar nos favoritos.");
+      setFavouriting(false)
     }
   }
 
@@ -91,18 +102,18 @@ export default function RepertorioCard({ repertorio }: RepertorioCardProps) {
 
   const getModeloLabel = (repertorio: Repertorio) => {
     switch (repertorio.modelo) {
-        case "obra":
-            if (repertorio.tipoObra) {
-                const tipo = repertorio.tipoObra.charAt(0).toUpperCase() + repertorio.tipoObra.slice(1);
-                return `Obra (${tipo})`;
-            }
-            return "Obra";
-        case "artigo":
-            return "Artigo";
-        case "citacao":
-            return "Citação";
-        default:
-            return "Repertório";
+      case "obra":
+        if (repertorio.tipoObra) {
+          const tipo = repertorio.tipoObra.charAt(0).toUpperCase() + repertorio.tipoObra.slice(1);
+          return `Obra (${tipo})`;
+        }
+        return "Obra";
+      case "artigo":
+        return "Artigo";
+      case "citacao":
+        return "Citação";
+      default:
+        return "Repertório";
     }
   }
 
@@ -149,7 +160,7 @@ export default function RepertorioCard({ repertorio }: RepertorioCardProps) {
                 &quot;{repertorio.citacao}&quot;
               </p>
             </div>
-            {repertorio.fonte && ( 
+            {repertorio.fonte && (
               <div className="mb-4">
                 <p className="text-xs text-gray-500">
                   <span className="font-medium">Fonte:</span> {repertorio.fonte}
@@ -227,15 +238,15 @@ export default function RepertorioCard({ repertorio }: RepertorioCardProps) {
             #{getModeloLabel(repertorio)}
           </span>
           {repertorio.eixos.map(eixo => (
-             <span
-                key={eixo}
-                className={`inline-block px-2 py-1 rounded-full text-xs font-medium border bg-gray-100 text-gray-800 border-gray-200`}
+            <span
+              key={eixo}
+              className={`inline-block px-2 py-1 rounded-full text-xs font-medium border bg-gray-100 text-gray-800 border-gray-200`}
             >
-                {eixo}
+              {eixo}
             </span>
           ))}
         </div>
-        
+
         {/* Conteúdo específico do modelo - clicável */}
         <div>
           {renderContent()}
@@ -245,9 +256,9 @@ export default function RepertorioCard({ repertorio }: RepertorioCardProps) {
       {/* Recortes */}
       <div className="grid grid-cols-2 place-items-center gap-2 mt-4">
         {repertorio.recortes.slice(0, 4).map(recorte => (
-            <span key={recorte} className="flex-3 w-full py-1 px-3 bg-[#E5EFF0] text-[#075F70] text-xs rounded-full text-center">
-                {recorte}
-            </span>
+          <span key={recorte} className="flex-3 w-full py-1 px-3 bg-[#E5EFF0] text-[#075F70] text-xs rounded-full text-center">
+            {recorte}
+          </span>
         ))}
       </div>
     </div>

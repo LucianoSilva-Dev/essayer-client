@@ -35,7 +35,7 @@ export function AuthButtons() {
         <>
           <span className="text-white text-[20px] font-bold">
             Olá, 
-            {userData?.nome || ""}
+            {` ${userData?.nome || ""}`}
           </span>
           <button
             onClick={() => router.push("/perfil")}

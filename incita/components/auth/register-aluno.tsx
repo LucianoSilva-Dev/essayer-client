@@ -18,10 +18,10 @@ interface FormAlunoProps {
   setShowPassword: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-export default function FormAluno({}: FormAlunoProps) {
+export default function FormAluno({ }: FormAlunoProps) {
   const router = useRouter()
   const [showPassword, setShowPassword] = useState(false)
-  const {isLoggedIn} = useAuth()
+  const { isLoggedIn } = useAuth()
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [formData, setFormData] = useState({
     name: "",
@@ -95,7 +95,7 @@ export default function FormAluno({}: FormAlunoProps) {
       })
 
       router.push(`/register/confirmation?${query}`)
-    } catch { } 
+    } catch { }
 
   }
 

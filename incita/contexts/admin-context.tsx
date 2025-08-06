@@ -53,9 +53,9 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
     try {
       const requisicoes = await getAllRequisicaoProfessor()
 
-      const professores = requisicoes.map(req => {
-        return mountProfessor(req)
-      })
+      const professores = requisicoes
+        .filter(req => req.requisitante)
+        .map(req => mountProfessor(req))
 
       setProfessoresPendentes(professores)
     } catch (e) {

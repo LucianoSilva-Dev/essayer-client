@@ -6,6 +6,7 @@ import Link from "next/link"
 import { EyeOff, Eye } from "lucide-react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { updatePassword } from "../../../apiCalls/usuario"
+import { useAuth } from "../../../contexts/auth-context"
 
 export default function ResetPasswordForm() {
   const [newPassword, setNewPassword] = useState("")
@@ -15,6 +16,8 @@ export default function ResetPasswordForm() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const router = useRouter()
   const searchParams = useSearchParams()
+
+  const {isLoggedIn} = useAuth()
 
   const passwordsMatch = newPassword === confirmPassword && newPassword.length > 0
   const isFormValid = newPassword.length >= 6 && passwordsMatch
@@ -30,7 +33,11 @@ export default function ResetPasswordForm() {
       if(!id) {return}
       await updatePassword(id, {senha: newPassword})
 
-      router.push("/login?message=password-reset-success")
+      if(!isLoggedIn){
+        router.push("/login?message=password-reset-success")
+      } else {
+        router.push("/perfil?message=password-reset-success")
+      }
     } catch { } finally {
       setIsSubmitting(false)
     }
