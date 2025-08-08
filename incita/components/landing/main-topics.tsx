@@ -31,7 +31,7 @@ const mainTopics: Topic[] = [
     description: "Questões ambientais e seus impactos na sociedade, no planeta e nas futuras gerações.",
     icon: <Leaf className="h-6 w-6 text-[#2a9d8f]" />,
     iconBg: "bg-[#e8f1f1]",
-    tags: ["Desmatamento", "Reciclagem", "Mudanças climáticas", "Consumo consciente"],
+    tags: ["Desmatamento", "Queimadas", "Crise Hídrica", "Poluição Marinha", "Preservação ambiental", "Arquitetura Sustentável",  "Urbanização", "Ecoturismo"],
   },
   {
     id: "social1",
@@ -39,7 +39,7 @@ const mainTopics: Topic[] = [
     description: "Desafios sociais como desigualdade, violência, inclusão e discriminação nas relações humanas.",
     icon: <Brain className="h-6 w-6 text-[#2a9d8f]" />,
     iconBg: "bg-[#e8f1f1]",
-    tags: ["Desigualdade social", "Pobreza", "Violência", "Direitos humanos", "Discriminação", "Inclusão social"],
+    tags: ["Racismo", "Abandono", "Violência", "Trabalho infantil", "População de rua", "Acesso à Cultura",  "Moradia Periférica"],
   },
   {
     id: "ciencia1",
@@ -47,7 +47,7 @@ const mainTopics: Topic[] = [
     description: "Temas relacionados à saúde pública, avanços científicos e bem-estar físico e mental.",
     icon: <HeartPulse className="h-6 w-6 text-[#2a9d8f]" />,
     iconBg: "bg-[#e8f1f1]",
-    tags: ["Vacinação", "Obesidade", "SUS", "Saúde mental", "Pandemia", "Ciência e sociedade"],
+    tags: ["Negacionismo", "SUS", "Saúde mental", "Pandemias", "Drogas", "Gravidez na adolescência", "Ética Científica"],
   },
   {
     id: "cultura1",
@@ -55,7 +55,7 @@ const mainTopics: Topic[] = [
     description: "Exploração da diversidade cultural, identidade, expressões artísticas e patrimônio histórico.",
     icon: <Palette className="h-6 w-6 text-[#2a9d8f]" />,
     iconBg: "bg-[#e8f1f1]",
-    tags: ["Identidade cultural", "Folclore", "Cultura popular", "Diversidade étnica", "Obras de arte"],
+    tags: ["Cultura periférica", "Liberdade artística", "Festivais Culturais", "Linguas Indigenas", "Arte na Educação", "Arte nas redes"],
   },
   {
     id: "cidadania1",
@@ -63,7 +63,7 @@ const mainTopics: Topic[] = [
     description: "Participação social, direitos fundamentais, democracia e políticas públicas para o bem-estar coletivo.",
     icon: <Scale className="h-6 w-6 text-[#2a9d8f]" />,
     iconBg: "bg-[#e8f1f1]",
-    tags: ["Saúde pública", "Democracia", "Cultura de paz", "Direitos humanos", "Participação social", "Saneamento Básico"],
+    tags: ["Discurso de Ódio", "Intolerância Religiosa", "Igualdade de gênero", "Criminalização da pobreza", "Minorias", "Direito ao voto", "PCD", "Igualdade de Gênero"],
   },
   {
     id: "educacao1",
@@ -71,7 +71,7 @@ const mainTopics: Topic[] = [
     description: "Discussões sobre acesso à educação, qualidade do ensino, inclusão e papel da escola na sociedade.",
     icon: <BookOpen className="h-6 w-6 text-[#2a9d8f]" />,
     iconBg: "bg-[#e8f1f1]",
-    tags: ["Evasão escolar", "Inclusão", "Educação digital", "Formação docente", "Educação inclusiva"],
+    tags: ["Cotas", "Inclusão Escolar", "Alfabetização Infantil", "Valorização do Professor", "Ensino Técnico", "Desigualdade na Educação"],
   },
   {
     id: "tecnologia1",
@@ -79,7 +79,7 @@ const mainTopics: Topic[] = [
     description: "Impactos da tecnologia na vida cotidiana, educação, trabalho, privacidade e relações sociais.",
     icon: <Cpu className="h-6 w-6 text-[#2a9d8f]" />,
     iconBg: "bg-[#e8f1f1]",
-    tags: ["Redes sociais", "Tecnologia na educação", "Privacidade digital"],
+    tags: ["Privacidade na internet", "Dependência Tecnológica", "Fake News", "Deep Fake", "Cibersegurança", "I.A.", "Inclusão Digital", "Streaming"],
   },
   {
     id: "economia1",
@@ -87,7 +87,7 @@ const mainTopics: Topic[] = [
     description: "Dinâmicas econômicas, consumo, globalização, desigualdade de renda e seus reflexos sociais.",
     icon: <BarChart3 className="h-6 w-6 text-[#2a9d8f]" />,
     iconBg: "bg-[#e8f1f1]",
-    tags: ["Consumo e publicidade", "Pobreza", "Globalização", "Desigualdade de renda"],
+    tags: ["Empreendedorismo", "Desemprego", "Inflação", "Desigualdade de renda", "Justiça Fiscal", "Investimentos", "Economia Criativa", "Distribuição de Renda"],
   },
 ]
 

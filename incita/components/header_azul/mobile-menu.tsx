@@ -1,16 +1,17 @@
 "use client"
 
 import { Menu } from "lucide-react"
-import { Button } from "../landing//ui/button"
+import { Button } from "../landing/ui/button"
 
 interface MobileMenuProps {
   onClick: () => void
 }
 
+
 export function MobileMenu({ onClick }: MobileMenuProps) {
   return (
-    <Button variant="ghost" size="icon" className="md:hidden" onClick={onClick}>
-      <Menu className="h-6 w-6" />
+    <Button variant="ghost" size="lg" className="md:hidden [&_svg:not([class*='size-'])]:size-8" onClick={onClick}>
+      <Menu size={25} className=""/>
       <span className="sr-only">Abrir menu</span>
     </Button>
   )
