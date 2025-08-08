@@ -6,7 +6,6 @@ interface ObraFormData {
   titulo: string
   autoria: string
   sinopse: string
-  fonte: string
   tipoObra: 'livro' | 'filme' | 'música' | 'teatro'
 }
 
@@ -16,11 +15,10 @@ interface ObraFormProps {
   titulo: string
   autoria: string
   sinopse: string
-  fonte: string
   tipoObra: 'livro' | 'filme' | 'música' | 'teatro'
 }
 
-export default function ObraForm({ titulo, autoria, sinopse, fonte, tipoObra, onDataChange, errors }: ObraFormProps) {
+export default function ObraForm({ titulo, autoria, sinopse, tipoObra, onDataChange, errors }: ObraFormProps) {
   
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target
@@ -102,24 +100,6 @@ export default function ObraForm({ titulo, autoria, sinopse, fonte, tipoObra, on
           placeholder="Descreva o enredo, tema principal e relevância da obra"
         />
         {errors.sinopse && <p className="mt-1 text-sm text-red-500">{errors.sinopse}</p>}
-      </div>
-
-      <div className="mb-5">
-        <label htmlFor="fonte" className="block text-sm font-medium text-gray-700 mb-1">
-          Fonte <span className="text-red-500">*</span>
-        </label>
-         <input
-          type="text"
-          id="fonte"
-          name="fonte"
-          value={fonte}
-          onChange={handleChange}
-          className={`w-full px-3 py-2 border ${
-            errors.fonte ? "border-red-500" : "border-gray-300"
-          } rounded-md focus:outline-none focus:ring-1 focus:ring-teal-600`}
-          placeholder="Ex: Editora Companhia das Letras, 2009"
-        />
-        {errors.fonte && <p className="mt-1 text-sm text-red-500">{errors.fonte}</p>} 
       </div>
     </>
   )

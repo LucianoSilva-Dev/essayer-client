@@ -233,7 +233,6 @@ export default function RepertorioForm({ onSubmit, onCancel, initialData, isEdit
         if (!formData.titulo?.trim()) newErrors.titulo = "O título é obrigatório"
         if (!formData.autoria?.trim()) newErrors.autoria = "A autoria é obrigatória"
         if (!formData.sinopse?.trim()) newErrors.sinopse = "A sinopse é obrigatória"
-        if (!formData.fonte?.trim()) newErrors.fonte = "A fonte é obrigatória"
         if (!formData.tipoObra) newErrors.tipoObra = "O tipo da obra é obrigatório"
         break
       case "artigo":
@@ -288,7 +287,6 @@ export default function RepertorioForm({ onSubmit, onCancel, initialData, isEdit
           titulo={formData.titulo || ''}
           autoria={formData.autoria || ''}
           sinopse={formData.sinopse || ''}
-          fonte={formData.fonte || ''}
           tipoObra={formData.tipoObra || 'livro'}
         />
       case "artigo":
