@@ -77,7 +77,7 @@ export default function Component({
                 alt="Foto de perfil"
                 width={320}
                 height={320}
-                className="w-80 h-80 rounded-full object-cover shadow-2xl"
+                className="w-80 h-60 lg:h-80 rounded-full object-cover shadow-2xl"
                 priority
               />
             </div>
@@ -93,7 +93,7 @@ export default function Component({
                     id="nome"
                     placeholder="Nome"
                     value={profile.nome}
-                    className={`bg-[#e5eff0] border-0 text-[#616060] h-12 rounded-md ${!isEditing ? "cursor-not-allowed" : ""}`}
+                    className={`bg-[#e5eff0] pl-2 border-0 text-[#616060] h-12 rounded-md ${!isEditing ? "cursor-not-allowed" : ""}`}
                     readOnly={!isEditing}
                   />
                 </div>
@@ -104,7 +104,7 @@ export default function Component({
                   <input
                     id="curriculo"
                     value={profile.curriculoLattes}
-                    className="bg-[#e5eff0] border-0 text-[#616060] h-12 rounded-md cursor-not-allowed"
+                    className="bg-[#e5eff0] pl-2 border-0 text-[#616060] h-12 rounded-md cursor-not-allowed"
                     readOnly
                   />
                 </div>
@@ -118,7 +118,7 @@ export default function Component({
                   <input
                     id="email"
                     value={profile.email}
-                    className="bg-[#e5eff0] border-0 text-[#616060] h-12 rounded-md cursor-not-allowed"
+                    className="bg-[#e5eff0] pl-2 border-0 text-[#616060] h-12 rounded-md cursor-not-allowed"
                     readOnly
                   />
                 </div>

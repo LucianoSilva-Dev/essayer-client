@@ -76,7 +76,11 @@ export default function ProfessoresList({ status }: ProfessoresListProps) {
                   </h3>
                   <div className="flex items-center space-x-2 text-sm text-gray-500">
                     <Mail size={14} />
-                    <span>{professor.email}</span>
+                          <span>
+                            {professor.email.length > 19
+                              ? professor.email.slice(0, 19) + '...'
+                              : professor.email}
+                          </span>
                   </div>
                 </div>
               </div>

@@ -10,6 +10,7 @@ import { useProfile } from "@/../contexts/profile-context"
 import type { UserProfile } from "@/../types/profile"
 import { updateProfilePicture, deleteProfilePicture } from "../../../../apiCalls/usuario"
 import { toast } from "react-toastify"
+import { AxiosError } from "axios"
 
 
 export default function EditarPerfilPage() {
@@ -67,8 +68,17 @@ export default function EditarPerfilPage() {
       await deleteProfilePicture(userData.id)
       setFoto(undefined)
       toast.success("Foto de perfil removida!")
-    } catch {
-      toast.error("Erro ao remover foto de perfil.")
+    } catch (e) {
+      if (e instanceof AxiosError) {
+        switch (e.response?.status) {
+          case 404:
+            toast.error("Foto de perfil não existe.")
+            break
+          default:
+            toast.error("Erro ao remover foto de perfil.")
+            break
+        }
+      }
     } finally {
       setIsDeletingFoto(false)
     }

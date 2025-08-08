@@ -6,7 +6,7 @@ export default function Footer() {
       <div className="container mx-auto max-w-4xl">
         <h2 className="text-white font-medium font-semibold mb-2 text-[35px]">Comece a explorar nossa plataforma hoje mesmo</h2>
         <p className="text-white mb-6 px-8 text-[25px]">
-          Junte-se a milhares de pesquisadores, estudantes e profissionais que já utilizam nosso acervo.
+          Junte-se a comunidade de pesquisadores, estudantes e profissionais que já utilizam nosso acervo.
         </p>
         <Link
           href="/register"
