@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import { useParams, useRouter } from "next/navigation"
 import { ArrowLeft, User, Calendar, Tag } from "lucide-react"
 import { useAdmin } from "@/../contexts/admin-context"
-import type { RepertorioPendente } from "@/../types/admin"
+import type { RepertorioPendente } from "@/types/admin"
 
 export default function RepertorioDetailPage() {
   const params = useParams()

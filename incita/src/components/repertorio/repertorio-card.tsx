@@ -4,7 +4,7 @@
 import { useEffect, useState } from "react"
 import { ThumbsUp, User, Bookmark, Eye } from "lucide-react"
 import { useRouter } from "next/navigation"
-import type { Repertorio } from "@/../types/repertorio"
+import type { Repertorio } from "@/types/repertorio"
 import { getProfilePictureLink } from "../../apiCalls/usuario"
 import { addLike, removeLike, addFavorito, removeFavorito } from "../../apiCalls/repertorio"
 import { useAuth } from "@/../contexts/auth-context"

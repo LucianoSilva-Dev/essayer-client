@@ -1,7 +1,7 @@
 import { AxiosError, isAxiosError } from "axios";
 import { toast } from "react-toastify";
 import { RepertorioDocument, ObraDocument, ArtigoDocument, CitacaoDocument } from "../../apiCalls/repertorio/types";
-import { Repertorio } from "../../types/repertorio";
+import { Repertorio } from "../types/repertorio";
 
 /**
  * Lida com erros de chamadas do Axios, exibindo notificações ao usuário

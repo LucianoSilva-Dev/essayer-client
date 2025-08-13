@@ -6,7 +6,7 @@ import { RepertorioDocument } from "../../../apiCalls/repertorio/types"
 import { getAllRepertorios } from "../../../apiCalls/repertorio"
 import { isGetAllArtigoDoc, isGetAllCitacaoDoc, isGetAllObraDoc } from "../../../apiCalls/repertorio/helpers"
 import Link from "next/link"
-import type { Repertorio } from "@/../types/repertorio"
+import type { Repertorio } from "@/types/repertorio"
 import RepertorioCard from "../../repertorio/repertorio-card"
 
 const mountFrontendRepertoire = (repertorio: RepertorioDocument): Repertorio | null => {

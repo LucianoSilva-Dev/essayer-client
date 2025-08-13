@@ -7,7 +7,7 @@ import { useProfile } from "@/../contexts/profile-context"
 import AlunoProfileComponent from "@/../components/profile/UserAccount"
 import ProfessorProfileComponent from "@/../components/profile/ProfAccount"
 import Loading from "./loading"
-import { AdminProfile, AlunoProfile, ProfessorProfile } from "../../../types/profile"
+import { AdminProfile, AlunoProfile, ProfessorProfile } from "../../types/profile"
 
 export default function PerfilPage() {
   const router = useRouter()

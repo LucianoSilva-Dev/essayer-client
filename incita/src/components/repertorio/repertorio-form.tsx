@@ -4,7 +4,7 @@
 import type React from "react"
 import { useState, useEffect } from "react"
 import { Save, X, AlertCircle, BookOpen, FileText, Quote } from "lucide-react"
-import type { RepertorioFormData, ModeloRepertorio } from "@/../types/repertorio"
+import type { RepertorioFormData, ModeloRepertorio } from "@/types/repertorio"
 import ObraForm from "../forms/obra-form"
 import ArtigoForm from "../forms/artigo-form"
 import CitacaoForm from "../forms/citacao-form"

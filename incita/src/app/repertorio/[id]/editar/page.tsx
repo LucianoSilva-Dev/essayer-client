@@ -5,7 +5,7 @@ import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { toast } from "react-toastify";
 import RepertorioForm from "@/../components/repertorio/repertorio-form";
 import Loading from "../loading";
-import type { RepertorioFormData } from "@/../types/repertorio";
+import type { RepertorioFormData } from "@/types/repertorio";
 import { getArtigoById, getCitacaoById, getObraById, updateArtigo, updateCitacao, updateObra } from "@/../apiCalls/repertorio";
 import type { RepertorioDocument, UpdateArtigoBody, UpdateCitacaoBody, UpdateObraBody } from "@/../apiCalls/repertorio/types";
 import { mountRepertoire } from "@/app/utils";

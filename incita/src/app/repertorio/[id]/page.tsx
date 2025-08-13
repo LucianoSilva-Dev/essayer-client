@@ -4,7 +4,7 @@ import { useEffect, useState, Suspense } from "react"
 import { useParams, useRouter, useSearchParams } from "next/navigation"
 import Image from "next/image"
 import { ArrowLeft, Bookmark, ThumbsUp, Share2, BookOpen, FileText, Quote, User, Send, Trash2, Edit } from "lucide-react"
-import type { Repertorio } from "@/../types/repertorio"
+import type { Repertorio } from "@/types/repertorio"
 import type { Comentario } from '@/../apiCalls/types'
 import { getArtigoById, getCitacaoById, getObraById, addComentario, addLike, removeLike, addFavorito, removeFavorito, deleteRepertorio, updateComentario, deleteComentario } from "@/../apiCalls/repertorio"
 import type { RepertorioDocument } from "@/../apiCalls/repertorio/types"

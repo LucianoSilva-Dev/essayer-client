@@ -4,8 +4,8 @@ import { useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { redirect, useRouter, useSearchParams } from "next/navigation"
-import { validateUser } from "../../apiCalls/requisicao-usuario"
-import { createUser } from "../../apiCalls/usuario"
+import { validateUser } from "../../../apiCalls/requisicao-usuario"
+import { createUser } from "../../../apiCalls/usuario"
 import { toast } from "react-toastify"
 
 export default function VerifyCodeForm() {

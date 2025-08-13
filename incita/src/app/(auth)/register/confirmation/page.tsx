@@ -1,5 +1,5 @@
 import { Suspense } from "react"
-import CodeForm from "../../../../components/auth/confirmation-code"
+import CodeForm from "../../../../components/auth/login/confirmation-code"
 
 export default function Home() {
   return (
