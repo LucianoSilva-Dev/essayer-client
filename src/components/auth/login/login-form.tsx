@@ -21,7 +21,7 @@ export default function LoginForm() {
   React.useEffect(() => {
     if (isLoggedIn && alreadyLogged) {
       toast.info("Você já está logado.")
-      router.replace("/perfil")
+      router.replace("/profile")
     }
   }, [isLoggedIn, router, alreadyLogged])
 

@@ -39,7 +39,7 @@ export default function FormAluno({ }: FormAlunoProps) {
   React.useEffect(() => {
     if (isLoggedIn) {
       toast.info("Você já está logado.")
-      router.replace("/perfil")
+      router.replace("/profile")
     }
   }, [isLoggedIn, router])
 

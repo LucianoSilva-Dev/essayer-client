@@ -22,7 +22,7 @@ export default function ProfilePage() {
   }, [isLoggedIn, isAuthLoading, router])
 
   const handleEdit = () => {
-    router.push("/perfil/editar")
+    router.push("/profile/editar")
   }
 
   const handleAvatarUpload = async (file: File) => {

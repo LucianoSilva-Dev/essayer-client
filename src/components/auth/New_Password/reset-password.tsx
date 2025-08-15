@@ -36,7 +36,7 @@ export default function ResetPasswordForm() {
       if(!isLoggedIn){
         router.push("/login?message=password-reset-success")
       } else {
-        router.push("/perfil?message=password-reset-success")
+        router.push("/profile?message=password-reset-success")
       }
     } catch { } finally {
       setIsSubmitting(false)

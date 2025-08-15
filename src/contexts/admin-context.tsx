@@ -5,7 +5,6 @@ import { createContext, useContext, useState, useEffect, useCallback } from "rea
 import type { RepertorioPendente, ProfessorPendente } from "../types/admin"
 import { getAllRequisicaoProfessor, updateStatus } from "../apiCalls/requisicao-professor"
 import { getRequisicaoProfessorResponse } from "../apiCalls/requisicao-professor/types"
-import { useAuth } from "./auth-context"
 
 const mountProfessor = (requisicao: getRequisicaoProfessorResponse): ProfessorPendente => {
   if (requisicao.requisitante) {
@@ -43,7 +42,6 @@ interface AdminContextType {
 const AdminContext = createContext<AdminContextType | undefined>(undefined)
 
 export function AdminProvider({ children }: { children: React.ReactNode }) {
-  const {isLoggedIn, userData} = useAuth()
   const [repertoriosPendentes, setRepertoriosPendentes] = useState<RepertorioPendente[]>([])
   const [professoresPendentes, setProfessoresPendentes] = useState<ProfessorPendente[]>([])
 
@@ -63,66 +61,10 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
 
   // Carregar dados iniciais
   useEffect(() => {
-    // Dados de exemplo para repertórios pendentes
-    const repertoriosExemplo: RepertorioPendente[] = [
-      {
-        id: "rep1",
-        titulo: "Jean Jacques Rousseau",
-        conteudo:
-          "Lorem ipsum dolor sit amet. Qui iure iusto et dignissimos fugiat in vel sit qui reprehenderit omnis sed Aut in qui fugiat in vel dignissimos iusto consequatur expedita vel sit amet. Lorem ipsum dolor sit amet. Qui iure iusto et dignissimos fugiat in vel sit qui reprehenderit omnis sed Aut in qui fugiat in vel dignissimos iusto consequatur expedita vel sit amet.",
-        fonte: "Lorem ipsum omnis",
-        categoria: "Filosofia",
-        tags: ["filosofia", "contrato social"],
-        autorId: "prof1",
-        autorNome: "Luciano do Nascimento Silva",
-        autorEmail: "luciano@email.com",
-        dataSubmissao: new Date().toISOString(),
-        status: {
-          id: "status1",
-          status: "pendente",
-          dataSubmissao: new Date().toISOString(),
-        },
-      },
-      {
-        id: "rep2",
-        titulo: "Perfeição",
-        conteudo:
-          "Lorem ipsum dolor sit amet. Qui iure iusto et dignissimos fugiat in vel sit qui reprehenderit omnis sed Aut in qui fugiat in vel dignissimos iusto consequatur expedita vel sit amet.",
-        fonte: "Obra clássica",
-        categoria: "Literatura",
-        tags: ["literatura", "clássico"],
-        autorId: "prof2",
-        autorNome: "Maria Silva",
-        autorEmail: "maria@email.com",
-        dataSubmissao: new Date().toISOString(),
-        status: {
-          id: "status2",
-          status: "aprovado",
-          dataSubmissao: new Date().toISOString(),
-          dataRevisao: new Date().toISOString(),
-        },
-      },
-      {
-        id: "rep3",
-        titulo: "O Oriente contra Ocidente",
-        conteudo:
-          "Lorem ipsum dolor sit amet. Qui iure iusto et dignissimos fugiat in vel sit qui reprehenderit omnis sed Aut in qui fugiat in vel dignissimos iusto consequatur expedita vel sit amet.",
-        fonte: "Por Obra de Carvalho",
-        categoria: "História",
-        tags: ["história", "oriente", "ocidente"],
-        autorId: "prof3",
-        autorNome: "João Santos",
-        autorEmail: "joao@email.com",
-        dataSubmissao: new Date().toISOString(),
-        status: {
-          id: "status3",
-          status: "recusado",
-          dataSubmissao: new Date().toISOString(),
-          dataRevisao: new Date().toISOString(),
-          feedbackAdmin: "Conteúdo precisa de mais referências acadêmicas.",
-        },
-      },
-    ]
+    
+  })
+
+
 
   const aprovarRepertorio = (id: string, feedback?: string) => {
     setRepertoriosPendentes((prev) =>

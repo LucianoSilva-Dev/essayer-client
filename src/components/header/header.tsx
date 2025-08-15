@@ -82,7 +82,7 @@ export function HeaderAzul() {
                 {isLoggedIn ? (
                   <>
                     <button
-                      onClick={() => router.push("/perfil")}
+                      onClick={() => router.push("/profile")}
                       className="flex items-center focus:outline-none"
                       title="Ver perfil"
                       type="button"

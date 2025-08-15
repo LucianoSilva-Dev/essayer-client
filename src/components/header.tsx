@@ -40,8 +40,8 @@ export default function Header() {
           {isLoggedIn ? (
           <>
             <Link
-              href="/perfil"
-              className={`flex items-center ${isActive("/perfil") ? "text-white" : "text-gray-300 hover:text-white transition-colors"}`}>   
+              href="/profile"
+              className={`flex items-center ${isActive("/profile") ? "text-white" : "text-gray-300 hover:text-white transition-colors"}`}>   
               </Link>
             <button
               onClick={handleLogout}

@@ -129,7 +129,7 @@ export default function EditarPerfilPage() {
         await updateProfilePicture(userData.id, foto)
       }
 
-      router.push("/perfil")
+      router.push("/profile")
     } catch (error) {
       console.error("Erro ao atualizar perfil:", error)
       setErrors({

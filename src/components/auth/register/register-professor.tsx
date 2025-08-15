@@ -42,7 +42,7 @@ export default function FormProfessor({ }: FormProfessorProps) {
   React.useEffect(() => {
     if (isLoggedIn) {
       toast.info("Você já está logado.")
-      router.replace("/perfil")
+      router.replace("/profile")
     }
   }, [isLoggedIn, router])
 

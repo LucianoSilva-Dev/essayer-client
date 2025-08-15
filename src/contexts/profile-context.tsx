@@ -2,7 +2,7 @@
 
 import type React from "react"
 import { createContext, useContext, useState, useEffect, useCallback } from "react"
-import type { UserProfile, AlunoProfile } from "@/types/profile"
+import type { UserProfile } from "@/types/profile"
 import { useAuth } from "./auth-context"
 import { getUserById, updateUser } from "../apiCalls/usuario"
 
@@ -50,39 +50,10 @@ export function ProfileProvider({ children }: { children: React.ReactNode }) {
       const storedProfile = localStorage.getItem("userProfile")
       if (storedProfile) {
         setProfile(JSON.parse(storedProfile))
-      } else {
-        // Criar perfil padrão (exemplo)
-        const defaultProfile: AlunoProfile = {
-          id: "1",
-          tipo: "aluno",
-          nome: "João",
-          sobrenome: "Silva",
-          email: "joao.silva@email.com",
-          escola: "Colégio Exemplo",
-          serie: "3medio",
-          nivel: "intermediario",
-          bio: "Estudante dedicado, apaixonado por literatura e redação. Sempre buscando melhorar minhas habilidades de escrita.",
-          dataCadastro: "2024-01-15",
-          ultimoAcesso: new Date().toISOString(),
-          estatisticas: {
-            repertoriosCriados: 12,
-            repertoriosFavoritos: 25,
-            citacoesCriadas: 8,
-            pontuacao: 1250,
-            redacoesEscritas: 15,
-          },
-          conquistas: ["Primeiro Repertório", "10 Repertórios", "Escritor Dedicado"],
-          metasMensais: {
-            repertorios: 5,
-            redacoes: 3,
-          },
-        }
-        if (userData) {
-          getUser(userData?.id)
-        }
       }
-    } else {
-      setProfile(null)
+      if (userData) {
+        getUser(userData?.id)
+      }
     }
   }, [isLoggedIn])
 
