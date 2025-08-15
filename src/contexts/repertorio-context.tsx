@@ -2,14 +2,13 @@
 "use client"
 
 import type React from "react"
-import { createContext, useContext, useState } from "react"
+import { createContext, useContext, useState, useCallback } from "react"
 import type { Repertorio, RepertorioFormData } from "@/types/repertorio"
 import { RepertorioDocument } from "../apiCalls/repertorio/types"
 import { isGetAllArtigoDoc, isGetAllCitacaoDoc, isGetAllObraDoc } from "../apiCalls/repertorio/helpers"
 import { addFavorito, getAllRepertorios, removeFavorito } from "../apiCalls/repertorio"
 import { useAuth } from "./auth-context"
 
-// ... (a função mountRepertoire continua a mesma)
 const mountRepertoire = (repertorio: RepertorioDocument): Repertorio | null => {
   if (isGetAllCitacaoDoc(repertorio)) {
     return {
@@ -105,13 +104,12 @@ export function RepertorioProvider({ children }: { children: React.ReactNode }) 
   const [totalPages, setTotalPages] = useState(1)
   const [totalRepertorios, setTotalRepertorios] = useState(0)
   const [isLoadingRepertorios, setIsLoadingRepertorios] = useState(true)
-  const [currentLimit, setCurrentLimit] = useState(15);
 
-  const setPage = (page: number) => {
+  const setPage = useCallback((page: number) => {
     setCurrentPage(page);
-  }
+  }, []);
 
-  const construirQueryString = (filters: any) => {
+  const construirQueryString = useCallback((filters: any) => {
     const params = new URLSearchParams();
     if (filters.search) params.append('conteudo', filters.search);
     if (filters.eixos && filters.eixos.length > 0) filters.eixos.forEach((e: string) => params.append('topicos', e));
@@ -121,12 +119,11 @@ export function RepertorioProvider({ children }: { children: React.ReactNode }) 
     if (filters.likedByCurrentUser !== undefined) params.append('likeDoUsuario', String(filters.likedByCurrentUser));
     if (filters.orderBy) params.append('ordenarPor', filters.orderBy);
     params.append('offset', String(filters.offset ?? 0));
-    params.append('limit', String(filters.limit ?? currentLimit));
+    params.append('limit', String(filters.limit ?? 15));
     return params.toString();
-  };
+  }, []);
 
-  // REMOVIDO o useCallback daqui para evitar "stale closures"
-  const pesquisarRepertorios = async (filters: any) => {
+  const pesquisarRepertorios = useCallback(async (filters: any) => {
     setIsLoadingRepertorios(true);
     try {
       const queryString = construirQueryString(filters);
@@ -139,8 +136,8 @@ export function RepertorioProvider({ children }: { children: React.ReactNode }) 
 
         setRepertorios(mappedRepertorios);
         setTotalRepertorios(response.paginacao.totalDocuments);
-        setTotalPages(Math.ceil(response.paginacao.totalDocuments / response.paginacao.limit));
-        setCurrentLimit(response.paginacao.limit);
+        const limit = filters.limit ?? 15;
+        setTotalPages(Math.ceil(response.paginacao.totalDocuments / limit));
 
         if (isLoggedIn) {
           setFavoritos(mappedRepertorios.filter(r => r.favoritadoPeloUsuario).map(r => r.id));
@@ -153,14 +150,20 @@ export function RepertorioProvider({ children }: { children: React.ReactNode }) 
           pagination: response.paginacao
         };
       }
+      setRepertorios([]);
+      setTotalRepertorios(0);
+      setTotalPages(1);
       return { documents: [], pagination: { offset: 0, limit: 0, nextPageUrl: null, previousPageUrl: null, totalDocuments: 0 } };
     } catch (e) {
       console.error('Context: Erro ao buscar repertórios:', e);
+      setRepertorios([]);
+      setTotalRepertorios(0);
+      setTotalPages(1);
       return { documents: [], pagination: { offset: 0, limit: 0, nextPageUrl: null, previousPageUrl: null, totalDocuments: 0 } };
     } finally {
       setIsLoadingRepertorios(false);
     }
-  };
+  }, [construirQueryString, isLoggedIn]);
 
   const toggleFavorito = async (id: string) => {
     if (!isLoggedIn) {

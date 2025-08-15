@@ -1,7 +1,8 @@
+// src/components/main/MainPageContent.tsx
 'use client'
 
 import type React from "react"
-import { useState, useEffect, useMemo, useCallback } from "react"
+import { useState, useEffect, useMemo, useRef } from "react"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import { useRepertorio } from "@/./contexts/repertorio-context"
 import RepertorioFilters from "./filters/RepertorioFilters"
@@ -11,7 +12,6 @@ import { EixosTematicos } from "@/constants/eixos"
 export default function MainPage() {
   const { repertorios, pesquisarRepertorios, totalPages, currentPage, setPage, isLoadingRepertorios, totalRepertorios } = useRepertorio()
 
-  // 1. Centralização de todo o estado dos filtros
   const [filters, setFilters] = useState({
     termoBusca: "",
     eixosAtivos: [] as string[],
@@ -20,35 +20,22 @@ export default function MainPage() {
     ordenarPor: 'Newest' as 'MaxLikes' | 'MinLikes' | 'Newest' | 'Oldest',
   });
   const [tipoVisualizacao, setTipoVisualizacao] = useState<"todos" | "salvos">("todos");
+  
+  const isInitialMount = useRef(true);
 
-  // 2. Lógica de busca de dados com debounce
+  // Efeito para resetar a página quando qualquer filtro (exceto a própria página) mudar.
+  useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+    } else {
+      setPage(0);
+    }
+  }, [filters, tipoVisualizacao, setPage]);
+
+  // Efeito unificado que busca os dados, com debounce para evitar chamadas excessivas.
   useEffect(() => {
     const handler = setTimeout(() => {
-      const fetchRepertorios = async () => {
-        setPage(0); // Reseta a página para a primeira ao aplicar novos filtros
-        await pesquisarRepertorios({
-          search: filters.termoBusca,
-          eixos: filters.eixosAtivos,
-          subtopicos: filters.recorteAtivo ? [filters.recorteAtivo] : [],
-          modelo: filters.modeloAtivo ? [filters.modeloAtivo] : [],
-          orderBy: filters.ordenarPor,
-          offset: 0, // Inicia a busca sempre da primeira página
-          limit: 15,
-          favoritedByCurrentUser: tipoVisualizacao === "salvos"
-        });
-      }
-      fetchRepertorios();
-    }, 500); // Aguarda 500ms após a última mudança nos filtros
-
-    return () => {
-      clearTimeout(handler);
-    };
-  }, [filters, tipoVisualizacao, pesquisarRepertorios, setPage]);
-
-  // Efeito separado para buscar dados quando a página muda (sem debounce)
-  useEffect(() => {
-    const fetchRepertoriosPaginados = async () => {
-      await pesquisarRepertorios({
+      pesquisarRepertorios({
         search: filters.termoBusca,
         eixos: filters.eixosAtivos,
         subtopicos: filters.recorteAtivo ? [filters.recorteAtivo] : [],
@@ -58,12 +45,12 @@ export default function MainPage() {
         limit: 15,
         favoritedByCurrentUser: tipoVisualizacao === "salvos"
       });
-    }
-    // Evita a busca inicial duplicada no primeiro carregamento
-    if (currentPage > 0) {
-      fetchRepertoriosPaginados();
-    }
-  }, [currentPage, pesquisarRepertorios]);
+    }, 500); // Debounce de 500ms
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [filters, tipoVisualizacao, currentPage, pesquisarRepertorios]);
 
 
   const recorteOptions = useMemo(() => {
