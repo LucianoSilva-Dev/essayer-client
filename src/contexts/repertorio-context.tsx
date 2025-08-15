@@ -1,14 +1,15 @@
-// GeminiContext/Frontend/contexts/repertorio-context.tsx
+// src/contexts/repertorio-context.tsx
 "use client"
 
 import type React from "react"
-import { createContext, useContext, useState, useCallback } from "react"
+import { createContext, useContext, useState } from "react"
 import type { Repertorio, RepertorioFormData } from "@/types/repertorio"
 import { RepertorioDocument } from "../apiCalls/repertorio/types"
 import { isGetAllArtigoDoc, isGetAllCitacaoDoc, isGetAllObraDoc } from "../apiCalls/repertorio/helpers"
 import { addFavorito, getAllRepertorios, removeFavorito } from "../apiCalls/repertorio"
 import { useAuth } from "./auth-context"
 
+// ... (a função mountRepertoire continua a mesma)
 const mountRepertoire = (repertorio: RepertorioDocument): Repertorio | null => {
   if (isGetAllCitacaoDoc(repertorio)) {
     return {
@@ -36,7 +37,7 @@ const mountRepertoire = (repertorio: RepertorioDocument): Repertorio | null => {
       autoria: repertorio.autor,
       sinopse: repertorio.sinopse,
       eixos: repertorio.topicos,
-      tipoObra: repertorio.tipoObra, // ADICIONADO
+      tipoObra: repertorio.tipoObra,
       recortes: repertorio.subtopicos,
       isPublico: true,
       totalLikes: repertorio.totalLikes,
@@ -66,9 +67,9 @@ const mountRepertoire = (repertorio: RepertorioDocument): Repertorio | null => {
       comentarios: repertorio.comentarios ?? []
     }
   }
-
   return null
 }
+
 
 interface RepertorioContextType {
   repertorios: Repertorio[]
@@ -85,16 +86,7 @@ interface RepertorioContextType {
     orderBy?: 'MaxLikes' | 'MinLikes' | 'Newest' | 'Oldest',
     offset?: number,
     limit?: number
-  }) => Promise<{
-    documents: Repertorio[],
-    pagination: {
-      offset: number,
-      limit: number,
-      nextPageUrl: string | null,
-      previousPageUrl: string | null,
-      totalDocuments: number
-    }
-  }>
+  }) => Promise<any>
   buscarPorId: (id: string) => Repertorio | undefined
   currentPage: number
   totalPages: number
@@ -119,43 +111,22 @@ export function RepertorioProvider({ children }: { children: React.ReactNode }) 
     setCurrentPage(page);
   }
 
-  const construirQueryString = (filters: {
-    search?: string,
-    eixos?: string[],
-    subtopicos?: string[],
-    modelo?: string[],
-    favoritedByCurrentUser?: boolean,
-    likedByCurrentUser?: boolean,
-    orderBy?: 'MaxLikes' | 'MinLikes' | 'Newest' | 'Oldest',
-    offset?: number,
-    limit?: number
-  }) => {
+  const construirQueryString = (filters: any) => {
     const params = new URLSearchParams();
     if (filters.search) params.append('conteudo', filters.search);
-    if (filters.eixos && filters.eixos.length > 0) filters.eixos.forEach(e => params.append('topicos', e));
-    if (filters.subtopicos && filters.subtopicos.length > 0) filters.subtopicos.forEach(s => params.append('subtopicos', s));
-    if (filters.modelo && filters.modelo.length > 0) filters.modelo.forEach(m => params.append('tipoRepertorio', m));
-
+    if (filters.eixos && filters.eixos.length > 0) filters.eixos.forEach((e: string) => params.append('topicos', e));
+    if (filters.subtopicos && filters.subtopicos.length > 0) filters.subtopicos.forEach((s: string) => params.append('subtopicos', s));
+    if (filters.modelo && filters.modelo.length > 0) filters.modelo.forEach((m: string) => params.append('tipoRepertorio', m));
     if (filters.favoritedByCurrentUser !== undefined) params.append('favoritadoPeloUsuario', String(filters.favoritedByCurrentUser));
     if (filters.likedByCurrentUser !== undefined) params.append('likeDoUsuario', String(filters.likedByCurrentUser));
     if (filters.orderBy) params.append('ordenarPor', filters.orderBy);
-
     params.append('offset', String(filters.offset ?? 0));
     params.append('limit', String(filters.limit ?? currentLimit));
     return params.toString();
   };
 
-  const pesquisarRepertorios = useCallback(async (filters: {
-    search?: string,
-    eixos?: string[],
-    subtopicos?: string[],
-    modelo?: string[],
-    favoritedByCurrentUser?: boolean,
-    likedByCurrentUser?: boolean,
-    orderBy?: 'MaxLikes' | 'MinLikes' | 'Newest' | 'Oldest',
-    offset?: number,
-    limit?: number
-  }) => {
+  // REMOVIDO o useCallback daqui para evitar "stale closures"
+  const pesquisarRepertorios = async (filters: any) => {
     setIsLoadingRepertorios(true);
     try {
       const queryString = construirQueryString(filters);
@@ -189,7 +160,7 @@ export function RepertorioProvider({ children }: { children: React.ReactNode }) 
     } finally {
       setIsLoadingRepertorios(false);
     }
-  }, [isLoggedIn, currentLimit]);
+  };
 
   const toggleFavorito = async (id: string) => {
     if (!isLoggedIn) {
