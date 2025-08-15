@@ -6,7 +6,6 @@ import type { RepertorioPendente, ProfessorPendente } from "../types/admin"
 import { getAllRequisicaoProfessor, updateStatus } from "../apiCalls/requisicao-professor"
 import { getRequisicaoProfessorResponse } from "../apiCalls/requisicao-professor/types"
 import { useAuth } from "./auth-context"
-import { redirect } from "next/navigation"
 
 const mountProfessor = (requisicao: getRequisicaoProfessorResponse): ProfessorPendente => {
   if (requisicao.requisitante) {
@@ -47,7 +46,6 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
   const {isLoggedIn, userData} = useAuth()
   const [repertoriosPendentes, setRepertoriosPendentes] = useState<RepertorioPendente[]>([])
   const [professoresPendentes, setProfessoresPendentes] = useState<ProfessorPendente[]>([])
-  const [isLoaded, setIsLoaded] = useState(false)
 
   const getProfessores = useCallback(async () => {
     try {
@@ -125,34 +123,6 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
         },
       },
     ]
-
-    // Dados de exemplo para professores pendentes
-    const professoresExemplo: ProfessorPendente[] = [
-      {
-        id: "prof1",
-        nome: "João",
-        email: "joao.silva@email.com",
-        curriculoLattes: "http://lattes.cnpq.br/1234567890",
-        dataSubmissao: new Date().toISOString(),
-        status: undefined,
-      },
-      {
-        id: "prof2",
-        nome: "Maria",
-        email: "maria.santos@email.com",
-        curriculoLattes: "http://lattes.cnpq.br/0987654321",
-        dataSubmissao: new Date().toISOString(),
-        status: "aprovado",
-      },
-    ]
-
-    setRepertoriosPendentes(repertoriosExemplo) 
-    if(isLoggedIn && userData?.cargo === "admin"){
-      getProfessores()
-    }
-    
-    setIsLoaded(true)
-  }, [isLoggedIn])
 
   const aprovarRepertorio = (id: string, feedback?: string) => {
     setRepertoriosPendentes((prev) =>

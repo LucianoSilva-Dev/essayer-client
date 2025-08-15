@@ -2,14 +2,14 @@
 
 import { useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { useAuth } from "@/../contexts/auth-context"
-import { useProfile } from "@/../contexts/profile-context"
-import AlunoProfileComponent from "@/../components/profile/UserAccount"
-import ProfessorProfileComponent from "@/../components/profile/ProfAccount"
+import { useAuth } from "@/./contexts/auth-context"
+import { useProfile } from "@/./contexts/profile-context"
+import AlunoProfileComponent from "@/./components/profile/UserAccount"
+import ProfessorProfileComponent from "@/./components/profile/ProfAccount"
 import Loading from "./loading"
-import { AdminProfile, AlunoProfile, ProfessorProfile } from "../../types/profile"
+import { AdminProfile, AlunoProfile, ProfessorProfile } from "@/types/profile"
 
-export default function PerfilPage() {
+export default function ProfilePage() {
   const router = useRouter()
   const { isLoggedIn, isLoading: isAuthLoading } = useAuth()
   const { profile, uploadAvatar, isLoading: isProfileLoading } = useProfile()

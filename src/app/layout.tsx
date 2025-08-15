@@ -4,17 +4,17 @@ import './swiper-hover.css'
 import { Inter } from 'next/font/google';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { AuthProvider } from '@/../contexts/auth-context';
-import { ProfileProvider } from '@/../contexts/profile-context';
-import { AdminProvider } from '@/../contexts/admin-context';
-import { RepertorioProvider } from '@/../contexts/repertorio-context';
-import { CitacaoProvider } from '@/../contexts/citacao-context';
+import { AuthProvider } from '@/./contexts/auth-context';
+import { ProfileProvider } from '@/./contexts/profile-context';
+import { AdminProvider } from '@/./contexts/admin-context';
+import { RepertorioProvider } from '@/./contexts/repertorio-context';
+import { CitacaoProvider } from '@/./contexts/citacao-context';
 
 // Import Swiper styles
 import 'swiper/css';
 import 'swiper/css/pagination'; // Para os pontinhos de navegação
 import 'swiper/css/navigation'; // Para as setas de navegação (opcional)
-import { HeaderAzul } from '../../components/header_azul/header';
+import { HeaderAzul } from '@/components/header/header';
 
 const inter = Inter({ subsets: ['latin'] });
 

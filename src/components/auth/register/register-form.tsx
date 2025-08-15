@@ -3,7 +3,7 @@
 import { /*useEffect,*/ useState } from "react"
 import Image from "next/image"
 import FormAluno from "./register-aluno"
-import FormProfessor from "../register-professor"
+import FormProfessor from "./register-professor"
 import type { UserType, UserRegistration } from "@/types/user"
 import router from "next/router"
 // import { toast } from "react-toastify"

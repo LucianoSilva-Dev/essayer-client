@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation"
 import RepertorioForm from "../repertorio-form"
 import { useAuth } from "@/contexts/auth-context" // 1. Importar o useAuth
 import { toast } from "react-toastify"
-import Loading from "./loading" // Pode criar um componente de loading simples se não tiver
+import Loading from "../../loading" // Pode criar um componente de loading simples se não tiver
 
 export default function AdicionarRepertorioPage() {
   const router = useRouter()

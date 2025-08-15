@@ -1,4 +1,4 @@
-import { useAuth } from '@/../contexts/auth-context'
+import { useAuth } from '@/./contexts/auth-context'
 import { useRouter, usePathname } from 'next/navigation'
 import Image from "next/image"
 import Link from "next/link"

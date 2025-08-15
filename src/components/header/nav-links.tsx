@@ -1,5 +1,5 @@
 //Precisa ser adicionada a fonte poppins
-import { useAuth } from "@/../contexts/auth-context" // 1. Importar o hook
+import { useAuth } from "@/./contexts/auth-context" // 1. Importar o hook
 import { NavItem } from "./nav-item"
 
 export function NavLinks() {

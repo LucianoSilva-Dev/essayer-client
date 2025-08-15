@@ -5,7 +5,7 @@ import Link from "next/link"
 import { EyeOff, Eye } from "lucide-react"
 import { toast } from "react-toastify"
 import { useRouter, useSearchParams } from "next/navigation"
-import { useAuth } from '@/../contexts/auth-context'
+import { useAuth } from '@/./contexts/auth-context'
 import { login as apiLogin } from '../../../apiCalls/auth/index'
 import { createProfessorRequest } from "../../../apiCalls/usuario"
 

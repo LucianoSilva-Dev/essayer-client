@@ -1,4 +1,3 @@
-import { API_BASE_URL } from '@/app/constants';
 import apiClient from '../api-client';
 import { GenericSuccessResponse } from '../types';
 import type {

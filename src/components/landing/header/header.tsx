@@ -4,7 +4,7 @@ import { Logo } from "./logo"
 import { NavLinks } from "./nav-links"
 import { AuthButtons } from "./auth-buttons"
 import { MobileMenu } from "./mobile-menu"
-import { useAuth } from '@/../contexts/auth-context'
+import { useAuth } from '@/./contexts/auth-context'
 import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import Link from "next/link"

@@ -79,7 +79,7 @@ export interface CreateCitacaoBody {
   fonte?: string;
 }
 
-export interface UpdateCitacaoBody extends Partial<CreateCitacaoBody> {}
+export type UpdateCitacaoBody = Partial<CreateCitacaoBody>;
 
 export interface CreateArtigoBody {
   titulo: string;
@@ -90,7 +90,7 @@ export interface CreateArtigoBody {
   topicos: string[];
 }
 
-export interface UpdateArtigoBody extends Partial<CreateArtigoBody> {}
+export type UpdateArtigoBody = Partial<CreateArtigoBody>;
 
 export interface CreateObraBody {
   titulo: string;
@@ -101,4 +101,4 @@ export interface CreateObraBody {
   topicos: string[];
 }
 
-export interface UpdateObraBody extends Partial<CreateObraBody> {}
+export type UpdateObraBody = Partial<CreateObraBody>;

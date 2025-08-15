@@ -1,6 +1,6 @@
 import { AxiosError, isAxiosError } from "axios";
 import { toast } from "react-toastify";
-import { RepertorioDocument, ObraDocument, ArtigoDocument, CitacaoDocument } from "../../apiCalls/repertorio/types";
+import { RepertorioDocument, ObraDocument, ArtigoDocument, CitacaoDocument } from "@/apiCalls/repertorio/types";
 import { Repertorio } from "../types/repertorio";
 
 /**

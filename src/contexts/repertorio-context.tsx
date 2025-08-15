@@ -2,9 +2,9 @@
 "use client"
 
 import type React from "react"
-import { createContext, useContext, useState, useEffect, useCallback, useRef } from "react"
+import { createContext, useContext, useState, useCallback } from "react"
 import type { Repertorio, RepertorioFormData } from "@/types/repertorio"
-import { RepertorioDocument, GetAllRepertoriosResponse } from "../apiCalls/repertorio/types"
+import { RepertorioDocument } from "../apiCalls/repertorio/types"
 import { isGetAllArtigoDoc, isGetAllCitacaoDoc, isGetAllObraDoc } from "../apiCalls/repertorio/helpers"
 import { addFavorito, getAllRepertorios, removeFavorito } from "../apiCalls/repertorio"
 import { useAuth } from "./auth-context"

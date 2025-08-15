@@ -8,7 +8,7 @@ import { EyeOff, Eye } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { CreateUsuarioBody } from "../../../apiCalls/usuario/types"
 import { createUser } from "../../../apiCalls/usuario"
-import { UserRegistration } from "../../types/user"
+import { UserRegistration } from "@/types/user"
 import { useAuth } from "../../../contexts/auth-context"
 import { toast } from "react-toastify"
 

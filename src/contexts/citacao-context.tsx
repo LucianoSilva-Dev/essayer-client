@@ -6,7 +6,6 @@ import { createContext, useContext, useState, useEffect } from "react"
 import axios from "axios"
 import { API_BASE_URL } from "@/app/constants"
 import { handleAxiosError } from "@/app/utils"
-import { promises } from "dns"
 
 export interface CitacaoData {
   author: string

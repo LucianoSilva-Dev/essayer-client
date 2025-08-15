@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation"
 import type { Repertorio } from "@/types/repertorio"
 import { getProfilePictureLink } from "../../apiCalls/usuario"
 import { addLike, removeLike, addFavorito, removeFavorito } from "../../apiCalls/repertorio"
-import { useAuth } from "@/../contexts/auth-context"
+import { useAuth } from "@/./contexts/auth-context"
 import { toast } from "react-toastify"
 import Image from "next/image"
 

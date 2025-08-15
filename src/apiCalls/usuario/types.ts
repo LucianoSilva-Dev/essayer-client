@@ -1,5 +1,3 @@
-import { GenericSuccessResponse } from '../types';
-
 export type UserCargo = 'admin' | 'aluno' | 'professor';
 
 export interface Usuario {
