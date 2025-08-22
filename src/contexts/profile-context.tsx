@@ -55,7 +55,7 @@ export function ProfileProvider({ children }: { children: React.ReactNode }) {
         getUser(userData?.id)
       }
     }
-  }, [isLoggedIn])
+  }, [getUser, userData])
 
   // Salvar perfil no localStorage
   useEffect(() => {

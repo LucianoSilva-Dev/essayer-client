@@ -4,8 +4,8 @@ import { useState, useEffect, useRef } from "react";
 import { useRepertorio } from "@/contexts/repertorio-context";
 import RepertorioFilters from "./filters/RepertorioFilters";
 import RepertorioGrid from "./RepertorioGrid";
-import Pagination from "./Pagination"; // Importe o novo componente
-import { useRepertorioFilters } from "@/hooks/useRepertorioFilters"; // Importe o hook
+import Pagination from "./Pagination";
+import { useRepertorioFilters } from "@/hooks/useRepertorioFilters";
 
 export default function MainPage() {
   const {
@@ -19,61 +19,67 @@ export default function MainPage() {
   } = useRepertorio();
 
   const {
-    filters,
-    handleFilterChange,
+    termoBusca, setTermoBusca,
+    eixosAtivos, setEixosAtivos,
+    recorteAtivo, setRecorteAtivo,
+    modeloAtivo, setModeloAtivo,
+    ordenarPor, setOrdenarPor,
     recorteOptions,
-    activeFilterCount,
+    activeFilterCount
   } = useRepertorioFilters();
-
+  
   const [tipoVisualizacao, setTipoVisualizacao] = useState<"todos" | "salvos">("todos");
   
   const isInitialMount = useRef(true);
 
-  // Efeito para resetar a página quando qualquer filtro (exceto a própria página) mudar.
-  useEffect(() => {
-    if (isInitialMount.current) {
-      isInitialMount.current = false;
-    } else {
-      setPage(0);
-    }
-  }, [filters, tipoVisualizacao, setPage]);
-
-  // Efeito unificado que busca os dados, com debounce para evitar chamadas excessivas.
+  // Efeito para buscar os dados sempre que um filtro ou a página mudar
   useEffect(() => {
     const handler = setTimeout(() => {
       pesquisarRepertorios({
-        search: filters.termoBusca,
-        eixos: filters.eixosAtivos,
-        subtopicos: filters.recorteAtivo ? [filters.recorteAtivo] : [],
-        modelo: filters.modeloAtivo ? [filters.modeloAtivo] : [],
-        orderBy: filters.ordenarPor,
+        search: termoBusca,
+        eixos: eixosAtivos,
+        subtopicos: recorteAtivo ? [recorteAtivo] : [],
+        modelo: modeloAtivo ? [modeloAtivo] : [],
+        orderBy: ordenarPor,
         offset: currentPage * 15,
         limit: 15,
         favoritedByCurrentUser: tipoVisualizacao === "salvos"
-      });
+      }, true); // Força a busca
     }, 500); // Debounce de 500ms
 
     return () => {
       clearTimeout(handler);
     };
-  }, [filters, tipoVisualizacao, currentPage, pesquisarRepertorios]);
+  }, [termoBusca, eixosAtivos, recorteAtivo, modeloAtivo, ordenarPor, tipoVisualizacao, currentPage, pesquisarRepertorios]);
+
+  // Efeito para resetar a página para 0 quando os filtros mudam
+  useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      return;
+    }
+    if (currentPage !== 0) {
+      setPage(0);
+    }
+  }, [termoBusca, eixosAtivos, recorteAtivo, modeloAtivo, ordenarPor, tipoVisualizacao, setPage]);
+
 
   return (
     <main className="min-h-screen bg-gray-50">
       <div className="container mx-auto px-4 py-8">
         <RepertorioFilters
-          termoBusca={filters.termoBusca}
-          setTermoBusca={(value) => handleFilterChange("termoBusca", value)}
-          eixosAtivos={filters.eixosAtivos}
-          setEixosAtivos={(value) => handleFilterChange("eixosAtivos", value)}
-          recorteAtivo={filters.recorteAtivo}
-          setRecorteAtivo={(value) => handleFilterChange("recorteAtivo", value)}
-          modeloAtivo={filters.modeloAtivo}
-          setModeloAtivo={(value) => handleFilterChange("modeloAtivo", value)}
-          ordenarPor={filters.ordenarPor}
-          setOrdenarPor={(value) => handleFilterChange("ordenarPor", value)}
+          termoBusca={termoBusca}
+          setTermoBusca={setTermoBusca}
+          eixosAtivos={eixosAtivos}
+          setEixosAtivos={setEixosAtivos}
+          recorteAtivo={recorteAtivo}
+          setRecorteAtivo={setRecorteAtivo}
+          modeloAtivo={modeloAtivo}
+          setModeloAtivo={setModeloAtivo}
+          ordenarPor={ordenarPor}
+          setOrdenarPor={setOrdenarPor}
           recorteOptions={recorteOptions}
-          filtrosAtivosCount={activeFilterCount}
+          filtrosAtivosCount={activeFilterCount + (tipoVisualizacao === 'salvos' ? 1 : 0)}
           tipoVisualizacao={tipoVisualizacao}
           onTipoVisualizacaoChange={setTipoVisualizacao}
         />
@@ -97,7 +103,7 @@ export default function MainPage() {
             activeFilterCount={activeFilterCount}
           />
 
-          {!isLoadingRepertorios && (
+          {!isLoadingRepertorios && totalPages > 1 && (
             <Pagination
               currentPage={currentPage}
               totalPages={totalPages}

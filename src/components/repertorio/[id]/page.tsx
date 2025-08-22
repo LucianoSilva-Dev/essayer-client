@@ -3,14 +3,10 @@
 import { useEffect, useState, Suspense, useCallback } from "react";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
-import { toast } from "react-toastify";
 import { useAuth } from "@/contexts/auth-context";
 import type { Repertorio } from "@/types/repertorio";
 import type { RepertorioDocument } from "@/apiCalls/repertorio/types";
-import {
-  getArtigoById, getCitacaoById, getObraById, addComentario,
-  addLike, removeLike, addFavorito, removeFavorito, deleteRepertorio, updateComentario, deleteComentario
-} from "@/apiCalls/repertorio";
+import {getArtigoById, getCitacaoById, getObraById  } from "@/apiCalls/repertorio";
 import { getProfilePictureLink } from "@/apiCalls/usuario";
 import { mountRepertoire } from "@/app/utils";
 
@@ -151,7 +147,7 @@ function RepertorioDetalhesContent() {
 
   return (
     <main className="min-h-screen bg-gray-50">
-      <ConfirmationModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onConfirm={handleConfirmAction} {...modalContent} isLoading={isModalLoading} />
+      <ConfirmationModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} {...modalContent} isLoading={isModalLoading} />
       <div className="container mx-auto px-4 py-6 md:py-8">
         <div className="max-w-4xl mx-auto">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">

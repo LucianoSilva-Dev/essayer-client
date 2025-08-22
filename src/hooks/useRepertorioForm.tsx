@@ -4,15 +4,13 @@ import React, { useState, useEffect, useMemo } from "react";
 import { toast } from "react-toastify";
 import { EixosTematicos } from "@/constants/eixos";
 import type { RepertorioFormData, ModeloRepertorio } from "@/types/repertorio";
-import { createArtigo, createCitacao, createObra } from "@/apiCalls/repertorio";
-import type { CreateArtigoBody, CreateCitacaoBody, CreateObraBody } from "@/apiCalls/repertorio/types";
 import { AlertCircle } from "lucide-react";
 
 // Importando os componentes de UI que foram criados
-import { RepertorioTypeSelector } from "./form/RepertorioTypeSelector";
-import { EixoSelector } from "./form/EixoSelector";
-import { RecorteSelector } from "./form/RecorteSelector";
-import { FormActions } from "./form/FormActions";
+import { RepertorioTypeSelector } from "@/components/repertorio/form/RepertorioTypeSelector";
+import { EixoSelector } from "@/components/repertorio/form/EixoSelector";
+import { RecorteSelector } from "@/components/repertorio/form/RecorteSelector";
+import { FormActions } from "@/components/repertorio/form/FormActions";
 
 // Importando os formulários de campos específicos
 import ObraForm from "@/components/forms/obra-form";
@@ -22,7 +20,12 @@ import CitacaoForm from "@/components/forms/citacao-form";
 // ------------------------------------------------------------------
 // HOOK CUSTOMIZADO PARA GERENCIAR TODA A LÓGICA DO FORMULÁRIO
 // ------------------------------------------------------------------
-const useRepertorioForm = ({ initialData, isEditing = false }: RepertorioFormProps) => {
+type UseRepertorioFormProps = {
+    initialData?: RepertorioFormData;
+    isEditing?: boolean;
+};
+
+const useRepertorioForm = ({ initialData, isEditing = false }: UseRepertorioFormProps) => {
     const [formData, setFormData] = useState<any>(
         initialData || { modelo: "obra", eixos: [], recortes: [], tipoObra: "livro" }
     );
