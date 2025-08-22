@@ -39,7 +39,6 @@ export default function RootLayout({
                 <CitacaoProvider>
                   <ToastContainer />
                   <HeaderAzul />
-                  {/* Removido o PageTransition para evitar conflitos de renderização */}
                   <main className="pt-25 relative">
                     {children}
                   </main>

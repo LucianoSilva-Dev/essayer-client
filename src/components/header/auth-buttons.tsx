@@ -30,7 +30,7 @@ export function AuthButtons() {
         <>
           <span className="text-white text-[20px] font-bold">
             Olá, 
-            {" " + userData?.nome.split(" ")[0] || ""}
+            {" " + (userData?.nome ? userData.nome.split(" ")[0] : "")}
             </span>
           <button
             onClick={() => router.push("/profile")}
