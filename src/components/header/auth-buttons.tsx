@@ -5,18 +5,17 @@ import Link from "next/link"
 import { useEffect, useState } from "react"
 import { getProfilePictureLink } from "../../apiCalls/usuario"
 
-
 export function AuthButtons() {
   const router = useRouter()
-  const { isLoggedIn, userData } = useAuth()
+  const { isLoggedIn, userData, isLoading } = useAuth() // Adicione o isLoading
   const [profilePic, setProfilePic] = useState<string | null>(null)
 
   useEffect(() => {
     const fetchProfilePic = async () => {
+      // Garante que só busca a foto se o usuário estiver logado e os dados carregados
       if (isLoggedIn && userData?.id) {
         const url = await getProfilePictureLink(userData.id)
         setProfilePic(url)
-         console.log("DADOS", userData)
       } else {
         setProfilePic(null)
       }
@@ -26,12 +25,13 @@ export function AuthButtons() {
 
   return (
     <div className="flex items-center space-x-4">
-      {isLoggedIn ? (
+      {/* Exibe o conteúdo do usuário apenas se estiver logado E o carregamento estiver concluído */}
+      {isLoggedIn && !isLoading ? (
         <>
           <span className="text-white text-[20px] font-bold">
-            Olá, 
-            {" " + (userData?.nome ? userData.nome.split(" ")[0] : "")}
-            </span>
+            {/* Verificação segura para exibir o nome */}
+            Olá, {userData?.nome ? userData.nome.split(" ")[0] : ""}
+          </span>
           <button
             onClick={() => router.push("/profile")}
             className="flex items-center focus:outline-none"
@@ -50,14 +50,14 @@ export function AuthButtons() {
               </span>
             ) : (
               <div className="w-9 h-9 rounded-full bg-gray-300 flex items-center justify-center text-gray-600 font-bold cursor-pointer">
+                {/* Fallback seguro para a inicial do nome */}
                 {userData?.nome?.[0] || ""}
               </div>
             )}
           </button>
-          
         </>
-
-      ) : (
+      // Exibe os botões de login/cadastro se NÃO estiver logado E o carregamento estiver concluído
+      ) : !isLoggedIn && !isLoading ? (
         <>
           <Link
             href="/login"
@@ -72,6 +72,9 @@ export function AuthButtons() {
             Cadastrar-se
           </Link>
         </>
+      ) : (
+        // Opcional: Renderiza um placeholder enquanto isLoading é true
+        <div className="w-48 h-9 animate-pulse bg-white/10 rounded-md"></div>
       )}
     </div>
   )

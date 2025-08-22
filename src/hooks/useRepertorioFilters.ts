@@ -1,57 +1,45 @@
 // src/hooks/useRepertorioFilters.ts
-import { useState, useCallback } from 'react';
+import { useState, useMemo } from 'react';
+import { EixosTematicos } from '@/constants/eixos';
 
 export const useRepertorioFilters = () => {
-    const [termoBusca, setTermoBusca] = useState("");
-    const [eixosAtivos, setEixosAtivos] = useState<string[]>([]);
-    const [recorteAtivo, setRecorteAtivo] = useState<string | null>(null);
-    const [modeloAtivo, setModeloAtivo] = useState<string | null>(null);
-    const [ordenarPor, setOrdenarPor] = useState<'MaxLikes' | 'MinLikes' | 'Newest' | 'Oldest'>('Newest');
+    const [filters, setFilters] = useState({
+        termoBusca: "",
+        eixosAtivos: [] as string[],
+        recorteAtivo: null as string | null,
+        modeloAtivo: null as string | null,
+        ordenarPor: 'Newest' as 'MaxLikes' | 'MinLikes' | 'Newest' | 'Oldest',
+    });
 
-    const onFilterChange = useCallback((filter: string, value: string | string[]) => {
-        switch (filter) {
-            case 'modelo':
-                setModeloAtivo(value as string);
-                break;
-            case 'eixos':
-                setEixosAtivos(value as string[]);
-                setRecorteAtivo(null); // Reseta o recorte ao mudar o eixo
-                break;
-            case 'recorte':
-                setRecorteAtivo(value as string);
-                break;
-            case 'ordenarPor':
-                setOrdenarPor(value as 'MaxLikes' | 'MinLikes' | 'Newest' | 'Oldest');
-                break;
+    const handleFilterChange = (filterName: string, value: any) => {
+        setFilters(prevFilters => {
+            const newFilters = { ...prevFilters, [filterName]: value };
+            if (filterName === "eixosAtivos") {
+                newFilters.recorteAtivo = null; // Reseta o recorte ao mudar o eixo
+            }
+            return newFilters;
+        });
+    };
+
+    const recorteOptions = useMemo(() => {
+        if (filters.eixosAtivos.length > 0) {
+            const allRecortes = filters.eixosAtivos.flatMap(eixo => EixosTematicos[eixo as keyof typeof EixosTematicos] || []);
+            return [...new Set(allRecortes)];
         }
-    }, []);
-
-    const onClearFilters = useCallback(() => {
-        setTermoBusca('');
-        setEixosAtivos([]);
-        setRecorteAtivo(null);
-        setModeloAtivo(null);
-        setOrdenarPor('Newest');
-    }, []);
+        return Object.values(EixosTematicos).flat();
+    }, [filters.eixosAtivos]);
 
     const activeFilterCount = [
-        termoBusca,
-        modeloAtivo,
-        recorteAtivo,
-        ...eixosAtivos
+        filters.termoBusca,
+        filters.eixosAtivos.length > 0,
+        filters.recorteAtivo,
+        filters.modeloAtivo,
     ].filter(Boolean).length;
 
     return {
-        termoBusca,
-        setTermoBusca,
-        activeFilters: {
-            modelo: modeloAtivo,
-            eixos: eixosAtivos,
-            recorte: recorteAtivo,
-            ordenarPor,
-        },
-        onFilterChange,
-        onClearFilters,
-        activeFilterCount
+        filters,
+        handleFilterChange,
+        recorteOptions,
+        activeFilterCount,
     };
 };
