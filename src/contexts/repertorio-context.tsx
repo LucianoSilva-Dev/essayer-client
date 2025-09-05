@@ -2,14 +2,14 @@
 "use client"
 
 import type React from "react"
-import { createContext, useContext, useState, useCallback } from "react"
+import { createContext, useContext, useState, useCallback, useEffect } from "react"
 import type { Repertorio, RepertorioFormData } from "@/types/repertorio"
 import { RepertorioDocument } from "../apiCalls/repertorio/types"
 import { isGetAllArtigoDoc, isGetAllCitacaoDoc, isGetAllObraDoc } from "../apiCalls/repertorio/helpers"
 import { addFavorito, getAllRepertorios, removeFavorito } from "../apiCalls/repertorio"
 import { useAuth } from "./auth-context"
+import { toast } from "react-toastify"
 
-// ... (função mountRepertoire permanece a mesma)
 const mountRepertoire = (repertorio: RepertorioDocument): Repertorio | null => {
   if (isGetAllCitacaoDoc(repertorio)) {
     return {
@@ -76,37 +76,25 @@ interface RepertorioContextType {
   adicionarRepertorio: (data: RepertorioFormData) => Promise<Repertorio>
   toggleFavorito: (id: string) => void
   favoritos: string[]
-  pesquisarRepertorios: (filters: {
-    search?: string,
-    eixos?: string[],
-    subtopicos?: string[],
-    modelo?: string[],
-    favoritedByCurrentUser?: boolean,
-    likedByCurrentUser?: boolean,
-    orderBy?: 'MaxLikes' | 'MinLikes' | 'Newest' | 'Oldest',
-    offset?: number,
-    limit?: number
-  }, force?: boolean) => Promise<any> // Adicionado 'force'
+  pesquisarRepertorios: (filters: any) => Promise<any>
   buscarPorId: (id: string) => Repertorio | undefined
   currentPage: number
   totalPages: number
   totalRepertorios: number
   setPage: (page: number) => void
   isLoadingRepertorios: boolean
-  hasFetched: boolean // NOVA FLAG
 }
 
-const RepertorioContext = createContext<RepertorioContextType | undefined>(undefined)
+const RepertorioContext = createContext<RepertorioContextType | undefined>(undefined);
 
 export function RepertorioProvider({ children }: { children: React.ReactNode }) {
-  const { isLoggedIn } = useAuth();
-  const [repertorios, setRepertorios] = useState<Repertorio[]>([])
-  const [favoritos, setFavoritos] = useState<string[]>([])
-  const [currentPage, setCurrentPage] = useState(0)
-  const [totalPages, setTotalPages] = useState(1)
-  const [totalRepertorios, setTotalRepertorios] = useState(0)
-  const [isLoadingRepertorios, setIsLoadingRepertorios] = useState(true)
-  const [hasFetched, setHasFetched] = useState(false); // NOVO ESTADO
+  const { isLoggedIn, isLoading: isAuthLoading } = useAuth();
+  const [repertorios, setRepertorios] = useState<Repertorio[]>([]);
+  const [favoritos, setFavoritos] = useState<string[]>([]);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalRepertorios, setTotalRepertorios] = useState(0);
+  const [isLoadingRepertorios, setIsLoadingRepertorios] = useState(true);
 
   const setPage = useCallback((page: number) => {
     setCurrentPage(page);
@@ -126,18 +114,11 @@ export function RepertorioProvider({ children }: { children: React.ReactNode }) 
     return params.toString();
   }, []);
 
-  const pesquisarRepertorios = useCallback(async (filters: any, force = false) => {
-    // Se não for para forçar a busca e os dados já foram carregados, não faz nada
-    if (hasFetched && !force) {
-        setIsLoadingRepertorios(false);
-        return;
-    }
-
+  const pesquisarRepertorios = useCallback(async (filters: any) => {
     setIsLoadingRepertorios(true);
     try {
       const queryString = construirQueryString(filters);
       const response = await getAllRepertorios(`?${queryString}`);
-
       if (response) {
         const mappedRepertorios = response.documentos
           .map((repertorio) => mountRepertoire(repertorio))
@@ -147,38 +128,40 @@ export function RepertorioProvider({ children }: { children: React.ReactNode }) 
         setTotalRepertorios(response.paginacao.totalDocuments);
         const limit = filters.limit ?? 15;
         setTotalPages(Math.ceil(response.paginacao.totalDocuments / limit));
-        setHasFetched(true); // MARCA QUE A BUSCA FOI FEITA
 
         if (isLoggedIn) {
           setFavoritos(mappedRepertorios.filter(r => r.favoritadoPeloUsuario).map(r => r.id));
         } else {
           setFavoritos([]);
         }
-
-        return {
-          documents: mappedRepertorios,
-          pagination: response.paginacao
-        };
+      } else {
+        setRepertorios([]);
+        setTotalRepertorios(0);
+        setTotalPages(1);
       }
-      setRepertorios([]);
-      setTotalRepertorios(0);
-      setTotalPages(1);
-      return { documents: [], pagination: { offset: 0, limit: 0, nextPageUrl: null, previousPageUrl: null, totalDocuments: 0 } };
     } catch (e) {
       console.error('Context: Erro ao buscar repertórios:', e);
       setRepertorios([]);
       setTotalRepertorios(0);
       setTotalPages(1);
-      return { documents: [], pagination: { offset: 0, limit: 0, nextPageUrl: null, previousPageUrl: null, totalDocuments: 0 } };
     } finally {
       setIsLoadingRepertorios(false);
     }
-  }, [construirQueryString, isLoggedIn, hasFetched]);
+  }, [construirQueryString, isLoggedIn]);
 
-  // ... (toggleFavorito, adicionarRepertorio, buscarPorId permanecem os mesmos)
+  useEffect(() => {
+    if (!isAuthLoading) {
+      pesquisarRepertorios({
+        orderBy: 'Newest',
+        offset: 0,
+        limit: 15
+      });
+    }
+  }, [isLoggedIn, isAuthLoading, pesquisarRepertorios]);
+
   const toggleFavorito = async (id: string) => {
     if (!isLoggedIn) {
-      alert("Você precisa estar logado para favoritar repertórios.");
+      toast.error("Você precisa estar logado para favoritar repertórios.");
       return;
     }
     const isCurrentlyFavorito = favoritos.includes(id);
@@ -194,6 +177,7 @@ export function RepertorioProvider({ children }: { children: React.ReactNode }) 
       }
     } catch (e) {
       console.error("Erro ao alternar favorito:", e);
+      toast.error("Erro ao salvar nos favoritos.");
     }
   }
 
@@ -229,18 +213,17 @@ export function RepertorioProvider({ children }: { children: React.ReactNode }) 
         totalRepertorios,
         setPage,
         isLoadingRepertorios,
-        hasFetched, // EXPORTA A FLAG
       }}
     >
       {children}
     </RepertorioContext.Provider>
-  )
+  );
 }
 
 export function useRepertorio() {
-  const context = useContext(RepertorioContext)
+  const context = useContext(RepertorioContext);
   if (context === undefined) {
-    throw new Error("useRepertorio deve ser usado dentro de um RepertorioProvider")
+    throw new Error("useRepertorio deve ser usado dentro de um RepertorioProvider");
   }
-  return context
+  return context;
 }

@@ -34,6 +34,12 @@ export default function MainPage() {
 
   // Efeito para buscar os dados sempre que um filtro ou a página mudar
   useEffect(() => {
+    // Na montagem inicial, não faz nada, pois o contexto já busca os dados
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      return;
+    }
+
     const handler = setTimeout(() => {
       pesquisarRepertorios({
         search: termoBusca,
@@ -44,7 +50,7 @@ export default function MainPage() {
         offset: currentPage * 15,
         limit: 15,
         favoritedByCurrentUser: tipoVisualizacao === "salvos"
-      }, true); // Força a busca
+      });
     }, 500); // Debounce de 500ms
 
     return () => {
@@ -54,12 +60,10 @@ export default function MainPage() {
 
   // Efeito para resetar a página para 0 quando os filtros mudam
   useEffect(() => {
-    if (isInitialMount.current) {
-      isInitialMount.current = false;
-      return;
-    }
-    if (currentPage !== 0) {
-      setPage(0);
+    if (!isInitialMount.current) {
+        if (currentPage !== 0) {
+            setPage(0);
+        }
     }
   }, [termoBusca, eixosAtivos, recorteAtivo, modeloAtivo, ordenarPor, tipoVisualizacao, setPage]);
 
