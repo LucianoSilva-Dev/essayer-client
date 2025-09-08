@@ -45,7 +45,7 @@ export default function ProfilePage() {
   }
 
   return (
-    <main className="min-h-screen bg-gray-50 py-8">
+    <main className="min-h-screen bg-[#F9FAFB]">
       <div className="container mx-auto px-4">
         {profile.tipo !== "professor" ? (
           <AlunoProfileComponent

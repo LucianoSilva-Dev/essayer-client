@@ -39,7 +39,7 @@ export default function AdicionarRepertorioPage() {
   }
 
   return (
-    <main className="min-h-[calc(100vh-64px)] bg-gray-100 py-12">
+    <main className="min-h-[calc(100vh-64px)] bg-gray-50 py-12">
       <div className="container mx-auto px-4">
         <RepertorioForm onSubmit={handleSubmit} onCancel={handleCancel} />
       </div>

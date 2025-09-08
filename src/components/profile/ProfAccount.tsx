@@ -38,7 +38,7 @@ export default function Component({
   }
 
   return (
-    <div className="min-h-screen bg-[#f1f1f2]">
+    <div className="min-h-screen bg-gray-50">
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-6 py-8">
         {/* Top Section */}

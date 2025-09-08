@@ -50,13 +50,6 @@
   }
 }
 
-/*Não sei como, mas isso resolveu o problema dos gaps do Header*/
-body>header:first-child {
-  position: sticky;
-  top: 0;
-  z-index: 50;
-}
-
 @keyframes upDown{
   0%{
     transform: translateY(0px);

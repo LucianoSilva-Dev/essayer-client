@@ -15,6 +15,7 @@ import 'swiper/css';
 import 'swiper/css/pagination'; // Para os pontinhos de navegação
 import 'swiper/css/navigation'; // Para as setas de navegação (opcional)
 import { HeaderAzul } from '@/components/header/header';
+import { Sidebar } from '@/components/sidebar/sidebar';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -38,8 +39,8 @@ export default function RootLayout({
               <RepertorioProvider>
                 <CitacaoProvider>
                   <ToastContainer />
-                  <HeaderAzul />
-                  <main className="pt-25 relative">
+                  <Sidebar />
+                  <main className="bg-gray-50 pl-25 relative">
                     {children}
                   </main>
                 </CitacaoProvider>
