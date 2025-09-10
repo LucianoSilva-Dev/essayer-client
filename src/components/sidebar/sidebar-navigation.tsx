@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { motion } from "framer-motion"
+import { motion, AnimatePresence } from "framer-motion"
 
 interface NavigationItem {
   icon: any
@@ -22,25 +22,42 @@ export function SidebarNavigation({ items, isExpanded, pathname }: SidebarNaviga
         const isActive = pathname === item.href
 
         return (
-          <li key={item.href}>
+          <li key={item.href} className="relative">
             <Link
               href={item.href}
-              className={`flex items-center p-3 rounded-lg transition-colors duration-200 ${
-                isActive ? "bg-[#075F70] text-white" : "text-[#898787] hover:bg-gray-400/40 hover:text-gray-500"
+              className={`relative flex items-center p-3 rounded-lg transition-colors duration-200 ${
+                isActive
+                  ? "text-[#075F70]"
+                  : "text-[#898787] hover:bg-gray-400/40 hover:text-gray-500"
               }`}
             >
+              {/* barra lateral animada */}
+              {isActive && (
+                <motion.div
+                  layoutId="activeIndicator"
+                  className="absolute left-0 top-0 bottom-0 w-1 bg-[#075F70] rounded-r-full"
+                  transition={{ type: "spring", stiffness: 500, damping: 40 }}
+                />
+              )}
+
+              {/* ícone sempre fixo */}
               <Icon size={24} className="flex-shrink-0" />
-              <motion.span
-                className="ml-3 whitespace-nowrap overflow-hidden"
-                initial={{ opacity: 0, width: 0 }}
-                animate={{
-                  opacity: isExpanded ? 1 : 0,
-                  width: isExpanded ? "auto" : 0,
-                }}
-                transition={{ duration: 0.3, delay: isExpanded ? 0.1 : 0 }}
-              >
-                {item.label}
-              </motion.span>
+
+              {/* texto com AnimatePresence */}
+              <AnimatePresence initial={false}>
+                {isExpanded && (
+                  <motion.span
+                    key="label"
+                    className="ml-3 whitespace-nowrap"
+                    initial={{ opacity: 0, x: -30, width: 0 }}
+                    animate={{ opacity: 1, x: 0, width: "auto" }}
+                    exit={{ opacity: 0, x: -30, width: 0 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    {item.label}
+                  </motion.span>
+                )}
+              </AnimatePresence>
             </Link>
           </li>
         )

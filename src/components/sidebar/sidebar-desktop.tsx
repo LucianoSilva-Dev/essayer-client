@@ -1,7 +1,7 @@
 import { motion } from "framer-motion"
 import Link from "next/link"
 import Image from "next/image"
-import { Home, PenTool, Users, Info, Globe } from "lucide-react"
+import { Home, PenTool, Users, Info, Globe, Settings } from "lucide-react"
 import { SidebarLogo } from "./sidebar-logo"
 import { SidebarNavigation } from "./sidebar-navigation"
 import { SidebarBottomItems } from "./sidebar-bottom-items"
@@ -28,11 +28,17 @@ const navigationItems = [
     roles: ["professor", "admin"],
   },
   {
-    icon: Users,
-    label: "Turmas",
-    href: "/admin",
-    roles: ["admin"],
-  },
+      icon: Users,
+      label: "Turmas",
+      href: "/turmas",
+      roles: ["professor", "admin"], 
+    },
+    {
+      icon: Settings,
+      label: "Admin",
+      href: "/admin",
+      roles: ["admin"], 
+    },
 ]
 
 const bottomItems = [

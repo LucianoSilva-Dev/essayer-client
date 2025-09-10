@@ -69,7 +69,7 @@ export default function MainPage() {
 
 
   return (
-    <main className="min-h-screen bg-gray-50">
+    <main className="min-h-screen bg-gray-50 overflow-x-visible no-scrollbar">
       <div className="container mx-auto px-4 py-8">
         <RepertorioFilters
           termoBusca={termoBusca}

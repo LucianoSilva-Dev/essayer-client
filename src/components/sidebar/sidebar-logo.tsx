@@ -10,11 +10,11 @@ export function SidebarLogo({ isExpanded }: SidebarLogoProps) {
   return (
     <div className="p-4">
       <Link href="/main" className="flex items-center justify-center">
-        <div className="relative h-12 w-12 flex-shrink-0">
+        <div className="relative h-20 w-20 flex-shrink-0">
           <Image src="/favicon.ico" alt="Logo" fill className="object-contain" priority />
         </div>
         <motion.span
-          className="ml-3 text-white font-bold text-lg whitespace-nowrap overflow-hidden"
+          className="ml-3 text-gray-500 font-bold text-lg whitespace-nowrap overflow-hidden"
           initial={{ opacity: 0, width: 0 }}
           animate={{
             opacity: isExpanded ? 1 : 0,
