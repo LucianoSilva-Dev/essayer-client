@@ -53,6 +53,7 @@ const config: Config = {
       },
       fontFamily: {
         sans: ['Arial', 'Helvetica', 'sans-serif'],
+        montserrat: ['var(--font-montserrat)', 'sans-serif'],
       },
     },
   },

@@ -51,7 +51,7 @@ export default function RepertorioFilters({
     setOrdenarPor('Newest');
     setShowFilters(false);
   };
-  
+
   return (
     <div className="text-center mb-8 lg:mb-12 mt-4">
       <h1 className="text-4xl font-bold text-gray-800 mb-6">
@@ -61,39 +61,37 @@ export default function RepertorioFilters({
       </h1>
 
       <div className="flex justify-center gap-4 mb-8">
-      <button
-        onClick={() => onTipoVisualizacaoChange("salvos")}
-        className={`w-[330px] h-[54px] rounded-[40px] text-[22px] font-medium transition-all duration-500 origin-bottom cursor-pointer px-10 ${
-          tipoVisualizacao === "salvos"
+        <button
+          onClick={() => onTipoVisualizacaoChange("salvos")}
+          className={`w-[330px] h-[54px] rounded-[40px] text-[22px] font-montserrat font-medium italic transition-all duration-500 origin-bottom cursor-pointer px-10 ${tipoVisualizacao === "salvos"
             ? "bg-[#CDDEE2] text-[#075F70] opacity-100"
             : "bg-white text-[#075F70] opacity-40 scale-97"
-        }`}
-        style={{
-          boxShadow: "0px 3px 0px #075F70B2",
-        }}
-      >
-        Repertórios salvos
-      </button>
-      <button
-        onClick={() => onTipoVisualizacaoChange("todos")}
-        className={`w-[330px] h-[54px] rounded-[40px] text-[22px] font-medium transition-all duration-500 origin-bottom cursor-pointer px-10 ${
-          tipoVisualizacao === "todos"
+            }`}
+          style={{
+            boxShadow: "0px 3px 0px #075F70B2",
+          }}
+        >
+          Repertórios salvos
+        </button>
+        <button
+          onClick={() => onTipoVisualizacaoChange("todos")}
+          className={`w-[330px] h-[54px] rounded-[40px] text-[22px] font-montserrat font-medium italic transition-all duration-500 origin-bottom cursor-pointer px-10 ${tipoVisualizacao === "todos"
             ? "bg-[#CDDEE2] text-[#075F70] opacity-100"
             : "bg-white text-[#075F70] opacity-40 scale-97"
-        }`}
-        style={{
-          boxShadow: "0px 3px 0px #075F70B2",
-        }}
-      >
-        Repertórios disponíveis
-      </button>
-    </div>
+            }`}
+          style={{
+            boxShadow: "0px 3px 0px #075F70B2",
+          }}
+        >
+          Repertórios disponíveis
+        </button>
+      </div>
 
       <div className="max-w-2xl mx-auto">
         <form onSubmit={(e) => e.preventDefault()} className="relative">
-          <div className="flex items-center bg-white rounded-full border border-gray-300 shadow-sm">
+          <div className="flex items-center bg-white rounded-[20px] shadow-lg">
             <div className="pl-4">
-              <Search className="text-gray-400" size={20} />
+              <Search className="text-gray-800" size={30} />
             </div>
             <input
               type="text"
@@ -105,9 +103,16 @@ export default function RepertorioFilters({
             <button
               type="button"
               onClick={() => setShowFilters(!showFilters)}
-              className={`pr-4 transition-colors relative ${showFilters ? "text-teal-600" : "text-gray-400 hover:text-gray-600"}`}
+              className={`pr-4 transition-colors relative font-bold ${showFilters ? "text-gray-600" : "text-gray-800 hover:text-gray-600"}`}
             >
-              <Filter size={20} />
+
+              <span className="block transition-all duration-300 ease-in-out transform" style={{ opacity: showFilters ? 0 : 1, position: "absolute", top: 0, left: 0 }}>
+                Filtrar
+              </span>
+              <span className="block transition-all duration-300 ease-in-out transform" style={{ opacity: showFilters ? 1 : 0 }}>
+                Fechar
+              </span>
+
               {filtrosAtivosCount > 0 && (
                 <span className="absolute -top-1 -right-1 bg-teal-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
                   {filtrosAtivosCount}
@@ -118,7 +123,10 @@ export default function RepertorioFilters({
         </form>
 
         {showFilters && (
-          <div className="mt-4 p-6 bg-white rounded-lg border border-gray-200 shadow-sm">
+          <div
+            className={`mt-4 p-6 bg-white rounded-lg border border-gray-200 shadow-sm transform transition-all duration-500 ease-in-out 
+              ${showFilters ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-2 pointer-events-none h-0 overflow-hidden"}`}
+          >
             <div className="mb-6">
               <h3 className="text-sm font-medium text-gray-700 mb-3">Filtrar por Tipo</h3>
               <div className="flex flex-wrap gap-2">

@@ -1,7 +1,7 @@
 // incita/src/app/layout.tsx
 import './globals.css';
 import './swiper-hover.css'
-import { Inter } from 'next/font/google';
+import { Inter, Montserrat } from 'next/font/google';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { AuthProvider } from '@/./contexts/auth-context';
@@ -18,6 +18,12 @@ import { HeaderAzul } from '@/components/header/header';
 import { Sidebar } from '@/components/sidebar/sidebar';
 
 const inter = Inter({ subsets: ['latin'] });
+const montserrat = Montserrat({
+  subsets: ['latin'],
+  weight: ['400', '600'],
+  style: ['normal', 'italic'],
+  variable: '--font-montserrat',
+});
 
 export const metadata = {
   title: 'Incita',
@@ -32,7 +38,7 @@ export default function RootLayout({
 }) {
   return (
     <html className="scroll-smooth" lang="pt-BR">
-      <body className={inter.className}>
+      <body className={`${inter.className} ${montserrat.variable}`}>
         <AuthProvider>
           <ProfileProvider>
             <AdminProvider>
