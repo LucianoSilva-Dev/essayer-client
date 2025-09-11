@@ -61,19 +61,33 @@ export default function RepertorioFilters({
       </h1>
 
       <div className="flex justify-center gap-4 mb-8">
-        <button
-          onClick={() => onTipoVisualizacaoChange("salvos")}
-          className={`px-6 py-3 rounded-full border-2 transition-colors cursor-pointer ${tipoVisualizacao === "salvos" ? "bg-teal-600 text-white border-teal-600" : "bg-white text-teal-600 border-teal-600 hover:bg-teal-50"}`}
-        >
-          Repertórios salvos
-        </button>
-        <button
-          onClick={() => onTipoVisualizacaoChange("todos")}
-          className={`px-6 py-3 rounded-full border-2 transition-colors cursor-pointer ${tipoVisualizacao === "todos" ? "bg-teal-600 text-white border-teal-600" : "bg-white text-teal-600 border-teal-600 hover:bg-teal-50"}`}
-        >
-          Repertórios
-        </button>
-      </div>
+      <button
+        onClick={() => onTipoVisualizacaoChange("salvos")}
+        className={`w-[330px] h-[54px] rounded-[40px] text-[22px] font-medium transition-all duration-500 origin-bottom cursor-pointer px-10 ${
+          tipoVisualizacao === "salvos"
+            ? "bg-[#CDDEE2] text-[#075F70] opacity-100"
+            : "bg-white text-[#075F70] opacity-40 scale-97"
+        }`}
+        style={{
+          boxShadow: "0px 3px 0px #075F70B2",
+        }}
+      >
+        Repertórios salvos
+      </button>
+      <button
+        onClick={() => onTipoVisualizacaoChange("todos")}
+        className={`w-[330px] h-[54px] rounded-[40px] text-[22px] font-medium transition-all duration-500 origin-bottom cursor-pointer px-10 ${
+          tipoVisualizacao === "todos"
+            ? "bg-[#CDDEE2] text-[#075F70] opacity-100"
+            : "bg-white text-[#075F70] opacity-40 scale-97"
+        }`}
+        style={{
+          boxShadow: "0px 3px 0px #075F70B2",
+        }}
+      >
+        Repertórios disponíveis
+      </button>
+    </div>
 
       <div className="max-w-2xl mx-auto">
         <form onSubmit={(e) => e.preventDefault()} className="relative">
