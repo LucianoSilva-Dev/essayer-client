@@ -79,7 +79,7 @@ export function SidebarDesktop({
       onMouseEnter={() => setIsExpanded(true)}
       onMouseLeave={() => setIsExpanded(false)}
     >
-      <SidebarLogo isExpanded={isExpanded} />
+      <SidebarLogo />
       
       <nav className="flex-1 px-2">
         <SidebarNavigation 
