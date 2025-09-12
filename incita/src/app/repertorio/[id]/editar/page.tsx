@@ -10,6 +10,8 @@ import { getArtigoById, getCitacaoById, getObraById, updateArtigo, updateCitacao
 import type { RepertorioDocument, UpdateArtigoBody, UpdateCitacaoBody, UpdateObraBody } from "@/../apiCalls/repertorio/types";
 import { mountRepertoire } from "@/app/utils";
 import { useAuth } from "@/../contexts/auth-context";
+import { FloatingFAQButton } from "@/../components/faq/floating-faq-button";
+
 
 function EditarRepertorioContent() {
     const router = useRouter();
@@ -148,6 +150,7 @@ function EditarRepertorioContent() {
                     initialData={initialData}
                     isEditing={true}
                 />
+                <FloatingFAQButton/>
             </div>
         </main>
     );

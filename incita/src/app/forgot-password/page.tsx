@@ -1,5 +1,6 @@
 import { Suspense } from "react"
 import ForgotForm from "../../../components/auth/New_Password/forgot-password"
+import { FloatingFAQButton } from "../../../components/faq/floating-faq-button"
 
 export default function Home() {
   return (
@@ -10,6 +11,7 @@ export default function Home() {
         </div>
       }>
         <ForgotForm />
+        <FloatingFAQButton/>
       </Suspense>
     </main>
   )

@@ -14,6 +14,7 @@ import Loading from "./loading"
 import { toast } from "react-toastify"
 import { getProfilePictureLink } from "@/../apiCalls/usuario"
 import ConfirmationModal from "@/../components/shared/confirmation-modal"
+import { FloatingFAQButton } from "@/../components/faq/floating-faq-button"
 
 // O componente CommentCard não precisa de alterações, pois seu layout flex já é adaptável.
 
@@ -461,6 +462,7 @@ function RepertorioDetalhesContent() {
           </div>
         </div>
       </div>
+      <FloatingFAQButton/>
     </main>
   )
 }

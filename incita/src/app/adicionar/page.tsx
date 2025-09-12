@@ -6,6 +6,7 @@ import RepertorioForm from "../../../components/repertorio/repertorio-form"
 import { useAuth } from "@/../contexts/auth-context" // 1. Importar o useAuth
 import { toast } from "react-toastify"
 import Loading from "./loading" // Pode criar um componente de loading simples se não tiver
+import { FloatingFAQButton } from "../../../components/faq/floating-faq-button"
 
 export default function AdicionarRepertorio() {
   const router = useRouter()
@@ -42,6 +43,7 @@ export default function AdicionarRepertorio() {
     <main className="min-h-[calc(100vh-64px)] bg-gray-100 py-12">
       <div className="container mx-auto px-4">
         <RepertorioForm onSubmit={handleSubmit} onCancel={handleCancel} />
+        <FloatingFAQButton/>
       </div>
     </main>
   )
