@@ -183,9 +183,9 @@ export default function RepertorioFilters({
                         exit={{ opacity: 0, scale: 0.9 }}
                         transition={{ duration: 0.2 }}
                         onClick={() => setRecorteAtivo(recorteAtivo === recorte ? null : recorte)}
-                        className={`px-3 py-2 text-md rounded-full border transition-colors ${recorte === recorteAtivo
-                            ? "bg-teal-100 text-teal-700 border-teal-200"
-                            : "bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100"
+                        className={`px-3 py-2 text-md rounded-[15px] transition-colors duration-200 ${recorte === recorteAtivo
+                            ? "bg-yellow-100 text-yellow-700"
+                            : "bg-gray-200 text-gray-700 hover:bg-gray-300"
                           }`}
                       >
                         {recorte}
