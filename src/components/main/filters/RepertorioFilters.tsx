@@ -1,27 +1,16 @@
 'use client'
 
 import { useState } from "react";
-import { Search, BookOpen, FileText, Quote } from "lucide-react";
+import { Search } from "lucide-react";
 import { EixoOptions } from "@/constants/eixos";
-import ObraIcon from '../../../public/obraIcon.svg';
+import Image from "next/image";
+import { motion, AnimatePresence } from "framer-motion";
 
 const modelosOptions = [
   { id: "Obra", nome: "Obra", icone: "/obraIcon.svg", cor: "bg-yellow-100 text-yellow-700 border-yellow-200" },
   { id: "Artigo", nome: "Artigo", icone: "/artigoIcon.svg", cor: "bg-blue-100 text-blue-700 border-blue-200" },
   { id: "Citacao", nome: "Citação", icone: "/citacaoIcon.svg", cor: "bg-green-100 text-green-700 border-green-200" },
 ];
-
-const eixos = [
-  {id:"sociais", nome: "Questões sociais", icone: `/sociais.svg` },
-  {id:"tecnologia", nome: "Tecnologia", icone: `/techIcon.svg` },
-  {id:"arte", nome: "Arte e Cultura", icone: `/cientificas.svg` },
-  {id:"saude", nome: "Saúde e Ciência", icone: `/politicas.svg` },
-  {id:"economia", nome: "Economia", icone: `/economicas.svg` },
-  {id:"ambiente", nome: "Meio ambiente", icone: `/ambientais.svg` },
-  {id:"educacao", nome: "Educação", icone: `/ambientais.svg` },
-  {id:"direito", nome: "Direito e Cidadania", icone: `/ambientais.svg` },
-
-]
 
 interface RepertorioFiltersProps {
   termoBusca: string;
@@ -140,8 +129,8 @@ export default function RepertorioFilters({
                       key={modelo.id}
                       onClick={() => setModeloAtivo(modeloAtivo === modelo.id ? null : modelo.id)}
                       className={`flex items-center px-3 py-2 text-md rounded-full transition-all duration-500 ${modeloAtivo === modelo.id
-                          ? `${modelo.cor} shadow-md scale-105` 
-                          : "bg-gray-200 text-gray-700 border-gray-200 hover:bg-gray-300"
+                        ? `${modelo.cor} shadow-md scale-105`
+                        : "bg-gray-200 text-gray-700 border-gray-200 hover:bg-gray-300"
                         }`}
                     >
                       <img src={modelo.icone} alt={modelo.nome} className="mr-1.5 w-4 h-4 inline-block" />
@@ -154,34 +143,45 @@ export default function RepertorioFilters({
               {/* Filtros por eixo */}
               <div className="mb-6">
                 <h3 className="text-md font-semibold text-gray-700 mb-3 text-left">Filtrar por Eixo Temático</h3>
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-3">
                   {EixoOptions.map((eixo) => (
                     <button
-                      key={eixo}
-                      onClick={() => handleEixoToggle(eixo)}
-                      className={`py-2 pr-2 text-md rounded-full transition-colors ${eixosAtivos.includes(eixo)
-                          ? "bg-teal-100 text-teal-700 border-teal-200"
-                          : "bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100"
+                      key={eixo.nome}
+                      onClick={() => handleEixoToggle(eixo.nome)}
+                      className={`flex items-center pl-0 pr-4 py-0 text-md rounded-full transition-all duration-300 font-medium ${eixosAtivos.includes(eixo.nome)
+                        ? "bg-[#075F70] text-[#F1F1F1] shadow-sm"
+                        : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                         }`}
                     >
-                      <div className="mr-2 w-3 h-4 rounded-full bg-green-200 inline-block">
-
-                      {/* <Image src={eixo.image} alt={eixo}/> */}
+                      <div className={`flex items-center justify-center mr-2 w-10 h-10 rounded-full shadow-inner transition-all duration-300 ${eixosAtivos.includes(eixo.nome) ? "bg-[#075F70] border border-1 border-[#E5EFF0]" : "bg-[#E5EFF0]"}`}>
+                        <Image width={24} height={24} src={eixo.icon} alt={eixo.nome} className={`transition-all duration-300 ${eixosAtivos.includes(eixo.nome) ? "filter brightness-0 invert" : ""}`} />
                       </div>
-                      {eixo}
+                      {eixo.nome}
                     </button>
                   ))}
                 </div>
               </div>
 
-              {/* Filtros por recorte */}
-              {eixosAtivos.length > 0 && recorteOptions.length > 0 && (
-                <div className="mb-6">
-                  <h3 className="text-md font-semibold text-gray-700 mb-3 text-left">Filtrar por Recorte</h3>
-                  <div className="flex flex-wrap gap-2">
+              <div
+                className={`transition-all duration-500 ease-in-out overflow-y-scroll
+                  ${eixosAtivos.length > 0 && recorteOptions.length > 0
+                    ? 'opacity-100 max-h-[300px] translate-y-0 mb-6'
+                    : 'opacity-0 max-h-0 -translate-y-2 pointer-events-none mb-0'
+                  }`}
+              >
+                <h3 className="text-md font-semibold text-gray-700 mb-3 text-left">
+                  Filtrar por Recorte
+                </h3>
+
+                <div className="flex flex-wrap gap-2">
+                  <AnimatePresence initial={false}>
                     {recorteOptions.map((recorte) => (
-                      <button
+                      <motion.button
                         key={recorte}
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.9 }}
+                        transition={{ duration: 0.2 }}
                         onClick={() => setRecorteAtivo(recorteAtivo === recorte ? null : recorte)}
                         className={`px-3 py-2 text-md rounded-full border transition-colors ${recorte === recorteAtivo
                             ? "bg-teal-100 text-teal-700 border-teal-200"
@@ -189,11 +189,12 @@ export default function RepertorioFilters({
                           }`}
                       >
                         {recorte}
-                      </button>
+                      </motion.button>
                     ))}
-                  </div>
+                  </AnimatePresence>
                 </div>
-              )}
+              </div>
+
 
               {/* Ordenação */}
               <div className="mb-6">
@@ -202,8 +203,8 @@ export default function RepertorioFilters({
                   <button
                     onClick={() => setOrdenarPor("Newest")}
                     className={`px-3 py-2 text-sm rounded-[15px] bg-gray-200 transition-colors ${ordenarPor === "Newest"
-                        ? "bg-blue-100 text-blue-700"
-                        : "bg-gray-50 text-gray-700 hover:bg-gray-300"
+                      ? "bg-blue-100 text-blue-700"
+                      : "bg-gray-50 text-gray-700 hover:bg-gray-300"
                       }`}
                   >
                     Mais Novos
@@ -211,8 +212,8 @@ export default function RepertorioFilters({
                   <button
                     onClick={() => setOrdenarPor("Oldest")}
                     className={`px-3 py-2 text-sm rounded-[15px] bg-gray-200 transition-colors duration-300 ${ordenarPor === "Oldest"
-                        ? "bg-blue-100 text-blue-700 border-blue-200"
-                        : "text-gray-700 border-gray-200 hover:bg-gray-300"
+                      ? "bg-blue-100 text-blue-700 border-blue-200"
+                      : "text-gray-700 border-gray-200 hover:bg-gray-300"
                       }`}
                   >
                     Mais Antigos
@@ -220,8 +221,8 @@ export default function RepertorioFilters({
                   <button
                     onClick={() => setOrdenarPor("MaxLikes")}
                     className={`px-3 py-2 text-sm rounded-[15px] bg-gray-200 transition-colors ${ordenarPor === "MaxLikes"
-                        ? "bg-blue-100 text-blue-700 border-blue-200"
-                        : "bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-300"
+                      ? "bg-blue-100 text-blue-700 border-blue-200"
+                      : "bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-300"
                       }`}
                   >
                     Mais Curtidos
@@ -229,8 +230,8 @@ export default function RepertorioFilters({
                   <button
                     onClick={() => setOrdenarPor("MinLikes")}
                     className={`px-3 py-2 text-sm rounded-[15px] bg-gray-200 transition-colors ${ordenarPor === "MinLikes"
-                        ? "bg-blue-100 text-blue-700 border-blue-200"
-                        : "bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-300"
+                      ? "bg-blue-100 text-blue-700 border-blue-200"
+                      : "bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-300"
                       }`}
                   >
                     Menos Curtidos
