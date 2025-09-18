@@ -154,7 +154,7 @@ export default function RepertorioFilters({
                         }`}
                     >
                       <div className={`flex items-center justify-center mr-2 w-10 h-10 rounded-full shadow-inner transition-all duration-300 ${eixosAtivos.includes(eixo.nome) ? "bg-[#075F70] border border-1 border-[#E5EFF0]" : "bg-[#E5EFF0]"}`}>
-                        <Image width={24} height={24} src={eixo.icon} alt={eixo.nome} className={`transition-all duration-300 ${eixosAtivos.includes(eixo.nome) ? "filter brightness-0 invert" : ""}`} />
+                        <Image width={24} height={24} src={eixo.icon} alt={eixo.nome} className={`transition-all duration-300 scale-80 ${eixosAtivos.includes(eixo.nome) ? "filter brightness-0 invert" : ""}`} />
                       </div>
                       {eixo.nome}
                     </button>
