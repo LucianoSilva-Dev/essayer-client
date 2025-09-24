@@ -1,10 +1,19 @@
 import CriarTurmaForm from "./form/criar-turma-form";
+import CarrosselImagens from "./components/carrossel-imagens";
 
 export default function CriarTurmaPage() {
   return (
-    <div className="p-6 max-w-3xl mx-auto bg-gray-50 min-h-screen">
-      <h1 className="text-2xl font-bold mb-6">Criar turma</h1>
-      <CriarTurmaForm />
+    <div className="min-h-screen bg-gray-100">
+      <div className="max-w-3xl mx-auto pt-8">
+        {/* Cabeçalho com o carrossel */}
+        <div className="text-center mb-8">
+          <h1 className="text-3xl font-bold text-[#3C3C3C] mb-6">Foto da turma</h1>
+          <CarrosselImagens />
+        </div>
+        
+        {/* Formulário */}
+        <CriarTurmaForm />
+      </div>
     </div>
   );
 }

@@ -1,7 +1,8 @@
+// FormActions.tsx
 "use client";
 import CriarTurmaButton from "../components/criar-turma-button";
 
-export default function FormActions({ nome, escola }: { nome: string; escola: string }) {
+export default function FormActions({ nome, descricao }: { nome: string; descricao: string }) {
   const criarTurma = async () => {
     const token = localStorage.getItem("token");
     const res = await fetch("https://suaapi.com/turma/", {
@@ -10,7 +11,7 @@ export default function FormActions({ nome, escola }: { nome: string; escola: st
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({ nome, escola }),
+      body: JSON.stringify({ nome, descricao }),
     });
 
     if (res.ok) {
@@ -22,8 +23,10 @@ export default function FormActions({ nome, escola }: { nome: string; escola: st
   };
 
   return (
-    <div className="flex justify-end">
-      <CriarTurmaButton onClick={criarTurma} disabled={!nome} />
+    <div className="border-t border-gray-300 pt-8">
+      <div className="text-center">
+        <CriarTurmaButton onClick={criarTurma} disabled={!nome.trim()} />
+      </div>
     </div>
   );
 }
