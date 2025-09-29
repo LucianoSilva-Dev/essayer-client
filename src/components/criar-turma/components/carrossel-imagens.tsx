@@ -5,9 +5,11 @@ import { motion, AnimatePresence } from "framer-motion";
 
 export default function CarrosselImagens() {
   const imagens = [
-    "/placeholder-avatar-1.png", 
-    "/placeholder-avatar-2.png", 
-    "/placeholder-avatar-3.png"
+    "/turmaFluxo.png", 
+    "/turmaLamp.png", 
+    "/turmaLapis.png",
+    "/turmaPc.png",
+    "/turmaPrancheta.png"
   ];
   const [index, setIndex] = useState(0);
 
@@ -98,11 +100,7 @@ export default function CarrosselImagens() {
               <img 
                 src={imagens[index]} 
                 alt={`Foto da turma ${index + 1}`} 
-                className="w-full h-full rounded-full object-cover border-4 border-white shadow-lg"
-                onError={(e) => {
-                  // Fallback para placeholder caso a imagem não carregue
-                  e.currentTarget.src = `https://via.placeholder.com/128/3C3C3C/FFFFFF?text=Turma+${index + 1}`;
-                }}
+                className="w-40 h-40 rounded-full object-cover border-4 border-white shadow-lg"
               />
               
               {/* Indicador de posição */}
