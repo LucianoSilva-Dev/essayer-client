@@ -12,8 +12,8 @@ export default function CriarTurmaButton({
       type="button"
       onClick={onClick}
       disabled={disabled}
-      className={`px-8 py-3 rounded-lg text-white font-medium text-lg ${
-        disabled ? "bg-gray-400 cursor-not-allowed" : "bg-[#3C3C3C] hover:bg-[#2C2C2C] transition-colors"
+      className={`px-8 py-3 w-[580px] rounded-[30px] text-[#434343] font-medium text-[30px] transition-colors duration-300 ${
+        disabled ? "bg-[#898787] cursor-not-allowed" : "bg-[#075F70] text-[#E5EFF0] hover:bg-[#019DA3] cursor-pointer delay-200"
       }`}
     >
       Criar turma

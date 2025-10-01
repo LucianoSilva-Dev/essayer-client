@@ -30,7 +30,7 @@ export default function CarrosselImagens() {
   };
 
   // largura base dos slides (quanto maior visibleSlides, menor cada um)
-  const slideWidth = 200; // px base — pode ser calculado ou responsivo
+  const slideWidth = 200;
   const gap = 20; // espaçamento horizontal
 
   return (
@@ -42,7 +42,7 @@ export default function CarrosselImagens() {
         {/* Botão anterior */}
         <button
           onClick={() => paginate(-1)}
-          className="w-10 h-10 flex items-center justify-center rounded-full border-2 transition bg-white shadow z-30 absolute left-0 top-1/2 -translate-y-1/2 opacity-70 focus:scale-105 focus:opacity-100 hover:scale-105 hover:opacity-100 transition"
+          className="w-10 h-10 flex items-center justify-center rounded-full transition bg-white shadow z-30 absolute left-0 top-1/2 -translate-y-1/2 opacity-70 focus:scale-105 focus:opacity-100 hover:scale-105 hover:opacity-100 transition"
           style={{ zIndex: 30 }}
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -112,7 +112,7 @@ export default function CarrosselImagens() {
         {/* Botão próximo */}
         <button
           onClick={() => paginate(1)}
-          className="w-10 h-10 flex items-center justify-center rounded-full border-2 bg-white shadow z-30 absolute right-0 top-1/2 -translate-y-1/2 opacity-70 focus:scale-105 focus:opacity-100 hover:scale-105 hover:opacity-100 transition"
+          className="w-10 h-10 flex items-center justify-center rounded-full bg-white shadow z-30 absolute right-0 top-1/2 -translate-y-1/2 opacity-70 focus:scale-105 focus:opacity-100 hover:scale-105 hover:opacity-100 transition"
           style={{ zIndex: 30 }}
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -23,7 +23,7 @@ export default function FormActions({ nome, descricao }: { nome: string; descric
   };
 
   return (
-    <div className="border-t border-gray-300 pt-8">
+    <div className="pt-2">
       <div className="text-center">
         <CriarTurmaButton onClick={criarTurma} disabled={!nome.trim()} />
       </div>
