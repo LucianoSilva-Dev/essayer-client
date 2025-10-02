@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import { IconsMap } from "@/constants/icons";
 
 // Lista de imagens agora com IDs
 const imagens = [
@@ -21,7 +22,7 @@ export default function CarrosselImagens({ onIconSelect }: CarrosselImagensProps
 
   // Efeito para chamar onIconSelect quando o index muda
   useEffect(() => {
-    onIconSelect(imagens[index].id);
+    onIconSelect(IconsMap[index].id);
   }, [index, onIconSelect]);
 
   // Ajusta quantos slides aparecem conforme largura da tela
@@ -36,7 +37,7 @@ export default function CarrosselImagens({ onIconSelect }: CarrosselImagensProps
   }, []);
 
   const paginate = (dir: number) => {
-    setIndex((prev) => (prev + dir + imagens.length) % imagens.length);
+    setIndex((prev) => (prev + dir + IconsMap.length) % IconsMap.length);
   };
 
   const slideWidth = 200;
@@ -58,12 +59,12 @@ export default function CarrosselImagens({ onIconSelect }: CarrosselImagensProps
         </button>
 
         <div className="relative flex items-center justify-center overflow-visible w-full h-[310px]">
-          {imagens.map((imagem, i) => {
+          {IconsMap.map((imagem, i) => {
             let offset = i - index;
-            if (offset < -Math.floor(imagens.length / 2))
-              offset += imagens.length;
-            if (offset > Math.floor(imagens.length / 2))
-              offset -= imagens.length;
+            if (offset < -Math.floor(IconsMap.length / 2))
+              offset += IconsMap.length;
+            if (offset > Math.floor(IconsMap.length / 2))
+              offset -= IconsMap.length;
 
             const xPos = offset * (slideWidth + gap);
             const isActive = offset === 0;
@@ -107,7 +108,7 @@ export default function CarrosselImagens({ onIconSelect }: CarrosselImagensProps
                     initial={{ opacity: 0, y: 5 }}
                     animate={{ opacity: 1, y: 0 }}
                   >
-                    {index + 1}/{imagens.length}
+                    {index + 1}/{IconsMap.length}
                   </motion.span>
                 )}
               </motion.div>

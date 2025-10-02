@@ -4,32 +4,33 @@ import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { GetTurmasCriadasResponse } from "@/apiCalls/turma/types";
 import { getTurmasCriadas } from "@/apiCalls/turma";
+import { defaultIcon, IconsMap } from "@/constants/icons";
+import { getIconPath } from "@/app/utils";
 
 export default function ListaTurmas() {
-
+  const limit = 4 // numeros de turmas por pagina
+  const initialQuery = `limit=${limit}`
   const [turmas, setTurmas] = useState<GetTurmasCriadasResponse>()
-
-  useEffect(() => {
-    (async () => {
-      
-    })()
-    const response = await getTurmasCriadas()
-  }, [])
-
+  const [query, setQuery] = useState(initialQuery)
   const [paginaAtual, setPaginaAtual] = useState(1);
   const [paginaAnterior, setPaginaAnterior] = useState<number | null>(null);
   const [direcao, setDirecao] = useState(1); // 1 = próximo, -1 = anterior
-  const porPagina = 5;
+  const totalPaginas = turmas?.paginacao.pagesUrl.length ?? 1;
+  console.log(totalPaginas)
 
-  const totalPaginas = Math.ceil(notificacoes.length / porPagina);
-  const inicio = (paginaAtual - 1) * porPagina;
-  const fim = inicio + porPagina;
-  const notificacoesPagina = notificacoes.slice(inicio, fim);
+  useEffect(() => {
+    (async () => {
+      const response = await getTurmasCriadas(query)
+      setTurmas(response)
+
+    })()
+  }, [query])
 
   const mudarPagina = (nova: number) => {
     setDirecao(nova > paginaAtual ? 1 : -1);
     setPaginaAnterior(paginaAtual); // guarda a página antiga
     setPaginaAtual(nova);
+    setQuery(turmas?.paginacao.pagesUrl[nova - 1] ?? '')
   };
 
   return (
@@ -56,21 +57,22 @@ export default function ListaTurmas() {
               className="absolute w-full space-y-4 z-10"
               onAnimationComplete={() => setPaginaAnterior(null)}
             >
-              {obterPagina(paginaAnterior).map((n) => (
+              {turmas?.documentos ? turmas?.documentos.map((turma) => (
                 <div
-                key={n.id}
-                className="mb-8 p-4 h-[128px] bg-gradient-to-r from-gray-50 to-white border-t-5 border-[#075F70] rounded-xl shadow-sm hover:shadow-md transition-all cursor-pointer group"
-              >
+                  key={turma.id}
+                  className="mb-8 p-4 h-[128px] bg-gradient-to-r from-gray-50 to-white border-t-5 border-[#075F70] rounded-xl shadow-sm hover:shadow-md transition-all cursor-pointer group"
+                >
 
-                <div className="flex items-center gap-3">
-                  <Image width={48} height={48} src={n.icon} alt={n.titulo}></Image>
-                <p className="font-semibold text-[#3C3C3C] text-[20px] group-hover:text-blue-700 transition-colors">
-                  {n.titulo}
-                </p>
+                  <div className="flex items-center gap-3">
+                    <Image width={48} height={48} src={getIconPath(turma.iconeId, defaultIcon.src)} alt={`Icone da turma '${turma.nome}'`}></Image>
+                    <p className="font-semibold text-[#3C3C3C] text-[20px] group-hover:text-blue-700 transition-colors">
+                      {turma.nome}
+                    </p>
+                  </div>
+                  <p className="text-[16px] text-gray-600 mt-1">{turma.escola ?? (<strong><i>Escola desconhecida</i></strong>)}</p>
                 </div>
-                <p className="text-[16px] text-gray-600 mt-1">{n.descricao}</p>
-              </div>
-              ))}
+            )) : 'Você ainda não criou nenhuma turma'
+              }
             </motion.div>
           )}
 
@@ -87,19 +89,19 @@ export default function ListaTurmas() {
             }}
             className="absolute w-full space-y-4 z-20"
           >
-            {notificacoesPagina.map((n) => (
+            {turmas?.documentos.map((turma) => (
               <div
-                key={n.id}
+                key={turma.id}
                 className="mb-8 p-4 h-[128px] bg-gradient-to-r from-gray-50 to-white border-t-5 border-[#075F70] rounded-xl shadow-sm hover:shadow-md transition-all cursor-pointer group"
               >
 
                 <div className="flex items-center gap-3">
-                  <Image width={48} height={48} src={n.icon} alt={n.titulo}></Image>
-                <p className="font-semibold text-[#3C3C3C] text-[20px] group-hover:text-blue-700 transition-colors">
-                  {n.titulo}
-                </p>
+                  <Image width={48} height={48} src={getIconPath(turma.iconeId, defaultIcon.src)} alt={`Icone da turma '${turma.nome}'`}></Image>
+                  <p className="font-semibold text-[#3C3C3C] text-[20px] group-hover:text-blue-700 transition-colors">
+                    {turma.nome}
+                  </p>
                 </div>
-                <p className="text-[16px] text-gray-600 mt-1">{n.descricao}</p>
+                <p className="text-[16px] text-gray-600 mt-1">{turma.escola}</p>
               </div>
             ))}
           </motion.div>
