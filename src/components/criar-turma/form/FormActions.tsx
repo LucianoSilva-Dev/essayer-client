@@ -21,7 +21,7 @@ export default function FormActions({ nome, escola, iconeId }: FormActionsProps)
         iconeId,
       });
       toast.success("Turma criada com sucesso!");
-      router.push("/turmas-professor"); // Redireciona para a página de turmas
+      router.push("/turmas_professor"); // Redireciona para a página de turmas
     } catch (error) {
       // O erro já é tratado pelo interceptor do axios, mas você pode adicionar lógicas extras aqui se precisar.
       console.error("Erro ao criar turma:", error);
