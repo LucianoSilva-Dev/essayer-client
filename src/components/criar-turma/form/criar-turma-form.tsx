@@ -1,16 +1,28 @@
 "use client";
-import { useState } from "react";
 import FormActions from "./FormActions";
 
-export default function CriarTurmaForm() {
-  const [nome, setNome] = useState("");
-  const [descricao, setDescricao] = useState("");
+interface CriarTurmaFormProps {
+  nome: string;
+  setNome: (nome: string) => void;
+  escola: string;
+  setEscola: (escola: string) => void;
+  iconeId: number;
+}
 
+export default function CriarTurmaForm({
+  nome,
+  setNome,
+  escola,
+  setEscola,
+  iconeId,
+}: CriarTurmaFormProps) {
   return (
     <form className="w-full rounded-t-[50px] mr-0 bg-[#E2E2E2] shadow-lg pt-10 px-8 pb-8">
       {/* Seção do nome da turma */}
       <div className="mb-8">
-        <label htmlFor="nomeTurma" className="text-[25px] font-semibold text-[#3C3C3C] mb-3">Nome da turma<span className="text-red-600">*</span></label>
+        <label htmlFor="nomeTurma" className="text-[25px] font-semibold text-[#3C3C3C] mb-3">
+          Nome da turma<span className="text-red-600">*</span>
+        </label>
         <input
           type="text"
           id="nomeTurma"
@@ -24,24 +36,26 @@ export default function CriarTurmaForm() {
         </label>
       </div>
 
-      {/* Seção da descrição da turma */}
+      {/* Seção da escola da turma */}
       <div className="mb-8">
-        <label htmlFor="descricao" className="text-[25px] font-semibold text-[#3C3C3C] mb-3">Descrição da turma</label>
+        <label htmlFor="escola" className="text-[25px] font-semibold text-[#3C3C3C] mb-3">
+          Escola (Opcional)
+        </label>
         <textarea
-          value={descricao}
-          id="descricao"
-          onChange={(e) => setDescricao(e.target.value)}
+          value={escola}
+          id="escola"
+          onChange={(e) => setEscola(e.target.value)}
           className="w-full p-4 border-b-2 border-[#3C3C3C] rounded-[10px] h-25 bg-transparent outline-none placeholder-gray-400 resize-none text-lg focus:border-1 focus:border-b-4 transition-all duration-100"
-          placeholder="Digite a descrição da turma"
+          placeholder="Digite o nome da escola ou instituição"
           rows={3}
         />
-        <label htmlFor="descricao" className="text-sm text-gray-600 mb-4">
-          Explique brevemente o objetivo ou conteúdo da turma, isso ajuda os alunos a saberem o que esperar.
+        <label htmlFor="escola" className="text-sm text-gray-600 mb-4">
+          O nome da escola ajuda a identificar a turma, especialmente se você leciona em mais de uma.
         </label>
       </div>
 
       {/* Ações do formulário */}
-      <FormActions nome={nome} descricao={descricao} />
+      <FormActions nome={nome} escola={escola} iconeId={iconeId} />
     </form>
   );
 }

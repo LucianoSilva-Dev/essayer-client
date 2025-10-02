@@ -2,17 +2,27 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 
-export default function CarrosselImagens() {
-  const imagens = [
-    "/turmaFluxo.png",
-    "/turmaLamp.png",
-    "/turmaLapis.png",
-    "/turmaPc.png",
-    "/turmaPrancheta.png"
-  ];
+// Lista de imagens agora com IDs
+const imagens = [
+  { id: 1, src: "/turmaFluxo.png" },
+  { id: 2, src: "/turmaLamp.png" },
+  { id: 3, src: "/turmaLapis.png" },
+  { id: 4, src: "/turmaPc.png" },
+  { id: 5, src: "/turmaPrancheta.png" },
+];
 
+interface CarrosselImagensProps {
+  onIconSelect: (id: number) => void;
+}
+
+export default function CarrosselImagens({ onIconSelect }: CarrosselImagensProps) {
   const [index, setIndex] = useState(0);
   const [visibleSlides, setVisibleSlides] = useState(1);
+
+  // Efeito para chamar onIconSelect quando o index muda
+  useEffect(() => {
+    onIconSelect(imagens[index].id);
+  }, [index, onIconSelect]);
 
   // Ajusta quantos slides aparecem conforme largura da tela
   useEffect(() => {
@@ -29,17 +39,14 @@ export default function CarrosselImagens() {
     setIndex((prev) => (prev + dir + imagens.length) % imagens.length);
   };
 
-  // largura base dos slides (quanto maior visibleSlides, menor cada um)
   const slideWidth = 200;
-  const gap = 20; // espaçamento horizontal
+  const gap = 20;
 
   return (
     <div className="flex flex-col items-center space-y-6">
       <h2 className="text-2xl font-semibold text-[#3C3C3C]">Foto da turma</h2>
 
-      {/* Área do carrossel */}
       <div className="flex items-center justify-center w-full max-w-5xl relative">
-        {/* Botão anterior */}
         <button
           onClick={() => paginate(-1)}
           className="w-10 h-10 flex items-center justify-center rounded-full transition bg-white shadow z-30 absolute left-0 top-1/2 -translate-y-1/2 opacity-70 focus:scale-105 focus:opacity-100 hover:scale-105 hover:opacity-100 transition"
@@ -51,7 +58,7 @@ export default function CarrosselImagens() {
         </button>
 
         <div className="relative flex items-center justify-center overflow-visible w-full h-[310px]">
-          {imagens.map((src, i) => {
+          {imagens.map((imagem, i) => {
             let offset = i - index;
             if (offset < -Math.floor(imagens.length / 2))
               offset += imagens.length;
@@ -60,11 +67,10 @@ export default function CarrosselImagens() {
 
             const xPos = offset * (slideWidth + gap);
             const isActive = offset === 0;
-            // Responsivo: só aplica blur/opacidade se mostrar mais de 1 slide
             const showEffects = visibleSlides > 1;
             return (
               <motion.div
-                key={i}
+                key={imagem.id}
                 className="absolute flex flex-col items-center transition-all duration-50"
                 animate={{
                   x: xPos,
@@ -90,7 +96,7 @@ export default function CarrosselImagens() {
                   }}
                 >
                   <img
-                    src={src}
+                    src={imagem.src}
                     alt={`Foto da turma ${i + 1}`}
                     className="w-full h-full object-cover"
                   />
@@ -109,7 +115,6 @@ export default function CarrosselImagens() {
           })}
         </div>
 
-        {/* Botão próximo */}
         <button
           onClick={() => paginate(1)}
           className="w-10 h-10 flex items-center justify-center rounded-full bg-white shadow z-30 absolute right-0 top-1/2 -translate-y-1/2 opacity-70 focus:scale-105 focus:opacity-100 hover:scale-105 hover:opacity-100 transition"
