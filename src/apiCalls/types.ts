@@ -16,6 +16,7 @@ export interface Paginacao {
     nextPageUrl: string | null;
     previousPageUrl: string | null;
     totalDocuments: number;
+    pagesUrl: string[];
 }
 
 export interface PerfilUsuario {

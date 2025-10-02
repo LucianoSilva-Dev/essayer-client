@@ -1,15 +1,20 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
+import { GetTurmasCriadasResponse } from "@/apiCalls/turma/types";
+import { getTurmasCriadas } from "@/apiCalls/turma";
 
-export default function Notificacoes() {
-  const notificacoes = Array.from({ length: 15 }, (_, i) => ({
-    id: i + 1,
-    titulo: `Nome da turma ${i + 1}`,
-    descricao: "Adignissimos eprehenderit omn est eprehenderit omn",
-    icon: "/turmaLamp.png",
-  }));
+export default function ListaTurmas() {
+
+  const [turmas, setTurmas] = useState<GetTurmasCriadasResponse>()
+
+  useEffect(() => {
+    (async () => {
+      
+    })()
+    const response = await getTurmasCriadas()
+  }, [])
 
   const [paginaAtual, setPaginaAtual] = useState(1);
   const [paginaAnterior, setPaginaAnterior] = useState<number | null>(null);
@@ -25,12 +30,6 @@ export default function Notificacoes() {
     setDirecao(nova > paginaAtual ? 1 : -1);
     setPaginaAnterior(paginaAtual); // guarda a página antiga
     setPaginaAtual(nova);
-  };
-
-  const obterPagina = (pagina: number) => {
-    const inicio = (pagina - 1) * porPagina;
-    const fim = inicio + porPagina;
-    return notificacoes.slice(inicio, fim);
   };
 
   return (
