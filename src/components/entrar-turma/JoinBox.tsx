@@ -1,16 +1,22 @@
 "use client"
 
+import { entrarTurma } from "@/apiCalls/turma"
+import { redirect } from "next/navigation"
 import type React from "react"
 import { useState } from "react"
 import { Background } from "./background"
+import { toast } from "react-toastify"
 
 export default function JoinBox() {
   const [codigo, setCodigo] = useState("")
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    console.log("Código da turma:", codigo)
-    // aqui você chama a API para validar/entrar na turma
+    if (!codigo) toast.error('insira um código para entrar em uma turma.');
+
+    const response = await entrarTurma(codigo)
+    toast.success('Solictação enviada.')
+    redirect("/turmas_professor") // Mudar para turma do aluno quando estiver pronta
   }
 
   return (

@@ -23,3 +23,8 @@ export const getTurmasCriadas = async (queryString?: string): Promise<GetTurmasC
   const response = await apiClient.get<GetTurmasCriadasResponse>(`/turma/criadas?${queryString || ''}`);
   return response.data;
 }
+
+export const entrarTurma = async (codigoConvite: string): Promise<string> => {
+  const response = await apiClient.post<string>('/turma/solicitar-entrada', { codigoConvite });
+  return response.data;
+}
