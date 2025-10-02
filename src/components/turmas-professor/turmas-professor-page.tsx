@@ -5,7 +5,7 @@ import EntrarTurmaCard from "./EntrarTurmaCard";
 
 export default function TurmasProfessorPage() {
   return (
-    <main className="grid grid-cols-3 gap-6 p-6 w-full h-[100vh]">
+    <main className="grid grid-cols-3 gap-6 p-6 w-full h-[100vh] overflow-x-hidden">
       {/* Coluna esquerda */}
       <Notificacoes />
 

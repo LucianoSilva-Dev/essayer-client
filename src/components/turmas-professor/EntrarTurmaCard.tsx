@@ -2,12 +2,12 @@ import Link from "next/link";
 
 export default function EntrarTurmaCard({ className }: { className?: string }) {
   return (
-    <div className={`relative w-full h-full min-h-[312px] bg-[#E5EFF0] rounded-[40px] p-4 cursor-pointer group scale-95 hover:scale-100 transition-all duration-300 ${className}`}>
+    <div className={`relative w-full h-full min-h-[312px] scale-90 bg-[#E5EFF0] rounded-[40px] p-4 cursor-pointer group transition-all duration-300 ${className}`}>
       <div className="absolute w-[100%] h-[100%] right-[2%] top-[-14%] z-0">
         <img
           src="/entrarTurmaStudents.png"
           alt="Entrar Turma"
-          className="w-full h-full object-contain transition-all duration-500 group-hover:brightness-110"
+          className="w-full h-full object-contain transition-all duration-500 group-hover:brightness-110 group-hover:scale-105"
         />
       </div>
 

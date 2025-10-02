@@ -1,18 +1,20 @@
 "use client";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
 
 export default function Notificacoes() {
-  const notificacoes = Array.from({ length: 12 }, (_, i) => ({
+  const notificacoes = Array.from({ length: 15 }, (_, i) => ({
     id: i + 1,
     titulo: `Nome da turma ${i + 1}`,
     descricao: "Adignissimos eprehenderit omn est eprehenderit omn",
+    icon: "/turmaLamp.png",
   }));
 
   const [paginaAtual, setPaginaAtual] = useState(1);
   const [paginaAnterior, setPaginaAnterior] = useState<number | null>(null);
   const [direcao, setDirecao] = useState(1); // 1 = próximo, -1 = anterior
-  const porPagina = 4;
+  const porPagina = 5;
 
   const totalPaginas = Math.ceil(notificacoes.length / porPagina);
   const inicio = (paginaAtual - 1) * porPagina;
@@ -47,21 +49,28 @@ export default function Notificacoes() {
               key={`old-${paginaAnterior}`}
               custom={direcao}
               initial={{ x: 0, opacity: 1 }}
-              animate={{ x: direcao > 0 ? -300 : 300, opacity: 0.9 }}
-              transition={{ x: { type: "tween", ease: "easeInOut", duration: 0.4 } }}
-              className="absolute w-full space-y-4"
+              animate={{ x: direcao > 0 ? -60 : 60, opacity: 0 }}
+              transition={{
+                x: { type: "spring", stiffness: 300, damping: 30 },
+                opacity: { duration: 0.25 }
+              }}
+              className="absolute w-full space-y-4 z-10"
               onAnimationComplete={() => setPaginaAnterior(null)}
             >
               {obterPagina(paginaAnterior).map((n) => (
                 <div
-                  key={n.id}
-                  className="p-4 bg-gradient-to-r from-gray-50 to-white border rounded-xl shadow-sm hover:shadow-md transition-all cursor-pointer group"
-                >
-                  <p className="font-semibold text-gray-900 group-hover:text-blue-700 transition-colors">
-                    {n.titulo}
-                  </p>
-                  <p className="text-sm text-gray-600 mt-1">{n.descricao}</p>
+                key={n.id}
+                className="mb-8 p-4 h-[128px] bg-gradient-to-r from-gray-50 to-white border-t-5 border-[#075F70] rounded-xl shadow-sm hover:shadow-md transition-all cursor-pointer group"
+              >
+
+                <div className="flex items-center gap-3">
+                  <Image width={48} height={48} src={n.icon} alt={n.titulo}></Image>
+                <p className="font-semibold text-[#3C3C3C] text-[20px] group-hover:text-blue-700 transition-colors">
+                  {n.titulo}
+                </p>
                 </div>
+                <p className="text-[16px] text-gray-600 mt-1">{n.descricao}</p>
+              </div>
               ))}
             </motion.div>
           )}
@@ -70,24 +79,28 @@ export default function Notificacoes() {
           <motion.div
             key={`new-${paginaAtual}`}
             custom={direcao}
-            initial={{ x: direcao > 0 ? 300 : -300, opacity: 0.9 }}
+            initial={{ x: direcao > 0 ? 60 : -60, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
-            exit={{ x: direcao > 0 ? -300 : 300, opacity: 0.9 }}
+            exit={{ x: direcao > 0 ? -60 : 60, opacity: 0 }}
             transition={{
-              x: { type: "tween", ease: "easeInOut", duration: 0.4 },
-              opacity: { duration: 0.2 },
+              x: { type: "spring", stiffness: 300, damping: 30 },
+              opacity: { duration: 0.25 }
             }}
-            className="absolute w-full space-y-4"
+            className="absolute w-full space-y-4 z-20"
           >
             {notificacoesPagina.map((n) => (
               <div
                 key={n.id}
-                className="p-4 bg-gradient-to-r from-gray-50 to-white border-t-4 border-[#075F70] rounded-xl shadow-sm hover:shadow-md transition-all cursor-pointer group"
+                className="mb-8 p-4 h-[128px] bg-gradient-to-r from-gray-50 to-white border-t-5 border-[#075F70] rounded-xl shadow-sm hover:shadow-md transition-all cursor-pointer group"
               >
-                <p className="font-semibold text-gray-900 group-hover:text-blue-700 transition-colors">
+
+                <div className="flex items-center gap-3">
+                  <Image width={48} height={48} src={n.icon} alt={n.titulo}></Image>
+                <p className="font-semibold text-[#3C3C3C] text-[20px] group-hover:text-blue-700 transition-colors">
                   {n.titulo}
                 </p>
-                <p className="text-sm text-gray-600 mt-1">{n.descricao}</p>
+                </div>
+                <p className="text-[16px] text-gray-600 mt-1">{n.descricao}</p>
               </div>
             ))}
           </motion.div>
