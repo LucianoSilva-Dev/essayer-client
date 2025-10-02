@@ -1,6 +1,6 @@
 import apiClient from '../api-client';
 import type { GenericSuccessResponse } from '../types';
-import type { CreateTurmaBody } from './types';
+import type { CreateTurmaBody, GetTurmasCriadasResponse } from './types';
 
 /**
  * Cria uma nova turma.
@@ -14,3 +14,12 @@ export const createTurma = async (data: CreateTurmaBody): Promise<GenericSuccess
   });
   return response.data;
 };
+
+/**
+ * Busca as turmas criadas pelo professor logado.
+ * @returns Uma lista paginada de turmas.
+ */
+export const getTurmasCriadas = async (queryString?: string): Promise<GetTurmasCriadasResponse> => {
+  const response = await apiClient.get<GetTurmasCriadasResponse>(`/turma/criadas?${queryString || ''}`);
+  return response.data;
+}
