@@ -2,15 +2,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { IconsMap } from "@/constants/icons";
-
-// Lista de imagens agora com IDs
-const imagens = [
-  { id: 1, src: "/turmaFluxo.png" },
-  { id: 2, src: "/turmaLamp.png" },
-  { id: 3, src: "/turmaLapis.png" },
-  { id: 4, src: "/turmaPc.png" },
-  { id: 5, src: "/turmaPrancheta.png" },
-];
+import Image from "next/image";
 
 interface CarrosselImagensProps {
   onIconSelect: (id: number) => void;
@@ -88,15 +80,16 @@ export default function CarrosselImagens({ onIconSelect }: CarrosselImagensProps
                 }}
               >
                 <div
-                  className={`rounded-full overflow-hidden border-4 ${
-                    isActive ? "border-white shadow-lg" : "border-transparent"
-                  }`}
+                  className={`rounded-full overflow-hidden border-4 ${isActive ? "border-white shadow-lg" : "border-transparent"
+                    }`}
                   style={{
                     width: slideWidth,
                     height: slideWidth
                   }}
                 >
-                  <img
+                  <Image
+                    width={100}
+                    height={100}
                     src={imagem.src}
                     alt={`Foto da turma ${i + 1}`}
                     className="w-full h-full object-cover"
