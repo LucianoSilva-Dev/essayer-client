@@ -17,3 +17,12 @@ export interface GetTurmasCriadasResponse {
   documentos: TurmaCriada[];
   paginacao: Paginacao;
 }
+
+export interface GetAtividadesRecentesReponse {
+  id: string;
+  titulo: string;
+  descricao: string;
+  respostas: Number;
+  totalAlunos: Number;
+  createdAt: Date;
+}
