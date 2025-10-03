@@ -24,13 +24,13 @@ const navigationItems = [
   {
     icon: PenTool,
     label: "Praticar redação",
-    href: "/adicionar",
+    href: "/adicionar", // mudar depois
     roles: ["professor", "admin"],
   },
   {
       icon: Users,
       label: "Turmas",
-      href: "/criar_turma", //Adicionado esse caminho para manutenção
+      href: "/turmas_professor", //Adicionado esse caminho para manutenção
       roles: ["professor", "admin"], 
     },
     {
