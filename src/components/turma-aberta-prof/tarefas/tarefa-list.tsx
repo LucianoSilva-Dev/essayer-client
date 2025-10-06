@@ -1,29 +1,19 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import TarefaCard from "./tarefa-card";
 import CriarTarefaButton from "./criar-tarefa-button";
-import { getAtividadesTurma } from "../../../apiCalls/turma-aberta-prof";
-import { Atividade } from "../../../apiCalls/turma-aberta-prof/types";
+import { useTurmaData } from "@/hooks/useTurmaData";
 
 interface Props {
   turmaId: string;
 }
 
 export default function TarefaList({ turmaId }: Props) {
-  const [tarefas, setTarefas] = useState<Atividade[]>([]);
+  const { atividades, loading, error } = useTurmaData(turmaId);
 
-  useEffect(() => {
-    async function fetchTarefas() {
-      try {
-        const data = await getAtividadesTurma(turmaId);
-        setTarefas(data);
-      } catch (error) {
-        console.error("Erro ao carregar tarefas:", error);
-      }
-    }
-    fetchTarefas();
-  }, [turmaId]);
+  if (loading) return <p className="text-gray-500">Carregando tarefas...</p>;
+  if (error) return <p className="text-red-600">{error}</p>;
+  if (!atividades.length) return <p>Nenhuma tarefa encontrada.</p>;
 
   return (
     <div>
@@ -33,12 +23,12 @@ export default function TarefaList({ turmaId }: Props) {
       </div>
 
       <div className="flex gap-4 overflow-x-auto scrollbar-hide">
-        {tarefas.map((tarefa) => (
+        {atividades.map((tarefa) => (
           <TarefaCard
             key={tarefa.id}
             tema={tarefa.titulo}
-            envios={0} // pode vir da API depois
-            total={60} // ajustar conforme docs
+            envios={0}
+            total={60}
             alunosExtras={0}
             data={tarefa.dataLimite || "Sem prazo"}
           />

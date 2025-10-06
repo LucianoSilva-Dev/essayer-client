@@ -10,10 +10,8 @@ interface Props {
 }
 
 export default function TurmaAbertaPage({ turmaId }: Props) {
-  console.log("TurmaAbertaPage recebeu turmaId:", turmaId);
-
   return (
-    <main className="relative w-[94vw] h-[100vh] bg-grey-50 gap-8">
+    <main className="relative w-[94vw] h-[100vh] bg-gray-50 gap-8">
       <div className="grid grid-cols-6 grid-rows-5 w-full h-full gap-6">
         {/* Calendário */}
         <div className="col-start-5 col-end-7 row-start-1 row-end-2">

@@ -1,28 +1,18 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import CorrecaoItem from "./correcao-item";
-import { getAtividadesTurma } from "../../../apiCalls/turma-aberta-prof";
-import { Atividade } from "../../../apiCalls/turma-aberta-prof/types";
+import { useTurmaData } from "@/hooks/useTurmaData";
 
 interface Props {
   turmaId: string;
 }
 
 export default function CorrecaoList({ turmaId }: Props) {
-  const [correcoes, setCorrecoes] = useState<Atividade[]>([]);
+  const { atividades, loading, error } = useTurmaData(turmaId);
 
-  useEffect(() => {
-    async function fetchCorrecoes() {
-      try {
-        const data = await getAtividadesTurma(turmaId);
-        setCorrecoes(data);
-      } catch (error) {
-        console.error("Erro ao carregar correções:", error);
-      }
-    }
-    fetchCorrecoes();
-  }, [turmaId]);
+  if (loading) return <p>Carregando correções...</p>;
+  if (error) return <p className="text-red-600">{error}</p>;
+  if (!atividades.length) return <p>Nenhuma correção disponível.</p>;
 
   return (
     <div className="flex flex-col gap-4">
@@ -30,12 +20,12 @@ export default function CorrecaoList({ turmaId }: Props) {
         Correções da tarefa
       </h2>
 
-      {correcoes.map((c) => (
+      {atividades.map((c) => (
         <CorrecaoItem
           key={c.id}
-          nome={"Aluno X"} // precisa integrar com envios do aluno
+          nome={"Aluno X"}
           tema={c.titulo}
-          tempo={"--"} // virá da API
+          tempo={"--"}
         />
       ))}
     </div>
