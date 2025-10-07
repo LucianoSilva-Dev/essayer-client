@@ -16,9 +16,7 @@ export default function CorrecaoList({ turmaId }: Props) {
 
   return (
     <div className="flex flex-col gap-4">
-      <h2 className="text-[24px] font-medium text-[#3C3C3C]">
-        Correções da tarefa
-      </h2>
+      
 
       {atividades.map((c) => (
         <CorrecaoItem

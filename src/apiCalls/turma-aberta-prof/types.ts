@@ -16,6 +16,7 @@ export interface Turma {
   escola: string | null;
   criador: Criador;
   membros: Aluno[];
+  descricao: string;
 }
 
 export interface Atividade {

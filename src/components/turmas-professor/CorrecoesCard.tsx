@@ -15,7 +15,7 @@ export default function CorrecoesCard({ className }: { className?: string }) {
 
   return (
     <div className={`relative w-full h-full scale-90 bg-white rounded-[20px] shadow-lg p-5 z-10 ${className}`}>
-      <h2 className="w-full font-montserrat font-semibold text-[22px] leading-[27px] text-[#3C3C3C] text-center mb-5">
+      <h2 className="w-full font-montserrat font-semibold text-[22px] leading-[27px] text-[#3C3C3C] text-center mb-7">
         Central de correções
       </h2>
 

@@ -16,8 +16,9 @@ import type {
   ConviteResponse,
 } from "@/apiCalls/turma-aberta-prof/types";
 
+
 export function useTurmaData(turmaId?: string) {
-  const [turma, setTurma] = useState<Turma | null>(null);
+  const [turma, setTurma] = useState<Turma| null>(null);
   const [alunos, setAlunos] = useState<Aluno[]>([]);
   const [atividades, setAtividades] = useState<Atividade[]>([]);
   const [pedidos, setPedidos] = useState<PedidoEntrada[]>([]);

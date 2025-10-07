@@ -1,61 +1,50 @@
-'use client'
+"use client";
 
 import React from "react";
-import { useState } from "react";
 
-interface Day {
-  weekDay: string;
-  day: number;
-  hasEvent?: boolean;
+interface DateSelectorProps {
+  deliveryDate?: Date; // Data de entrega da tarefa
 }
 
-const DateSelector: React.FC = () => {
-  const days: Day[] = [
-    { weekDay: "Dom", day: 12 },
-    { weekDay: "Seg", day: 13 },
-    { weekDay: "Ter", day: 14 },
-    { weekDay: "Qua", day: 15 },
-    { weekDay: "Qui", day: 16, hasEvent: true },
-    { weekDay: "Sex", day: 17 },
-    { weekDay: "Sáb", day: 18 },
-  ];
+const DateSelector: React.FC<DateSelectorProps> = ({ deliveryDate }) => {
+  const today = new Date();
+  const currentDay = today.getDate();
 
-  const [selectedDay, setSelectedDay] = useState<number>(13);
+  // Gera os próximos 7 dias
+  const days = Array.from({ length: 7 }).map((_, i) => {
+    const date = new Date();
+    date.setDate(today.getDate() + i);
+
+    const weekDay = date.toLocaleDateString("pt-BR", { weekday: "short" });
+    const day = date.getDate();
+
+    // ✅ Comparação de data simplificada (ignora horas)
+    const isDelivery =
+      deliveryDate &&
+      date.getDate() === new Date(deliveryDate).getDate() &&
+      date.getMonth() === new Date(deliveryDate).getMonth() &&
+      date.getFullYear() === new Date(deliveryDate).getFullYear();
+
+    return { weekDay, day, isDelivery };
+  });
 
   return (
-    <div
-      className="absolute left-[964px] top-[215px] w-[453px] h-[84px] 
-                 flex flex-row justify-center items-center gap-2"
-    >
-      {days.map(({ weekDay, day, hasEvent }) => {
-        const isSelected = selectedDay === day;
+    <div className="flex justify-between items-center gap-3 overflow-x-auto scrollbar-hide">
+      {days.map(({ weekDay, day, isDelivery }) => {
+        const isToday = day === currentDay;
 
         return (
           <div
             key={day}
-            onClick={() => setSelectedDay(day)}
-            className="flex flex-col items-center cursor-pointer"
+            className={`flex flex-col items-center justify-center rounded-xl px-3 py-2 transition-all
+              ${isToday ? "bg-teal-700 text-white" : "text-gray-700"}
+            `}
           >
-            {/* Dia da semana */}
-            <span
-              className={`text-sm font-medium ${
-                isSelected ? "text-white" : "text-gray-700"
-              } ${isSelected ? "bg-teal-700 px-3 py-1 rounded-full" : ""}`}
-            >
-              {weekDay}
-            </span>
+            <span className="text-sm font-medium capitalize">{weekDay}</span>
+            <span className="text-base font-semibold mt-1">{day}</span>
 
-            {/* Número do dia */}
-            <span
-              className={`mt-1 text-base font-semibold ${
-                isSelected ? "text-white bg-teal-700 px-3 py-1 rounded-full" : "text-gray-800"
-              }`}
-            >
-              {day}
-            </span>
-
-            {/* Pontinho de evento */}
-            {hasEvent && !isSelected && (
+            {/* ✅ Bolinha do dia de entrega */}
+            {isDelivery && (
               <span className="w-2 h-2 rounded-full bg-teal-700 mt-1"></span>
             )}
           </div>
