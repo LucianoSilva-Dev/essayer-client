@@ -10,7 +10,6 @@ import {
 // Obtém detalhes da turma
 export const getTurmaById = async (id: string): Promise<Turma> => {
   const { data } = await apiClient.get(`/turma/${id}`);
-  console.log(data)
   return data;
 };
 

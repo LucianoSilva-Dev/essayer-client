@@ -1,23 +1,20 @@
 // TypeScript types based on the API schema
 
-export type UserType = "PROFESSOR" | "ALUNO"
-
-export interface User {
-  id: string
-  nome: string
-  email: string
-  tipo: UserType
-  criadoEm: string
-  atualizadoEm: string
-}
+import { PerfilUsuario } from "@/apiCalls/types"
 
 export interface Turma {
   id: string
   nome: string
-  descricao: string
+
   professorId: string
+  criador: PerfilUsuario
   criadoEm: string
   atualizadoEm: string
+}
+
+export interface TurmaDetalhada extends Turma {
+  membros: PerfilUsuario[];
+  
 }
 
 export interface Tarefa {
@@ -40,12 +37,7 @@ export interface Envio {
   atualizadoEm: string
 }
 
-export interface Integrante {
-  id: string
-  nome: string
-  email: string
-  tipo: UserType
-}
+
 
 // Extended types with computed data
 export interface TarefaWithStats extends Tarefa {
@@ -54,6 +46,4 @@ export interface TarefaWithStats extends Tarefa {
   envios: Envio[]
 }
 
-export interface EnvioWithAluno extends Envio {
-  aluno: User
-}
+

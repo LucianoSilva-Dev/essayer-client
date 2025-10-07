@@ -33,3 +33,18 @@ export const getAtividadesRecentes = async (): Promise<GetAtividadesRecentesRepo
   const response = await apiClient.get<GetAtividadesRecentesReponse[]>('/atividade/recentes')
   return response.data
 }
+
+export async function getTurmasAluno() {
+  const res = await apiClient.get("/turma/");
+  return res.data;
+}
+
+export async function getTurmaById(id: string) {
+  const res = await apiClient.get(`/turma/${id}`);
+  return res.data;
+}
+
+export async function getAtividadesByTurma(id: string) {
+  const res = await apiClient.get(`/turma/${id}/atividades`);
+  return res.data;
+}
