@@ -18,6 +18,9 @@ export interface TurmaDetalhada extends Turma {
 }
 
 export interface Tarefa {
+  dataLimite: string
+  titulo: string
+  status: string
   id: string
   turmaId: string
   tema: string
