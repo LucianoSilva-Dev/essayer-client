@@ -4,7 +4,11 @@ import { Tarefa } from "@/types/turma";
 
 export default function TarefaList({ tarefas }: { tarefas: Tarefa[] }) {
   if (!tarefas || tarefas.length === 0)
-    return <div className="text-sm text-gray-500">Nenhuma tarefa encontrada.</div>;
+    return (
+      <div className="text-sm text-gray-500 bg-gray-50 rounded-lg p-3 text-center">
+        Nenhuma tarefa encontrada.
+      </div>
+    );
 
   return (
     <div className="space-y-3">

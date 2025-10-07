@@ -5,7 +5,7 @@ import { PerfilUsuario } from "@/apiCalls/types"
 export interface Turma {
   id: string
   nome: string
-
+  descricao: string
   professorId: string
   criador: PerfilUsuario
   criadoEm: string
@@ -18,6 +18,9 @@ export interface TurmaDetalhada extends Turma {
 }
 
 export interface Tarefa {
+  dataLimite: string
+  titulo: string
+  status: string
   id: string
   turmaId: string
   tema: string

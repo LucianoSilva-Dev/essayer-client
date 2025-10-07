@@ -1,3 +1,5 @@
+"use client"
+
 import { useEffect, useState } from "react";
 import { getTurmasAluno } from "@/apiCalls/turma";
 import { Turma } from "@/types/turma";
