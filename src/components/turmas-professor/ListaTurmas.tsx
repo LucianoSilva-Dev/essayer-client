@@ -35,9 +35,8 @@ export default function ListaTurmas() {
 
   return (
     <section className="col-span-1 bg-transparent p-6 flex flex-col h-full z-1">
-      {/* Aqui vai o botão de ver notificações */}
       <h2 className="text-xl font-bold text-gray-800 pb-3">
-        Notificações
+        Turmas
       </h2>
 
       {/* Lista paginada com animação */}

@@ -30,7 +30,7 @@ const navigationItems = [
   {
       icon: Users,
       label: "Turmas",
-      href: "/criar_turma", //Adicionado esse caminho para manutenção
+      href: "/turmas_professor", //Adicionado esse caminho para manutenção
       roles: ["professor", "admin"], 
     },
     {
