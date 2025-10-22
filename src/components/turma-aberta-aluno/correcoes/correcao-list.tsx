@@ -1,69 +1,54 @@
-"use client";
-import React, { useEffect, useState } from "react";
-import { AlertCircle } from "lucide-react";
-import api from "@/apiCalls/api-client";
+// src/components/turma-aberta-aluno/correcoes/correcao-list.tsx
+import React from "react";
+import { AlertCircle, ChevronDown } from "lucide-react";
+import CorrecaoItem from "./correcao-item";
+import { Correcao } from "@/types/turma"; // Certifique-se que o tipo está importado
 
-interface Correcao {
-  id: string;
-  tema: string;
-  visto: boolean;
+interface CorrecaoListProps {
+  correcoes: Correcao[];
+  loading: boolean;
+  error: any;
 }
 
-export default function CorrecaoList({ turmaId }: { turmaId: string }) {
-  const [correcoes, setCorrecoes] = useState<Correcao[]>([]);
-  const [error, setError] = useState(false);
+export default function CorrecaoList({ correcoes, loading, error }: CorrecaoListProps) {
 
-  useEffect(() => {
-    const fetchCorrecoes = async () => {
-      try {
-        const response = await api.get(`/turma/${turmaId}/atividades`);
-        const mapped = response.data.map((a: any) => ({
-          id: a.id,
-          tema: a.titulo,
-          visto: Math.random() > 0.5,
-        }));
-        setCorrecoes(mapped);
-      } catch (e) {
-        console.error("Erro ao carregar correções:", e);
-        setError(true);
-      }
-    };
-    fetchCorrecoes();
-  }, [turmaId]);
+  if (loading) return <div className="text-sm text-gray-500 text-center py-4">Carregando correções...</div>;
 
   if (error)
     return (
-      <div className="flex items-center gap-2 text-sm text-gray-500">
-        <AlertCircle className="w-4 h-4" />
+      <div className="flex flex-col items-center gap-2 text-sm text-red-500 bg-red-50 p-4 rounded-lg">
+        <AlertCircle className="w-5 h-5" />
+        {/* Mensagem de erro pode vir do hook/pai se necessário */}
         Erro ao carregar correções.
       </div>
     );
 
-  if (!correcoes.length)
+  if (!correcoes || correcoes.length === 0)
     return (
-      <div className="text-sm text-gray-500 bg-gray-50 rounded-lg p-3 text-center">
+      <div className="text-sm text-gray-500 bg-gray-50 rounded-lg p-4 text-center">
         Nenhuma correção disponível.
       </div>
     );
 
   return (
-    <div className="space-y-2">
-      {correcoes.map((c) => (
-        <div
-          key={c.id}
-          className="flex items-center justify-between p-3 border rounded-lg hover:bg-gray-50 transition"
-        >
-          <div>
-            <div className="text-sm font-medium text-gray-800">{c.tema}</div>
-            <div className="text-xs text-gray-400">
-              {c.visto ? "Visto" : "Não visto"}
-            </div>
-          </div>
-          <button className="text-sm text-teal-600 hover:underline">
-            Abrir
-          </button>
+    <div>
+       {/* Header com título e ordenação */}
+       <div className="flex justify-between items-center mb-4">
+            <h4 className="font-semibold text-gray-800">
+              Correções disponíveis
+            </h4>
+            <button className="flex items-center text-xs text-gray-500 hover:text-gray-700">
+                Ordenar por
+                <ChevronDown size={14} className="ml-1" />
+            </button>
+       </div>
+        {/* Lista de correções */}
+        <div className="space-y-1">
+            {/* Mapeia o array recebido via props */}
+            {correcoes.map((c) => (
+                <CorrecaoItem key={c.id} correcao={c} />
+            ))}
         </div>
-      ))}
     </div>
   );
 }

@@ -1,31 +1,51 @@
-"use client";
-
+import React from "react";
+import { AlertCircle, ChevronDown } from "lucide-react";
 import CorrecaoItem from "./correcao-item";
-import { useTurmaData } from "@/hooks/useTurmaData";
+import { Correcao } from "@/types/turma"; // Importe o tipo
 
-interface Props {
-  turmaId: string;
+interface CorrecaoListProps {
+  correcoes: Correcao[];
+  loading: boolean;
+  error: any;
 }
 
-export default function CorrecaoList({ turmaId }: Props) {
-  const { atividades, loading, error } = useTurmaData(turmaId);
+export default function CorrecaoList({ correcoes, loading, error }: CorrecaoListProps) {
 
-  if (loading) return <p>Carregando correções...</p>;
-  if (error) return <p className="text-red-600">{error}</p>;
-  if (!atividades.length) return <p>Nenhuma correção disponível.</p>;
+  if (loading) return <div className="text-sm text-gray-500 text-center py-4">Carregando correções...</div>;
+
+  if (error)
+    return (
+      <div className="flex flex-col items-center gap-2 text-sm text-red-500 bg-red-50 p-4 rounded-lg">
+        <AlertCircle className="w-5 h-5" />
+        Erro ao carregar correções.
+      </div>
+    );
+
+  if (!correcoes || correcoes.length === 0)
+    return (
+      <div className="text-sm text-gray-500 bg-gray-50 rounded-lg p-4 text-center">
+        Nenhuma correção disponível.
+      </div>
+    );
 
   return (
-    <div className="flex flex-col gap-4">
-      
-
-      {atividades.map((c) => (
-        <CorrecaoItem
-          key={c.id}
-          nome={"Aluno X"}
-          tema={c.titulo}
-          tempo={"--"}
-        />
-      ))}
+    <div>
+        {/* Header com título e ordenação */}
+       <div className="flex justify-between items-center mb-4">
+            <h4 className="font-semibold text-gray-800">
+              Correções disponíveis
+            </h4>
+            <button className="flex items-center text-xs text-gray-500 hover:text-gray-700">
+                Ordenar por
+                <ChevronDown size={14} className="ml-1" />
+            </button>
+       </div>
+        {/* Lista de correções */}
+        <div className="space-y-1">
+            {correcoes.map((c) => (
+                <CorrecaoItem key={c.id} correcao={c} />
+            ))}
+        </div>
     </div>
   );
 }

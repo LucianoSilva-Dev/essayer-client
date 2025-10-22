@@ -40,7 +40,14 @@ export interface Envio {
   atualizadoEm: string
 }
 
-
+export interface Correcao {
+  id: string,
+  visto: boolean,
+  titulo: string,
+  descricao: string,
+  criadoEm: string,
+  feedbackProfessor: string,
+}
 
 // Extended types with computed data
 export interface TarefaWithStats extends Tarefa {
