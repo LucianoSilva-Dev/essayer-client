@@ -2,7 +2,7 @@
 import React from "react";
 import { AlertCircle, ChevronDown } from "lucide-react";
 import CorrecaoItem from "./correcao-item";
-import { Correcao } from "@/types/turma"; // Certifique-se que o tipo está importado
+import { Correcao } from "@/apiCalls/turma/types";
 
 interface CorrecaoListProps {
   correcoes: Correcao[];

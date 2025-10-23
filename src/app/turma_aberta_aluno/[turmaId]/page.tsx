@@ -4,6 +4,7 @@ interface Props {
   params: { turmaId: string };
 }
 
-export default function Page({ params }: Props) {
-  return <TurmaAbertaAlunoPage turmaId={params.turmaId} />;
+export default async function Page({ params }: Props) {
+  const awaitedParams = await params;
+  return <TurmaAbertaAlunoPage turmaId={awaitedParams.turmaId} />;
 }

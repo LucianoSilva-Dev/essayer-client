@@ -3,14 +3,14 @@
 
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-// Importar a nova função e o tipo Correcao
 import { getTurmaById, getAtividadesByTurma, getCorrecoesByTurma } from "@/apiCalls/turma";
-import { TurmaDetalhada, Tarefa } from "@/types/turma";
-import { Correcao } from "@/types/turma"; // Importar o tipo Correcao
+import { Correcao } from "@/apiCalls/turma/types";
+import { AtividadeBasica, Turma } from "@/apiCalls/turma/types";
+import { Atividade } from "@/apiCalls/turma-aberta-prof/types";
 
 export function useTurmaAbertaAluno(turmaId: string) {
-  const [turma, setTurma] = useState<TurmaDetalhada | null>(null);
-  const [tarefas, setTarefas] = useState<Tarefa[]>([]);
+  const [turma, setTurma] = useState<Turma | null>(null);
+  const [tarefas, setTarefas] = useState<AtividadeBasica[]>([]);
   const [correcoes, setCorrecoes] = useState<Correcao[]>([]); // Mantém o estado para correções
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<any>(null);
@@ -27,7 +27,7 @@ export function useTurmaAbertaAluno(turmaId: string) {
         const [turmaData, atividadesData, correcoesData] = await Promise.all([
           getTurmaById(turmaId),
           getAtividadesByTurma(turmaId),
-          getCorrecoesByTurma(turmaId), // Chama a nova função de API
+          getCorrecoesByTurma(turmaId),
         ]);
 
         if (!mounted) return;

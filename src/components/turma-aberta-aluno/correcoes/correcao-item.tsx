@@ -1,6 +1,5 @@
-// src/components/turma-aberta-aluno/correcoes/correcao-item.tsx
 import React from "react";
-import { Correcao } from "@/types/turma"; // Importe o tipo Correcao
+import { Correcao } from "@/apiCalls/turma/types";
 
 interface CorrecaoItemProps {
   correcao: Correcao;
@@ -12,12 +11,10 @@ export default function CorrecaoItem({ correcao }: CorrecaoItemProps) {
       className="flex items-center justify-between p-3 border-b border-gray-100 hover:bg-gray-50 transition cursor-pointer rounded-md"
     >
       <div>
-        {/* Usar 'titulo' da Correcao */}
-        <div className="text-sm font-medium text-gray-800">{correcao.titulo}</div>
-        {/* Usar 'descricao' da Correcao, se disponível */}
-        {correcao.descricao && (
+        <div className="text-sm font-medium text-gray-800">{correcao.atividade.tipoAtividade}</div>
+        {correcao.atividade.titulo && (
              <div className="text-xs text-gray-500 mt-1">
-                 {correcao.descricao}
+                 {correcao.atividade.titulo}
              </div>
         )}
       </div>

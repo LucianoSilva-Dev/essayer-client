@@ -1,4 +1,3 @@
-// src/components/turma-aberta-aluno/turma-aberta-aluno-page.tsx
 "use client";
 
 import React from "react";
@@ -6,12 +5,10 @@ import { useTurmaAbertaAluno } from "@/hooks/useTurmaAbertaAluno";
 import TarefaList from "@/components/turma-aberta-aluno/tarefas/tarefa-list";
 import CorrecaoList from "@/components/turma-aberta-aluno/correcoes/correcao-list";
 import IntegranteList from "@/components/turma-aberta-aluno/comunidade/integrante-list";
-// Importando o DateSelector da pasta do professor, assumindo que é reutilizável
 import DateSelector from "@/components/turma-aberta-prof/ui/date-selector";
-// Importando o EntrarTurmaCard correto
-import EntrarTurmaCard from "@/components/turmas-professor/EntrarTurmaCard"; //
+import EntrarTurmaCard from "@/components/turmas-professor/EntrarTurmaCard";
 import { AlertCircle } from "lucide-react";
-import Loading from "@/components/loading"; // Importar componente Loading
+import Loading from "@/components/loading";
 import TarefaItem from "../turma-aberta-aluno/tarefas/tarefa-item";
 
 export default function TurmaAbertaAlunoPage({ turmaId }: { turmaId: string }) {
@@ -63,8 +60,8 @@ export default function TurmaAbertaAlunoPage({ turmaId }: { turmaId: string }) {
           {/* Cabeçalho da Turma */}
           <div className="bg-white p-5 rounded-lg shadow mb-6">
             <h1 className="text-xl font-semibold text-gray-800">{turma.nome}</h1>
-            {turma.descricao && (
-              <p className="text-sm text-gray-600 mt-1">{turma.descricao}</p>
+            {turma.escola && (
+              <p className="text-sm text-gray-600 mt-1">{turma.escola}</p>
             )}
           </div>
 

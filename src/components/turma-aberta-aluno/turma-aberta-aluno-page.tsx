@@ -43,15 +43,15 @@ export default function TurmaAbertaAlunoPage({ turmaId }: { turmaId: string }) {
   const outrasTarefas = tarefas.filter(t => t.id !== primeiraTarefaConcluida?.id);
 
   return (
-    <div className="min-h-screen p-6 bg-gray-50 pt-24">
+    <div className="min-h-screen p-6 bg-gray-50">
       <div className="max-w-full mx-auto grid grid-cols-1 md:grid-cols-12 gap-6">
 
         {/* Coluna Central (Histórico de Tarefas) */}
         <div className="col-span-12 md:col-span-6 lg:col-span-5 order-2 md:order-1">
           <div className="bg-white p-5 rounded-lg shadow mb-6">
             <h1 className="text-xl font-semibold text-gray-800">{turma!.nome}</h1>
-            {turma!.descricao && (
-              <p className="text-sm text-gray-600 mt-1">{turma!.descricao}</p>
+            {turma!.escola && (
+              <p className="text-sm text-gray-600 mt-1">{turma!.escola}</p>
             )}
           </div>
           <section>
