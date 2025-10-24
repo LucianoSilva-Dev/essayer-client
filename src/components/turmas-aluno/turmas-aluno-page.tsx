@@ -9,6 +9,7 @@ import Link from "next/link";
 
 export default function TurmasAlunoPage() {
   const { turmas, loading } = useTurmasAluno();
+  console.log("Turmas do aluno:", turmas);
 
   return (
     <div className="min-h-screen p-6 bg-gray-50">
@@ -24,10 +25,10 @@ export default function TurmasAlunoPage() {
             ) : (
               turmas.map((t) => (
                 <Link key={t.id} href={`/turma_aberta_aluno/${t.id}`}>
-                  <a className="block p-4 bg-white rounded-lg shadow hover:shadow-md transition">
+                  <span className="block p-4 bg-white rounded-lg shadow hover:shadow-md transition">
                     <div className="font-medium">{t.nome}</div>
                     <div className="text-sm text-gray-500">{t.criador.nome}</div>
-                  </a>
+                  </span>
                 </Link>
               ))
             )}
