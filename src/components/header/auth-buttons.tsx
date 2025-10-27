@@ -28,7 +28,7 @@ export function AuthButtons() {
       {/* Exibe o conteúdo do usuário apenas se estiver logado E o carregamento estiver concluído */}
       {isLoggedIn && !isLoading ? (
         <>
-          <span className="text-white text-[20px] font-bold">
+          <span className="text-[#3c3c3c] text-[20px] font-bold">
             {/* Verificação segura para exibir o nome */}
             Olá, {userData?.nome ? userData.nome.split(" ")[0] : ""}
           </span>

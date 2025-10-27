@@ -14,8 +14,9 @@ import { CitacaoProvider } from '@/./contexts/citacao-context';
 import 'swiper/css';
 import 'swiper/css/pagination'; // Para os pontinhos de navegação
 import 'swiper/css/navigation'; // Para as setas de navegação (opcional)
-import { HeaderAzul } from '@/components/header/header';
+import { HeaderWrapper } from '@/components/header-wrapper';
 import { Sidebar } from '@/components/sidebar/sidebar';
+import { MainWrapper } from '@/components/main-wrapper';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -39,10 +40,11 @@ export default function RootLayout({
               <RepertorioProvider>
                 <CitacaoProvider>
                   <ToastContainer />
+                  <HeaderWrapper />
                   <Sidebar />
-                  <main className="bg-gray-50 pl-25 relative">
+                  <MainWrapper>
                     {children}
-                  </main>
+                  </MainWrapper>
                 </CitacaoProvider>
               </RepertorioProvider>
             </AdminProvider>

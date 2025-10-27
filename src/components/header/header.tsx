@@ -1,25 +1,29 @@
 "use client"
 
-import { Logo } from "./logo"
-import { NavItem } from "./nav-item"
 import { AuthButtons } from "./auth-buttons"
 import { MobileMenu } from "./mobile-menu"
 import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { usePathname } from "next/navigation" // Importa o hook
+import { usePathname } from "next/navigation"
 import Link from "next/link"
 import { useAuth } from "../../contexts/auth-context"
 import { useRouter } from "next/navigation"
 import Image from "next/image"
 import { getProfilePictureLink } from "../../apiCalls/usuario"
-import { NavLinks } from "./nav-links"
+import { Redo2 } from 'lucide-react';
 
-export function HeaderAzul() {
+interface HeaderProps {
+  currentPage?: string
+  description?: string | null
+  backPage?: string | null
+}
+
+export function Header({ currentPage, description, backPage }: HeaderProps) {
   const { isLoggedIn, logout, userData } = useAuth()
   const router = useRouter()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [profilePic, setProfilePic] = useState<string | null>(null)
-  const pathname = usePathname() // Obtém o pathname atual
+  const pathname = usePathname()
 
   useEffect(() => {
     const fetchProfilePic = async () => {
@@ -39,7 +43,7 @@ export function HeaderAzul() {
   }
 
   // Não renderiza o header na landing page
-  if (pathname === "/landing") {
+  if (pathname === "/landing" || pathname === "/login" || pathname === "/register") {
     return null
   }
 
@@ -48,17 +52,54 @@ export function HeaderAzul() {
   }
 
   return (
-    <header className="fixed top-0 w-full bg-[#075F70] z-50 border-b rounded-b-[2em]">
-      <div className="container mx-auto px-4 py-0 flex items-center justify-between">
-        <Logo />
+    <header className="sticky top-0 px-20 mb-[-30px] w-full bg-transparent z-50">
+      <div className="container mx-auto px-4 py-4 flex items-center justify-between">
+        {/* Lado Esquerdo: Seta de voltar + Nome da página */}
+        <div className="flex items-center gap-4">
+          {/* Seta de voltar - condicional */}
+          {backPage && (
+            <Link
+              href={backPage}
+              className="flex items-center gap-3 group transition-all duration-200"
+            >
+              <div className="w-11 h-8 flex items-center justify-center">
+                <Redo2 
+                  size={32} 
+                  className="text-[#3C3C3C] transform rotate-180 group-hover:scale-110 transition-transform duration-200" 
+                />
+              </div>
+              <span className="text-[#3C3C3C] text-lg font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                Retornar
+              </span>
+            </Link>
+          )}
+          
+          {/* Título e Subtítulo */}
+          {(currentPage || description) && (
+            <div className="flex flex-col">
+              {currentPage && (
+                <h1 className="text-[#3C3C3C] text-2xl font-medium">
+                  {currentPage}
+                </h1>
+              )}
+              {description && (
+                <p className="text-[#6B7280] text-sm font-normal mt-1">
+                  {description}
+                </p>
+              )}
+            </div>
+          )}
+        </div>
 
-        <div className="hidden md:flex items-center justify-between flex-1 ml-8">
-          <NavLinks/>
+        {/* Lado Direito: AuthButtons (já lida com usuário logado/não logado) */}
+        <div className="hidden md:block">
           <AuthButtons />
         </div>
 
+        {/* Menu Mobile */}
         <MobileMenu onClick={toggleMenu} />
 
+        {/* Menu Mobile Expandido */}
         <AnimatePresence>
           {isMenuOpen && (
             <motion.div 
@@ -69,13 +110,18 @@ export function HeaderAzul() {
               className="absolute top-23 left-0 right-0 bg-white z-50 p-4 shadow-md md:hidden"
             >
               <div className="flex flex-col space-y-4 mb-4">
-                {/* <NavItem href="/main" label="Início" /> */}
-                <NavItem href="/main" label="Repertórios" />
+                <Link href="/main" className="text-gray-800 text-lg font-medium py-2">
+                  Repertórios
+                </Link>
                 {isLoggedIn && (userData?.cargo === "professor" || userData?.cargo === "admin") && (
-                  <NavItem href="/adicionar" label="Adicionar Repertório" />
+                  <Link href="/adicionar" className="text-gray-800 text-lg font-medium py-2">
+                    Adicionar Repertório
+                  </Link>
                 )}
                 {isLoggedIn && userData?.cargo === "admin" && (
-                  <NavItem href="/admin" label="Admin" />
+                  <Link href="/admin" className="text-gray-800 text-lg font-medium py-2">
+                    Admin
+                  </Link>
                 )}
               </div>
               <div className="flex items-center space-x-4">
@@ -115,7 +161,7 @@ export function HeaderAzul() {
                   <>
                     <Link
                       href="/login"
-                      className="px-6 py-3 rounded-[10px] border border-white/30 text-[#075F70] text-[20px] hover:bg-[#CA9C60] hover:border-[#CA9C60] hover:text-white duration-300 transition-colors"
+                      className="px-6 py-3 rounded-[10px] border border-gray-300 text-gray-800 text-[20px] hover:bg-[#CA9C60] hover:border-[#CA9C60] hover:text-white duration-300 transition-colors"
                     >
                       Entrar
                     </Link>

@@ -5,7 +5,7 @@ import { useRouter, usePathname } from 'next/navigation'
 import Image from "next/image"
 import Link from "next/link"
 
-export default function Header() {
+export default function HeaderLanding() {
   const pathname = usePathname()
   const router = useRouter()
   const { isLoggedIn, logout } = useAuth()

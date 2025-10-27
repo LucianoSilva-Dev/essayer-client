@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
+import Link from "next/link";
 import { GetTurmasCriadasResponse } from "@/apiCalls/turma/types";
 import { getTurmasCriadas } from "@/apiCalls/turma";
 import { defaultIcon, IconsMap } from "@/constants/icons";
@@ -58,19 +59,24 @@ export default function ListaTurmas() {
               onAnimationComplete={() => setPaginaAnterior(null)}
             >
               {turmas?.documentos ? turmas?.documentos.map((turma) => (
-                <div
+                <Link
                   key={turma.id}
-                  className="mb-8 p-4 h-[128px] bg-gradient-to-r from-gray-50 to-white border-t-5 border-[#075F70] rounded-xl shadow-sm hover:shadow-md transition-all cursor-pointer group"
+                  href={`/turma_aberta_prof/${turma.id}`}
+                  className="block mb-8 hover:scale-115 transition-transform"
                 >
+                  <div
+                    className="p-4 h-[128px] bg-gradient-to-r from-gray-50 to-white border-t-5 border-[#075F70] rounded-xl shadow-sm hover:shadow-md transition-all cursor-pointer group"
+                  >
 
-                  <div className="flex items-center gap-3">
-                    <Image width={48} height={48} src={getIconPath(turma.iconeId, defaultIcon.src)} alt={`Icone da turma '${turma.nome}'`}></Image>
-                    <p className="font-semibold text-[#3C3C3C] text-[20px] group-hover:text-blue-700 transition-colors">
-                      {turma.nome}
-                    </p>
+                    <div className="flex items-center gap-3">
+                      <Image width={48} height={48} src={getIconPath(turma.iconeId, defaultIcon.src)} alt={`Icone da turma '${turma.nome}'`}></Image>
+                      <p className="font-semibold text-[#3C3C3C] text-[20px] group-hover:text-blue-700 transition-colors">
+                        {turma.nome}
+                      </p>
+                    </div>
+                    <p className="text-[16px] text-gray-600 mt-1">{turma.escola ?? (<strong><i>Escola desconhecida</i></strong>)}</p>
                   </div>
-                  <p className="text-[16px] text-gray-600 mt-1">{turma.escola ?? (<strong><i>Escola desconhecida</i></strong>)}</p>
-                </div>
+                </Link>
             )) : 'Você ainda não criou nenhuma turma'
               }
             </motion.div>
@@ -90,19 +96,24 @@ export default function ListaTurmas() {
             className="absolute w-full space-y-4 z-20"
           >
             {turmas?.documentos.map((turma) => (
-              <div
+              <Link
                 key={turma.id}
-                className="mb-8 p-4 h-[128px] bg-gradient-to-r from-gray-50 to-white border-t-5 border-[#075F70] rounded-xl shadow-sm hover:shadow-md transition-all cursor-pointer group"
+                href={`/turma_aberta_prof/${turma.id}`}
+                className="block mb-8"
               >
+                <div
+                  className="p-4 h-[128px] bg-gradient-to-r from-gray-50 to-white border-t-5 border-[#075F70] rounded-xl shadow-sm hover:shadow-md transition-all cursor-pointer group"
+                >
 
-                <div className="flex items-center gap-3">
-                  <Image width={48} height={48} src={getIconPath(turma.iconeId, defaultIcon.src)} alt={`Icone da turma '${turma.nome}'`}></Image>
-                  <p className="font-semibold text-[#3C3C3C] text-[20px] group-hover:text-blue-700 transition-colors">
-                    {turma.nome}
-                  </p>
+                  <div className="flex items-center gap-3">
+                    <Image width={48} height={48} src={getIconPath(turma.iconeId, defaultIcon.src)} alt={`Icone da turma '${turma.nome}'`}></Image>
+                    <p className="font-semibold text-[#3C3C3C] text-[20px] group-hover:text-blue-700 transition-colors">
+                      {turma.nome}
+                    </p>
+                  </div>
+                  <p className="text-[16px] text-gray-600 mt-1">{turma.escola}</p>
                 </div>
-                <p className="text-[16px] text-gray-600 mt-1">{turma.escola}</p>
-              </div>
+              </Link>
             ))}
           </motion.div>
         </AnimatePresence>

@@ -21,8 +21,43 @@ import type {
  * Busca todos os repertórios com filtros, ordenação e paginação.
  */
 export const getAllRepertorios = async (queryString?: string): Promise<GetAllRepertoriosResponse | null> => {
-    const response = await apiClient.get<GetAllRepertoriosResponse | null>('/repertorio' + queryString);
+    const response = await apiClient.get<GetAllRepertoriosResponse | null>(`/repertorio${queryString ? queryString : ''}`);
     return response.data;
+};
+
+/**
+ * Retorna os IDs dos repertórios para a query informada.
+ * Se fetchAllPages for true, itera sobre as páginas disponíveis e agrega todos os ids.
+ */
+export const getRepertoriosIds = async (queryString?: string, fetchAllPages = false): Promise<string[]> => {
+    const formatQuery = (q?: string) => (q && q.startsWith('?') ? q : q ? `?${q}` : '');
+
+    if (!fetchAllPages) {
+        const res = await getAllRepertorios(formatQuery(queryString));
+        return res?.documentos.map(d => d.id) ?? [];
+    }
+
+    // busca todas as páginas listadas em paginacao.pagesUrl
+    const first = await getAllRepertorios(formatQuery(queryString));
+    const idsSet = new Set<string>();
+    if (first?.documentos) first.documentos.forEach(d => idsSet.add(d.id));
+
+    const pages = first?.paginacao.pagesUrl ?? [];
+    // pages normalmente contém query strings (ex: "limit=10&offset=10"); iteramos e buscamos cada
+    for (const pageQ of pages) {
+        try {
+            // evita repetir a página já buscada
+            const q = formatQuery(pageQ);
+            const res = await getAllRepertorios(q);
+            if (res?.documentos) res.documentos.forEach(d => idsSet.add(d.id));
+        } catch (e) {
+            // se uma página falhar, continuamos com as demais
+            // opcional: logar o erro
+            // console.warn('Falha ao buscar página de repertórios', pageQ, e);
+        }
+    }
+
+    return Array.from(idsSet);
 };
 
 /**
