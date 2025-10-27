@@ -10,7 +10,6 @@ import { toast } from "react-toastify";
 // Importações corrigidas para date-fns
 import { formatDistanceToNow } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
-import { AlertCircle, ChevronRight } from "lucide-react"; // Adicionado ChevronRight
 
 interface ListaEnviosProps {
   turmaId: string;

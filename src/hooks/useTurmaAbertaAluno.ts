@@ -6,7 +6,6 @@ import { toast } from "react-toastify";
 import { getTurmaById, getAtividadesByTurma, getCorrecoesByTurma } from "@/apiCalls/turma";
 import { Correcao } from "@/apiCalls/turma/types";
 import { AtividadeBasica, Turma } from "@/apiCalls/turma/types";
-import { Atividade } from "@/apiCalls/turma-aberta-prof/types";
 
 export function useTurmaAbertaAluno(turmaId: string) {
   const [turma, setTurma] = useState<Turma | null>(null);

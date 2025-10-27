@@ -117,10 +117,6 @@ export default function TurmaAbertaPage({ turmaId }: Props) {
                         ? `Envios para: ${selectedAtividadeTitulo}`
                         : "Envios da tarefa"}
                     </h2>
-                <select className="text-sm border border-gray-300 rounded p-1 bg-white text-gray-600">
-                    <option>Filtrar por letra</option>
-                    {/* Add options */}
-                </select>
              </div>
             {/* ListaEnvios rendering */}
             <ListaEnvios
