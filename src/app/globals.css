@@ -1,6 +1,5 @@
 @import "tailwindcss";
-@tailwind base;
-@tailwind components;
+@import "tailwindcss/preflight";
 @tailwind utilities;
 
 /* Variáveis de cor */
@@ -60,4 +59,18 @@
   100%{
     transform: translateY(0px);
   }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Classe que usa a animação */
+.animate-fade-in {
+  animation: fadeIn 0.4s ease-in-out;
 }

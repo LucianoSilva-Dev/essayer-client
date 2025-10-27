@@ -1,13 +1,9 @@
-import TitleSection from "@/components/faq/TitleSection";
-import FaqContainer from "@/components/faq/FaqContainer";
+import { FaqPageContent } from "@/components/faq/FaqPageContent";
 
 export default function FaqPage() {
-    return (
-        <main className="flex h-[100vh] flex-col flex-1 px-12 py-10">
-            <TitleSection />
-            <FaqContainer />
-        </main>
-
-    );
+  return (
+    <main className="min-h-screen flex justify-center items-start py-12">
+      <FaqPageContent />
+    </main>
+  );
 }
-
