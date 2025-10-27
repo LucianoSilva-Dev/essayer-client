@@ -1,6 +1,6 @@
 // src/apiCalls/tarefas/types.ts
 // Reutiliza tipos se possível, certifique-se que estão exportados de turma/types
-import { AtividadeRedacaoDetalhada } from "../turma/types";
+import { AtividadeRedacaoDetalhada, AtividadeBasica } from "../turma/types";
 import { GenericSuccessResponse, PerfilUsuario } from "../types"; // Import PerfilUsuario
 
 // --- Tipos para Respostas ---
@@ -67,3 +67,12 @@ export type UpdateFeedbackResponse = GenericSuccessResponse;
 
 // Para DELETE /atividade/{id} (resposta é 204 No Content)
 // Não precisa de tipo específico, a ausência de erro indica sucesso.
+
+export interface MinhaTarefaAtiva extends AtividadeBasica {
+  turma: {
+    id: string;
+    nome: string;
+    iconeId: string; // Ou number, dependendo da API real
+  };
+  // Adicione outros campos se a API /atividade/ retornar mais dados relevantes
+}

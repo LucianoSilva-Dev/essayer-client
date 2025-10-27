@@ -13,6 +13,7 @@ import {
     UpdateFeedbackBody,
     UpdateFeedbackResponse
 } from './types'; // Importa os tipos definidos localmente
+import { MinhaTarefaAtiva } from './types';
 
 /**
  * Cria uma nova atividade de Redação.
@@ -94,4 +95,23 @@ export const enviarRespostaRedacao = async (id: string, data: EnviarRespostaReda
 export const updateFeedbackResposta = async (respostaId: string, data: UpdateFeedbackBody): Promise<UpdateFeedbackResponse> => {
     const response = await apiClient.put<UpdateFeedbackResponse>(`/atividade/respostas/${respostaId}/feedback`, data);
     return response.data;
+};
+
+/**
+ * Busca todas as tarefas ativas para o usuário logado.
+ * Endpoint: GET /atividade/
+ */
+export const getMinhasAtividadesAtivas = async (): Promise<MinhaTarefaAtiva[]> => {
+  // A API pode retornar diretamente o array ou um objeto com { documentos: [...] }
+  // Ajuste conforme a resposta real da sua API.
+  try {
+    const response = await apiClient.get<MinhaTarefaAtiva[]>('/atividade/');
+    // Se a API retornar { documentos: [...] } descomente a linha abaixo:
+    // return Array.isArray(response.data.documentos) ? response.data.documentos : [];
+    return Array.isArray(response.data) ? response.data : []; // Assume que retorna o array diretamente
+  } catch (error) {
+    console.error("Erro ao buscar atividades ativas:", error);
+    // Retorna array vazio em caso de erro para não quebrar a UI
+    return [];
+  }
 };

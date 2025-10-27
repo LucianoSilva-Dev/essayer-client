@@ -1,4 +1,4 @@
-import TurmasAlunoPage from "@/components/turmas-aluno/turmas-aluno-page";
+import TurmasAlunoPage from "@/components/turmas-aluno/TurmaAlunoPageContent";
 
 export default function Page() {
   return <TurmasAlunoPage />;
