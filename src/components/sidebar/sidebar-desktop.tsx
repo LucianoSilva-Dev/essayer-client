@@ -1,7 +1,7 @@
 import { motion } from "framer-motion"
 import Link from "next/link"
 import Image from "next/image"
-import { Home, PenTool, Users, Info, Globe, Settings } from "lucide-react"
+import { Home, PenTool, Users, Info, Settings, MessageCircleQuestion } from "lucide-react"
 import { SidebarLogo } from "./sidebar-logo"
 import { SidebarNavigation } from "./sidebar-navigation"
 import { SidebarBottomItems } from "./sidebar-bottom-items"
@@ -42,18 +42,13 @@ const navigationItems = [
 ]
 
 const bottomItems = [
+
   {
-    icon: Info,
-    label: "Sobre nós",
-    href: "/sobre",
+    icon: MessageCircleQuestion,
+    label: "FAQ",
+    href: "/faq",
     roles: null,
-  },
-  {
-    icon: Globe,
-    label: "Redes sociais",
-    href: "/redes",
-    roles: null,
-  },
+  }
 ]
 
 export function SidebarDesktop({ 
