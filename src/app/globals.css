@@ -73,3 +73,43 @@
 .animate-fade-in {
   animation: fadeIn 0.4s ease-in-out;
 }
+/* Adicione ao seu globals.css existente */
+
+/* Fontes personalizadas */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Onest:wght@500&display=swap');
+
+/* Estilos específicos para a página de login */
+.login-container {
+  min-height: 100vh;
+  background: #F1F1F2;
+}
+
+.login-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-left: 10rem;
+  padding-right: 5rem;
+}
+
+.login-visual {
+  flex: 1;
+  position: relative;
+  background: #E0E0E0;
+  border-radius: 25px 0 0 25px;
+  overflow: hidden;
+}
+
+/* Garantir que as cores personalizadas funcionem */
+.text-custom-blue {
+  color: #075F70;
+}
+
+.bg-custom-blue {
+  background-color: #075F70;
+}
+
+.border-custom-blue {
+  border-color: #075F70;
+}

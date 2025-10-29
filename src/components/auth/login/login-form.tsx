@@ -45,89 +45,106 @@ export default function LoginForm() {
   }
  
   return (
-    <div className="w-full max-w-xl mx-auto flex flex-col items-center shadow-lg px-8 py-8">
-      {/* Logo */}
-      <div className="mb-6">
-        <Image src="/favicon_2d.png" alt="Incita Logo" width={180} height={120} priority />
-      </div>
-
-      {/* Título */}
-      <h1 className="text-2xl font-medium text-gray-800 mb-8">Faça seu login</h1>
-
-      {/* Botão Google
-      <button className="flex items-center justify-center gap-2 w-full border border-gray-300 rounded-md py-3 px-4 mb-8 hover:bg-gray-50 transition-colors">
-        <Image src="/google-icon.svg" alt="Google" width={20} height={20} />
-        <span className="text-gray-700">Continuar com o Google</span>
-      </button> */}
-
-      {/* Divisor */}
-      <div className="w-full flex items-center mb-8">
-        <div className="flex-grow h-px bg-gray-200"></div>
-      </div>
-
-      {/* Formulário */}
-      <form onSubmit={handleSubmit} className="w-full">
-        <div className="mb-4">
-          <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-            Email
-          </label>
-          <input
-            id="email"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="w-full px-3 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-teal-600"
-            required
-          />
+    <div className="min-h-screen bg-[#F1F1F2] flex px-10 py-10 w-full">
+      {/* Lado Esquerdo - Conteúdo */}
+      <div className="flex-1 flex flex-col justify-center pl-40 pr-20">
+        {/* Cabeçalho */}
+        <div className="mb-16">
+          <h1 className="text-4xl font-semibold text-[#282133] mb-4">
+            Bem vindo ao Incita
+          </h1>
+          <div className="w-48 h-0.5 bg-[#D3D3D3] mb-4"></div>
+          <p className="text-2xl text-[#075F70] font-medium">
+            Sua plataforma de repertórios
+          </p>
         </div>
 
-        <div className="mb-1">
-          <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
-            Senha
-          </label>
-          <div className="relative">
+        {/* Descrição */}
+        <p className="text-xl text-[#3C3C3C] mb-16 max-w-2xl leading-relaxed">
+          Preencha os campos para entrar na plataforma.
+        </p>
+
+        {/* Formulário */}
+        <form onSubmit={handleSubmit} className="max-w-2xl">
+          {/* Campo Email */}
+          <div className="mb-12">
+            <label className="block text-xl font-medium text-[#3C3C3C] mb-4">
+              Email
+            </label>
             <input
-              id="password"
-              type={showPassword ? "text" : "password"}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-3 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-teal-600"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full px-6 py-4 bg-white rounded-3xl focus:outline-none focus:ring-2 focus:ring-[#075F70] text-lg"
+              placeholder="Seu email"
               required
             />
-            <button
-              type="button"
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"
-              onClick={() => setShowPassword(!showPassword)}
-            >
-              {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-            </button>
           </div>
-        </div>
 
-        <div className="flex justify-end mb-6">
-          <Link href="/forgot-password" className="text-sm text-gray-500 hover:text-teal-600">
-            Esqueceu a senha?
-          </Link>
-        </div>
+          {/* Campo Senha */}
+          <div className="mb-16">
+            <label className="block text-xl font-medium text-[#3C3C3C] mb-4">
+              Insira uma senha
+            </label>
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full px-6 py-4 bg-white rounded-3xl focus:outline-none focus:ring-2 focus:ring-[#075F70] text-lg shadow-sm"
+                placeholder="Sua senha"
+                required
+              />
+              <button
+                type="button"
+                className="absolute right-6 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? <EyeOff size={24} /> : <Eye size={24} />}
+              </button>
+            </div>
+          </div>
 
-        <button
-          type="submit"
-          className="w-full bg-teal-800 hover:bg-teal-700 text-white py-3 px-4 rounded-md transition-colors"
-        >
-          Entrar
-        </button>
+          {/* Botão Entrar */}
+          <button
+            type="submit"
+            className="w-full bg-[#075F70] hover:bg-[#064c5a] text-white py-5 px-8 rounded-3xl text-xl font-medium shadow-lg transition-colors duration-200 mb-8"
+          >
+            Entrar
+          </button>
 
-         
-        <div className="flex justify-end mb-6 pt-1">
-          <label htmlFor="password" className="text-sm text-gray-500 ">
-            Não tem uma conta?
-          </label>
-          <Link href="/register" className="pl-1 text-sm text-gray-500 hover:text-teal-600">
-            Cadastre-se
-          </Link>
-        </div>
+          {/* Links Adicionais */}
+          <div className="flex flex-col items-center space-y-4">
+            <Link 
+              href="/forgot-password" 
+              className="text-lg text-[#075F70] hover:text-[#064c5a] transition-colors"
+            >
+              Esqueceu a senha?
+            </Link>
+            
+            <div className="flex items-center space-x-2 text-lg">
+              <span className="text-gray-600">Não tem uma conta?</span>
+              <Link 
+                href="/register" 
+                className="text-[#075F70] hover:text-[#064c5a] font-medium transition-colors"
+              >
+                Cadastre-se
+              </Link>
+            </div>
+          </div>
+        </form>
+      </div>
 
-      </form>
+      {/* Lado Direito - Imagem/Visual */}
+      <div className="flex-1 relative bg-[#E0E0E0] rounded-[25px] h-[92vh] w-[60vw] overflow-hidden">
+        <Image 
+          src="/login.jpg"
+          alt="Login background"
+          fill
+          style={{ objectFit: 'cover' }}
+          priority
+        />
+      </div>
     </div>
   )
 }
