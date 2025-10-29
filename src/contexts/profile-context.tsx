@@ -35,7 +35,6 @@ export function ProfileProvider({ children }: { children: React.ReactNode }) {
         nome: user.nome,
         tipo: user.cargo,
         email: user.email,
-        dataCadastro: user.createdAt,
         curriculoLattes: user.lattes
       })
 

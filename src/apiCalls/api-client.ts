@@ -1,35 +1,39 @@
 import axios from 'axios';
 import { API_BASE_URL } from '@/app/constants';
-import { handleAxiosError } from '@/app/utils'; // Importando seu utilitário
+import { handleAxiosError } from '@/app/utils';
 import { setupCache } from 'axios-cache-interceptor'
 
 const apiClient = setupCache(axios.create({
   baseURL: API_BASE_URL,
+  withCredentials: true,
 }), {
   ttl: 0,
   location: 'client'
 });
 
-// Interceptor para adicionar o token JWT em todas as requisições
-apiClient.interceptors.request.use(
-  (config) => {
-    if (typeof window !== 'undefined') {
-      const token = localStorage.getItem('userToken');
-      if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
+apiClient.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    const originalRequest = error.config;
+
+    if (
+      error.response?.status === 401 &&
+      !originalRequest._retry &&
+      originalRequest.url &&
+      !originalRequest.url.includes('/auth/')
+    ) {
+      originalRequest._retry = true; // Marca esta requisição para não tentar novamente
+
+      try {
+        await apiClient.post('/auth/refresh'); // Assumindo que este é seu endpoint
+        return apiClient(originalRequest);
+      } catch (refreshError) {
+        window.dispatchEvent(new Event('auth:sessionExpired'));
+        return handleAxiosError(refreshError);
       }
     }
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
+    return handleAxiosError(error);
   }
-);
-
-apiClient.interceptors.response.use(
-  // A primeira função lida com respostas de sucesso (2xx)
-  (response) => response,
-  (error) => handleAxiosError(error)
 );
 
 export default apiClient;

@@ -4,7 +4,11 @@ export interface UserLoginBody {
   }
   
   export interface UserLoginResponse {
-    token: string;
+    id: string
+    nome: string
+    email: string
+    fotoPath: string
+    cargo: string
   }
   
   export interface UserRegisterBody {

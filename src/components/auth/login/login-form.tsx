@@ -34,7 +34,7 @@ export default function LoginForm() {
     try {
       setAlreadylogged(false)
       const response = await apiLogin({ email, senha: password })
-      login(response.token)
+      login(response)
       
       if(lattes && lattes !== "null"){
         await createProfessorRequest({lattes})
