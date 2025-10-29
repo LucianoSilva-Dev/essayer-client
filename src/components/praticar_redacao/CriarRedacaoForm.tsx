@@ -93,7 +93,7 @@ export function CriarRedacaoForm() {
                          ${
                            isButtonDisabled
                              ? 'border-[#898787] text-[#898787] bg-white cursor-not-allowed'
-                             : 'border-teal-600 bg-teal-600 text-white hover:bg-teal-700'
+                             : 'border-[#075F70] bg-[#075F70] text-white hover:bg-[#075F70]'
                          }`}
             >
               Praticar redação
