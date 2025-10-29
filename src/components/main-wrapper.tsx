@@ -6,7 +6,7 @@ export function MainWrapper({ children }: { children: React.ReactNode }) {
   const isLandingPage = pathname === "/landing"
   
   return (
-    <main className={`bg-gray-50 ${isLandingPage ? '' : 'pl-25'} relative`}>
+    <main className={`bg-gray-50 ${isLandingPage ? '' : 'pl-25'} pt-20 relative`}>
       {children}
     </main>
   )

@@ -12,7 +12,6 @@ import ConvidarEstudante from "./integrantes/convidar-estudante";
 import { useTurmaData } from "@/hooks/useTurmaData";
 import { AtividadeProfessor } from "@/apiCalls/turma/types";
 // import { TurmaHeader } from "./header-Turma-prof/turma-header"; // Assuming you might use this later
-import { TurmaInfo } from "./header-Turma-prof/turma-info"; // Make sure this is correctly imported
 import { AlertCircle } from "lucide-react";
 
 // **Define the Props interface HERE, before the component function**
@@ -50,41 +49,35 @@ export default function TurmaAbertaPage({ turmaId }: Props) {
         <p className="text-lg font-medium text-center mb-2">Erro ao carregar dados da turma</p>
         <p className="text-sm text-center text-gray-500 mb-6">{error}</p>
         <button
-            onClick={refetch}
-            className="px-4 py-2 bg-teal-600 text-white rounded hover:bg-teal-700 transition-colors"
+          onClick={refetch}
+          className="px-4 py-2 bg-teal-600 text-white rounded hover:bg-teal-700 transition-colors"
         >
-            Tentar Novamente
+          Tentar Novamente
         </button>
       </div>
     );
   }
 
   if (loading && !turma) { // Show skeleton/loading only if turma data isn't available yet
-     return (
-        <main className="min-h-screen w-full bg-gray-50 px-4 sm:px-6 py-8 flex flex-col gap-6 md:gap-8">
-            {/* Skeleton do Header */}
-            <div className="flex items-center gap-4 p-4 bg-white rounded-lg shadow animate-pulse">
-                <div className="w-16 h-16 rounded-full bg-gray-200"></div>
-                <div className="flex-1 space-y-2">
-                    <div className="h-6 bg-gray-200 rounded w-3/4"></div>
-                    <div className="h-4 bg-gray-200 rounded w-1/2"></div>
-                </div>
-                <div className="w-10 h-10 rounded-md bg-gray-200"></div>
-            </div>
-             {/* Add more skeleton loaders for other sections if desired */}
-        </main>
-     );
+    return (
+      <main className="min-h-screen w-full bg-gray-50 px-4 sm:px-6 py-8 flex flex-col gap-6 md:gap-8">
+        {/* Skeleton do Header */}
+        <div className="flex items-center gap-4 p-4 bg-white rounded-lg shadow animate-pulse">
+          <div className="w-16 h-16 rounded-full bg-gray-200"></div>
+          <div className="flex-1 space-y-2">
+            <div className="h-6 bg-gray-200 rounded w-3/4"></div>
+            <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+          </div>
+          <div className="w-10 h-10 rounded-md bg-gray-200"></div>
+        </div>
+        {/* Add more skeleton loaders for other sections if desired */}
+      </main>
+    );
   }
 
   // --- JSX ---
   return (
     <main className="min-h-screen w-full bg-gray-50 px-4 sm:px-6 py-8 flex flex-col gap-6 md:gap-8">
-      {/* Header da Turma */}
-       <div className="bg-white rounded-lg shadow p-4 md:p-6">
-           {/* Render TurmaInfo even if loading is finishing, if turma has data */}
-           <TurmaInfo turma={turma} />
-       </div>
-
       {/* Grid principal */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8 flex-grow">
 
@@ -103,25 +96,25 @@ export default function TurmaAbertaPage({ turmaId }: Props) {
             </div>
             {/* TarefaList rendering */}
             <TarefaList
-                turmaId={turmaId}
-                onSelectedDateChange={handleSelectedDateChange}
-                onSelectedAtividadeChange={handleSelectedAtividadeChange}
+              turmaId={turmaId}
+              onSelectedDateChange={handleSelectedDateChange}
+              onSelectedAtividadeChange={handleSelectedAtividadeChange}
             />
           </section>
 
           {/* Seção de Envios */}
           <section className="bg-white rounded-2xl shadow-md p-4 md:p-6">
-             <div className="flex flex-wrap justify-between items-center gap-4 mb-4">
-                 <h2 className="text-lg sm:text-xl font-semibold text-gray-800">
-                    {selectedAtividadeTitulo
-                        ? `Envios para: ${selectedAtividadeTitulo}`
-                        : "Envios da tarefa"}
-                    </h2>
-             </div>
+            <div className="flex flex-wrap justify-between items-center gap-4 mb-4">
+              <h2 className="text-lg sm:text-xl font-semibold text-gray-800">
+                {selectedAtividadeTitulo
+                  ? `Envios para: ${selectedAtividadeTitulo}`
+                  : "Envios da tarefa"}
+              </h2>
+            </div>
             {/* ListaEnvios rendering */}
             <ListaEnvios
-                turmaId={turmaId}
-                selectedAtividadeId={selectedAtividadeId}
+              turmaId={turmaId}
+              selectedAtividadeId={selectedAtividadeId}
             />
           </section>
         </div>
@@ -149,13 +142,13 @@ export default function TurmaAbertaPage({ turmaId }: Props) {
               />
             </div>
             <div className="flex-grow mb-4 overflow-y-auto">
-                <IntegranteList
-                    turmaId={turmaId}
-                    alunos={alunos}
-                    loading={loading} // Passa o loading do useTurmaData
-                    searchTerm={memberSearchTerm}
-                    refetch={refetch}
-                />
+              <IntegranteList
+                turmaId={turmaId}
+                alunos={alunos}
+                loading={loading} // Passa o loading do useTurmaData
+                searchTerm={memberSearchTerm}
+                refetch={refetch}
+              />
             </div>
             <ConvidarEstudante />
           </section>
