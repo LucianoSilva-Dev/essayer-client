@@ -32,24 +32,29 @@ export default function TurmasAlunoPageContent() {
   } = useMinhasTarefasAtivas();
 
   return (
-    <main className="flex-1 space-y-8 overflow-y-auto bg-[#F1F1F2] p-8">
-      
-      {/* Container do Grid (Main Col + Side Col) */}
+    <main className="flex-1 space-y-8 overflow-y-auto bg-gray-50 p-8 h-[89vh]">
       <div className="grid grid-cols-[1fr_400px] gap-8">
-        
-        {/* === Coluna Principal (Esquerda) === */}
         <section className="space-y-4">
-
           {/* REQUISITO 1: Carrossel de Turmas do Aluno */}
-      <ListaTurmasAluno
-        turmas={turmas}
-        loading={loadingTurmas}
-        baseUrl="/turma_aberta_aluno" // Rota do Aluno
-        titulo="Minhas Turmas"
-      />
-          
+          {!loadingTurmas && (!turmas || turmas.length === 0) ? (
+            <div className="bg-white p-8 rounded-lg shadow-sm text-center">
+              <h3 className="text-lg font-medium text-gray-900 mb-2">
+                Você ainda não está em nenhuma turma
+              </h3>
+              <p className="text-gray-600">
+                Use o card ao lado para entrar em uma turma usando um código de acesso
+              </p>
+            </div>
+          ) : (
+            <ListaTurmasAluno
+              turmas={turmas}
+              loading={loadingTurmas}
+              baseUrl="/turma_aberta_aluno"
+              titulo="Minhas Turmas"
+            />
+          )}
         </section>
-        
+
         {/* === Coluna Lateral (Direita) === */}
         <aside className="space-y-8">
 

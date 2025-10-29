@@ -1,7 +1,7 @@
 import { motion } from "framer-motion"
 import Link from "next/link"
 import Image from "next/image"
-import { Home, PenTool, Users, Info, Settings, MessageCircleQuestion } from "lucide-react"
+import { Home, PenTool, Users, Info, Settings, MessageCircleQuestion, SquarePlus  } from "lucide-react"
 import { SidebarLogo } from "./sidebar-logo"
 import { SidebarNavigation } from "./sidebar-navigation"
 import { SidebarBottomItems } from "./sidebar-bottom-items"
@@ -24,8 +24,20 @@ const navigationItems = [
   {
     icon: PenTool,
     label: "Praticar redação",
-    href: "/adicionar", // mudar depois
+    href: "/praticar_redacao",
+    roles: null,
+  },
+  {
+    icon: SquarePlus,
+    label: "Adicionar repertório",
+    href: "/adicionar",
     roles: ["professor", "admin"],
+  },
+  {
+    icon: Users,
+    label: "Turmas",
+    href: "/turmas_aluno",
+    roles: ["aluno"],
   },
   {
       icon: Users,

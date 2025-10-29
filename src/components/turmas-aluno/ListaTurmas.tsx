@@ -8,7 +8,7 @@ import { defaultIcon} from "@/constants/icons";
 import { getIconPath } from "@/app/utils";
 
 export default function ListaTurmasAluno() {
-  const limit = 4 // numeros de turmas por pagina
+  const limit = 4 // numero de turmas por pagina
   const initialQuery = `limit=${limit}`
   const [turmas, setTurmas] = useState<GetTurmasMatriculadasResponse>()
   const [query, setQuery] = useState(initialQuery)
@@ -37,7 +37,7 @@ export default function ListaTurmasAluno() {
     <section className="col-span-1 bg-transparent p-6 flex flex-col h-full z-1">
       {/* Aqui vai o botão de ver notificações */}
       <h2 className="text-xl font-bold text-gray-800 pb-3">
-        Turmas Matriculadas
+        Notificações
       </h2>
 
       {/* Lista paginada com animação */}

@@ -1,21 +1,5 @@
-// src/app/praticar-redacao/page.tsx
+import PraticarRedacaoPage from "@/components/praticar_redacao/CriarRedacaoPage";
 
-import { CriarRedacaoForm } from '@/components/praticar_redacao/CriarRedacaoForm';
-import { RedacoesCriadasList } from '@/components/praticar_redacao/RedacoesCriadasList';
-
-export default function PraticarRedacaoPage() {
-  return (
-    // ALTERAÇÃO: Padding padrão e responsivo
-    <div className="flex-1 p-6 md:p-8 bg-[#F1F1F2]">
-      {/* ALTERAÇÃO: Título reduzido de text-[28px] para text-2xl (muito mais padrão) */}
-      <h1 className="mb-6 text-2xl font-semibold text-gray-800">
-        Crie sua redação e começe a praticar
-      </h1>
-
-      <main className="space-y-8">
-        <CriarRedacaoForm />
-        <RedacoesCriadasList />
-      </main>
-    </div>
-  );
+export default function PraticarRedacao() {
+  return <PraticarRedacaoPage />;
 }
