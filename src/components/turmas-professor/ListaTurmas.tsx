@@ -11,6 +11,7 @@ import { getIconPath } from "@/app/utils";
 export default function ListaTurmas() {
   const limit = 4 // numeros de turmas por pagina
   const initialQuery = `limit=${limit}`
+  const [isLoading, setIsLoading] = useState(false);
   const [turmas, setTurmas] = useState<GetTurmasCriadasResponse>()
   const [query, setQuery] = useState(initialQuery)
   const [paginaAtual, setPaginaAtual] = useState(1);
@@ -21,17 +22,52 @@ export default function ListaTurmas() {
 
   useEffect(() => {
     (async () => {
-      const response = await getTurmasCriadas(query)
-      setTurmas(response)
-
+      setIsLoading(true);
+      const response = await getTurmasCriadas(query);
+      setTurmas(response);
+      setIsLoading(false);
     })()
   }, [query])
 
-  const mudarPagina = (nova: number) => {
-    setDirecao(nova > paginaAtual ? 1 : -1);
-    setPaginaAnterior(paginaAtual); // guarda a página antiga
+  const mudarPagina = async (nova: number) => {
+    if (isLoading) return;
+    
+    const novaDirecao = nova > paginaAtual ? 1 : -1;
+    setDirecao(novaDirecao);
+    setPaginaAnterior(paginaAtual);
     setPaginaAtual(nova);
-    setQuery(turmas?.paginacao.pagesUrl[nova - 1] ?? '')
+    
+    const novaQuery = turmas?.paginacao.pagesUrl[nova - 1] ?? '';
+    setQuery(novaQuery);
+  };
+
+  const renderTurmas = (turmasData?: GetTurmasCriadasResponse) => {
+    if (!turmasData?.documentos) {
+      return <p>Você ainda não criou nenhuma turma</p>;
+    }
+
+    return turmasData.documentos.map((turma) => (
+      <Link
+        key={turma.id}
+        href={`/turma_aberta_prof/${turma.id}`}
+        className="block mb-4 hover:scale-105 transition-transform"
+      >
+        <div className="p-4 h-[128px] bg-gradient-to-r from-gray-50 to-white border-t-5 border-[#075F70] rounded-xl shadow-sm hover:shadow-md transition-all cursor-pointer group">
+          <div className="flex items-center gap-3">
+            <Image 
+              width={48} 
+              height={48} 
+              src={getIconPath(turma.iconeId, defaultIcon.src)} 
+              alt={`Icone da turma '${turma.nome}'`}
+            />
+            <p className="font-semibold text-[#3C3C3C] text-[20px] group-hover:text-[#075F70] transition-colors">
+              {turma.nome}
+            </p>
+          </div>
+          <p className="text-[16px] text-gray-600 mt-1">{turma.escola}</p>
+        </div>
+      </Link>
+    ));
   };
 
   return (
@@ -42,7 +78,7 @@ export default function ListaTurmas() {
       </h2>
 
       {/* Lista paginada com animação */}
-      <div className="flex-1 relative overflow-hidden">
+      <div className="flex-1 relative overflow-x-visible">
         <AnimatePresence initial={false} custom={direcao}>
           {/* Página antiga */}
           {paginaAnterior && paginaAnterior !== paginaAtual && (
@@ -58,27 +94,7 @@ export default function ListaTurmas() {
               className="absolute w-full space-y-4 z-10"
               onAnimationComplete={() => setPaginaAnterior(null)}
             >
-              {turmas?.documentos ? turmas?.documentos.map((turma) => (
-                <Link
-                  key={turma.id}
-                  href={`/turma_aberta_prof/${turma.id}`}
-                  className="block mb-8 hover:scale-115 transition-transform"
-                >
-                  <div
-                    className="p-4 h-[128px] bg-gradient-to-r from-gray-50 to-white border-t-5 border-[#075F70] rounded-xl shadow-sm hover:shadow-md transition-all cursor-pointer group"
-                  >
-
-                    <div className="flex items-center gap-3">
-                      <Image width={48} height={48} src={getIconPath(turma.iconeId, defaultIcon.src)} alt={`Icone da turma '${turma.nome}'`}></Image>
-                      <p className="font-semibold text-[#3C3C3C] text-[20px] group-hover:text-blue-700 transition-colors">
-                        {turma.nome}
-                      </p>
-                    </div>
-                    <p className="text-[16px] text-gray-600 mt-1">{turma.escola ?? (<strong><i>Escola desconhecida</i></strong>)}</p>
-                  </div>
-                </Link>
-            )) : 'Você ainda não criou nenhuma turma'
-              }
+              {renderTurmas(turmas)}
             </motion.div>
           )}
 
@@ -93,28 +109,9 @@ export default function ListaTurmas() {
               x: { type: "spring", stiffness: 300, damping: 30 },
               opacity: { duration: 0.25 }
             }}
-            className="absolute w-full space-y-4 z-20"
+            className="absolute w-full space-y-4 overflow-x-visible z-20"
           >
-            {turmas?.documentos.map((turma) => (
-              <Link
-                key={turma.id}
-                href={`/turma_aberta_prof/${turma.id}`}
-                className="block mb-8"
-              >
-                <div
-                  className="p-4 h-[128px] bg-gradient-to-r from-gray-50 to-white border-t-5 border-[#075F70] rounded-xl shadow-sm hover:shadow-md transition-all cursor-pointer group"
-                >
-
-                  <div className="flex items-center gap-3">
-                    <Image width={48} height={48} src={getIconPath(turma.iconeId, defaultIcon.src)} alt={`Icone da turma '${turma.nome}'`}></Image>
-                    <p className="font-semibold text-[#3C3C3C] text-[20px] group-hover:text-blue-700 transition-colors">
-                      {turma.nome}
-                    </p>
-                  </div>
-                  <p className="text-[16px] text-gray-600 mt-1">{turma.escola}</p>
-                </div>
-              </Link>
-            ))}
+            {renderTurmas(turmas)}
           </motion.div>
         </AnimatePresence>
       </div>
@@ -170,3 +167,4 @@ export default function ListaTurmas() {
     </section>
   );
 }
+

@@ -61,13 +61,13 @@ export function AuthButtons() {
         <>
           <Link
             href="/login"
-            className="px-6 py-3 rounded-[10px] border-2 border-white/30 text-white text-[20px] hover:bg-[#CA9C60] hover:border-[#CA9C60] duration-300 transition-colors"
+            className="px-6 py-1 rounded-[40px] text-[#075F70] text-[20px] border-2 border-transparent hover:border-[#075F70] duration-300 transition-colors active:scale-95"
           >
             Entrar
           </Link>
           <Link
             href="/register"
-            className="px-6 py-3 rounded-[10px] bg-[#CA9C60] text-white text-[20px] hover:bg-[#a68050] duration-300 transition-colors"
+            className="px-6 py-1 rounded-[40px] bg-transparent border-2 border-[#075F70] text-[#075F70] text-[20px] hover:bg-[#075F70] hover:text-white duration-300 transition-colors active:scale-95"
           >
             Cadastrar-se
           </Link>

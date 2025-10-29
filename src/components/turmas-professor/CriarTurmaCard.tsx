@@ -10,7 +10,7 @@ export default function CriarTurmaCard() {
     }
   
   return (
-    <div className="relative w-full h-full min-h-[280px] z-0 cursor-pointer group/card">
+    <div className="relative w-full h-[280px] z-0 cursor-pointer group/card">
       {/* Container principal com posicionamento relativo */}
       <div className="relative w-full h-full">
         {/* Ellipse 3 - Fundo com blur */}

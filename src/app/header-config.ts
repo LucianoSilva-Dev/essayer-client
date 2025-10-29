@@ -19,16 +19,16 @@ export const headerConfig: Record<string, HeaderConfig> = {
     backPage: '/main'
   },
   '/admin': {
-    currentPage: 'Administração',
+    currentPage: 'Admin',
     backPage: '/main'
   },
   '/turmas_professor': {
     currentPage: 'Minhas Turmas',
-    backPage: '/main'
+    backPage: undefined
   },
   '/turmas_aluno': {
     currentPage: 'Minhas Turmas',
-    backPage: '/main'
+    backPage: undefined
   },
   '/criar_turma': {
     currentPage: 'Criar Turma',
@@ -45,38 +45,32 @@ export const headerConfig: Record<string, HeaderConfig> = {
 
   // Rotas dinâmicas
   '/repertorio/[id]': {
-    currentPage: (params: Record<string, string>, repertorioData?: any) => 
-      repertorioData?.titulo || 'Detalhes do Repertório',
-    description: (params: Record<string, string>, repertorioData?: any) => {
-      if (!repertorioData) return 'Carregando...'
-      const tipo = repertorioData.tipoRepertorio?.toLowerCase() || 'repertório'
-      const autor = repertorioData.autor || 'Autor desconhecido'
-      return `${tipo} • ${autor}`
-    },
+    currentPage: (params: Record<string, string>, repertorioData?: any) =>
+      repertorioData?.titulo || 'Repertório',
     backPage: '/main',
     dynamicData: true
   },
   '/repertorio/[id]/editar': {
     currentPage: 'Editar Repertório',
-    description: (params: Record<string, string>, repertorioData?: any) => 
+    description: (params: Record<string, string>, repertorioData?: any) =>
       repertorioData?.titulo || 'Carregando...',
     backPage: (params: Record<string, string>) => `/repertorio/${params.id}`,
     dynamicData: true
   },
   '/turma_aberta_prof/[turmaId]': {
-    currentPage: (params: Record<string, string>, turmaData?: any) => 
+    currentPage: (params: Record<string, string>, turmaData?: any) =>
       turmaData?.nome || 'Turma',
     description: (params: Record<string, string>, turmaData?: any) => {
       if (!turmaData) return 'Carregando...'
-      
+
       const escola = turmaData?.escola
       const criador = turmaData?.criador?.nome
-      
+
       // Se tiver escola, mostra escola + criador
       if (escola) {
         return criador ? `${escola} • Criada por ${criador}` : escola
       }
-      
+
       // Se não tiver escola, mostra apenas criador
       return criador ? `Criada por ${criador}` : 'Turma'
     },
@@ -84,19 +78,19 @@ export const headerConfig: Record<string, HeaderConfig> = {
     dynamicData: true
   },
   '/turma_aberta_aluno/[turmaId]': {
-    currentPage: (params: Record<string, string>, turmaData?: any) => 
+    currentPage: (params: Record<string, string>, turmaData?: any) =>
       turmaData?.nome || 'Turma',
     description: (params: Record<string, string>, turmaData?: any) => {
       if (!turmaData) return 'Carregando...'
-      
+
       const escola = turmaData?.escola
       const criador = turmaData?.criador?.nome
-      
+
       // Se tiver escola, mostra escola + criador
       if (escola) {
         return criador ? `${escola} • Professor: ${criador}` : escola
       }
-      
+
       // Se não tiver escola, mostra apenas criador
       return criador ? `Professor: ${criador}` : 'Turma'
     },

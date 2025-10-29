@@ -42,7 +42,7 @@ export function Header({ currentPage, description, backPage }: HeaderProps) {
     router.push('/login')
   }
 
-  // Não renderiza o header na landing page
+  // Não renderiza o header nas páginas
   if (pathname === "/landing" || pathname === "/login" || pathname === "/register") {
     return null
   }
@@ -52,7 +52,7 @@ export function Header({ currentPage, description, backPage }: HeaderProps) {
   }
 
   return (
-    <header className="fixed top-0 px-20 mb-[-30px] w-full bg-transparent z-50">
+    <header className="fixed top-0 px-20 mb-[-30px] w-full bg-transparent z-40 backdrop-blur-md">
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
         {/* Lado Esquerdo: Seta de voltar + Nome da página */}
         <div className="flex items-center gap-4">
@@ -62,15 +62,12 @@ export function Header({ currentPage, description, backPage }: HeaderProps) {
               href={backPage}
               className="flex items-center gap-3 group transition-all duration-200"
             >
-              <div className="w-11 h-8 flex items-center justify-center">
+              <div className="w-11 h-8 flex items-center justify-center" title="Voltar">
                 <Redo2 
                   size={32} 
                   className="text-[#3C3C3C] transform rotate-180 group-hover:scale-110 transition-transform duration-200" 
                 />
               </div>
-              <span className="text-[#3C3C3C] text-lg font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                Retornar
-              </span>
             </Link>
           )}
           

@@ -150,10 +150,7 @@ function RepertorioDetalhesContent() {
       <ConfirmationModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} {...modalContent} isLoading={isModalLoading} />
       <div className="container mx-auto px-4 py-6 md:py-8">
         <div className="max-w-4xl mx-auto">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <button onClick={() => router.push("/main")} className="flex items-center text-gray-600 hover:text-gray-900 self-start">
-              <ArrowLeft size={20} className="mr-2" /> Voltar
-            </button>
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-end gap-4">
             <RepertorioActions {...{ canEdit: canEditRepertory, canDelete: canDeleteRepertory, isFavorito, isLiked, likes, onEdit: handleEditRepertorio, onDelete: handleDeleteRepertorio, onShare: handleShare, onToggleFavorito: handleToggleFavorito, onLike: handleLike }} />
           </div>
 
