@@ -1,14 +1,15 @@
 'use client'
 import { createContext, useContext, useEffect, useState } from 'react'
-import { Usuario } from '../apiCalls/usuario/types'
-import { jwtDecode } from 'jwt-decode'
 import { toast } from 'react-toastify'
+import { getMe, logout as apiLogout } from '../apiCalls/auth' // Importa as novas funções
+import apiClient from '../apiCalls/api-client' // Importa o apiClient para limpar o cache
+import { UserLoginBody, UserLoginResponse } from '@/apiCalls/auth/types'
 
 interface AuthContextType {
   isLoggedIn: boolean
   isLoading: boolean
-  userData: Usuario | null // Adicionei o userData ao tipo do contexto
-  login: (token: string) => void
+  userData: UserLoginResponse | null
+  login: (user: UserLoginResponse) => void
   logout: () => void
 }
 
@@ -20,57 +21,67 @@ const AuthContext = createContext<AuthContextType>({
   logout: () => {}
 })
 
-function defineUserData(token: string): Usuario | null {
-  try {
-    const payload: Usuario = jwtDecode(token)
-    return payload
-  } catch (e) {
-    console.error("Erro ao decodificar o token:", e);
-    toast.error('Sessão inválida. Por favor, faça login novamente.')
-    return null
-  }
-}
-
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
-  const [userData, setUserData] = useState<Usuario | null>(null)
+  const [userData, setUserData] = useState<UserLoginResponse | null>(null)
 
   useEffect(() => {
-    try {
-      const token = localStorage.getItem('userToken')
-      if (token) {
-        const decodedData = defineUserData(token)
-        if (decodedData) {
+    const checkUserSession = async () => {
+      try {
+        const data = await getMe()
+        if (data) {
           setIsLoggedIn(true)
-          setUserData(decodedData)
+          setUserData(data)
         } else {
-          // O token era inválido, então deslogue
-          localStorage.removeItem('userToken');
           setIsLoggedIn(false)
           setUserData(null)
         }
-      } else {
+      } catch (error) {
         setIsLoggedIn(false)
         setUserData(null)
+      } finally {
+        setIsLoading(false)
       }
-    } finally {
-      setIsLoading(false)
+    }
+
+    checkUserSession()
+
+    // Adiciona um listener para o evento de sessão expirada (disparado pelo api-client)
+    const handleSessionExpired = () => {
+      toast.error('Sua sessão expirou. Por favor, faça login novamente.')
+      logout()
+    }
+
+    window.addEventListener('auth:sessionExpired', handleSessionExpired)
+
+    return () => {
+      window.removeEventListener('auth:sessionExpired', handleSessionExpired)
     }
   }, [])
 
-  const login = (token: string) => {
-    localStorage.setItem('userToken', token)
-    const decodedData = defineUserData(token)
-    setUserData(decodedData)
+  const login = (user: UserLoginResponse) => {
+    setUserData(user)
     setIsLoggedIn(true)
   }
 
-  const logout = () => {
-    localStorage.removeItem('userToken')
-    localStorage.removeItem('userProfile')
-    setUserData(null)
-    setIsLoggedIn(false)
+  const logout = async () => {
+    try {
+      await apiLogout()
+    } catch (error) {
+      console.error('Erro ao fazer logout na API:', error)
+    } finally {
+      // desloga o usuario mesmo com erro na API
+      setUserData(null)
+      setIsLoggedIn(false)
+
+      // Limpa qualquer item legado do localStorage
+      localStorage.removeItem('userToken')
+      localStorage.removeItem('userProfile')
+      localStorage.removeItem('repertorios')
+
+      if (apiClient.storage.clear) await apiClient.storage.clear()
+    }
   }
 
   return (

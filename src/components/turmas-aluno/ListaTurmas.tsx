@@ -2,160 +2,112 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
-import { GetTurmasMatriculadasResponse } from "@/apiCalls/turma/types";
+import Link from "next/link"; // Importar Link
+import { GetTurmasMatriculadasResponse, TurmaMatriculadaAluno } from "@/apiCalls/turma/types"; // Importar tipos
 import { getTurmasAluno } from "@/apiCalls/turma";
 import { defaultIcon} from "@/constants/icons";
 import { getIconPath } from "@/app/utils";
 
-export default function ListaTurmasAluno() {
-  const limit = 4 // numero de turmas por pagina
-  const initialQuery = `limit=${limit}`
-  const [turmas, setTurmas] = useState<GetTurmasMatriculadasResponse>()
-  const [query, setQuery] = useState(initialQuery)
-  const [paginaAtual, setPaginaAtual] = useState(1);
-  const [paginaAnterior, setPaginaAnterior] = useState<number | null>(null);
-  const [direcao, setDirecao] = useState(1); // 1 = próximo, -1 = anterior
-  const totalPaginas = turmas?.paginacao.pagesUrl.length ?? 1;
-  console.log(totalPaginas)
+// Props atualizadas para reutilização
+interface ListaTurmasProps {
+  turmas: TurmaMatriculadaAluno[];
+  loading: boolean;
+  baseUrl: string;
+  titulo: string;
+}
 
-  useEffect(() => {
-    (async () => {
-      const response = await getTurmasAluno();
-      setTurmas(response)
+export default function ListaTurmasAluno({ turmas, loading, baseUrl, titulo }: ListaTurmasProps) {
+  // Estados para paginação (removidos para simplificar, já que o Figma mostra 4 cards)
+  // Se precisar de paginação, a lógica anterior pode ser mantida.
+  // Por enquanto, vamos apenas listar os cards.
 
-    })()
-  }, [query])
+  // NOTE: O CSS do Figma usa `position: absolute` com `top: calc(...)`
+  // indicando uma lista vertical. Vou aplicar o estilo do `cardAluno`
+  // a cada item da lista.
 
-  const mudarPagina = (nova: number) => {
-    setDirecao(nova > paginaAtual ? 1 : -1);
-    setPaginaAnterior(paginaAtual); // guarda a página antiga
-    setPaginaAtual(nova);
-    setQuery(turmas?.paginacao.pagesUrl[nova - 1] ?? '')
+  const renderTurmas = () => {
+    if (loading) {
+      return (
+        <div className="space-y-4">
+          {[...Array(3)].map((_, i) => (
+            <div key={i} className="p-5 bg-white rounded-2xl shadow-sm h-[159px] animate-pulse">
+              <div className="flex items-center gap-4">
+                <div className="w-[55px] h-[55px] rounded-full bg-gray-200"></div>
+                <div className="w-1/2 h-6 bg-gray-200 rounded"></div>
+              </div>
+              <div className="mt-5 w-3/4 h-10 bg-gray-200 rounded"></div>
+            </div>
+          ))}
+        </div>
+      );
+    }
+
+    if (!turmas || turmas.length === 0) {
+      return <p>Você ainda não entrou em nenhuma turma.</p>;
+    }
+
+    return turmas.map((turma) => (
+      <Link
+        key={turma.id}
+        href={`${baseUrl}/${turma.id}`}
+        className="block mb-5" // Espaçamento entre os cards
+      >
+        {/* Estilo do cardAluno aplicado aqui:
+          - p-5 (padding: 20px)
+          - bg-white
+          - border-b-4 border-[#075F70] (box-shadow: 0px -5px 0px #075F70)
+          - rounded-2xl (border-radius: 20px)
+          - flex flex-col gap-5 (display: flex, direction: column, gap: 25px)
+        */}
+        <div className="p-5 bg-white border-b-4 border-[#075F70] rounded-2xl shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all cursor-pointer group flex flex-col gap-5">
+          {/* content / identificacaoTurma */}
+          <div className="flex flex-col gap-2.5"> {/* gap: 10px */}
+            {/* nome&IconTurma */}
+            <div className="flex items-center gap-4"> {/* gap: 15px */}
+              <Image 
+                width={55} // figma width: 55px
+                height={55} // figma height: 55px
+                src={getIconPath(turma.iconeId, defaultIcon.src)} 
+                alt={`Icone da turma '${turma.nome}'`}
+                className="rounded-full" // figma border-radius: 200px
+              />
+              <p className="font-medium text-[#3C3C3C] text-2xl line-clamp-1 group-hover:text-[#075F70]"> {/* figma: font-size 26px, weight 500 */}
+                {turma.nome}
+              </p>
+            </div>
+            {/* descricaoTurma */}
+            <div className="flex">
+              <p className="font-normal text-lg text-gray-700 line-clamp-2 h-[54px]"> {/* figma: font-size 22px, weight 400, height 54px */}
+                {turma.escola || "Esta turma não possui descrição."}
+              </p>
+            </div>
+          </div>
+        </div>
+      </Link>
+    ));
   };
 
   return (
-    <section className="col-span-1 bg-transparent p-6 flex flex-col h-full z-1">
-      {/* Aqui vai o botão de ver notificações */}
-      <h2 className="text-xl font-bold text-gray-800 pb-3">
-        Notificações
-      </h2>
-
-      {/* Lista paginada com animação */}
-      <div className="flex-1 relative overflow-hidden">
-        <AnimatePresence initial={false} custom={direcao}>
-          {/* Página antiga */}
-          {paginaAnterior && paginaAnterior !== paginaAtual && (
-            <motion.div
-              key={`old-${paginaAnterior}`}
-              custom={direcao}
-              initial={{ x: 0, opacity: 1 }}
-              animate={{ x: direcao > 0 ? -60 : 60, opacity: 0 }}
-              transition={{
-                x: { type: "spring", stiffness: 300, damping: 30 },
-                opacity: { duration: 0.25 }
-              }}
-              className="absolute w-full space-y-4 z-10"
-              onAnimationComplete={() => setPaginaAnterior(null)}
-            >
-              {turmas?.documentos ? turmas?.documentos.map((turma) => (
-                <div
-                  key={turma.id}
-                  className="mb-8 p-4 h-[128px] bg-gradient-to-r from-gray-50 to-white border-t-5 border-[#075F70] rounded-xl shadow-sm hover:shadow-md transition-all cursor-pointer group"
-                >
-
-                  <div className="flex items-center gap-3">
-                    <Image width={48} height={48} src={getIconPath(turma.iconeId, defaultIcon.src)} alt={`Icone da turma '${turma.nome}'`}></Image>
-                    <p className="font-semibold text-[#3C3C3C] text-[20px] group-hover:text-blue-700 transition-colors">
-                      {turma.nome}
-                    </p>
-                  </div>
-                  <p className="text-[16px] text-gray-600 mt-1">{turma.escola ?? (<strong><i>Escola desconhecida</i></strong>)}</p>
-                </div>
-            )) : 'Você ainda não entrou em nenhuma turma'
-              }
-            </motion.div>
-          )}
-
-          {/* Página nova */}
-          <motion.div
-            key={`new-${paginaAtual}`}
-            custom={direcao}
-            initial={{ x: direcao > 0 ? 60 : -60, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            exit={{ x: direcao > 0 ? -60 : 60, opacity: 0 }}
-            transition={{
-              x: { type: "spring", stiffness: 300, damping: 30 },
-              opacity: { duration: 0.25 }
-            }}
-            className="absolute w-full space-y-4 z-20"
-          >
-            {turmas?.documentos.map((turma) => (
-              <div
-                key={turma.id}
-                className="mb-8 p-4 h-[128px] bg-gradient-to-r from-gray-50 to-white border-t-5 border-[#075F70] rounded-xl shadow-sm hover:shadow-md transition-all cursor-pointer group"
-              >
-
-                <div className="flex items-center gap-3">
-                  <Image width={48} height={48} src={getIconPath(turma.iconeId, defaultIcon.src)} alt={`Icone da turma '${turma.nome}'`}></Image>
-                  <p className="font-semibold text-[#3C3C3C] text-[20px] group-hover:text-blue-700 transition-colors">
-                    {turma.nome}
-                  </p>
-                </div>
-                <p className="text-[16px] text-gray-600 mt-1">{turma.escola}</p>
-              </div>
-            ))}
-          </motion.div>
-        </AnimatePresence>
+    <section className="col-span-1 bg-transparent flex flex-col h-full z-1">
+      {/* Título "Notificações" atualizado para "Minhas turmas" e estilizado */}
+      <div className="flex items-center gap-3 pb-4">
+        <svg width="24" height="28" viewBox="0 0 24 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 27.0001C13.5323 27.0001 14.7967 25.7356 14.7967 24.2034H9.20334C9.20334 25.7356 10.4677 27.0001 12 27.0001ZM21.9033 19.3391V12.1018C21.9033 7.86371 19.2233 4.31371 15.15 3.59696V2.80289C15.15 1.87464 13.7067 1.1001 12 1.1001C10.2933 1.1001 8.85 1.87464 8.85 2.80289V3.59696C4.77667 4.31371 2.09667 7.86371 2.09667 12.1018V19.3391L0 21.4363V22.3334H24V21.4363L21.9033 19.3391Z" fill="#3C3C3C"/>
+            <circle cx="20" cy="4" r="4" fill="#075F70" stroke="white" strokeWidth="2"/>
+        </svg>
+        <h2 className="text-2xl font-medium text-[#3C3C3C]">
+          {titulo}
+        </h2>
       </div>
 
-      {/* Paginação com bolinhas */}
-      <div className="flex justify-center items-center gap-4 mt-4">
-        {/* Seta esquerda */}
-        <button
-          onClick={() => mudarPagina(Math.max(1, paginaAtual - 1))}
-          disabled={paginaAtual === 1}
-          className="disabled:opacity-40"
-        >
-          <svg
-            className="w-5 h-5"
-            fill="none"
-            stroke={paginaAtual === 1 ? "#D9D9D9" : "#075F70"}
-            strokeWidth={2}
-            viewBox="0 0 24 24"
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-          </svg>
-        </button>
-
-        {/* Bolinhas */}
-        <div className="flex gap-2">
-          {Array.from({ length: totalPaginas }, (_, i) => (
-            <button
-              key={i}
-              onClick={() => mudarPagina(i + 1)}
-              className={`w-3 h-3 rounded-full transition-colors ${paginaAtual === i + 1 ? "bg-[#075F70]" : "bg-[#D9D9D9]"
-                }`}
-            />
-          ))}
+      {/* Lista de turmas (sem a paginação por enquanto) */}
+      <div className="flex-1 relative">
+        <div className="space-y-0">
+          {renderTurmas()}
         </div>
-
-        {/* Seta direita */}
-        <button
-          onClick={() => mudarPagina(Math.min(totalPaginas, paginaAtual + 1))}
-          disabled={paginaAtual === totalPaginas}
-          className="disabled:opacity-40"
-        >
-          <svg
-            className="w-5 h-5"
-            fill="none"
-            stroke={paginaAtual === totalPaginas ? "#D9D9D9" : "#075F70"}
-            strokeWidth={2}
-            viewBox="0 0 24 24"
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-          </svg>
-        </button>
       </div>
+      
+      {/* A lógica de paginação pode ser readicionada aqui se necessário */}
     </section>
   );
 }

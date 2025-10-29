@@ -5,11 +5,8 @@ import { useTurmasAluno } from "@/hooks/useTurmasAluno";
 import { useMinhasTarefasAtivas } from "@/hooks/useMinhasTarefasAtivas";
 
 // --- Componentes ---
-// O Carrossel (agora refatorado para aceitar props)
 import ListaTurmasAluno from "./ListaTurmas"; 
-// O Card de Entrar Turma (reutilizado)
 import EntrarTurmaCard from "@/components/turmas-professor/EntrarTurmaCard"; 
-// O Carrossel de Tarefas (que fizemos antes)
 import { TarefasAtivasList } from "./TarefaAtivaList";
 
 /**
@@ -32,8 +29,13 @@ export default function TurmasAlunoPageContent() {
   } = useMinhasTarefasAtivas();
 
   return (
-    <main className="flex-1 space-y-8 overflow-y-auto bg-gray-50 p-8 h-[89vh]">
-      <div className="grid grid-cols-[1fr_400px] gap-8">
+    <main className="flex-1 space-y-8 overflow-y-auto bg-gray-50 p-8 h-auto"> {/* Ajustado para h-auto */}
+      {/* Layout atualizado: 
+        - 1 coluna em telas pequenas (mobile)
+        - 2 colunas em telas grandes (lg), alinhadas ao centro, respeitando as larguras do Figma.
+      */}
+      <div className="grid grid-cols-1 lg:grid-cols-[428px_minmax(0,730px)] lg:gap-12 justify-center max-w-[1200px] mx-auto">
+        {/* === Coluna da Esquerda (Minhas Turmas) === */}
         <section className="space-y-4">
           {/* REQUISITO 1: Carrossel de Turmas do Aluno */}
           {!loadingTurmas && (!turmas || turmas.length === 0) ? (
@@ -50,12 +52,12 @@ export default function TurmasAlunoPageContent() {
               turmas={turmas}
               loading={loadingTurmas}
               baseUrl="/turma_aberta_aluno"
-              titulo="Minhas Turmas"
+              titulo="Minhas turmas" // Título atualizado
             />
           )}
         </section>
 
-        {/* === Coluna Lateral (Direita) === */}
+        {/* === Coluna da Direita (Tarefas & Entrar) === */}
         <aside className="space-y-8">
 
           {/* REQUISITO 3: Carrossel de Tarefas Ativas */}
@@ -66,7 +68,7 @@ export default function TurmasAlunoPageContent() {
           />
 
           {/* REQUISITO 2: Card para Entrar em Turma */}
-          <EntrarTurmaCard />
+          <EntrarTurmaCard className="!scale-100" /> {/* Removido scale-90 */}
 
         </aside>
       </div>

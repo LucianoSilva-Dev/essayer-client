@@ -1,2 +1,1 @@
 export const API_BASE_URL = 'https://backend-incita-preview.up.railway.app'
-
