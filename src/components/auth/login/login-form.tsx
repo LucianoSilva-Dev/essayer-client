@@ -9,7 +9,7 @@ import { useAuth } from '@/./contexts/auth-context'
 import { login as apiLogin } from '../../../apiCalls/auth/index'
 import { createProfessorRequest } from "../../../apiCalls/usuario"
 import { motion } from "framer-motion"
-import { AuthButtons } from "@/components/header/auth-buttons" 
+import { AuthButtons } from "@/components/header/auth-buttons"
 
 export default function LoginForm() {
   const { login, isLoggedIn } = useAuth()
@@ -37,15 +37,15 @@ export default function LoginForm() {
       setAlreadylogged(false)
       const response = await apiLogin({ email, senha: password })
       login(response)
-      
-      if(lattes && lattes !== "null"){
-        await createProfessorRequest({lattes})
+
+      if (lattes && lattes !== "null") {
+        await createProfessorRequest({ lattes })
       }
-      
+
       router.push("/main")
     } catch { }
   }
- 
+
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -113,8 +113,9 @@ export default function LoginForm() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="w-full px-4 py-3 md:px-6 md:py-4 bg-white rounded-2xl md:rounded-3xl 
-                  focus:outline-none focus:ring-2 focus:ring-[#075F70] 
-                  focus:shadow-lg transition-all duration-300 text-base md:text-lg shadow-md"
+              focus:outline-none focus:ring-2 focus:ring-[#075F70] 
+              focus:shadow-lg focus:-translate-y-[0.5em]
+              transition-all duration-300 text-base md:text-lg shadow-md"
               required
             />
           </motion.div>
@@ -130,19 +131,19 @@ export default function LoginForm() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="w-full px-4 py-3 md:px-6 md:py-4 bg-white rounded-2xl md:rounded-3xl 
-                  focus:outline-none focus:ring-2 focus:ring-[#075F70] 
-                  focus:shadow-lg group-focus-within:-translate-y-0.5 
-                  transition-all duration-300 text-base md:text-lg shadow-md"
+                focus:outline-none focus:ring-2 focus:ring-[#075F70] 
+                focus:shadow-lg group-focus-within:-translate-y-[0.5em]
+                transition-all duration-300 text-base md:text-lg shadow-md"
               />
               <button
                 type="button"
                 className="absolute right-4 md:right-6 top-1/2 transform -translate-y-1/2 
-                  text-gray-500 hover:text-gray-700
-                  group-focus-within:-translate-y-1 group-focus-within:text-[#075F70]
-                  transition-all duration-300"
+                text-gray-500 hover:text-gray-700
+                group-focus-within:-translate-y-[calc(50%+0.5em)] group-focus-within:text-[#075F70]
+                transition-all duration-300"
                 onClick={() => setShowPassword(!showPassword)}
                 aria-label="Alternar visibilidade da senha"
-              > 
+              >
                 {showPassword ? <EyeOff size={22} /> : <Eye size={22} />}
               </button>
             </div>
@@ -152,7 +153,7 @@ export default function LoginForm() {
           <motion.button
             variants={itemVariants}
             type="submit"
-            className="w-full bg-[#075F70] hover:bg-[#064c5a] hover:shadow-xl active:translate-y-0 text-white py-3.5 md:py-5 px-6 rounded-2xl md:rounded-3xl text-lg md:text-xl font-medium shadow-lg transition-all duration-300 mb-6 md:mb-8 focus:shadow-xl"
+            className="w-full bg-[#075F70] hover:bg-[#064c5a] hover:shadow-xl hover:translate-y-[-0.2em] active:translate-y-0 text-white py-3.5 md:py-5 px-6 rounded-2xl md:rounded-3xl text-lg md:text-xl font-medium shadow-lg transition-all duration-300 mb-6 md:mb-8 focus:shadow-xl focus:translate-y-[-0.2em]"
           >
             Entrar
           </motion.button>
@@ -162,17 +163,17 @@ export default function LoginForm() {
             variants={itemVariants}
             className="flex flex-col items-center space-y-3 md:space-y-4"
           >
-            <Link 
-              href="/forgot-password" 
+            <Link
+              href="/forgot-password"
               className="text-md md:text-lg text-[#075F70] hover:text-[#064c5a] transition-colors hover:underline"
             >
               Esqueceu a senha?
             </Link>
-            
+
             <div className="flex items-center space-x-2 text-md md:text-lg group">
               <span className="text-gray-600">Não tem uma conta?</span>
-              <Link 
-                href="/register" 
+              <Link
+                href="/register"
                 className="text-[#075F70] hover:text-[#064c5a] font-medium transition-colors group-hover:underline"
               >
                 Cadastre-se
@@ -189,7 +190,7 @@ export default function LoginForm() {
         transition={{ duration: 0.7, delay: 0.5 }}
         className="hidden md:flex flex-1 relative bg-[#E0E0E0] rounded-[25px] h-[92vh] w-[60vw] overflow-hidden mt-1"
       >
-        <Image 
+        <Image
           src="/login.jpg"
           alt="Login background"
           fill

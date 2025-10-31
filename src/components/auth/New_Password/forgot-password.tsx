@@ -6,6 +6,7 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { createRequisicaoSenha } from "../../../apiCalls/requisicao-senha"
 import { useAuth } from "../../../contexts/auth-context"
+import { motion } from "framer-motion"
 
 export default function ForgotPasswordForm() {
   const [email, setEmail] = useState("")
@@ -16,10 +17,10 @@ export default function ForgotPasswordForm() {
     e.preventDefault()
 
     try {
-      const {id} = await createRequisicaoSenha({email})
+      const { id } = await createRequisicaoSenha({ email })
 
       const query = new URLSearchParams({
-        id, 
+        id,
         email
       })
 
@@ -27,53 +28,131 @@ export default function ForgotPasswordForm() {
     } catch { }
   }
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.12,
+        delayChildren: 0.06,
+      },
+    },
+  }
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: -18 } as const,
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.42,
+        ease: "easeOut",
+      } as const,
+    },
+  }
+
   return (
-    <div className="w-full max-w-xl mx-auto flex flex-col items-center shadow-lg px-8 py-8">
-      {/* Logo */}
-      <div className="mb-6">
-        <Image src="/favicon_2d.png" alt="Incita Logo" width={180} height={120} priority />
-      </div>
+    <div className="min-h-screen bg-gray-50 flex flex-col md:flex-row px-4 md:px-10 py-6 w-full overflow-x-hidden">
+      {/* Lado Esquerdo - Conteúdo */}
+      <motion.div
+        className="flex-1 flex flex-col justify-center pl-6 pr-6 md:pl-20 md:pr-20"
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+      >
+        {/* Cabeçalho */}
+        <motion.div variants={itemVariants} className="mt-4 md:mt-5">
+          <h1 className="text-3xl md:text-4xl font-semibold text-[#282133]">
+            Redefinição de senha
+          </h1>
+          <div className="w-full h-0.5 bg-[#D3D3D3] mb-4 mt-6"></div>
+        </motion.div>
 
-      {/* Título */}
-      <h1 className="text-2xl font-medium text-gray-800 mb-4">Redefina sua senha</h1>
-
-      {/* Descrição */}
-      <p className="text-sm text-gray-600 text-center mb-8 leading-relaxed">
-        Insira o endereço do e-mail vinculado à sua conta para te enviarmos um código
-      </p>
-
-      {/* Formulário */}
-      <form onSubmit={handleSubmit} className="w-full">
-        <div className="mb-6">
-          <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-            Email
-          </label>
-          <input
-            id="email"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="w-full px-3 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-teal-600"
-            placeholder="Digite seu email"
-            required
-          />
-        </div>
-
-        <button
-          type="submit"
-          className="w-full bg-teal-800 hover:bg-teal-700 text-white py-3 px-4 rounded-md transition-colors mb-4"
+        {/* Descrição */}
+        <motion.p
+          variants={itemVariants}
+          className="text-base md:text-[25px] text-[#3C3C3C] mb-6 md:mb-8 max-w-full md:max-w-2xl leading-relaxed"
         >
-          Enviar código
-        </button>
+          Insira o endereço do e-mail para receber o código de verificação e prosseguir na redefinição de senha
+        </motion.p>
 
-        {!isLoggedIn && ( // Só mostra se NÃO estiver logado
-          <div className="flex justify-center">
-            <Link href="/login" className="text-sm text-gray-500 hover:text-teal-600">
-              Voltar ao login
-            </Link>
-          </div>
-        )}
-      </form>
+        {/* Formulário */}
+        <motion.form
+          variants={containerVariants}
+          onSubmit={handleSubmit}
+          className="w-full max-w-full md:max-w-2xl"
+        >
+          {/* Campo Email */}
+          <motion.div variants={itemVariants} className="mb-10 md:mb-16">
+            <label className="block text-xl md:text-2xl font-medium text-[#3C3C3C] pl-1 md:pl-3 mb-2">
+              Email
+            </label>
+            <div className="relative group">
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full px-4 py-3 md:px-6 md:py-4 bg-white rounded-2xl md:rounded-3xl 
+                  focus:outline-none focus:ring-2 focus:ring-[#075F70] 
+                  focus:shadow-lg group-focus-within:-translate-y-0.5 
+                  transition-all duration-300 text-base md:text-lg shadow-md"
+                placeholder="Digite seu email"
+                required
+              />
+            </div>
+          </motion.div>
+
+          {/* Botão Enviar E-mail */}
+          <motion.button
+            variants={itemVariants}
+            type="submit"
+            className="w-full bg-[#075F70] hover:bg-[#064c5a] hover:shadow-xl hover:translate-y-[-0.2em] active:translate-y-0 text-white py-3.5 md:py-5 px-6 rounded-2xl md:rounded-3xl text-lg md:text-xl font-medium shadow-lg transition-all duration-300 mb-6 md:mb-8 focus:shadow-xl focus:translate-y-[-0.2em]"
+          >
+            Enviar e-mail
+          </motion.button>
+
+          {/* Links Adicionais */}
+          <motion.div
+            variants={itemVariants}
+            className="flex flex-col items-center space-y-3 md:space-y-4"
+          >
+            {!isLoggedIn && (
+              <Link
+                href="/login"
+                className="text-md md:text-lg text-[#075F70] hover:text-[#064c5a] transition-colors hover:underline"
+              >
+                Voltar ao login
+              </Link>
+            )}
+
+            <div className="flex items-center space-x-2 text-md md:text-lg group">
+              <span className="text-gray-600">Não tem uma conta?</span>
+              <Link
+                href="/register"
+                className="text-[#075F70] hover:text-[#064c5a] font-medium transition-colors group-hover:underline"
+              >
+                Cadastre-se
+              </Link>
+            </div>
+          </motion.div>
+        </motion.form>
+      </motion.div>
+
+      {/* Lado Direito - Imagem/Visual (oculta em telas pequenas) */}
+      <motion.div
+        initial={{ opacity: 0, x: 70 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.7, delay: 0.5 }}
+        className="hidden md:flex flex-1 relative bg-[#E0E0E0] rounded-[25px] h-[92vh] w-[60vw] overflow-hidden mt-1"
+      >
+        <Image
+          src="/login.jpg"
+          alt="Redefinição de senha background"
+          fill
+          style={{ objectFit: 'cover' }}
+          priority
+        />
+      </motion.div>
     </div>
   )
 }

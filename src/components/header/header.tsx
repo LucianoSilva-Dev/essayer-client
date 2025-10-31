@@ -43,7 +43,7 @@ export function Header({ currentPage, description, backPage }: HeaderProps) {
   }
 
   // Não renderiza o header nas páginas
-  if (pathname === "/landing" || pathname === "/login" || pathname === "/register") {
+  if (pathname === "/landing" || pathname === "/login" || pathname === "/register" || pathname.startsWith("/forgot-password")) {
     return null
   }
 

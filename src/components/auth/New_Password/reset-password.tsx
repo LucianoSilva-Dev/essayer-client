@@ -7,6 +7,7 @@ import { EyeOff, Eye } from "lucide-react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { updatePassword } from "../../../apiCalls/usuario"
 import { useAuth } from "../../../contexts/auth-context"
+import { motion } from "framer-motion"
 
 export default function ResetPasswordForm() {
   const [newPassword, setNewPassword] = useState("")
@@ -16,8 +17,9 @@ export default function ResetPasswordForm() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const router = useRouter()
   const searchParams = useSearchParams()
+  const passwordRegex = /^(?=.*[a-z])(?=.*\d).{8,24}$/
 
-  const {isLoggedIn} = useAuth()
+  const { isLoggedIn } = useAuth()
 
   const passwordsMatch = newPassword === confirmPassword && newPassword.length > 0
   const isFormValid = newPassword.length >= 6 && passwordsMatch
@@ -30,10 +32,10 @@ export default function ResetPasswordForm() {
 
     setIsSubmitting(true)
     try {
-      if(!id) {return}
-      await updatePassword(id, {senha: newPassword})
+      if (!id) { return }
+      await updatePassword(id, { senha: newPassword })
 
-      if(!isLoggedIn){
+      if (!isLoggedIn) {
         router.push("/login?message=password-reset-success")
       } else {
         router.push("/profile?message=password-reset-success")
@@ -43,95 +45,187 @@ export default function ResetPasswordForm() {
     }
   }
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.12,
+        delayChildren: 0.06,
+      },
+    },
+  }
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: -18 } as const,
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.42,
+        ease: "easeOut",
+      } as const,
+    },
+  }
+
   return (
-    <div className="w-full max-w-xl mx-auto flex flex-col items-center shadow-lg px-8 py-8">
-      {/* Logo */}
-      <div className="mb-6">
-        <Image src="/favicon_2d.png" alt="Incita Logo" width={180} height={120} priority />
-      </div>
+    <div className="min-h-screen bg-gray-50 flex flex-col md:flex-row px-4 md:px-10 py-6 w-full overflow-x-hidden">
+      {/* Lado Esquerdo - Conteúdo */}
+      <motion.div
+        className="flex-1 flex flex-col justify-center pl-6 pr-6 md:pl-20 md:pr-20"
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+      >
+        {/* Cabeçalho */}
+        <motion.div variants={itemVariants} className="mt-4 md:mt-5">
+          <h1 className="text-3xl md:text-4xl font-semibold text-[#282133]">
+            Redefinição de senha
+          </h1>
+          <div className="w-full h-0.5 bg-[#D3D3D3] mb-4 mt-2"></div>
+        </motion.div>
 
-      {/* Título */}
-      <h1 className="text-2xl font-medium text-gray-800 mb-4">Redefina sua senha</h1>
-
-      {/* Descrição */}
-      <p className="text-sm text-gray-600 text-center mb-8 leading-relaxed">
-        Insira e confirme a nova senha da sua conta
-      </p>
-
-      {/* Formulário */}
-      <form onSubmit={handleSubmit} className="w-full">
-        <div className="mb-4">
-          <label htmlFor="newPassword" className="block text-sm font-medium text-gray-700 mb-1">
-            Nova senha
-          </label>
-          <div className="relative">
-            <input
-              id="newPassword"
-              type={showNewPassword ? "text" : "password"}
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-              className="w-full px-3 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-teal-600"
-              placeholder="Digite sua nova senha"
-              minLength={6}
-              required
-            />
-            <button
-              type="button"
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"
-              onClick={() => setShowNewPassword(!showNewPassword)}
-            >
-              {showNewPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-            </button>
-          </div>
-          {newPassword.length > 0 && newPassword.length < 6 && (
-            <p className="text-xs text-red-500 mt-1">A senha deve ter pelo menos 6 caracteres</p>
-          )}
-        </div>
-
-        <div className="mb-6">
-          <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-1">
-            Confirmar nova senha
-          </label>
-          <div className="relative">
-            <input
-              id="confirmPassword"
-              type={showConfirmPassword ? "text" : "password"}
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              className="w-full px-3 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-teal-600"
-              placeholder="Confirme sua nova senha"
-              required
-            />
-            <button
-              type="button"
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"
-              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-            >
-              {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-            </button>
-          </div>
-          {confirmPassword.length > 0 && !passwordsMatch && (
-            <p className="text-xs text-red-500 mt-1">As senhas não coincidem</p>
-          )}
-          {passwordsMatch && confirmPassword.length > 0 && (
-            <p className="text-xs text-green-600 mt-1">As senhas coincidem</p>
-          )}
-        </div>
-
-        <button
-          type="submit"
-          disabled={!isFormValid || isSubmitting}
-          className="w-full bg-teal-800 hover:bg-teal-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white py-3 px-4 rounded-md transition-colors mb-4"
+        {/* Descrição */}
+        <motion.p
+          variants={itemVariants}
+          className="text-base md:text-[25px] text-[#3C3C3C] mb-6 md:mb-8 max-w-full md:max-w-2xl leading-relaxed"
         >
-          {isSubmitting ? "Redefinindo..." : "Redefinir senha"}
-        </button>
+          Insira e confirme a nova senha da sua conta
+        </motion.p>
 
-        <div className="flex justify-center">
-          <Link href="/forgot-password/verify-code" className="text-sm text-gray-500 hover:text-teal-600">
-            Voltar
-          </Link>
-        </div>
-      </form>
+        {/* Formulário */}
+        <motion.form
+          variants={containerVariants}
+          onSubmit={handleSubmit}
+          className="w-full max-w-full md:max-w-2xl"
+        >
+          {/* Campo Nova Senha */}
+          <motion.div variants={itemVariants} className="mb-8 md:mb-12">
+            <label className="block text-xl md:text-2xl font-medium text-[#3C3C3C] pl-1 md:pl-3 mb-2">
+              Nova senha
+            </label>
+            <div className="relative group">
+              <input
+                type={showNewPassword ? "text" : "password"}
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                className="w-full px-4 py-3 md:px-6 md:py-4 bg-white rounded-2xl md:rounded-3xl 
+                focus:outline-none focus:ring-2 focus:ring-[#075F70] 
+                focus:shadow-lg group-focus-within:-translate-y-[0.5em]
+                transition-all duration-300 text-base md:text-lg shadow-md"
+                placeholder="Digite sua nova senha"
+                minLength={6}
+                required
+              />
+              <button
+                type="button"
+                className="absolute right-4 md:right-6 top-1/2 transform -translate-y-1/2 
+                text-gray-500 hover:text-gray-700
+                group-focus-within:-translate-y-[calc(50%+0.5em)] group-focus-within:text-[#075F70]
+                transition-all duration-300"
+                onClick={() => setShowNewPassword(!showNewPassword)}
+                aria-label="Alternar visibilidade da senha"
+              >
+                {showNewPassword ? <EyeOff size={22} /> : <Eye size={22} />}
+              </button>
+            </div>
+            <p
+              className={`text-xs mt-1 ml-3 transition-colors duration-300 ${newPassword.length === 0
+                ? "text-zinc-700" // estado inicial
+                : passwordRegex.test(newPassword)
+                  ? "text-green-600" // senha válida
+                  : "text-red-500"   // senha inválida
+                }`}
+            >
+              A senha precisa ter de 8 a 24 caracteres, ao menos uma letra minúscula e um número.
+            </p>
+          </motion.div>
+
+          {/* Campo Confirmar Senha */}
+          <motion.div variants={itemVariants} className="mb-10 md:mb-16">
+            <label className="block text-xl md:text-2xl font-medium text-[#3C3C3C] pl-1 md:pl-3 mb-2">
+              Insira a senha novamente
+            </label>
+            <div className="relative group">
+              <input
+                type={showConfirmPassword ? "text" : "password"}
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                className="w-full px-4 py-3 md:px-6 md:py-4 bg-white rounded-2xl md:rounded-3xl 
+                focus:outline-none focus:ring-2 focus:ring-[#075F70] 
+                focus:shadow-lg group-focus-within:-translate-y-[0.5em]
+                transition-all duration-300 text-base md:text-lg shadow-md"
+                placeholder="Confirme sua nova senha"
+                required
+              />
+              <button
+                type="button"
+                className="absolute right-4 md:right-6 top-1/2 transform -translate-y-1/2 
+                text-gray-500 hover:text-gray-700
+                group-focus-within:-translate-y-[calc(50%+0.5em)] group-focus-within:text-[#075F70]
+                transition-all duration-300"
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                aria-label="Alternar visibilidade da senha"
+              >
+                {showConfirmPassword ? <EyeOff size={22} /> : <Eye size={22} />}
+              </button>
+            </div>
+            <p
+              className={`text-xs mt-1 ml-3 transition-all duration-300 ${confirmPassword.length === 0
+                  ? "opacity-0"
+                  : passwordsMatch
+                    ? "opacity-100 text-green-600"
+                    : "opacity-100 text-red-500"
+                }`}
+            >
+              {passwordsMatch ? "As senhas coincidem" : "As senhas não coincidem"}
+            </p>
+          </motion.div>
+
+          {/* Botão Redefinir Senha */}
+          <motion.button
+            variants={itemVariants}
+            type="submit"
+            disabled={!isFormValid || isSubmitting}
+            className="w-full bg-[#075F70] hover:bg-[#064c5a] hover:shadow-xl hover:translate-y-[-0.2em] 
+            active:translate-y-0 disabled:bg-gray-400 disabled:cursor-not-allowed disabled:hover:translate-y-0
+            disabled:hover:shadow-lg text-white py-3.5 md:py-5 px-6 rounded-2xl md:rounded-3xl 
+            text-lg md:text-xl font-medium shadow-lg transition-all duration-300 mb-6 md:mb-8 
+            focus:shadow-xl focus:translate-y-[-0.2em]"
+          >
+            {isSubmitting ? "Redefinindo..." : "Redefinir senha"}
+          </motion.button>
+
+          {/* Link Voltar */}
+          <motion.div
+            variants={itemVariants}
+            className="flex justify-center"
+          >
+            <Link
+              href="/forgot-password/verify-code"
+              className="text-md md:text-lg text-[#075F70] hover:text-[#064c5a] transition-colors hover:underline"
+            >
+              Voltar
+            </Link>
+          </motion.div>
+        </motion.form>
+      </motion.div>
+
+      {/* Lado Direito - Imagem/Visual (oculta em telas pequenas) */}
+      <motion.div
+        initial={{ opacity: 0, x: 70 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.7, delay: 0.5 }}
+        className="hidden md:flex flex-1 relative bg-[#E0E0E0] rounded-[25px] h-[92vh] w-[60vw] overflow-hidden mt-1"
+      >
+        <Image
+          src="/login.jpg"
+          alt="Redefinir senha background"
+          fill
+          style={{ objectFit: 'cover' }}
+          priority
+        />
+      </motion.div>
     </div>
   )
 }
