@@ -8,6 +8,8 @@ import { useRouter, useSearchParams } from "next/navigation"
 import { useAuth } from '@/./contexts/auth-context'
 import { login as apiLogin } from '../../../apiCalls/auth/index'
 import { createProfessorRequest } from "../../../apiCalls/usuario"
+import { motion } from "framer-motion"
+import { AuthButtons } from "@/components/header/auth-buttons" 
 
 export default function LoginForm() {
   const { login, isLoggedIn } = useAuth()
@@ -44,99 +46,149 @@ export default function LoginForm() {
     } catch { }
   }
  
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.12,
+        delayChildren: 0.06,
+      },
+    },
+  }
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: -18 } as const,
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.42,
+        ease: "easeOut",
+      } as const,
+    },
+  }
+
   return (
-    <div className="min-h-screen bg-[#F1F1F2] flex px-10 py-10 w-full">
+    <div className="min-h-screen bg-gray-50 flex flex-col md:flex-row px-4 md:px-10 py-6 w-full overflow-x-hidden">
       {/* Lado Esquerdo - Conteúdo */}
-      <div className="flex-1 flex flex-col justify-center pl-40 pr-20">
+      <motion.div
+        className="flex-1 flex flex-col justify-center pl-6 pr-6 md:pl-20 md:pr-20"
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+      >
         {/* Cabeçalho */}
-        <div className="mb-16">
-          <h1 className="text-4xl font-semibold text-[#282133] mb-4">
+        <motion.div variants={itemVariants} className="mt-4 md:mt-5">
+          <h1 className="text-3xl md:text-4xl font-semibold text-[#282133]">
             Bem vindo ao Incita
           </h1>
-          <div className="w-48 h-0.5 bg-[#D3D3D3] mb-4"></div>
-          <p className="text-2xl text-[#075F70] font-medium">
+          <p className="text-lg md:text-2xl text-[#075F70] font-medium mt-2 mb-4">
             Sua plataforma de repertórios
           </p>
-        </div>
+          <div className="w-full h-0.5 bg-[#D3D3D3] mb-4"></div>
+        </motion.div>
 
         {/* Descrição */}
-        <p className="text-xl text-[#3C3C3C] mb-16 max-w-2xl leading-relaxed">
+        <motion.p
+          variants={itemVariants}
+          className="text-base md:text-[25px] text-[#3C3C3C] mb-6 md:mb-8 max-w-full md:max-w-2xl leading-relaxed"
+        >
           Preencha os campos para entrar na plataforma.
-        </p>
+        </motion.p>
 
         {/* Formulário */}
-        <form onSubmit={handleSubmit} className="max-w-2xl">
+        <motion.form
+          variants={containerVariants}
+          onSubmit={handleSubmit}
+          className="w-full max-w-full md:max-w-2xl"
+        >
           {/* Campo Email */}
-          <div className="mb-12">
-            <label className="block text-xl font-medium text-[#3C3C3C] mb-4">
+          <motion.div variants={itemVariants} className="mb-8 md:mb-12">
+            <label className="block text-xl md:text-2xl font-medium text-[#3C3C3C] pl-1 md:pl-3 mb-2">
               Email
             </label>
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-6 py-4 bg-white rounded-3xl focus:outline-none focus:ring-2 focus:ring-[#075F70] text-lg"
-              placeholder="Seu email"
+              className="w-full px-4 py-3 md:px-6 md:py-4 bg-white rounded-2xl md:rounded-3xl 
+                  focus:outline-none focus:ring-2 focus:ring-[#075F70] 
+                  focus:shadow-lg transition-all duration-300 text-base md:text-lg shadow-md"
               required
             />
-          </div>
+          </motion.div>
 
           {/* Campo Senha */}
-          <div className="mb-16">
-            <label className="block text-xl font-medium text-[#3C3C3C] mb-4">
+          <motion.div variants={itemVariants} className="mb-10 md:mb-16">
+            <label className="block text-xl md:text-2xl font-medium text-[#3C3C3C] pl-1 md:pl-3 mb-2">
               Insira uma senha
             </label>
-            <div className="relative">
+            <div className="relative group">
               <input
                 type={showPassword ? "text" : "password"}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-6 py-4 bg-white rounded-3xl focus:outline-none focus:ring-2 focus:ring-[#075F70] text-lg shadow-sm"
-                placeholder="Sua senha"
-                required
+                className="w-full px-4 py-3 md:px-6 md:py-4 bg-white rounded-2xl md:rounded-3xl 
+                  focus:outline-none focus:ring-2 focus:ring-[#075F70] 
+                  focus:shadow-lg group-focus-within:-translate-y-0.5 
+                  transition-all duration-300 text-base md:text-lg shadow-md"
               />
               <button
                 type="button"
-                className="absolute right-6 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                className="absolute right-4 md:right-6 top-1/2 transform -translate-y-1/2 
+                  text-gray-500 hover:text-gray-700
+                  group-focus-within:-translate-y-1 group-focus-within:text-[#075F70]
+                  transition-all duration-300"
                 onClick={() => setShowPassword(!showPassword)}
-              >
-                {showPassword ? <EyeOff size={24} /> : <Eye size={24} />}
+                aria-label="Alternar visibilidade da senha"
+              > 
+                {showPassword ? <EyeOff size={22} /> : <Eye size={22} />}
               </button>
             </div>
-          </div>
+          </motion.div>
 
           {/* Botão Entrar */}
-          <button
+          <motion.button
+            variants={itemVariants}
             type="submit"
-            className="w-full bg-[#075F70] hover:bg-[#064c5a] text-white py-5 px-8 rounded-3xl text-xl font-medium shadow-lg transition-colors duration-200 mb-8"
+            className="w-full bg-[#075F70] hover:bg-[#064c5a] hover:shadow-xl active:translate-y-0 text-white py-3.5 md:py-5 px-6 rounded-2xl md:rounded-3xl text-lg md:text-xl font-medium shadow-lg transition-all duration-300 mb-6 md:mb-8 focus:shadow-xl"
           >
             Entrar
-          </button>
+          </motion.button>
 
           {/* Links Adicionais */}
-          <div className="flex flex-col items-center space-y-4">
+          <motion.div
+            variants={itemVariants}
+            className="flex flex-col items-center space-y-3 md:space-y-4"
+          >
             <Link 
               href="/forgot-password" 
-              className="text-lg text-[#075F70] hover:text-[#064c5a] transition-colors"
+              className="text-md md:text-lg text-[#075F70] hover:text-[#064c5a] transition-colors hover:underline"
             >
               Esqueceu a senha?
             </Link>
             
-            <div className="flex items-center space-x-2 text-lg">
+            <div className="flex items-center space-x-2 text-md md:text-lg group">
               <span className="text-gray-600">Não tem uma conta?</span>
               <Link 
                 href="/register" 
-                className="text-[#075F70] hover:text-[#064c5a] font-medium transition-colors"
+                className="text-[#075F70] hover:text-[#064c5a] font-medium transition-colors group-hover:underline"
               >
                 Cadastre-se
               </Link>
             </div>
-          </div>
-        </form>
-      </div>
+          </motion.div>
+        </motion.form>
+      </motion.div>
 
-      {/* Lado Direito - Imagem/Visual */}
-      <div className="flex-1 relative bg-[#E0E0E0] rounded-[25px] h-[92vh] w-[60vw] overflow-hidden">
+      {/* Lado Direito - Imagem/Visual (oculta em telas pequenas) */}
+      <motion.div
+        initial={{ opacity: 0, x: 70 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.7, delay: 0.5 }}
+        className="hidden md:flex flex-1 relative bg-[#E0E0E0] rounded-[25px] h-[92vh] w-[60vw] overflow-hidden mt-1"
+      >
         <Image 
           src="/login.jpg"
           alt="Login background"
@@ -144,7 +196,7 @@ export default function LoginForm() {
           style={{ objectFit: 'cover' }}
           priority
         />
-      </div>
+      </motion.div>
     </div>
   )
 }
