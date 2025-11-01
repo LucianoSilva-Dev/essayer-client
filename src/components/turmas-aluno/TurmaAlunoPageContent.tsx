@@ -6,7 +6,7 @@ import { useMinhasTarefasAtivas } from "@/hooks/useMinhasTarefasAtivas";
 
 // --- Componentes ---
 import ListaTurmasAluno from "./ListaTurmas"; 
-import EntrarTurmaCard from "@/components/turmas-professor/EntrarTurmaCard"; 
+import EntrarTurmaCard from "./EntrarTurmaCard"; 
 import { TarefasAtivasList } from "./TarefaAtivaList";
 
 /**
@@ -29,7 +29,7 @@ export default function TurmasAlunoPageContent() {
   } = useMinhasTarefasAtivas();
 
   return (
-    <main className="flex-1 space-y-8 overflow-y-auto bg-gray-50 p-8 h-auto"> {/* Ajustado para h-auto */}
+    <main className="flex-1 space-y-8 overflow-y-hidden bg-gray-50 p-8 h-[calc(100vh-80px)]"> {/* Ajustado para h-auto */}
       {/* Layout atualizado: 
         - 1 coluna em telas pequenas (mobile)
         - 2 colunas em telas grandes (lg), alinhadas ao centro, respeitando as larguras do Figma.
@@ -68,7 +68,7 @@ export default function TurmasAlunoPageContent() {
           />
 
           {/* REQUISITO 2: Card para Entrar em Turma */}
-          <EntrarTurmaCard className="!scale-100" /> {/* Removido scale-90 */}
+          <EntrarTurmaCard /> {/* Removido scale-90 */}
 
         </aside>
       </div>

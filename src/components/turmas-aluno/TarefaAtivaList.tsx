@@ -30,7 +30,7 @@ export function TarefasAtivasList({
         <h2 className="mb-6 font-montserrat text-[24px] font-medium text-[#3C3C3C]">
           Tarefas ativas
         </h2>
-        <div className="flex justify-center items-center h-[311px] bg-gray-100 rounded-lg">
+        <div className="flex justify-center items-center h-[250px] bg-gray-100 rounded-lg">
           <p className="text-gray-500">Carregando tarefas...</p>
         </div>
       </section>
@@ -64,7 +64,7 @@ export function TarefasAtivasList({
    }
 
   return (
-    <section className="relative w-full max-w-[1400px] px-4">
+    <section className="relative w-full max-w-[1400px] max-h-[311px] px-4">
       <h2 className="mb-6 font-montserrat text-[24px] font-medium text-[#3C3C3C]">
         Tarefas ativas
       </h2>
@@ -73,11 +73,16 @@ export function TarefasAtivasList({
         modules={[Navigation]}
         spaceBetween={30}
         slidesPerView={'auto'} // Deixa o Swiper calcular quantos cabem
+        loop={true}
+        pagination={{
+                clickable: true,
+                dynamicBullets: true,
+              }}
         navigation={{
           nextEl: ".swiper-button-next-tarefas",
           prevEl: ".swiper-button-prev-tarefas",
         }}
-        className="!pb-4"
+        className="pb-4 overflow-y-visible"
       >
         {/* Mapeia as tarefas recebidas via props */}
         {tarefas.map((tarefa) => (

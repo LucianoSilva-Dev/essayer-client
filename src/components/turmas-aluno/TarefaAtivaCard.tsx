@@ -18,16 +18,16 @@ export function TarefaAtivaCard({ tarefa }: TarefaAtivaCardProps) {
     : "Sem prazo";
 
   return (
-    <div className="relative flex h-[311px] w-[692px] flex-col gap-[25px] rounded-[40px] bg-white p-[30px] shadow-[0px_0px_13px_2px_rgba(0,0,0,0.25)] isolate">
+    <div className="relative flex max-h-[311px] w-[692px] flex-col gap-[25px] rounded-[40px] bg-white p-[30px] shadow-[0px_0px_13px_2px_rgba(0,0,0,0.25)] isolate scale-95 hover:shadow-[0px_0px_15px_4px_rgba(7,95,112,0.6)] transition-all duration-300">
       {/* Imagem de fundo opcional */}
       {/* Ajuste a lógica da imagem se necessário */}
       {/* Exemplo: <Image src={tarefa.turma.imagemUrl || "/placeholder.png"} ... /> */}
       <Image
           src={"/turmaPrancheta.png"} // Usando placeholder por enquanto
           alt="background design"
-          width={692}
-          height={456}
-          className="absolute left-0 top-[-145px] -z-10 rounded-[40px]"
+          width={100}
+          height={100}
+          className="absolute right-10 top-5 -z-10 rounded-[40px]"
         />
 
       {/* Nome da turma - Usando tarefa.turma.nome */}

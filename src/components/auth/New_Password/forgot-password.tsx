@@ -52,10 +52,10 @@ export default function ForgotPasswordForm() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col md:flex-row px-4 md:px-10 py-6 w-full overflow-x-hidden">
+    <div className="min-h-screen bg-gray-50 flex flex-col md:flex-row px-4 md:px-2 py-6 w-full overflow-x-hidden">
       {/* Lado Esquerdo - Conteúdo */}
       <motion.div
-        className="flex-1 flex flex-col justify-center pl-6 pr-6 md:pl-20 md:pr-20"
+        className="flex-1 flex flex-col justify-center pl-6 pr-6 md:pl-10 md:pr-20"
         variants={containerVariants}
         initial="hidden"
         animate="visible"
@@ -143,7 +143,7 @@ export default function ForgotPasswordForm() {
         initial={{ opacity: 0, x: 70 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.7, delay: 0.5 }}
-        className="hidden md:flex flex-1 relative bg-[#E0E0E0] rounded-[25px] h-[92vh] w-[60vw] overflow-hidden mt-1"
+        className="hidden md:flex flex-1 relative bg-[#E0E0E0] rounded-[25px] h-[92vh] w-[60vw] overflow-hidden mt-1 md:mr-5"
       >
         <Image
           src="/login.jpg"

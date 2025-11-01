@@ -2,37 +2,28 @@
 
 import React from "react"
 import { useState } from "react"
-//import Image from "next/image"
 import Link from "next/link"
 import { EyeOff, Eye } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { CreateUsuarioBody } from "../../../apiCalls/usuario/types"
 import { createUser } from "../../../apiCalls/usuario"
-import { UserRegistration } from "@/types/user"
 import { useAuth } from "../../../contexts/auth-context"
 import { toast } from "react-toastify"
+import { motion } from "framer-motion"
 
-type FormProfessorProps = {
-  onSubmit: (userData: UserRegistration) => Promise<void>
-  isSubmitting: boolean
-  showPassword: boolean
-  setShowPassword: React.Dispatch<React.SetStateAction<boolean>>
-}
-
-export default function FormProfessor({ }: FormProfessorProps) {
+export default function FormProfessor() {
   const router = useRouter()
   const { isLoggedIn } = useAuth()
-  const [showPasswordState, setShowPasswordState] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     password: "",
     confirmPassword: "",
     curriculoLattes: "",
-    aceitouTermos: false,
   })
-
   const [errors, setErrors] = useState({
     password: "",
     confirmPassword: "",
@@ -74,10 +65,12 @@ export default function FormProfessor({ }: FormProfessorProps) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    setIsSubmitting(true)
 
     // Verificar se as senhas coincidem
     if (formData.password !== formData.confirmPassword) {
       setErrors((prev) => ({ ...prev, confirmPassword: "As senhas não coincidem" }))
+      setIsSubmitting(false)
       return
     }
 
@@ -97,141 +90,187 @@ export default function FormProfessor({ }: FormProfessorProps) {
       })
 
       router.push(`/register/confirmation?${query}`)
-    } catch { }
+    } catch (error) {
+      console.error("Erro ao criar conta:", error)
+      toast.error("Erro ao criar conta. Tente novamente.")
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
 
+  const inputVariants = {
+    focus: {
+      scale: 1.02,
+      y: -2,
+      transition: { duration: 0.2 }
+    }
   }
 
   return (
-    <div className="w-full max-w-auto mx-auto flex flex-col items-center">
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      className="w-full"
+    >
+      <h1 className="text-2xl md:text-3xl font-semibold text-[#282133] mb-6 text-center">
+        Crie sua conta
+      </h1>
 
-
-      {/* Título */}
-      <h1 className="text-2xl font-medium text-gray-800 mb-8">Crie sua conta</h1>
-
-      {/* Botão Google 
-      <button className="flex items-center justify-center gap-2 w-full border border-gray-300 rounded-md py-3 px-4 mb-8 hover:bg-gray-50 transition-colors">
-        <Image src="/google-icon.svg" alt="Google" width={20} height={20} />
-        <span className="text-gray-700">Continuar com o Google</span>
-      </button> */}
-
-      {/* Divisor 
-      <div className="w-full flex items-center mb-8">
-        <div className="flex-grow h-px bg-gray-200"></div>
-      </div> */}
-
-      {/* Formulário */}
-      <form onSubmit={handleSubmit} className="w-full">
-        <div className="mb-4">
-          <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+      <form onSubmit={handleSubmit} className="space-y-6">
+        {/* Campo Nome */}
+        <div className="space-y-2">
+          <label htmlFor="name" className="block text-lg font-medium text-[#3C3C3C] pl-1">
             Nome completo
           </label>
-          <input
-            id="name"
-            name="name"
-            type="text"
-            value={formData.name}
-            onChange={handleChange}
-            className="w-full px-3 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-teal-600"
-            required
-          />
+          <motion.div whileFocus="focus" variants={inputVariants}>
+            <input
+              id="name"
+              name="name"
+              type="text"
+              value={formData.name}
+              onChange={handleChange}
+              className="w-full px-4 py-3 bg-white rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#075F70] focus:shadow-lg transition-all duration-300 text-base shadow-md border border-gray-200"
+              required
+              placeholder="Digite seu nome completo"
+            />
+          </motion.div>
         </div>
 
-        <div className="mb-4">
-          <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+        {/* Campo Email */}
+        <div className="space-y-2">
+          <label htmlFor="email" className="block text-lg font-medium text-[#3C3C3C] pl-1">
             Email
           </label>
-          <input
-            id="email"
-            name="email"
-            type="email"
-            value={formData.email}
-            onChange={handleChange}
-            className="w-full px-3 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-teal-600"
-            required
-          />
+          <motion.div whileFocus="focus" variants={inputVariants}>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              value={formData.email}
+              onChange={handleChange}
+              className="w-full px-4 py-3 bg-white rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#075F70] focus:shadow-lg transition-all duration-300 text-base shadow-md border border-gray-200"
+              required
+              placeholder="seu@email.com"
+            />
+          </motion.div>
         </div>
 
-        <div className="mb-4">
-          <label htmlFor="curriculoLattes" className="block text-sm font-medium text-gray-700 mb-1">
-           Link do Currículo Lattes
+        {/* Campo Lattes */}
+        <div className="space-y-2">
+          <label htmlFor="curriculoLattes" className="block text-lg font-medium text-[#3C3C3C] pl-1">
+            Link do Currículo Lattes
           </label>
-          <input
-            type="url"
-            id="curriculoLattes"
-            name="curriculoLattes"
-            value={formData.curriculoLattes}
-            onChange={handleChange}
-            className="w-full px-3 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-teal-600"
-            required
-            placeholder="https://lattes.cnpq.br/"
-          />
+          <motion.div whileFocus="focus" variants={inputVariants}>
+            <input
+              type="url"
+              id="curriculoLattes"
+              name="curriculoLattes"
+              value={formData.curriculoLattes}
+              onChange={handleChange}
+              className="w-full px-4 py-3 bg-white rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#075F70] focus:shadow-lg transition-all duration-300 text-base shadow-md border border-gray-200"
+              required
+              placeholder="https://lattes.cnpq.br/..."
+            />
+          </motion.div>
         </div>
 
-        <div className="mb-4">
-          <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+        {/* Campo Senha */}
+        <div className="space-y-2">
+          <label htmlFor="password" className="block text-lg font-medium text-[#3C3C3C] pl-1">
             Senha
           </label>
-          <div className="relative">
+          <motion.div whileFocus="focus" variants={inputVariants} className="relative group">
             <input
               id="password"
               name="password"
-              type={showPasswordState ? "text" : "password"}
+              type={showPassword ? "text" : "password"}
               value={formData.password}
               onChange={handleChange}
-              className={`w-full px-3 py-3 border ${errors.password ? "border-red-500" : "border-gray-300"} rounded-md focus:outline-none focus:ring-1 focus:ring-teal-600`}
+              className={`w-full px-4 py-3 bg-white rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#075F70] focus:shadow-lg transition-all duration-300 text-base shadow-md border ${
+                errors.password ? "border-red-500" : "border-gray-200"
+              }`}
               required
+              placeholder="Crie uma senha segura"
             />
             <button
               type="button"
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"
-              onClick={() => setShowPasswordState(!showPasswordState)}
+              className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 transition-colors group-focus-within:text-[#075F70]"
+              onClick={() => setShowPassword(!showPassword)}
             >
-              {showPasswordState ? <EyeOff size={20} /> : <Eye size={20} />}
+              {showPassword ? <EyeOff size={22} /> : <Eye size={22} />}
             </button>
-          </div>
-          {errors.password && <p className="mt-1 text-sm text-red-500">{errors.password}</p>}
-          <p className="mt-1 text-xs text-gray-500">A senha deve ter pelo menos 8 caracteres</p>
+          </motion.div>
+          {errors.password && (
+            <p className="text-sm text-red-500 pl-1">{errors.password}</p>
+          )}
+          <p className="text-sm text-gray-500 pl-1">
+            A senha deve ter pelo menos 8 caracteres, uma letra minúscula e um número
+          </p>
         </div>
 
-        <div className="mb-6">
-          <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-1">
+        {/* Campo Confirmar Senha */}
+        <div className="space-y-2">
+          <label htmlFor="confirmPassword" className="block text-lg font-medium text-[#3C3C3C] pl-1">
             Confirmar senha
           </label>
-          <div className="relative">
+          <motion.div whileFocus="focus" variants={inputVariants} className="relative group">
             <input
               id="confirmPassword"
               name="confirmPassword"
               type={showConfirmPassword ? "text" : "password"}
               value={formData.confirmPassword}
               onChange={handleChange}
-              className={`w-full px-3 py-3 border ${errors.confirmPassword ? "border-red-500" : "border-gray-300"} rounded-md focus:outline-none focus:ring-1 focus:ring-teal-600`}
+              className={`w-full px-4 py-3 bg-white rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#075F70] focus:shadow-lg transition-all duration-300 text-base shadow-md border ${
+                errors.confirmPassword ? "border-red-500" : "border-gray-200"
+              }`}
               required
+              placeholder="Confirme sua senha"
             />
             <button
               type="button"
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+              className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 transition-colors group-focus-within:text-[#075F70]"
               onClick={() => setShowConfirmPassword(!showConfirmPassword)}
             >
-              {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+              {showConfirmPassword ? <EyeOff size={22} /> : <Eye size={22} />}
             </button>
-          </div>
-          {errors.confirmPassword && <p className="mt-1 text-sm text-red-500">{errors.confirmPassword}</p>}
+          </motion.div>
+          {errors.confirmPassword && (
+            <p className="text-sm text-red-500 pl-1">{errors.confirmPassword}</p>
+          )}
         </div>
 
-        <button
+        {/* Botão de Submit */}
+        <motion.button
           type="submit"
-          className="w-full bg-teal-800 hover:bg-teal-700 text-white py-3 px-4 rounded-md transition-colors mb-4"
+          disabled={isSubmitting}
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+          className="w-full bg-[#075F70] hover:bg-[#064c5a] disabled:bg-gray-400 text-white py-4 px-6 rounded-2xl text-lg font-medium shadow-lg transition-all duration-300 focus:shadow-xl focus:translate-y-[-0.1em]"
         >
-          Criar conta
-        </button>
+          {isSubmitting ? (
+            <div className="flex items-center justify-center">
+              <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-white"></div>
+              <span className="ml-2">Criando conta...</span>
+            </div>
+          ) : (
+            "Criar conta"
+          )}
+        </motion.button>
 
-        <div className="text-center text-sm text-gray-600">
-          Já tem uma conta?{" "}
-          <Link href="/" className="text-teal-600 hover:text-teal-700">
-            Faça login
-          </Link>
+        {/* Link para Login */}
+        <div className="text-center pt-4">
+          <p className="text-gray-600">
+            Já tem uma conta?{" "}
+            <Link
+              href="/login"
+              className="text-[#075F70] hover:text-[#064c5a] font-medium transition-colors hover:underline"
+            >
+              Faça login
+            </Link>
+          </p>
         </div>
       </form>
-    </div>
+    </motion.div>
   )
 }
