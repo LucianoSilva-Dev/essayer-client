@@ -7,13 +7,19 @@ interface Props {
 
 export function RedacaoEditorArea({ texto, onTextoChange }: Props) {
   return (
-    <div className="flex-1 p-8 md:p-12">
+    // 'typeInsert' do Figma
+    // ALTERAÇÃO: Aumentei de 60vh para 70vh para dar mais altura ao card
+    <div className="bg-white rounded-[20px] w-full min-h-[70vh]">
       <textarea
         value={texto}
         onChange={(e) => onTextoChange(e.target.value)}
         placeholder="Comece a digitar aqui..."
-        className="w-full h-full min-h-[400px] text-lg text-gray-800 placeholder:text-gray-400
-                   resize-none border-none focus:outline-none focus:ring-0"
+        // Aumentei aqui também para o textarea preencher
+        className="w-full h-full min-h-[70vh] p-6 
+                   text-lg text-gray-800 
+                   placeholder:text-[#BDB4B4] placeholder:font-normal placeholder:text-xl
+                   resize-none border-none focus:outline-none focus:ring-0
+                   bg-transparent"
       />
     </div>
   );

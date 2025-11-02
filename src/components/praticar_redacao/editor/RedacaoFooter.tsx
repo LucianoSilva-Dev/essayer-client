@@ -11,27 +11,39 @@ interface Props {
 
 export function RedacaoFooter({ contagemPalavras, maxPalavras, onFinalizar, onExportar }: Props) {
   return (
-    <footer className="flex justify-between items-center p-6 bg-white border-t border-gray-100 z-20">
-      <span className="text-base font-medium text-gray-600">
+    // ALTERAÇÃO: Requisito 3 - Alinhamento com Flexbox
+    // 'relative' para o botão central
+    // 'flex justify-between items-center' para alinhar contador e exportar
+    <div className="relative w-full flex justify-between items-center mt-9 h-4">
+      
+      {/* Esquerda: Contador */}
+      <span className="text-[#3C3C3C] font-semibold text-lg">
         {contagemPalavras}/{maxPalavras} palavras
       </span>
-      <div className="flex items-center gap-4">
-        <button
-          onClick={onExportar}
-          className="flex items-center gap-2 text-base font-medium text-gray-700
-                     hover:text-black transition-colors"
-        >
-          Exportar redação
-          <Download size={18} />
-        </button>
+      
+      {/* Centro: Botão Finalizar */}
+      <div className="absolute left-1/2 -translate-x-1/2">
         <button
           onClick={onFinalizar}
-          className="px-6 py-3 bg-[#075F70] text-white rounded-full font-semibold
-                     hover:bg-opacity-90 transition-colors shadow-sm"
+          className="bg-[#075F70] hover:bg-[#086f80] rounded-full 
+                     px-8 py-3 
+                     text-white text-lg font-bold
+                     transition-colors"
         >
           Finalizar redação
         </button>
       </div>
-    </footer>
+
+      {/* Direita: Botão Exportar */}
+      <button
+        onClick={onExportar}
+        className="flex items-center gap-2 
+                   text-[#3C3C3C] font-semibold text-lg
+                   hover:text-black transition-colors"
+      >
+        Exportar redação
+        <Download size={24} className="text-[#3C3C3C]" />
+      </button>
+    </div>
   );
 }
