@@ -113,3 +113,12 @@
 .border-custom-blue {
   border-color: #075F70;
 }
+
+/* Adicione isto ao seu globals.css */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;  /* IE e Edge */
+  scrollbar-width: none;  /* Firefox */
+}
