@@ -3,47 +3,165 @@ import React, { useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { toast } from "react-toastify"
-import { useRouter, useSearchParams } from "next/navigation"
-import { useAuth } from '@/./contexts/auth-context'
-import { login as apiLogin } from '../../../apiCalls/auth/index'
-import { createProfessorRequest } from "../../../apiCalls/usuario"
-import { motion } from "framer-motion"
+import { useRouter } from "next/navigation"
+import { useAuth } from "@/contexts/auth-context"
+import { motion, AnimatePresence } from "framer-motion"
+
+// 1. Importar os componentes das etapas
 import UserTypeCard from "./steps/UserTypeCard"
+import { NameInputs } from "./steps/NameInputs"
+import { EmailLattesInputs } from "./steps/EmailLattesInputs"
+import { PasswordInputs } from "./steps/PasswordInputs"
+// 2. Importar o novo componente da Etapa 5
+import { VerifyCodeInputs } from "./steps/VerifyCodeInputs"
+
+type CardType = "student" | "teacher"
+
+// Função simples de validação de email
+const validateEmail = (email: string) => {
+  return String(email)
+    .toLowerCase()
+    .match(
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    );
+};
+
+// Regex de senha (do reset-password.tsx)
+const passwordRegex = /^(?=.*[a-z])(?=.*\d).{8,24}$/
+
 export default function RegisterForm() {
-  const { login, isLoggedIn } = useAuth()
-  const [showPassword, setShowPassword] = useState(false)
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
+  const { isLoggedIn } = useAuth()
   const router = useRouter()
-  const [alreadyLogged, setAlreadylogged] = useState(true)
+
+  // --- Estado da Etapa e do Formulário ---
+  const [step, setStep] = useState(1)
+  const [isSubmitting, setIsSubmitting] = useState(false) // Para o envio final
+  const [formData, setFormData] = useState({
+    userType: "student" as CardType,
+    firstName: "",
+    lastName: "",
+    email: "",
+    lattes: "",
+    password: "",
+    confirmPassword: "",
+    // Não precisamos do verificationCode aqui, pois o
+    // componente VerifyCodeInputs cuidará disso localmente.
+  })
+
+  // Cálculo de validação
+  const passwordsMatch =
+    formData.password === formData.confirmPassword && formData.password.length > 0
+  const isPasswordValid = passwordRegex.test(formData.password)
 
   // Redireciona se já estiver logado
   React.useEffect(() => {
-    if (isLoggedIn && alreadyLogged) {
+    if (isLoggedIn) {
       toast.info("Você já está logado.")
       router.replace("/profile")
     }
-  }, [isLoggedIn, router, alreadyLogged])
+  }, [isLoggedIn, router])
 
-  const searchParams = useSearchParams()
-  const lattes = searchParams.get('lattes')
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-
-    try {
-      setAlreadylogged(false)
-      const response = await apiLogin({ email, senha: password })
-      login(response)
-
-      if (lattes && lattes !== "null") {
-        await createProfessorRequest({ lattes })
-      }
-
-      router.push("/main")
-    } catch { }
+  // --- Funções de Callback para os componentes filhos ---
+  const handleUserTypeChange = (type: CardType) => {
+    setFormData((prev) => ({ ...prev, userType: type }))
   }
 
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target
+    setFormData((prev) => ({ ...prev, [name]: value }))
+  }
+
+  // --- Lógica de navegação das etapas ---
+  const handleNextStep = async (e: React.MouseEvent) => {
+    e.preventDefault()
+
+    // Etapa 1 -> 2
+    if (step === 1) {
+      setStep(2)
+      return
+    }
+
+    // Etapa 2 -> 3
+    if (step === 2) {
+      if (!formData.firstName || !formData.lastName) {
+        toast.warn("Por favor, preencha seu nome e sobrenome.")
+        return
+      }
+      setStep(3)
+      return
+    }
+
+    // Etapa 3 -> 4
+    if (step === 3) {
+      if (!formData.email || !validateEmail(formData.email)) {
+        toast.warn("Por favor, insira um email válido.")
+        return
+      }
+      if (formData.userType === 'teacher' && !formData.lattes) {
+        toast.warn("Por favor, insira seu Lattes.")
+        return
+      }
+      setStep(4)
+      return
+    }
+
+    // Etapa 4 -> Envio da API e -> Etapa 5
+    if (step === 4) {
+      if (!isPasswordValid) {
+        toast.warn("Por favor, insira uma senha que siga as regras.")
+        return
+      }
+      if (!passwordsMatch) {
+        toast.warn("As senhas não coincidem.")
+        return
+      }
+
+      setIsSubmitting(true)
+      console.log("ENVIANDO FORMULÁRIO:", formData)
+
+      // --- AQUI VOCÊ CHAMA SUA API DE CADASTRO ---
+      // Ex: await apiRegister(formData)
+      // Esta API deve criar o usuário e enviar o email de verificação.
+
+      // Simulação de sucesso
+      setTimeout(() => {
+        toast.info("Enviamos um código de verificação para o seu email.")
+        setStep(5) // Avança para a etapa de verificação
+        setIsSubmitting(false)
+      }, 1000)
+    }
+    
+    // A etapa 5 tem sua própria lógica de submissão
+    // dentro do VerifyCodeInputs, então este
+    // handleNextStep não fará nada na etapa 5.
+  }
+
+  // Função para o botão "Voltar"
+  const handlePrevStep = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault()
+    if (step > 1) {
+      setStep((prev) => prev - 1)
+    }
+  }
+
+  // --- 3. Funções para a Etapa 5 ---
+  
+  // Chamado quando a verificação do código é bem-sucedida
+  const handleVerifySuccess = () => {
+    router.push("/login?message=register-success")
+  }
+  
+  // Chamado quando o usuário pede um novo código
+  const handleResendCode = async () => {
+    // Simulação de API
+    // Ex: await apiResendCode({ email: formData.email })
+    console.log("API de reenvio de código chamada para:", formData.email)
+    await new Promise(res => setTimeout(res, 1000))
+    // A toast de sucesso é mostrada dentro do VerifyCodeInputs
+  }
+
+
+  // (Variantes permanecem as mesmas)
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -67,6 +185,12 @@ export default function RegisterForm() {
     },
   }
 
+  const stepVariants = {
+    hidden: { opacity: 0, x: 100, transition: { duration: 0.4, ease: "easeIn" } } as const,
+    visible: { opacity: 1, x: 0, transition: { duration: 0.4, ease: "easeOut" } } as const,
+    exit: { opacity: 0, x: -100, transition: { duration: 0.4, ease: "easeIn" } } as const,
+  }
+
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col md:flex-row px-4 md:px-10 py-6 w-full overflow-x-hidden">
       {/* Lado Esquerdo - Conteúdo */}
@@ -87,24 +211,185 @@ export default function RegisterForm() {
           <div className="w-full h-0.5 bg-[#D3D3D3] mb-4"></div>
         </motion.div>
 
-        {/* InputCard */}
-          <motion.div variants={itemVariants} className="mb-6 md:mb-8">
-            <UserTypeCard />
+        {/* --- Container das Etapas com Animação --- */}
+        {/* A altura mínima ajuda a evitar "saltos" de layout */}
+        <div className={`${ step === 5 ? "" : "mb-6"} min-h-[350px] transition-all duration-300`} >
+          <AnimatePresence mode="wait">
+            {step === 1 && (
+              <motion.div
+                key="step1"
+                variants={stepVariants}
+                initial="hidden"
+                animate="visible"
+                exit="exit"
+              >
+                {/* Descrição da etapa 1 */}
+                <motion.p
+                  variants={itemVariants}
+                  className="text-base md:text-[25px] text-[#3C3C3C] mb-6 md:mb-8 max-w-full md:max-w-2xl leading-relaxed"
+                >
+                  Selecione o valor que se encaixa com você
+                </motion.p>
+                <UserTypeCard
+                  selectedType={formData.userType}
+                  onTypeChange={handleUserTypeChange}
+                />
+              </motion.div>
+            )}
+
+            {step === 2 && (
+              <motion.div
+                key="step2"
+                variants={stepVariants}
+                initial="hidden"
+                animate="visible"
+                exit="exit"
+              >
+                {/* Descrição da etapa 2 */}
+                <motion.p
+                  variants={itemVariants}
+                  className="text-base md:text-[25px] text-[#3C3C3C] mb-6 md:mb-8 max-w-full md:max-w-2xl leading-relaxed"
+                >
+                  Cadastro para {formData.userType === "student" ? "Estudante" : "Educador"}
+                </motion.p>
+                <NameInputs
+                  firstName={formData.firstName}
+                  lastName={formData.lastName}
+                  onFormChange={handleInputChange}
+                  itemVariants={itemVariants}
+                />
+              </motion.div>
+            )}
+
+            {step === 3 && (
+              <motion.div
+                key="step3"
+                variants={stepVariants}
+                initial="hidden"
+                animate="visible"
+                exit="exit"
+              >
+                 {/* Descrição da etapa 3 */}
+                <motion.p
+                  variants={itemVariants}
+                  className="text-base md:text-[25px] text-[#3C3C3C] mb-6 md:mb-8 max-w-full md:max-w-2xl leading-relaxed"
+                >
+                   Cadastro para {formData.userType === "student" ? "Estudante" : "Educador"}
+                </motion.p>
+                <EmailLattesInputs
+                  email={formData.email}
+                  lattes={formData.lattes}
+                  userType={formData.userType}
+                  onFormChange={handleInputChange}
+                  itemVariants={itemVariants}
+                />
+              </motion.div>
+            )}
+
+            {step === 4 && (
+              <motion.div
+                key="step4"
+                variants={stepVariants}
+                initial="hidden"
+                animate="visible"
+                exit="exit"
+              >
+                 {/* Descrição da etapa 4 */}
+                <motion.p
+                  variants={itemVariants}
+                  className="text-base md:text-[25px] text-[#3C3C3C] mb-6 md:mb-8 max-w-full md:max-w-2xl leading-relaxed"
+                >
+                   Cadastro para {formData.userType === "student" ? "Estudante" : "Educador"}
+                </motion.p>
+                <PasswordInputs
+                  password={formData.password}
+                  confirmPassword={formData.confirmPassword}
+                  onFormChange={handleInputChange}
+                  itemVariants={itemVariants}
+                  passwordsMatch={passwordsMatch}
+                  passwordRegex={passwordRegex}
+                />
+              </motion.div>
+            )}
+
+            {/* --- 4. ADICIONADO: Bloco da Etapa 5 --- */}
+            {step === 5 && (
+              <motion.div
+                key="step5"
+                variants={stepVariants}
+                initial="hidden"
+                animate="visible"
+                exit="exit"
+              >
+                <VerifyCodeInputs
+                  email={formData.email}
+                  itemVariants={itemVariants}
+                  onVerifySuccess={handleVerifySuccess}
+                  onResendCode={handleResendCode}
+                />
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+
+        {/* --- 5. Botões de Navegação (AGORA SÃO CONDICIONAIS) --- */}
+        {step < 5 && (
+          <motion.div
+            variants={itemVariants}
+            className="flex flex-col-reverse md:flex-row items-center gap-6"
+            // Animação para os botões desaparecerem
+            initial={{ opacity: 1, y: 0 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
+          >
+            {/* Botão "Voltar" (Estilo Secundário) */}
+            <AnimatePresence>
+              {step > 1 && (
+                <motion.button
+                  onClick={handlePrevStep}
+                  disabled={isSubmitting} // Desabilita durante o envio
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -20, position: "absolute" }}
+                  transition={{ duration: 0.3, ease: "easeInOut" }}
+                  className="w-full md:w-auto md:max-w-[280px] h-[60px] bg-white 
+             shadow-[0px_0px_15px_-6px_rgba(0,0,0,0.25)] rounded-[32px]
+             flex justify-center items-center
+             font-montserrat font-medium text-xl md:text-[28px] text-[#075F70]
+             hover:shadow-lg hover:-translate-y-1 transition-all duration-300
+             focus:outline-none focus:ring-2 focus:ring-[#075F70] px-6
+             disabled:opacity-50 disabled:hover:-translate-y-0"
+                >
+                  Voltar
+                </motion.button>
+              )}
+            </AnimatePresence>
+
+            {/* Botão "Avançar" / "Cadastrar-se" (Estilo Primário) */}
+            <button
+              onClick={handleNextStep}
+              disabled={isSubmitting} // Desabilita durante o envio
+              className="w-full md:w-auto md:max-w-[280px] h-[60px] bg-white 
+             shadow-[0px_0px_15px_-6px_rgba(0,0,0,0.25)] rounded-[32px]
+             flex justify-center items-center
+             font-montserrat font-medium text-xl md:text-[28px] text-[#075F70]
+             hover:shadow-lg hover:-translate-y-1 transition-all duration-300
+             focus:outline-none focus:ring-2 focus:ring-[#075F70] px-6
+             disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isSubmitting
+                ? "Cadastrando..."
+                : step === 4
+                ? "Cadastrar-se"
+                : "Avançar"}
+            </button>
           </motion.div>
-
-        {/* Descrição */}
-        <motion.p
-          variants={itemVariants}
-          className="text-base md:text-[25px] text-[#3C3C3C] mb-6 md:mb-8 max-w-full md:max-w-2xl leading-relaxed"
-        >
-          Selecione o valor que se encaixa com você
-        </motion.p>
-
+        )}
 
         {/* Links Adicionais */}
         <motion.div
           variants={itemVariants}
-          className="flex flex-col items-center space-y-3 md:space-y-4"
+          className="flex flex-col items-center space-y-3 md:space-y-4 mt-8"
         >
           <div className="flex items-center space-x-2 text-md md:text-lg group">
             <span className="text-gray-600">Já tem uma conta?</span>
@@ -118,7 +403,7 @@ export default function RegisterForm() {
         </motion.div>
       </motion.div>
 
-      {/* Lado Direito - Imagem/Visual (oculta em telas pequenas) */}
+      {/* Lado Direito - Imagem/Visual */}
       <motion.div
         initial={{ opacity: 0, x: 70 }}
         animate={{ opacity: 1, x: 0 }}

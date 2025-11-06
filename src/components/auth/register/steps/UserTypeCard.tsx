@@ -1,11 +1,10 @@
-// Salve como: src/components/UserTypeCard.tsx
+// Modifique: src/components/auth/register/steps/UserTypeCard.tsx
 
-"use client" // Necessário por usar hooks (useState) e framer-motion
-
-import React, { useState } from 'react'
+"use client"
+import React from 'react'
 import { motion, AnimatePresence, PanInfo } from 'framer-motion'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
 
-// Dados para cada tipo de usuário
 const cardData = {
   student: {
     title: 'Estudante',
@@ -14,7 +13,6 @@ const cardData = {
   },
   teacher: {
     title: 'Educador',
-    // Criei esta descrição como exemplo
     description:
       'Ideal para educadores que vão criar conteúdos, gerenciar turmas, avaliar atividades e interagir com alunos.',
   },
@@ -22,30 +20,34 @@ const cardData = {
 
 type CardType = 'student' | 'teacher'
 
-export default function UserTypeCard() {
-  const [selectedType, setSelectedType] = useState<CardType>('student')
+// --- Props Atualizadas ---
+interface UserTypeCardProps {
+  selectedType: CardType
+  onTypeChange: (type: CardType) => void
+}
+
+export default function UserTypeCard({
+  selectedType,
+  onTypeChange,
+}: UserTypeCardProps) {
   const data = cardData[selectedType]
 
-  // Lógica para o "swipe"
   const onDragEnd = (
     event: MouseEvent | TouchEvent | PointerEvent,
     info: PanInfo
   ) => {
-    const swipeThreshold = 50 // Distância mínima para considerar um swipe
+    const swipeThreshold = 50
     if (info.offset.x < -swipeThreshold) {
-      // Swipe para a esquerda
-      setSelectedType('teacher')
+      onTypeChange('teacher')
     } else if (info.offset.x > swipeThreshold) {
-      // Swipe para a direita
-      setSelectedType('student')
+      onTypeChange('student')
     }
   }
 
-  // Variantes para a animação do texto
-  const textVariants = {
+   const textVariants = {
     hidden: (direction: number) => ({
       opacity: 0,
-      x: direction > 0 ? 50 : -50, // Entra da direita, sai para a esquerda (ou vice-versa)
+      x: direction > 0 ? 50 : -50,
     }) as const,
     visible: {
       opacity: 1,
@@ -60,47 +62,55 @@ export default function UserTypeCard() {
   }
 
   return (
-    // Card Principal
-    // Usei `max-w-[672px]` e `w-full` para responsividade
-    // A `min-h-[292px]` ajuda a manter o layout estável durante a troca de texto
     <motion.div
-      className="relative flex flex-col justify-center items-start p-8 gap-4 bg-white shadow-[0px_0px_15.7px_-7px_#3C3C3C] rounded-[30px] isolate w-full max-w-[672px] min-h-[292px] overflow-hidden cursor-grab active:cursor-grabbing"
-      // Propriedades do Framer Motion para o "drag"
+      className="relative flex flex-col justify-center items-start p-8 gap-4 bg-white shadow-[0px_0px_15.7px_-7px_#3C3C3C] rounded-[30px] isolate w-full max-w-[672px] min-h-[292px] overflow-hidden cursor-grab active:cursor-grabbing z-3"
       drag="x"
-      dragConstraints={{ left: 0, right: 0 }} // Não permite arrastar para fora
-      dragElastic={0.1} // Uma leve "elasticidade"
+      dragConstraints={{ left: 0, right: 0 }}
+      dragElastic={0.1}
       onDragEnd={onDragEnd}
     >
       {/* Botões de seleção (pontos) */}
       <div className="absolute top-6 right-8 flex flex-row items-center gap-3 z-10">
         <button
-          onClick={() => setSelectedType('student')}
-          className={`
-            ${selectedType === 'student' ? 'w-[52px] bg-[#075F70]' : 'w-5 bg-[#D9D9D9]'}
-            h-5 rounded-full transition-all duration-300 ease-out cursor-pointer
+          onClick={(e) => {
+            e.stopPropagation() // <-- 2. ADICIONADO: Impede que o 'onTap' do card seja disparado
+            onTypeChange('student')
+          }}
+          className={` flex items-center justify-center
+            ${selectedType === 'student' ? 'w-[63px] bg-[#075F70]' : 'w-6 bg-[#D9D9D9]'}
+            h-6 rounded-full transition-all duration-300 ease-out cursor-pointer
           `}
           aria-label="Selecionar Estudante"
-        />
+        >
+          {selectedType === 'student' && (
+            <ChevronLeft className="w-5 h-5 text-white" strokeWidth={3} />
+          )}
+        </button>
         <button
-          onClick={() => setSelectedType('teacher')}
-          className={`
-            ${selectedType === 'teacher' ? 'w-[52px] bg-[#075F70]' : 'w-5 bg-[#D9D9D9]'}
-            h-5 rounded-full transition-all duration-300 ease-out cursor-pointer
+          onClick={(e) => {
+            e.stopPropagation() // <-- 2. ADICIONADO: Impede que o 'onTap' do card seja disparado
+            onTypeChange('teacher')
+          }}
+          className={` flex items-center justify-center
+            ${selectedType === 'teacher' ? 'w-[63px] bg-[#075F70]' : 'w-6 bg-[#D9D9D9]'}
+            h-6 rounded-full transition-all duration-300 ease-out cursor-pointer
           `}
           aria-label="Selecionar Educador"
-        />
+        >
+          {selectedType === 'teacher' && (
+            <ChevronRight className="w-5 h-5 text-white" strokeWidth={3} />
+          )}
+        </button>
       </div>
 
       {/* Conteúdo (Título e Descrição) */}
-      {/* AnimatePresence garante a animação de saída do elemento antigo */}
-      <AnimatePresence 
-        mode="wait" 
+      <AnimatePresence
+        mode="wait"
         custom={selectedType === 'student' ? 1 : -1}
       >
         <motion.div
-          key={selectedType} // Essencial para o AnimatePresence saber que o componente mudou
+          key={selectedType}
           className="flex flex-col gap-4 self-stretch"
-          // Animações de entrada e saída
           custom={selectedType === 'student' ? 1 : -1}
           variants={textVariants}
           initial="hidden"
@@ -108,12 +118,12 @@ export default function UserTypeCard() {
           exit="exit"
         >
           {/* Título */}
-          <h2 className="font-montserrat font-medium text-[44px] leading-[54px] text-[#3C3C3C] z-0">
+          <h2 className="font-montserrat font-medium text-[32px] md:text-[44px] leading-[54px] text-[#3C3C3C] z-0">
             {data.title}
           </h2>
 
           {/* Descrição */}
-          <p className="font-montserrat font-normal text-[32px] leading-[39px] text-[#898787] z-20 self-stretch">
+          <p className="font-montserrat font-normal text-[18px] md:text-[32px] leading-[39px] text-[#898787] z-20 self-stretch">
             {data.description}
           </p>
         </motion.div>
