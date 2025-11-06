@@ -336,7 +336,7 @@ export default function RegisterForm() {
         {step < 5 && (
           <motion.div
             variants={itemVariants}
-            className="flex flex-col-reverse md:flex-row items-center gap-6"
+            className={`flex flex-col-reverse items-center gap-6 md:flex-row ${step === 1 ? "md:justify-end" : "md:justify-between"} `}
             // Animação para os botões desaparecerem
             initial={{ opacity: 1, y: 0 }}
             animate={{ opacity: 1, y: 0 }}
