@@ -1,48 +1,61 @@
-"use client"
+"use client";
 
-import { useEffect } from "react"
-import { useRouter } from "next/navigation"
-import RepertorioForm from "../repertorio-form"
-import { useAuth } from "@/contexts/auth-context" // 1. Importar o useAuth
-import { toast } from "react-toastify"
-import Loading from "../../loading" // Pode criar um componente de loading simples se não tiver
+import React from 'react';
+import { useTipoRepertorio, TipoRepertorio } from './hooks/useTipoRepertorio';
+import { TipoRepertorioCard } from './TipoRepertorioCard';
+import { BandejaTiposObra } from './BandejaTiposObra';
 
-export default function AdicionarRepertorioPage() {
-  const router = useRouter()
-  const { userData, isLoading, isLoggedIn } = useAuth() // 2. Obter dados de autenticação
+export default function AdicionarRepertorioContent() {
+  const {
+    tipoSelecionado,
+    tipoObraSelecionado,
+    bandejaAberta,
+    selecionarTipo,
+    selecionarTipoObra,
+    fecharBandeja
+  } = useTipoRepertorio();
 
-  // 3. Efeito para verificar permissão e redirecionar
-  useEffect(() => {
-    // Só executa a lógica depois que a autenticação for verificada
-    if (!isLoading) {
-      const isAuthorized = isLoggedIn && (userData?.cargo === 'professor' || userData?.cargo === 'admin');
-      
-      if (!isAuthorized) {
-        toast.error("Você não tem permissão para acessar esta página.");
-        router.push("/main"); // Redireciona para a página principal
-      }
-    }
-  }, [isLoading, isLoggedIn, userData, router])
-
-
-  const handleSubmit = async () => {
-    router.push("/main")
-  }
-
-  const handleCancel = () => {
-    router.push("/main")
-  }
-
-  const isAuthorized = isLoggedIn && (userData?.cargo === 'professor' || userData?.cargo === 'admin');
-  if (isLoading || !isAuthorized) {
-    return <Loading />; 
-  }
+  // Ordem de entrada dos cards (z-index)
+  const cardOrder: TipoRepertorio[] = ['obra', 'artigo', 'citacao'];
 
   return (
-    <main className="min-h-[calc(100vh-64px)] bg-gray-50 py-12">
+    <main className="min-h-[calc(100vh-80px)] bg-gray-50">
       <div className="container mx-auto px-4">
-        <RepertorioForm onSubmit={handleSubmit} onCancel={handleCancel} />
+        
+        {/* Título */}
+        <h1 className="text-3xl font-medium text-gray-800 text-center mb-8">
+          Selecione um tipo de repertório que queira criar
+        </h1>
+
+        {/* Container dos Cards */}
+        <div className="flex justify-center items-center">
+          <div className="flex flex-row items-center justify-center gap-10 relative">
+            {cardOrder.map((tipo, index) => (
+              <TipoRepertorioCard
+                key={tipo}
+                tipo={tipo}
+                selecionado={tipoSelecionado === tipo}
+                onClick={selecionarTipo}
+                zIndex={cardOrder.length - index} // Artigo tem z-index maior
+              />
+            ))}
+          </div>
+        </div>
+
+        {/* Bandeja de Tipos de Obra */}
+        <BandejaTiposObra
+          isOpen={bandejaAberta}
+          onSelect={selecionarTipoObra}
+          onClose={fecharBandeja}
+        />
+
+        {/* Debug (remover na produção) */}
+        <div className="fixed bottom-4 left-4 bg-black text-white p-2 rounded text-sm">
+          <div>Selecionado: {tipoSelecionado}</div>
+          <div>Tipo Obra: {tipoObraSelecionado}</div>
+          <div>Bandeja: {bandejaAberta ? 'Aberta' : 'Fechada'}</div>
+        </div>
       </div>
     </main>
-  )
+  );
 }
