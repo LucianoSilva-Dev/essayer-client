@@ -14,6 +14,9 @@ import { EmailLattesInputs } from "./steps/EmailLattesInputs"
 import { PasswordInputs } from "./steps/PasswordInputs"
 // 2. Importar o novo componente da Etapa 5
 import { VerifyCodeInputs } from "./steps/VerifyCodeInputs"
+import { RegisterFormData } from "./register-form-types"
+import { CreateUsuarioBody } from "@/apiCalls/usuario/types"
+import { createUser } from "@/apiCalls/usuario"
 
 type CardType = "student" | "teacher"
 
@@ -36,18 +39,16 @@ export default function RegisterForm() {
   // --- Estado da Etapa e do Formulário ---
   const [step, setStep] = useState(1)
   const [isSubmitting, setIsSubmitting] = useState(false) // Para o envio final
-  const [formData, setFormData] = useState({
-    userType: "student" as CardType,
+  const [formData, setFormData] = useState<RegisterFormData>({
+    userType: "student",
     firstName: "",
     lastName: "",
     email: "",
     lattes: "",
     password: "",
     confirmPassword: "",
-    // Não precisamos do verificationCode aqui, pois o
-    // componente VerifyCodeInputs cuidará disso localmente.
+    registerRequestId: "",
   })
-
   // Cálculo de validação
   const passwordsMatch =
     formData.password === formData.confirmPassword && formData.password.length > 0
@@ -119,16 +120,22 @@ export default function RegisterForm() {
       setIsSubmitting(true)
       console.log("ENVIANDO FORMULÁRIO:", formData)
 
-      // --- AQUI VOCÊ CHAMA SUA API DE CADASTRO ---
-      // Ex: await apiRegister(formData)
-      // Esta API deve criar o usuário e enviar o email de verificação.
-
-      // Simulação de sucesso
-      setTimeout(() => {
+      const formDataToUserCreateUsuarioBody: CreateUsuarioBody = {
+        email: formData.email,
+        nome: `${formData.firstName} ${formData.lastName}`,
+        senha: formData.password,
+      }
+      try {
+        const response = await createUser(formDataToUserCreateUsuarioBody)
+        formData.registerRequestId = response.id
         toast.info("Enviamos um código de verificação para o seu email.")
         setStep(5) // Avança para a etapa de verificação
+      } catch (e) {
+        console.error("Erro no registro:", e)
+      } finally {
         setIsSubmitting(false)
-      }, 1000)
+      }
+
     }
     
     // A etapa 5 tem sua própria lógica de submissão
@@ -152,11 +159,12 @@ export default function RegisterForm() {
   }
   
   // Chamado quando o usuário pede um novo código
-  const handleResendCode = async () => {
-    // Simulação de API
-    // Ex: await apiResendCode({ email: formData.email })
+  const handleResendCode = async (email: string, nome: string, senha: string) => {
+    const createUsuarioBody: CreateUsuarioBody = { email, nome, senha}
+    console.log('userData para reenvio de código: ', createUsuarioBody)
+    // re-envia o codigo criando o usuario novamente (não duplicará o email)
+    await createUser(createUsuarioBody)
     console.log("API de reenvio de código chamada para:", formData.email)
-    await new Promise(res => setTimeout(res, 1000))
     // A toast de sucesso é mostrada dentro do VerifyCodeInputs
   }
 
@@ -323,9 +331,15 @@ export default function RegisterForm() {
               >
                 <VerifyCodeInputs
                   email={formData.email}
+                  firstName={formData.firstName}
+                  lastName={formData.lastName}
+                  password={formData.password}
+                  requestId={formData.registerRequestId}
                   itemVariants={itemVariants}
                   onVerifySuccess={handleVerifySuccess}
-                  onResendCode={handleResendCode}
+                  onResendCode={() => handleResendCode(
+                    formData.email, `${formData.firstName} ${formData.lastName}`, formData.password
+                  )}
                 />
               </motion.div>
             )}

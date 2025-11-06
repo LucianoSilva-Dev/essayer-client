@@ -1,22 +1,33 @@
 "use client"
 import type React from "react"
 import { useState, useRef, useEffect } from "react"
-import { useRouter } from "next/navigation"
 import { motion, Variants } from "framer-motion"
 import { toast } from "react-toastify"
+import { validateUser } from "@/apiCalls/requisicao-usuario"
+import { VERIFY_CODE_ALLOWED_CHARS_REGEX } from "@/app/constants"
+import { createUser } from "@/apiCalls/usuario"
+import { CreateUsuarioBody } from "@/apiCalls/usuario/types"
 
 // Props que o register-form passará para este componente
 interface VerifyCodeInputsProps {
   email: string
+  firstName: string
+  lastName: string
+  password: string
   itemVariants: Variants
+  requestId: string
   // Chamado quando o código for verificado com sucesso
   onVerifySuccess: () => void
   // Chamado para simular o reenvio de código
-  onResendCode: () => Promise<void>
+  onResendCode: (nome: string, email: string, senha: string) => Promise<void>
 }
 
 export const VerifyCodeInputs: React.FC<VerifyCodeInputsProps> = ({
   email,
+  firstName,
+  lastName,
+  password,
+  requestId,
   itemVariants,
   onVerifySuccess,
   onResendCode,
@@ -26,6 +37,7 @@ export const VerifyCodeInputs: React.FC<VerifyCodeInputsProps> = ({
   const [isResending, setIsResending] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const inputRefs = useRef<(HTMLInputElement | null)[]>([])
+  console.log("requestID: ", requestId)
 
   // Foca o primeiro input ao montar
   useEffect(() => {
@@ -51,27 +63,38 @@ export const VerifyCodeInputs: React.FC<VerifyCodeInputsProps> = ({
     // Ex: await apiVerifyCode({ email, codigo: fullCode })
     console.log("Verificando código:", fullCode, "para o email:", email)
 
-    // Simulação de API
-    setTimeout(() => {
-      // Simulação de sucesso (mude para 'false' para testar erro)
-      const isSuccess = true
+    try {
+      await validateUser(requestId, {codigo: fullCode})
+      toast.success("Email verificado com sucesso!")
+      onVerifySuccess() // Informa o pai (register-form) para redirecionar
+    } catch (e) { 
+      console.error("Erro ao verificar o código:", e) 
+      toast.error("Código incorreto. Tente novamente.")
+    } finally {
+      setIsSubmitting(false)
+    }
+    
 
-      if (isSuccess) {
-        toast.success("Email verificado com sucesso!")
-        onVerifySuccess() // Informa o pai (register-form) para redirecionar
-      } else {
-        toast.error("Código incorreto. Tente novamente.")
-        setIsSubmitting(false)
-      }
-    }, 1000)
+    // // Simulação de API
+    // setTimeout(() => {
+    //   // Simulação de sucesso (mude para 'false' para testar erro)
+    //   const isSuccess = true
+
+    //   if (isSuccess) {
+    //     toast.success("Email verificado com sucesso!")
+    //     onVerifySuccess() // Informa o pai (register-form) para redirecionar
+    //   } else {
+    //     toast.error("Código incorreto. Tente novamente.")
+    //     setIsSubmitting(false)
+    //   }
+    // }, 1000)
   }
 
   // --- Lógica de Reenvio ---
   const handleResendCode = async () => {
     setIsResending(true)
     try {
-      // Chama a função passada pelo register-form
-      await onResendCode()
+      await onResendCode(`${firstName} ${lastName}`, email, password)
       toast.info("Um novo código foi enviado para o seu email.")
     } catch (error) {
       toast.error("Erro ao reenviar o código.")
@@ -82,8 +105,7 @@ export const VerifyCodeInputs: React.FC<VerifyCodeInputsProps> = ({
 
   // --- Handlers dos Inputs (do seu verify-code.tsx) ---
   const handleCodeChange = (index: number, value: string) => {
-    const sanitizedValue = value.replace(/[^A-Za-z0-9]/g, "") // Permite letras e números
-
+    const sanitizedValue = value.replace(VERIFY_CODE_ALLOWED_CHARS_REGEX, "")
     if (sanitizedValue.length <= 1) {
       const newCode = [...code]
       newCode[index] = sanitizedValue
@@ -108,7 +130,7 @@ export const VerifyCodeInputs: React.FC<VerifyCodeInputsProps> = ({
     e.preventDefault()
     const pastedData = e.clipboardData
       .getData("text")
-      .replace(/[^A-Za-z0-9]/g, "") // Permite letras e números
+      .replace(VERIFY_CODE_ALLOWED_CHARS_REGEX, "") // Permite letras, números e o sinal de "+"
       .slice(0, 8)
 
     if (pastedData) {
