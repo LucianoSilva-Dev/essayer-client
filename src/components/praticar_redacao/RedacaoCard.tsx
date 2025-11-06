@@ -1,8 +1,4 @@
-// src/components/praticar-redacao/RedacaoCard.tsx
-
 import Link from 'next/link';
-// ALTERAÇÃO: Removemos a importação de motion, pois não será usada.
-// import { motion } from 'framer-motion'; 
 
 export type RedacaoStatus = 'pendente' | 'completa' | 'sem_correcoes' | 'erro';
 
@@ -13,54 +9,59 @@ interface RedacaoCardProps {
   finalizada: boolean;
 }
 
+// ALTERAÇÃO: Ajuste de cores, backgrounds e tamanhos para os badges (tags de status) do Figma
 const statusConfig = {
   pendente: { text: 'Correção pendente', className: 'bg-yellow-100 text-yellow-800' },
   completa: { text: 'Correção completa', className: 'bg-cyan-100 text-cyan-800' },
   sem_correcoes: { text: 'Sem correções', className: 'bg-gray-200 text-gray-800' },
-  erro: { text: 'Erro de correção', className: 'bg-red-100 text-red-800' },
+  erro: { text: 'Erro de correção', className: 'bg-red-100 text-red-800' }, 
 };
 
 export function RedacaoCard({ href, tema, status, finalizada }: RedacaoCardProps) {
   const config = statusConfig[status];
 
   return (
-    // ALTERAÇÃO: Voltar para <Link>.
-    // ALTERAÇÃO: Adicionar classes Tailwind para transição e transformação no hover.
     <Link
       href={href}
-      className="block bg-white p-6 rounded-[32px] shadow-sm border border-gray-100
-                 transition-all duration-200 ease-out // Adiciona uma transição suave
-                 hover:shadow-lg // Aumenta a sombra no hover para dar profundidade
-                 hover:-translate-y-1 // Move o card 1 pixel para cima
-                 hover:scale-[1.01] // Aumenta o card em 1% (menos que 1.02 para ser mais sutil)
+      // ALTERAÇÃO: Padding (24px 28px 20px) e border-radius ajustados (48px)
+      className="block bg-white p-[24px] rounded-[48px] shadow-sm border border-gray-100
+                 transition-all duration-200 ease-out 
+                 hover:shadow-lg 
+                 hover:-translate-y-1 
+                 hover:scale-[1.01] 
                  hover:border-teal-200 
                  group cursor-pointer" 
     >
-      <div className="flex flex-col justify-between h-full space-y-5">
+      <div className="flex flex-col justify-between h-full space-y-7"> {/* Aumento do espaçamento */}
         {/* Conteúdo Superior */}
-        <div className="space-y-1.5">
-          <p className="text-sm font-medium text-gray-500">
+        <div className="space-y-3">
+          {/* ALTERAÇÃO: Fonte do tema (32px, 500), cor (898787) */}
+          <p className="text-[32px] font-medium text-[#898787]"> 
             Tema
           </p>
-          <h3 className="text-lg font-semibold text-gray-900 line-clamp-3 group-hover:text-teal-700">
+          {/* ALTERAÇÃO: Fonte do título (28px, 500) e cor (3C3C3C) */}
+          <h3 className="text-[28px] font-medium text-[#3C3C3C] line-clamp-3 group-hover:text-teal-700 leading-normal">
             {tema}
           </h3>
         </div>
 
         {/* Conteúdo Inferior (Status) */}
-        <div className="flex justify-between items-center pt-4 border-t border-gray-100">
+        {/* ALTERAÇÃO: Remoção da borda superior */}
+        <div className="flex justify-between items-center pt-2">
           
           {/* Tag de Status */}
+          {/* ALTERAÇÃO: Padding, font-size (20px) e border-radius ajustados */}
           <span
-            className={`px-3.5 py-1.5 text-xs font-semibold rounded-[40px] ${config.className}`}
+            className={`px-4 py-3 text-[20px] font-normal rounded-[40px] ${config.className}`}
           >
             {config.text}
           </span>
 
           {/* Texto de Finalização */}
+          {/* ALTERAÇÃO: Font-size (16px), peso (500), e cor para Não Finalizada (CA9C60) */}
           <span
-            className={`text-sm font-medium ${
-              finalizada ? 'text-gray-500' : 'text-yellow-600'
+            className={`text-base font-medium ${
+              finalizada ? 'text-[#3C3C3C]' : 'text-[#CA9C60]'
             }`}
           >
             {finalizada ? 'Finalizada' : 'Redação não finalizada'}

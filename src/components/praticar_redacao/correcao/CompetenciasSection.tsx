@@ -33,7 +33,6 @@ export function CompetenciasSection({
     }
   }
 
-  // Assumindo fundo 'bg-gray-50'. Se for branco, mude para 'from-white'
   const gradientColorFrom = 'from-gray-50'
 
   return (
