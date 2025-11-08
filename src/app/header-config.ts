@@ -18,6 +18,14 @@ export const headerConfig: Record<string, HeaderConfig> = {
     currentPage: 'Adicionar Repertório',
     backPage: '/main'
   },
+  '/adicionar/eixos': {
+    currentPage: 'Adicionar Repertório',
+    backPage: '/adicionar'
+  },
+  '/adicionar/detalhes': {
+    currentPage: 'Adicionar Repertório',
+    backPage: '/adicionar/eixos'
+  },
   '/admin': {
     currentPage: 'Admin',
     backPage: '/main'
@@ -97,4 +105,5 @@ export const headerConfig: Record<string, HeaderConfig> = {
     backPage: '/turmas_aluno',
     dynamicData: true
   },
+
 }

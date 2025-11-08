@@ -1,11 +1,14 @@
 "use client";
 
 import React from 'react';
-import { useTipoRepertorio, TipoRepertorio } from './hooks/useTipoRepertorio';
+import { useTipoRepertorio, TipoRepertorio } from '../hooks/useTipoRepertorio';
 import { TipoRepertorioCard } from './TipoRepertorioCard';
 import { BandejaTiposObra } from './BandejaTiposObra';
+import { useAdicionarRepertorio } from '../hooks/useAdicionarRepertorio';
 
 export default function AdicionarRepertorioContent() {
+  const { dados, avancarEtapa } = useAdicionarRepertorio();
+
   const {
     tipoSelecionado,
     tipoObraSelecionado,
@@ -13,7 +16,15 @@ export default function AdicionarRepertorioContent() {
     selecionarTipo,
     selecionarTipoObra,
     fecharBandeja
-  } = useTipoRepertorio();
+  } = useTipoRepertorio({
+    dadosIniciais: {
+      tipoRepertorio: dados.tipoRepertorio,
+      tipoObra: dados.tipoObra
+    },
+    onAvancar: (dadosTipo) => {
+      avancarEtapa(dadosTipo);
+    }
+  });
 
   // Ordem de entrada dos cards (z-index)
   const cardOrder: TipoRepertorio[] = ['obra', 'artigo', 'citacao'];
@@ -50,7 +61,7 @@ export default function AdicionarRepertorioContent() {
         />
 
         {/* Debug (remover na produção) */}
-        <div className="fixed bottom-4 left-4 bg-black text-white p-2 rounded text-sm">
+        <div className="fixed bottom-4 left-24 bg-black text-white p-2 rounded text-sm">
           <div>Selecionado: {tipoSelecionado}</div>
           <div>Tipo Obra: {tipoObraSelecionado}</div>
           <div>Bandeja: {bandejaAberta ? 'Aberta' : 'Fechada'}</div>

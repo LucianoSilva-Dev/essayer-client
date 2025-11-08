@@ -1,4 +1,4 @@
-import AdicionarRepertorioPage from "@/components/repertorio/adicionar/AdicionarRepertorioContent";
+import AdicionarRepertorioPage from "@/components/repertorio/adicionar/tipos/AdicionarRepertorioContent";
 
 export default function AdicionarRepertorio() {
   return <AdicionarRepertorioPage/>

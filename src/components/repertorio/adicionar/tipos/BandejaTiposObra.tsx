@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import { TipoObra } from './hooks/useTipoRepertorio';
+import { TipoObra } from '../hooks/useTipoRepertorio';
 
 interface BandejaTiposObraProps {
   isOpen: boolean;

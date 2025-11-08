@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import { TipoRepertorio } from './hooks/useTipoRepertorio';
+import { TipoRepertorio } from '../hooks/useTipoRepertorio';
 import Image from 'next/image';
 
 interface TipoRepertorioCardProps {

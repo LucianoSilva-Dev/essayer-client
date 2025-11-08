@@ -1,10 +1,15 @@
 "use client";
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { TipoRepertorio, TipoObra } from './useAdicionarRepertorio';
 
-export type TipoRepertorio = 'obra' | 'artigo' | 'citacao';
-export type TipoObra = 'filme' | 'teatro' | 'livro' | 'musica';
+interface UseTipoRepertorioProps {
+  dadosIniciais: {
+    tipoRepertorio: TipoRepertorio | null;
+    tipoObra: TipoObra | null;
+  };
+  onAvancar: (dados: { tipoRepertorio: TipoRepertorio; tipoObra?: TipoObra }) => void;
+}
 
 interface UseTipoRepertorioReturn {
   tipoSelecionado: TipoRepertorio | null;
@@ -13,14 +18,15 @@ interface UseTipoRepertorioReturn {
   selecionarTipo: (tipo: TipoRepertorio) => void;
   selecionarTipoObra: (tipo: TipoObra) => void;
   fecharBandeja: () => void;
-  avancarParaProximaEtapa: () => void;
 }
 
-export const useTipoRepertorio = (): UseTipoRepertorioReturn => {
-  const [tipoSelecionado, setTipoSelecionado] = useState<TipoRepertorio | null>(null);
-  const [tipoObraSelecionado, setTipoObraSelecionado] = useState<TipoObra | null>(null);
+export const useTipoRepertorio = ({ 
+  dadosIniciais, 
+  onAvancar 
+}: UseTipoRepertorioProps): UseTipoRepertorioReturn => {
+  const [tipoSelecionado, setTipoSelecionado] = useState<TipoRepertorio | null>(dadosIniciais.tipoRepertorio);
+  const [tipoObraSelecionado, setTipoObraSelecionado] = useState<TipoObra | null>(dadosIniciais.tipoObra);
   const [bandejaAberta, setBandejaAberta] = useState(false);
-  const router = useRouter();
 
   const selecionarTipo = (tipo: TipoRepertorio) => {
     if (tipoSelecionado === tipo) {
@@ -29,7 +35,7 @@ export const useTipoRepertorio = (): UseTipoRepertorioReturn => {
         setBandejaAberta(true);
       } else {
         // Artigo ou citação - avançar diretamente
-        avancarParaProximaEtapa(tipo);
+        onAvancar({ tipoRepertorio: tipo });
       }
     } else {
       // Primeiro clique - destacar
@@ -43,24 +49,12 @@ export const useTipoRepertorio = (): UseTipoRepertorioReturn => {
     setTipoObraSelecionado(tipo);
     setBandejaAberta(false);
     // Avançar para próxima etapa após selecionar tipo de obra
-    setTimeout(() => avancarParaProximaEtapa('obra'), 300);
+    setTimeout(() => onAvancar({ tipoRepertorio: 'obra', tipoObra: tipo }), 300);
   };
 
   const fecharBandeja = () => {
     setBandejaAberta(false);
     setTipoSelecionado(null);
-  };
-
-  const avancarParaProximaEtapa = (tipo: TipoRepertorio) => {
-    // Aqui vamos navegar para a próxima etapa
-    console.log('Avançando para próxima etapa:', { 
-      tipoRepertorio: tipo, 
-      tipoObra: tipoObraSelecionado 
-    });
-    
-    // TODO: Implementar navegação para próxima etapa
-    // Vamos passar os dados selecionados via query params ou estado
-    // router.push('/adicionar/eixos');
   };
 
   return {
@@ -69,7 +63,9 @@ export const useTipoRepertorio = (): UseTipoRepertorioReturn => {
     bandejaAberta,
     selecionarTipo,
     selecionarTipoObra,
-    fecharBandeja,
-    avancarParaProximaEtapa: () => tipoSelecionado && avancarParaProximaEtapa(tipoSelecionado),
+    fecharBandeja
   };
 };
+
+// Re-exportar tipos para compatibilidade
+export type { TipoRepertorio, TipoObra };
