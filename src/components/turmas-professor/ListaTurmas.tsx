@@ -31,14 +31,15 @@ export default function ListaTurmas() {
 
   const mudarPagina = async (nova: number) => {
     if (isLoading) return;
-    
     const novaDirecao = nova > paginaAtual ? 1 : -1;
+    setIsLoading(true);
+    const novaQuery = turmas?.paginacao.pagesUrl[nova - 1] ?? '';
+    const response = await getTurmasCriadas(novaQuery);
     setDirecao(novaDirecao);
     setPaginaAnterior(paginaAtual);
     setPaginaAtual(nova);
-    
-    const novaQuery = turmas?.paginacao.pagesUrl[nova - 1] ?? '';
-    setQuery(novaQuery);
+    setTurmas(response);
+    setIsLoading(false);
   };
 
   const renderTurmas = (turmasData?: GetTurmasCriadasResponse) => {
@@ -54,10 +55,10 @@ export default function ListaTurmas() {
       >
         <div className="p-4 h-[128px] bg-gradient-to-r from-gray-50 to-white border-t-5 border-[#075F70] rounded-xl shadow-sm hover:shadow-md transition-all cursor-pointer group">
           <div className="flex items-center gap-3">
-            <Image 
-              width={48} 
-              height={48} 
-              src={getIconPath(turma.iconeId, defaultIcon.src)} 
+            <Image
+              width={48}
+              height={48}
+              src={getIconPath(turma.iconeId, defaultIcon.src)}
               alt={`Icone da turma '${turma.nome}'`}
             />
             <p className="font-semibold text-[#3C3C3C] text-[20px] group-hover:text-[#075F70] transition-colors">
