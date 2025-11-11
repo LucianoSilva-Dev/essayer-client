@@ -1,6 +1,5 @@
 "use client"
 
-import PersonalDataForm from "@/components/profile/PersonalDataForm"
 import { motion } from "framer-motion"
 
 // Configurações de animação do Framer Motion
@@ -16,18 +15,21 @@ const pageTransition = {
   duration: 0.5 as const,
 }
 
-export default function PersonalDataPage() {
+export default function SocialPage() {
   return (
     <motion.div
-      key="personal-data" // Chave única para AnimatePresence
+      key="social"
       initial="initial"
       animate="in"
       exit="out"
       variants={pageVariants}
       transition={pageTransition}
-      className="bg-transparent" //rounded-2xl shadow-sm p-10 
+      className="bg-white rounded-2xl shadow-sm p-10"
     >
-      <PersonalDataForm />
+      <h1 className="text-4xl font-medium text-[#3C3C3C]">Perfil Social</h1>
+      <p className="mt-4 text-gray-600">
+        Esta seção está em construção.
+      </p>
     </motion.div>
   )
 }
