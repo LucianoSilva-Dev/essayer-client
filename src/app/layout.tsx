@@ -17,6 +17,7 @@ import 'swiper/css/navigation'; // Para as setas de navegação (opcional)
 import { HeaderWrapper } from '@/components/header-wrapper';
 import { Sidebar } from '@/components/sidebar/sidebar';
 import { MainWrapper } from '@/components/main-wrapper';
+import { AddRepertorioProvider } from '@/contexts/add-repertorio-context';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -39,12 +40,14 @@ export default function RootLayout({
             <AdminProvider>
               <RepertorioProvider>
                 <CitacaoProvider>
-                  <ToastContainer />
-                  <HeaderWrapper />
-                  <Sidebar />
-                  <MainWrapper>
-                    {children}
-                  </MainWrapper>
+                  <AddRepertorioProvider>
+                    <ToastContainer />
+                    <HeaderWrapper />
+                    <Sidebar />
+                    <MainWrapper>
+                      {children}
+                    </MainWrapper>
+                  </AddRepertorioProvider>
                 </CitacaoProvider>
               </RepertorioProvider>
             </AdminProvider>

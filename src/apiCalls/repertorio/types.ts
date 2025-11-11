@@ -65,6 +65,7 @@ export interface GetAllRepertoriosResponse {
 
 export interface CreateComentarioBody {
   texto: string;
+  fixar?: boolean;
 }
 
 export interface UpdateComentarioBody {
@@ -96,9 +97,13 @@ export interface CreateObraBody {
   titulo: string;
   sinopse: string;
   autor: string;
-  tipoObra: 'livro' | 'filme' | 'música' | 'teatro';
+  tipoObra: 'livro' | 'filme' | 'musica' | 'teatro';
   subtopicos: string[];
   topicos: string[];
+}
+
+export interface CreateRepertorioResponse {
+  id: string;
 }
 
 export type UpdateObraBody = Partial<CreateObraBody>;

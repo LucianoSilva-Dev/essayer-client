@@ -1,30 +1,45 @@
 "use client";
 
-import React from 'react';
-import { useTipoRepertorio, TipoRepertorio } from '../hooks/useTipoRepertorio';
+import React, { useState } from 'react';
 import { TipoRepertorioCard } from './TipoRepertorioCard';
 import { BandejaTiposObra } from './BandejaTiposObra';
-import { useAdicionarRepertorio } from '../hooks/useAdicionarRepertorio';
+import { TipoObra, TipoRepertorio, useAddRepertorio } from '@/contexts/add-repertorio-context';
+import { useRouter } from 'next/navigation';
 
 export default function AdicionarRepertorioContent() {
-  const { dados, avancarEtapa } = useAdicionarRepertorio();
+  const [bandejaAberta, setBandejaAberta] = useState(false);
+  const [tipoSelecionado, setTipoSelecionado] = useState<TipoRepertorio | null>(null);
+  const { setTipos } = useAddRepertorio();
+  const router = useRouter()
 
-  const {
-    tipoSelecionado,
-    tipoObraSelecionado,
-    bandejaAberta,
-    selecionarTipo,
-    selecionarTipoObra,
-    fecharBandeja
-  } = useTipoRepertorio({
-    dadosIniciais: {
-      tipoRepertorio: dados.tipoRepertorio,
-      tipoObra: dados.tipoObra
-    },
-    onAvancar: (dadosTipo) => {
-      avancarEtapa(dadosTipo);
+  const fecharBandeja = () => {
+    setBandejaAberta(false);
+    setTipoSelecionado(null);
+  };
+
+  const selecionarTipo = (tipo: TipoRepertorio) => {
+    if (tipoSelecionado === tipo) {
+      // Segundo clique - confirmar seleção
+      if (tipo === 'obra') {
+        setBandejaAberta(true);
+      } else {
+        // Artigo ou citação - avançar diretamente
+        setTipos(tipo, undefined);
+        router.push('/adicionar/eixos');
+      }
+    } else {
+      // Primeiro clique - destacar
+      setTipoSelecionado(tipo);
+      setBandejaAberta(false);
     }
-  });
+  }
+
+  const selecionarTipoObra = (tipo: TipoObra) => {
+    setTipos('obra', tipo);
+    setBandejaAberta(false);
+    // Avançar para próxima etapa após selecionar tipo de obra
+    router.push('/adicionar/eixos');
+  };
 
   // Ordem de entrada dos cards (z-index)
   const cardOrder: TipoRepertorio[] = ['obra', 'artigo', 'citacao'];
@@ -32,7 +47,7 @@ export default function AdicionarRepertorioContent() {
   return (
     <main className="min-h-[calc(100vh-80px)] bg-gray-50">
       <div className="container mx-auto px-4">
-        
+
         {/* Título */}
         <h1 className="text-3xl font-medium text-gray-800 text-center mb-8">
           Selecione um tipo de repertório que queira criar
@@ -63,7 +78,6 @@ export default function AdicionarRepertorioContent() {
         {/* Debug (remover na produção) */}
         <div className="fixed bottom-4 left-24 bg-black text-white p-2 rounded text-sm">
           <div>Selecionado: {tipoSelecionado}</div>
-          <div>Tipo Obra: {tipoObraSelecionado}</div>
           <div>Bandeja: {bandejaAberta ? 'Aberta' : 'Fechada'}</div>
         </div>
       </div>
