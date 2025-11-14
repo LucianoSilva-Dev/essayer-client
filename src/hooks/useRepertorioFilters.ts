@@ -1,6 +1,5 @@
-// src/hooks/useRepertorioFilters.ts
 import { useState, useMemo, useCallback } from 'react';
-import { EixosTematicos } from '@/constants/eixos';
+import { EixoOptions } from '@/constants/eixos'; 
 
 export const useRepertorioFilters = () => {
     const [termoBusca, setTermoBusca] = useState("");
@@ -9,7 +8,6 @@ export const useRepertorioFilters = () => {
     const [modeloAtivo, setModeloAtivo] = useState<string | null>(null);
     const [ordenarPor, setOrdenarPor] = useState<'MaxLikes' | 'MinLikes' | 'Newest' | 'Oldest'>('Newest');
 
-    // Sempre que os eixos ativos mudarem, reseta o recorte.
     const handleSetEixosAtivos = useCallback((value: string[]) => {
         setEixosAtivos(value);
         setRecorteAtivo(null);
@@ -17,10 +15,15 @@ export const useRepertorioFilters = () => {
 
     const recorteOptions = useMemo(() => {
         if (eixosAtivos.length > 0) {
-            const allRecortes = eixosAtivos.flatMap(eixo => EixosTematicos[eixo as keyof typeof EixosTematicos] || []);
+            const allRecortes = eixosAtivos.flatMap(nomeDoEixo => {
+                const eixoEncontrado = EixoOptions.find(option => option.nome === nomeDoEixo);
+                return eixoEncontrado ? eixoEncontrado.recortes : [];
+            });
             return [...new Set(allRecortes)];
         }
-        return Object.values(EixosTematicos).flat();
+
+        const todosOsRecortesPossiveis = EixoOptions.flatMap(option => option.recortes);
+        return [...new Set(todosOsRecortesPossiveis)];
     }, [eixosAtivos]);
 
     const activeFilterCount = [

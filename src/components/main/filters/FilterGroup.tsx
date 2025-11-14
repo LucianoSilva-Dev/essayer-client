@@ -1,4 +1,3 @@
-// src/components/main/filters/FilterGroup.tsx
 import React from "react";
 
 interface FilterGroupProps {
