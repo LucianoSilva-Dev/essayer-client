@@ -1,3 +1,5 @@
+import { CorrecaoRedacaoEvents, GetCorrecaoRedacaoResponse } from "./redacao/types";
+
 export interface GenericError {
     error: string;
 }
@@ -28,4 +30,15 @@ export interface Comentario {
     id: string;
     usuario: PerfilUsuario;
     texto: string;
+}
+
+export type CustomEventSourceMap = {
+    appError: {
+        data: {
+            statusCode: number,
+            message: string
+        };
+    };
+    [CorrecaoRedacaoEvents.RedacaoCorrigida]: { data: GetCorrecaoRedacaoResponse }
+    [CorrecaoRedacaoEvents.RedacaoDevagar]: { data: null }
 }
