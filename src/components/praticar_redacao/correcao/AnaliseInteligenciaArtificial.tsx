@@ -1,11 +1,9 @@
-import { Competencia } from '@/types/correcao'
-
 interface AnaliseInteligenciaArtificialProps {
-  competenciaSelecionada: Competencia
+  feedback: string
 }
 
 export function AnaliseInteligenciaArtificial({
-  competenciaSelecionada,
+  feedback,
 }: AnaliseInteligenciaArtificialProps) {
   return (
     <div className="bg-white p-6 md:p-8 rounded-[48px] shadow-sm border border-gray-200 mt-6">
@@ -15,7 +13,7 @@ export function AnaliseInteligenciaArtificial({
       <div className="space-y-4">
         {/* Usamos 'whitespace-pre-line' para respeitar as quebras de linha (\n) do mock */}
         <p className="text-gray-700 leading-relaxed whitespace-pre-line">
-          {competenciaSelecionada.analiseIA}
+          {feedback}
         </p>
       </div>
     </div>

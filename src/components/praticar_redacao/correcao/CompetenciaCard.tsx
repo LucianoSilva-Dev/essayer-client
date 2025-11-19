@@ -29,7 +29,7 @@ export function CompetenciaCard({
       >
         <span className="text-sm font-medium">{competencia.nome}</span>
         <span className="text-sm font-medium">
-          {competencia.nota}/{competencia.notaMaxima}
+          {competencia.nota}/{200}
         </span>
       </div>
 

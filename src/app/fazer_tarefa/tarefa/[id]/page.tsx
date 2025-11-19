@@ -5,6 +5,6 @@ interface Props {
 }
 
 export default function FazerTarefa({ params }: Props) {
-    const awaitedParams = params;
-    return <FazerTarefaContent id={awaitedParams.id} />; 
+  const awaitedParams = params;
+  return <FazerTarefaContent id={awaitedParams.id} />;
 }

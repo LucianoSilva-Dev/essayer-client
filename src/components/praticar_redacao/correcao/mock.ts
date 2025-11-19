@@ -5,7 +5,7 @@ export const mockCorrecao: Correcao = {
   textoRedacao:
     'Na contemporaneidade, as redes sociais tornaram-se parte essencial da vida cotidiana, especialmente entre os jovens. Essa onipresença digital levanta questões cruciais sobre seu impacto na formação da identidade e nas interações sociais. Se por um lado a conectividade global é facilitada, por outro, a exposição constante a padrões irreais e a cultura do cancelamento geram ansiedade e superficialidade nas relações. É imperativo, portanto, debater como podemos usufruir dos benefícios tecnológicos sem negligenciar o desenvolvimento de habilidades socioemocionais robustas e um senso crítico apurado.',
   notaTotal: 1000,
-  totalCorrecoes: 1,
+  totalCorrecoes: 3,
   competencias: [
     {
       id: 'c1',

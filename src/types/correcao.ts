@@ -3,7 +3,6 @@ export interface Competencia {
   nome: string
   descricao: string
   nota: number
-  notaMaxima: number
   analiseIA: string
 }
 

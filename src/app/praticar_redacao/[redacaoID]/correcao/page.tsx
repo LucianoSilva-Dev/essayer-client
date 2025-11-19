@@ -2,11 +2,15 @@ import { CorrecaoRedacaoPage } from '@/components/praticar_redacao/correcao/Corr
 
 // Esta página será renderizada no contexto do layout principal,
 // que já inclui o Sidebar e o Header global ("Olá, Nome").
-export default function Page() {
+export default function Page({
+  params,
+}: {
+  params: { redacaoID: string };
+}) {
   return (
     // O layout principal do app (src/app/layout.tsx) provavelmente 
     // já define o fundo (ex: bg-gray-50), então só precisamos 
     // renderizar o conteúdo da página.
-    <CorrecaoRedacaoPage />
+    <CorrecaoRedacaoPage id={params.redacaoID}/>
   )
 }
