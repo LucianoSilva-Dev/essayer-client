@@ -1,31 +1,26 @@
 'use client'; // Necessário para usar hooks como useState
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { CriarRedacaoForm } from './CriarRedacaoForm';
-import { RedacoesCriadasList, RedacaoItem } from './RedacoesCriadasList';
-
-// Mock de dados iniciais com o campo 'duration' adicionado
-const initialRedacoes: RedacaoItem[] = [
-  { id: '1', tema: 'O impacto das redes sociais na formação da identidade dos jovens', status: 'pendente', finalizada: true, duration: 30 },
-  { id: '2', tema: 'O impacto das redes sociais na formação da identidade dos jovens', status: 'completa', finalizada: true, duration: 30 },
-  { id: '3', tema: 'O impacto das redes sociais na formação da identidade dos jovens', status: 'sem_correcoes', finalizada: false, duration: 30 },
-  { id: '4', tema: 'O impacto das redes sociais na formação da identidade dos jovens', status: 'erro', finalizada: true, duration: 30 },
-];
+import { RedacoesCriadasList } from './RedacoesCriadasList';
+import { createRedacaoLivre, getAllRedacaoLivre } from '@/apiCalls/redacao-livre';
+import { RedacaoLivreDoc } from '@/apiCalls/redacao-livre/types';
+import { useRouter } from 'next/navigation';
 
 export default function PraticarRedacaoPage() {
-  const [redacoes, setRedacoes] = useState<RedacaoItem[]>(initialRedacoes);
+  const [redacoes, setRedacoes] = useState<RedacaoLivreDoc[]>([]);
+  const router = useRouter()
 
-  const addRedacao = (tema: string, duration: number) => {
-    const newId = (redacoes.length + 1).toString();
-    const newRedacao: RedacaoItem = {
-      id: newId,
-      tema,
-      status: 'pendente',
-      finalizada: false,
-      duration,
-    };
-    // Adiciona o novo item no início da lista para aparecer primeiro
-    setRedacoes(prev => [newRedacao, ...prev]); 
+  useEffect(() => {
+    (async () => {
+      const response = await getAllRedacaoLivre();
+      setRedacoes(response)
+    })()
+  }, [])
+
+  const addRedacao = async (tema: string, duration: number) => {
+    const response = await createRedacaoLivre({tema, duracao: duration * 60});
+    router.push(`/praticar_redacao/${response.id}`);
   };
   
   // Mock de temas para o modal

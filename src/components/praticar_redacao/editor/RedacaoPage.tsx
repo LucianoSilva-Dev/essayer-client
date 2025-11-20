@@ -1,88 +1,120 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 // ALTERAÇÃO: Importar o 'useRouter' para navegação
 import { useRouter } from 'next/navigation';
 import { RedacaoEditorArea } from './RedacaoEditorArea';
 import { RedacaoHeader } from './RedacaoHeader';
 import { RedacaoFooter } from './RedacaoFooter';
+import { corrigirRedacaoLivre, getRedacaoLivre, updateRedacaoLivre } from '@/apiCalls/redacao-livre';
 
 type RedacaoData = {
-  id: string;
-  duracaoConfigurada: number;
-  conteudoSalvo: string;
+  id: string;
+  duracaoConfigurada: number;
+  conteudoSalvo: string;
+  tema: string
 };
 
-// Vou assumir que a prop 'data' é do tipo RedacaoData,
-// já que a definição do tipo está aqui.
-export function RedacaoPage({ data }: { data: RedacaoData }) {
+export function RedacaoPage({ id }: { id: string }) {
   // ALTERAÇÃO: Instanciar o router
-  const router = useRouter();
+  const router = useRouter();
 
-  // --- Estados (sem mudança) ---
-  const [texto, setTexto] = useState(data.conteudoSalvo);
-  const [contagemPalavras, setContagemPalavras] = useState(0);
-  const [tempoRestante, setTempoRestante] = useState(data.duracaoConfigurada);
-  const [isPaused, setIsPaused] = useState(false);
+  useEffect(() => {
+    (async () => {
+      const response = await getRedacaoLivre(id);
+      setData({
+        id: response.id,
+        duracaoConfigurada: response.duracao || 0,
+        conteudoSalvo: response.texto || "",
+        tema: response.tema
+      })
+      setTexto(response.texto || "");
+      setTempoRestante(response.duracao || 30);
+    })()
+  }, [])
 
-  // --- Efeitos (sem mudança) ---
-  useEffect(() => {
-    const palavras = texto.trim().split(/\s+/).filter(Boolean);
-    setContagemPalavras(palavras.length === 1 && palavras[0] === '' ? 0 : palavras.length);
-  }, [texto]);
+  // --- Estados (sem mudança) ---
+  const [data, setData] = useState<RedacaoData | null>(null)
+  const [texto, setTexto] = useState("");
+  const [contagemPalavras, setContagemPalavras] = useState(0);
+  const [tempoRestante, setTempoRestante] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
 
-  useEffect(() => {
-    if (isPaused || tempoRestante === 0) return;
-    const interval = setInterval(() => {
-      setTempoRestante((t) => (t > 0 ? t - 1 : 0));
-    }, 1000);
-    return () => clearInterval(interval);
-  }, [isPaused, tempoRestante]);
+  // --- Efeitos (sem mudança) ---
+  useEffect(() => {
+    const palavras = texto.trim().split(/\s+/).filter(Boolean);
+    setContagemPalavras(palavras.length === 1 && palavras[0] === '' ? 0 : palavras.length);
+  }, [texto]);
+
+  useEffect(() => {
+    if (isPaused || tempoRestante === 0) return;
+    const interval = setInterval(() => {
+      setTempoRestante((t) => (t > 0 ? t - 1 : 0));
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [isPaused, tempoRestante]);
 
   // --- Handlers (ALTERAÇÃO) ---
-  const handleFinalizar = () => {
-    // 1. Pegamos o ID da prop 'data'
-    const redacaoID = data.id;
-    console.log('Finalizando e submetendo redação:', redacaoID);
-    
-    // 2. (FUTURO) Aqui você fará a chamada à API (mutation)
-    //    para salvar o `texto` e solicitar a correção.
-    // ex: mutation.mutate({ redacaoID, texto })
+  const handleFinalizar = async () => {
+    const redacaoId = data?.id;
+    if (!redacaoId) return;
 
-    // 3. Após o sucesso da API, navegue para a página de correção
-    router.push(`/praticar_redacao/${redacaoID}/correcao`);
-  };
+    await updateRedacaoLivre(redacaoId, {
+      texto,
+      finalizada: true,
+      dataRealizacao: new Date().toISOString(),
+    });
 
-  const handleExportar = () => alert('API de "Exportar Redação" seria chamada aqui.');
+    await corrigirRedacaoLivre(redacaoId, {
+      textoRedacao: texto,
+      tema: data.tema
+    })
 
-  return (
-    <div 
-      className="relative bg-[#EBEBEB] rounded-[30px] shadow-lg w-full 
+    router.push(`/praticar_redacao/${redacaoId}/correcao`);
+  };
+
+  const handlePause = async () => {
+    setIsPaused(!isPaused);
+
+    const redacaoId = data?.id;
+    if (!redacaoId) return;
+
+    if(!isPaused) {
+      console.log(texto);
+      await updateRedacaoLivre(redacaoId, {texto, duracao: tempoRestante})
+    }
+  }
+
+  const handleExportar = () => alert('API de "Exportar Redação" seria chamada aqui.');
+
+  return (
+    <div
+      className="relative bg-[#EBEBEB] rounded-[30px] shadow-lg w-full 
                  p-6 md:p-10"
-    >
-      {/* 1. O Cabeçalho (Timer) */}
-      <RedacaoHeader
-        tempoRestante={tempoRestante}
-        isPaused={isPaused}
-        onPauseToggle={() => setIsPaused(!isPaused)}
-      />
+    >
+      {/* 1. O Cabeçalho (Timer) */}
+      <RedacaoHeader
+        tempoRestante={tempoRestante}
+        isPaused={isPaused}
+        onPauseToggle={handlePause}
+      />
 
-      {/* 2. A Área de Edição (Branca) */}
-      <div className="mt-12">
-        <RedacaoEditorArea
-          texto={texto}
-          onTextoChange={setTexto}
-        />
-      </div>
+      {/* 2. A Área de Edição (Branca) */}
+      <div className="mt-12">
+        <RedacaoEditorArea
+          texto={texto}
+          onTextoChange={setTexto}
+        />
+      </div>
 
 
-      {/* 3. Rodapé (Conectado) */}
-      <RedacaoFooter
-        contagemPalavras={contagemPalavras}
-        maxPalavras={1000}
-        onFinalizar={handleFinalizar} // <-- Agora chama a função com a navegação
-        onExportar={handleExportar}
-      />
-    </div>
-  );
+      {/* 3. Rodapé (Conectado) */}
+      <RedacaoFooter
+        contagemPalavras={contagemPalavras}
+        maxPalavras={1000}
+        onFinalizar={handleFinalizar} // <-- Agora chama a função com a navegação
+        onExportar={handleExportar}
+      />
+    </div>
+  );
 }

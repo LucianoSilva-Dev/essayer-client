@@ -3,28 +3,81 @@
 import { Competencia } from '@/types/correcao' // <-- IMPORT NECESSÁRIO
 import { CompetenciaCard } from './CompetenciaCard'
 import { ChevronDown, ChevronLeft, ChevronRight } from 'lucide-react'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { CorrecaoIA } from '@/apiCalls/redacao-livre/types'
 
 // --- DEFINIÇÃO QUE FALTAVA ---
 // (Isso resolve os erros 3 e 4)
 interface CompetenciasSectionProps {
-  competencias: Competencia[] // <-- Tipar isso resolve o erro do 'comp'
-  notaTotal: number
-  totalCorrecoes: number
+  correcoes: CorrecaoIA[]
   activeCompetenciaId: string
   onSelectCompetencia: (id: string) => void
 }
 // --- FIM DAS DEFINIÇÕES ---
 
 export function CompetenciasSection({
-  competencias,
-  notaTotal,
-  totalCorrecoes,
+  correcoes,
   activeCompetenciaId,
   onSelectCompetencia,
 }: CompetenciasSectionProps) {
   const scrollRef = useRef<HTMLDivElement>(null)
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
+
+  const somarNotas = (correcao: CorrecaoIA): number => {
+    return correcao.notaC1 + correcao.notaC2 + correcao.notaC3 + correcao.notaC4 + correcao.notaC5
+  }
+
+  const [correcaoAtiva, setCorrecaoAtiva] = useState<CorrecaoIA | null>(null)
+  const [notaTotal, setNotaTotal] = useState<number>(0)
+  const [competencias, setCompetencias] = useState<Competencia[]>([])
+
+  useEffect(() => {
+    setCorrecaoAtiva(correcoes[0])
+  }, [correcoes])
+
+  useEffect(() => {
+    if (!correcaoAtiva) return
+
+    setNotaTotal(somarNotas(correcaoAtiva))
+    setCompetencias([
+      {
+        id: 'c1',
+        nome: 'Competência 1',
+        descricao: 'Domínio da norma padrão da língua portuguesa',
+        nota: correcaoAtiva?.notaC1 || 0,
+        analiseIA: correcaoAtiva?.feedbackC1 || ""
+      },
+      {
+        id: 'c2',
+        nome: 'Competência 2',
+        descricao: 'Compreensão do tema e aplicação de repertório',
+        nota: correcaoAtiva?.notaC2 || 0,
+        analiseIA: correcaoAtiva?.feedbackC2 || ""
+      },
+      {
+        id: 'c3',
+        nome: 'Competência 3',
+        descricao: 'Seleção e organização de argumentos',
+        nota: correcaoAtiva?.notaC3 || 0,
+        analiseIA: correcaoAtiva?.feedbackC3 || ""
+      },
+      {
+        id: 'c4',
+        nome: 'Competência 4',
+        descricao: 'Coesão e Coerência',
+        nota: correcaoAtiva?.notaC4 || 0,
+        analiseIA: correcaoAtiva?.feedbackC4 || ""
+      },
+      {
+        id: 'c5',
+        nome: 'Competência 5',
+        descricao: 'Proposta de Intervenção',
+        nota: correcaoAtiva?.notaC5 || 0,
+        analiseIA: correcaoAtiva?.feedbackC5 || ""
+      }
+    ])
+
+  }, [correcaoAtiva])
 
   const scroll = (direction: 'left' | 'right') => {
     if (scrollRef.current) {
@@ -52,12 +105,11 @@ export function CompetenciasSection({
             className="relative bg-white px-4 py-2 rounded-[32px] shadow-sm border border-gray-200 text-sm flex items-center space-x-2"
           >
             <span className="text-gray-600">Correções </span>
-            <span className="font-bold text-gray-900">{totalCorrecoes}</span>
+            <span className="font-bold text-gray-900">{correcoes.length}</span>
             <ChevronDown
               size={16}
-              className={`text-gray-500 transition-transform duration-200 ${
-                isDropdownOpen ? 'rotate-180' : ''
-              }`}
+              className={`text-gray-500 transition-transform duration-200 ${isDropdownOpen ? 'rotate-180' : ''
+                }`}
             />
           </button>
         </div>

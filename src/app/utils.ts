@@ -1,5 +1,5 @@
 import { AxiosError, isAxiosError } from "axios";
-import { Icons, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import { RepertorioDocument, ObraDocument, ArtigoDocument, CitacaoDocument } from "@/apiCalls/repertorio/types";
 import { Repertorio } from "../types/repertorio";
 import { IconsMap } from "@/constants/icons";
@@ -133,7 +133,7 @@ export function getIconPath(id: number | string, defaultIcon?: string) {
 	if (typeof id === 'string') iconId = Number.parseInt(id)
 	else iconId = id
 
-	if(!defaultIcon) defaultSrc = ''
+	if (!defaultIcon) defaultSrc = ''
 	else defaultSrc = defaultIcon
 
 	return IconsMap.find(icon => icon.id === iconId)?.src ?? defaultSrc

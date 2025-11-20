@@ -8,7 +8,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 // --- DEFINIÇÕES QUE FALTAVAM ---
 interface RedacaoOriginalCardProps {
   textoRedacao: Correcao['textoRedacao']
-  // temaRedacao: string; // Você precisará passar o tema
+  temaRedacao: string; // Você precisará passar o tema
 }
 
 type View = 'redacao' | 'tema'
@@ -16,15 +16,13 @@ type View = 'redacao' | 'tema'
 
 const COLLAPSED_HEIGHT_PX = 128 // max-h-32
 
-export function RedacaoOriginalCard({ textoRedacao }: RedacaoOriginalCardProps) {
+export function RedacaoOriginalCard({ textoRedacao, temaRedacao }: RedacaoOriginalCardProps) {
   const [isExpanded, setIsExpanded] = useState(false)
   const [view, setView] = useState<View>('redacao')
   const [isOverflowing, setIsOverflowing] = useState(false)
   const textRef = useRef<HTMLParagraphElement>(null)
 
-  const mockTema =
-    'Impactos da cultura de cancelamento na sociedade contemporânea e os limites da liberdade de expressão nas redes sociais.'
-  const currentText = view === 'redacao' ? textoRedacao : mockTema
+  const currentText = view === 'redacao' ? textoRedacao : temaRedacao
 
   useEffect(() => {
     if (textRef.current) {

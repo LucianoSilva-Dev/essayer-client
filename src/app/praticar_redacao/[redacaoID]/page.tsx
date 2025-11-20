@@ -1,26 +1,12 @@
-// src/app/praticar_redacao/[redacaoId]/page.tsx
+// src/app/praticar_redacao/[redacaoID]/page.tsx
 
 import { RedacaoPage } from '@/components/praticar_redacao/editor/RedacaoPage';
-
-// ----- PONTO DE INTEGRAÇÃO (GET) -----
-async function getRedacaoData(id: string) {
-  // MOCK:
-  return {
-    id: id,
-    tema: 'O impacto das redes sociais na formação da identidade dos jovens',
-    duracaoConfigurada: 3598, // 59:58
-    conteudoSalvo: '', 
-  };
-}
-// ----------------------------------------
 
 export default async function PraticarRedacaoIdPage({
   params,
 }: {
-  params: { redacaoId: string };
+  params: { redacaoID: string };
 }) {
-  const redacaoData = await getRedacaoData(params.redacaoId);
-
   return (
     // Fundo da página (sem cor, como pedido)
     <main 
@@ -30,7 +16,11 @@ export default async function PraticarRedacaoIdPage({
       <h1 
         className="text-3xl md:text-3xl font-bold text-[#075F70] text-center mb-12"
       >
-        {redacaoData.tema}
+        {/* 
+          Mudar o tema para uma página 'use client'
+        
+        */} 
+        {/* {redacaoData.tema} */}
       </h1>
 
       {/* 2. CONTAINER RELATIVO (Define a largura máxima e a altura) */}
@@ -57,7 +47,7 @@ export default async function PraticarRedacaoIdPage({
           Como 'bottom-4' do gradiente é > 0, o card vai "vazar" para baixo.
         */}
         <div className="relative w-full max-w-5xl mx-auto mt-8">
-          <RedacaoPage data={redacaoData} />
+          <RedacaoPage id={params.redacaoID} />
         </div>
       </div>
     </main>
