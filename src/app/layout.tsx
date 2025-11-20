@@ -18,6 +18,7 @@ import { HeaderWrapper } from '@/components/header-wrapper';
 import { Sidebar } from '@/components/sidebar/sidebar';
 import { MainWrapper } from '@/components/main-wrapper';
 import { AddRepertorioProvider } from '@/contexts/add-repertorio-context';
+import { NotificationProvider } from '@/contexts/notification-context';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -41,12 +42,14 @@ export default function RootLayout({
               <RepertorioProvider>
                 <CitacaoProvider>
                   <AddRepertorioProvider>
-                    <ToastContainer />
-                    <HeaderWrapper />
-                    <Sidebar />
-                    <MainWrapper>
-                      {children}
-                    </MainWrapper>
+                    <NotificationProvider>
+                      <ToastContainer />
+                      <HeaderWrapper />
+                      <Sidebar />
+                      <MainWrapper>
+                        {children}
+                      </MainWrapper>
+                    </NotificationProvider>
                   </AddRepertorioProvider>
                 </CitacaoProvider>
               </RepertorioProvider>
