@@ -1,7 +1,7 @@
 import { motion } from "framer-motion"
 import Link from "next/link"
 import Image from "next/image"
-import { Home, PenTool, Users, Info, Settings, MessageCircleQuestion, SquarePlus  } from "lucide-react"
+import { Home, PenTool, Users, UsersRound, Info, Settings, MessageCircleQuestion, SquarePlus  } from "lucide-react"
 import { SidebarLogo } from "./sidebar-logo"
 import { SidebarNavigation } from "./sidebar-navigation"
 import { SidebarBottomItems } from "./sidebar-bottom-items"
@@ -34,15 +34,15 @@ const navigationItems = [
     roles: ["professor", "admin"],
   },
   {
-    icon: Users,
+    icon: UsersRound,
     label: "Turmas",
     href: "/turmas_aluno",
-    roles: ["aluno"],
+    roles: ["aluno", "admin"],
   },
   {
       icon: Users,
       label: "Turmas",
-      href: "/turmas_professor", //Adicionado esse caminho para manutenção
+      href: "/turmas_professor",
       roles: ["professor", "admin"], 
     },
     {
