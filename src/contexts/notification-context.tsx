@@ -18,6 +18,7 @@ import {
   TiposNotificacao,
 } from '@/types/notification';
 import { useAuth } from './auth-context';
+import { createResilientEventSource } from '@/apiCalls/sse-utils';
 
 const NotificationContext = createContext<NotificationContextType | undefined>(
   undefined
@@ -49,10 +50,6 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({
   useEffect(() => {
     if (!user) return;
 
-    const eventSource = new EventSource(`${API_BASE_URL}/notificacao/listen`, {
-      withCredentials: true,
-    });
-
     const handleNewNotification = (event: MessageEvent) => {
       try {
         const newNotification: Notification = JSON.parse(event.data);
@@ -62,30 +59,15 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({
       }
     };
 
-    eventSource.addEventListener(
-      TiposNotificacao.TarefaEnviada,
-      handleNewNotification
-    );
-    eventSource.addEventListener(
-      TiposNotificacao.TarefaFechada,
-      handleNewNotification
-    );
-    eventSource.addEventListener(
-      TiposNotificacao.TarefaCorrigida,
-      handleNewNotification
-    );
-    eventSource.addEventListener(
-      TiposNotificacao.RequisicaoProfessorStatus,
-      handleNewNotification
-    );
-
-    eventSource.onerror = (error) => {
-      console.error('EventSource failed:', error);
-      eventSource.close();
-    };
+    const connection = createResilientEventSource('/notificacao/listen', {
+      [TiposNotificacao.TarefaEnviada]: handleNewNotification,
+      [TiposNotificacao.TarefaFechada]: handleNewNotification,
+      [TiposNotificacao.TarefaCorrigida]: handleNewNotification,
+      [TiposNotificacao.RequisicaoProfessorStatus]: handleNewNotification,
+    });
 
     return () => {
-      eventSource.close();
+      connection.close();
     };
   }, [user]);
 
