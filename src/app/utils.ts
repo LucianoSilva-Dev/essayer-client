@@ -11,6 +11,10 @@ import { IconsMap } from "@/constants/icons";
  * @returns Uma Promise rejeitada com o erro.
  */
 export const handleAxiosError = (error: unknown) => {
+    if ((error as any)?.isSessionExpired) {
+        return Promise.reject(error);
+    }
+
 	if (isAxiosError(error)) {
 		const axiosError = error as AxiosError<{ error?: string, errors?: string[] }>;
 		const { response, config } = axiosError;

@@ -37,8 +37,13 @@ export const refreshTokenOrWait = async () => {
 
   try {
     await apiClient.post('/auth/refresh');
+    
+    // Pequeno delay para garantir que os cookies foram propagados corretamente pelo browser
+    await new Promise(resolve => setTimeout(resolve, 100));
+    
     processQueue(null);
-  } catch (refreshError) {
+  } catch (refreshError: any) {
+    refreshError.isSessionExpired = true;
     processQueue(refreshError, null);
     window.dispatchEvent(new Event('auth:sessionExpired'));
     throw refreshError;
@@ -56,13 +61,23 @@ apiClient.interceptors.response.use(
       error.response?.status === 401 &&
       !originalRequest._retry &&
       originalRequest.url &&
-      !originalRequest.url.includes('/auth/')
+      !originalRequest.url.includes('/auth/refresh') &&
+      !originalRequest.url.includes('/auth/login')
     ) {
       originalRequest._retry = true;
 
       try {
         await refreshTokenOrWait();
-        return apiClient(originalRequest);
+        
+        // Retenta a requisição original garantindo que não use cache antigo
+        // e removendo propriedades internas que podem causar problemas
+        const retryConfig = { 
+          ...originalRequest,
+          _retry: true,
+          cache: false // Força ignorar cache do axios-cache-interceptor na retentativa
+        };
+        
+        return apiClient(retryConfig);
       } catch (refreshError) {
         return handleAxiosError(refreshError);
       }
