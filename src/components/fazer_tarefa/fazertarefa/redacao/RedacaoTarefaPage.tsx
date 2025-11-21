@@ -1,88 +1,62 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-// ALTERAÇÃO: Importar o 'useRouter' para navegação
-import { useRouter } from 'next/navigation';
-import { RedacaoEditorArea } from './RedacaoEditorArea';
-import { RedacaoHeader } from './RedacaoHeader';
-import { RedacaoFooter } from './RedacaoFooter';
+import React, { useState } from "react";
+import { Montserrat } from "next/font/google";
+import { BookOpen } from "lucide-react"; // Ícone para textos motivacionais
+import RedacaoHeader from "./RedacaoHeader";
+import RedacaoEditorArea from "./RedacaoEditorArea";
+import RedacaoFooter from "./RedacaoFooter";
 
-type RedacaoData = {
-  id: string;
-  duracaoConfigurada: number;
-  conteudoSalvo: string;
-};
+// Configuração da fonte
+const montserrat = Montserrat({ 
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
+});
 
-// Vou assumir que a prop 'data' é do tipo RedacaoData,
-// já que a definição do tipo está aqui.
-export function FazerTarefaContent({ data }: { data: RedacaoData }) {
-  // ALTERAÇÃO: Instanciar o router
-  const router = useRouter();
+// Mock do Tema (Futuramente virá da API via tarefaId)
+const MOCK_TEMA = "Envelhecimento populacional e seus impactos econômicos e sociais";
 
-  // --- Estados (sem mudança) ---
-  const [texto, setTexto] = useState(data.conteudoSalvo);
-  const [contagemPalavras, setContagemPalavras] = useState(0);
-  const [tempoRestante, setTempoRestante] = useState(data.duracaoConfigurada);
-  const [isPaused, setIsPaused] = useState(false);
+export default function RedacaoTarefaPage({ tarefaId }: { tarefaId: string }) {
+  const [texto, setTexto] = useState("");
 
-  // --- Efeitos (sem mudança) ---
-  useEffect(() => {
-    const palavras = texto.trim().split(/\s+/).filter(Boolean);
-    setContagemPalavras(palavras.length === 1 && palavras[0] === '' ? 0 : palavras.length);
-  }, [texto]);
+  // Lógica simples de contagem de palavras
+  const countWords = (str: string) => {
+    return str.trim().split(/\s+/).filter((word) => word.length > 0).length;
+  };
 
-  useEffect(() => {
-    if (isPaused || tempoRestante === 0) return;
-    const interval = setInterval(() => {
-      setTempoRestante((t) => (t > 0 ? t - 1 : 0));
-    }, 1000);
-    return () => clearInterval(interval);
-  }, [isPaused, tempoRestante]);
+  const wordCount = countWords(texto);
 
-  // --- Handlers (ALTERAÇÃO) ---
-  const handleFinalizar = () => {
-    // 1. Pegamos o ID da prop 'data'
-    const redacaoID = data.id;
-    console.log('Finalizando e submetendo redação:', redacaoID);
-    
-    // 2. (FUTURO) Aqui você fará a chamada à API (mutation)
-    //    para salvar o `texto` e solicitar a correção.
-    // ex: mutation.mutate({ redacaoID, texto })
+  return (
+    <main className={`w-full min-h-screen bg-[#F2F2F2] flex flex-col items-center py-8 px-4 ${montserrat.className}`}>
+      
+      {/* 1. Título do Tema (Fora do Card) */}
+      <div className="mb-6 w-full max-w-[1000px] text-center">
+        <RedacaoHeader tema={MOCK_TEMA} />
+      </div>
 
-    // 3. Após o sucesso da API, navegue para a página de correção
-    router.push(`/praticar_redacao/${redacaoID}/correcao`);
-  };
+      {/* 2. Área Cinza Principal (Container) */}
+      <div className="w-full max-w-[1000px] bg-[#E5E5E5] rounded-[20px] p-4 md:p-8 shadow-sm flex flex-col gap-4 relative">
+        
+        {/* Botão de Textos Motivacionais (Canto Superior Direito) */}
+        <div className="flex justify-end mb-2">
+          <button className="flex items-center gap-2 text-gray-700 hover:text-[#0F5F68] transition-colors font-medium text-sm md:text-base">
+            <BookOpen size={20} />
+            <span>Textos motivacionais</span>
+          </button>
+        </div>
 
-  const handleExportar = () => alert('API de "Exportar Redação" seria chamada aqui.');
+        {/* 3. Área de Edição (Papel Branco) */}
+        <div className="w-full h-[60vh] bg-white rounded-[15px] shadow-sm overflow-hidden">
+           <RedacaoEditorArea 
+             value={texto} 
+             onChange={setTexto} 
+           />
+        </div>
 
-  return (
-    <div 
-      className="relative bg-[#EBEBEB] rounded-[30px] shadow-lg w-full 
-                 p-6 md:p-10"
-    >
-      {/* 1. O Cabeçalho (Timer) */}
-      <RedacaoHeader
-        tempoRestante={tempoRestante}
-        isPaused={isPaused}
-        onPauseToggle={() => setIsPaused(!isPaused)}
-      />
+        {/* 4. Footer (Contador + Botão Finalizar) */}
+        <RedacaoFooter wordCount={wordCount} maxWords={400} />
 
-      {/* 2. A Área de Edição (Branca) */}
-      <div className="mt-12">
-        <RedacaoEditorArea
-          texto={texto}
-          onTextoChange={setTexto}
-        />
-      </div>
-
-
-      {/* 3. Rodapé (Conectado) */}
-      <RedacaoFooter
-        contagemPalavras={contagemPalavras}
-        maxPalavras={1000}
-        onFinalizar={handleFinalizar} // <-- Agora chama a função com a navegação
-        onExportar={handleExportar}
-      />
-    </div>
-  );
+      </div>
+    </main>
+  );
 }

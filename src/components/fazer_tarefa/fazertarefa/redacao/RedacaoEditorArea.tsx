@@ -1,26 +1,18 @@
-// src/components/praticar_redacao/editor/RedacaoEditorArea.tsx
+import React from 'react';
 
-interface Props {
-  texto: string;
-  onTextoChange: (novoTexto: string) => void;
+interface RedacaoEditorAreaProps {
+  value: string;
+  onChange: (val: string) => void;
 }
 
-export function RedacaoEditorArea({ texto, onTextoChange }: Props) {
+export default function RedacaoEditorArea({ value, onChange }: RedacaoEditorAreaProps) {
   return (
-    // 'typeInsert' do Figma
-    // ALTERAÇÃO: Aumentei de 60vh para 70vh para dar mais altura ao card
-    <div className="bg-white rounded-[20px] w-full min-h-[70vh]">
-      <textarea
-        value={texto}
-        onChange={(e) => onTextoChange(e.target.value)}
-        placeholder="Comece a digitar aqui..."
-        // Aumentei aqui também para o textarea preencher
-        className="w-full h-full min-h-[70vh] p-6 
-                   text-lg text-gray-800 
-                   placeholder:text-[#BDB4B4] placeholder:font-normal placeholder:text-xl
-                   resize-none border-none focus:outline-none focus:ring-0
-                   bg-transparent"
-      />
-    </div>
+    <textarea
+      className="w-full h-full p-6 resize-none outline-none text-gray-700 text-base leading-relaxed placeholder:text-gray-300 placeholder:text-center placeholder:pt-[20%] md:placeholder:pt-[10%]"
+      placeholder="Comece a digitar aqui..."
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      spellCheck={false}
+    />
   );
 }
