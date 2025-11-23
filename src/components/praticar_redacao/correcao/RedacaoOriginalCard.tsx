@@ -4,19 +4,25 @@ import { Correcao } from '@/types/correcao' // <-- IMPORT NECESSÁRIO
 import { Trash2 } from 'lucide-react'
 import { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { deleteRedacaoLivre, updateRedacaoLivre } from '@/apiCalls/redacao-livre'
+import { useRouter } from 'next/navigation'
 
 // --- DEFINIÇÕES QUE FALTAVAM ---
 interface RedacaoOriginalCardProps {
+  idRedacao: string;
+  idCorrecao: string;
   textoRedacao: Correcao['textoRedacao']
   temaRedacao: string; // Você precisará passar o tema
 }
 
-type View = 'redacao' | 'tema'
+type View = 'redacao' | 'tema'  
 // --- FIM DAS DEFINIÇÕES ---
 
 const COLLAPSED_HEIGHT_PX = 128 // max-h-32
 
-export function RedacaoOriginalCard({ textoRedacao, temaRedacao }: RedacaoOriginalCardProps) {
+export function RedacaoOriginalCard({ textoRedacao, temaRedacao, idRedacao, idCorrecao }: RedacaoOriginalCardProps) {
+  const router = useRouter()
+  
   const [isExpanded, setIsExpanded] = useState(false)
   const [view, setView] = useState<View>('redacao')
   const [isOverflowing, setIsOverflowing] = useState(false)
@@ -30,7 +36,15 @@ export function RedacaoOriginalCard({ textoRedacao, temaRedacao }: RedacaoOrigin
     }
   }, [currentText, view])
 
-  
+  const handleReescrever = async () => {
+    await updateRedacaoLivre(idRedacao, {finalizada: false, texto: "", duracao: 30 * 60})
+    router.replace(`/praticar_redacao/${idRedacao}`)
+  }
+
+  const handleDelete = async () => {
+    await deleteRedacaoLivre(idRedacao, idCorrecao)
+    router.replace('/praticar_redacao')
+  }
 
   return (
     <div className="bg-white p-6 md:p-8 rounded-[40px] shadow-sm border border-gray-200">
@@ -103,13 +117,13 @@ export function RedacaoOriginalCard({ textoRedacao, temaRedacao }: RedacaoOrigin
         <div className="flex items-center space-x-3">
           <button 
             className="flex items-center justify-center p-2.5 rounded-full bg-[#089993] text-white hover:opacity-90 transition-opacity"
-            onClick={e => console.log('excluido')}
+            onClick={handleDelete}
           >
             <Trash2 size={18} />
           </button>
           <button
             className="px-5 py-2.5 rounded-[40px] bg-[#075F70] text-white text-sm font-medium hover:opacity-90 transition-opacity"
-            onClick={e => console.log('apertado')}
+            onClick={handleReescrever}
           >
             Reescrever
           </button>

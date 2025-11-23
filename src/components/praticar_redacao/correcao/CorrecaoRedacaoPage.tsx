@@ -70,7 +70,7 @@ export function CorrecaoRedacaoPage({ id }: { id: string }) {
     <div className="p-6 md:p-10 max-w-7xl mx-auto">
       <CorrecaoHeader />
 
-      <RedacaoOriginalCard textoRedacao={data?.correcoesIA[0].texto || ""} temaRedacao={data?.tema || ""} />
+      <RedacaoOriginalCard idRedacao={data?.id || ''} idCorrecao={data?.correcoesIA[0].id || ''} textoRedacao={data?.correcoesIA[0].texto || ""} temaRedacao={data?.tema || ""} />
 
       <CompetenciasSection
         correcoes={data?.correcoesIA || []}

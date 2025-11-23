@@ -22,6 +22,11 @@ export const updateRedacaoLivre = async (id: string, data: UpdateRedacaoLivreBod
 }
 
 export const corrigirRedacaoLivre = async (id: string, data: CorrigirRedacaoLivreBody): Promise<void> => {
-  const response = await apiClient.post<void>(`usuario/redacao/${id}/corrigir`, data)
+  const response = await apiClient.post<void>(`/usuario/redacao/${id}/corrigir`, data)
+  return response.data
+}
+
+export const deleteRedacaoLivre = async (idRedacao: string, idCorrecao: string): Promise<void> => {
+  const response = await apiClient.delete<void>(`/usuario/redacao/${idRedacao}/correcao/${idCorrecao}`)
   return response.data
 }
