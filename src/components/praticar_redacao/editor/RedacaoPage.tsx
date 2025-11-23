@@ -8,6 +8,10 @@ import { RedacaoHeader } from './RedacaoHeader';
 import { RedacaoFooter } from './RedacaoFooter';
 import { corrigirRedacaoLivre, getRedacaoLivre, updateRedacaoLivre } from '@/apiCalls/redacao-livre';
 import { createAutoSave } from './helpers/autoSave';
+import { listenCorrecaoRedacao } from '@/apiCalls/redacao';
+import { CustomEventSourceMap } from '@/apiCalls/types';
+import { toast } from 'react-toastify';
+import { GetCorrecaoRedacaoResponse } from '@/apiCalls/redacao/types';
 
 type RedacaoData = {
   id: string;
@@ -51,6 +55,24 @@ export function RedacaoPage({ id }: { id: string }) {
   const autoSave = createAutoSave(updateText, 2000, 1000)
   const useAutoSave = useCallback(autoSave, [])
 
+  const onError = (data: CustomEventSourceMap['appError']) => {
+    // Reformular no futuro
+    toast.error(`error number ${data.data.statusCode}: ${data.data.message}`)
+    router.replace('/praticar_redacao')
+  }
+
+  const onDelay = (_: null) => {
+    // Reformular no futuro
+    toast.info('correção em andamento, por favor aguarde!')
+  }
+
+  const onSuccess = (_: GetCorrecaoRedacaoResponse) => {
+    const redacaoId = data?.id;
+    if (!redacaoId) return;
+
+    router.replace(`/praticar_redacao/${redacaoId}/correcao`);
+  }
+
   // --- Efeitos (sem mudança) ---
   useEffect(() => {
     const palavras = texto.trim().split(/\s+/).filter(Boolean);
@@ -83,7 +105,7 @@ export function RedacaoPage({ id }: { id: string }) {
         tema: data.tema
       })
 
-      router.replace(`/praticar_redacao/${redacaoId}/correcao`);
+      await listenCorrecaoRedacao(redacaoId, onError, onDelay, onSuccess)
     })()
   }, [tempoRestante])
 
@@ -108,7 +130,7 @@ export function RedacaoPage({ id }: { id: string }) {
       tema: data.tema
     })
 
-    router.replace(`/praticar_redacao/${redacaoId}/correcao`);
+    await listenCorrecaoRedacao(redacaoId, onError, onDelay, onSuccess)
   };
 
   const handlePause = async () => {
