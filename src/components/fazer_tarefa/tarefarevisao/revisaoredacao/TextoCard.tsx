@@ -45,7 +45,7 @@ export default function TextoCard({ data }: { data: TextoData }) {
       {/* Cabeçalho do Card */}
       <div className="flex justify-between items-start mb-4 gap-2">
         <h3 
-          className="font-bold text-gray-800 text-lg line-clamp-2 leading-tight" 
+          className="font-bold text-gray-800 text-lg line-clamp-2 leading-tight text-left" 
           title={data.titulo}
         >
             {data.titulo}
@@ -76,11 +76,12 @@ export default function TextoCard({ data }: { data: TextoData }) {
 
       {/* Conteúdo com Fade */}
       <div className="relative flex-1 overflow-hidden">
-        <p className="text-gray-600 text-sm leading-relaxed text-justify">
+        {/* ALTERAÇÃO AQUI: Troquei 'text-justify' por 'text-left' */}
+        <p className="text-gray-600 text-sm leading-relaxed text-left">
           {data.conteudo}
         </p>
         
-        {/* Gradiente reduzido para h-16 conforme solicitado */}
+        {/* Gradiente */}
         <div className="absolute bottom-0 left-0 w-full h-16 bg-gradient-to-t from-white via-white/90 to-transparent pointer-events-none" />
       </div>
     </div>

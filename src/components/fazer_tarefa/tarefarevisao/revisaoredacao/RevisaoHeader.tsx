@@ -19,7 +19,7 @@ export default function RevisaoHeader({ titulo, tarefaId }: RevisaoHeaderProps) 
       </div>
 
       <div className="w-full md:w-auto">
-        <Link href={`/fazer_tarefa/tarefa/${tarefaId}`}>
+        <Link href={`/fazer_tarefa/editor`}>
           {/* Adicionei 'cursor-pointer' aqui */}
           <button className="cursor-pointer bg-[#0F5F68] hover:bg-[#075F70] text-white font-semibold py-2 px-6 rounded-full transition-colors shadow-sm w-full md:w-auto">
             Iniciar tarefa

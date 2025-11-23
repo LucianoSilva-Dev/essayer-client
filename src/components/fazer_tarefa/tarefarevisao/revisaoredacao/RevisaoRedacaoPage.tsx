@@ -1,9 +1,7 @@
-// src/components/fazer_tarefa/tarefarevisao/revisaoredacao/RevisaoRedacaoPage.tsx
+"use client";
 
 import React from "react";
-// 1. Importando a fonte
 import { Montserrat } from "next/font/google";
-
 import RevisaoHeader from "./RevisaoHeader";
 import TemaCard from "./TemaCard";
 import TextoList from "./TextoList";
@@ -11,18 +9,17 @@ import Descricao from "./Descricao";
 import DuracaoCard from "./DuracaoCard";
 import PrazoCard from "./PrazoCard";
 
-// 2. Configurando a fonte
 const montserrat = Montserrat({ 
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"], // Importando pesos variados
+  weight: ["300", "400", "500", "600", "700"],
 });
 
+// MOCKS ATUALIZADOS COM TEXTOS MAIORES
 const MOCK_TAREFA = {
-  // ... seus dados mockados (mantidos iguais)
   titulo: "Título da tarefa aqui",
   usuario: { nome: "Nome" },
   tema: "Economia verde e responsabilidade ambiental do Estado",
-  descricao: "Aqui será adicionado uma breve descrição feita pelo professor sobre a tarefa.",
+  descricao: "Aqui será adicionado uma breve descrição feita pelo professor sobre a tarefa, explicando os objetivos principais e os pontos de atenção para o desenvolvimento do texto.",
   duracaoMinutos: 0, 
   prazo: {
     dataCompleta: "13 de Novembro às 14h00",
@@ -41,48 +38,46 @@ const MOCK_TAREFA = {
       id: 1,
       titulo: "Vidas Secas - Graciliano Ramos",
       tipo: "Obra",
-      conteudo: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam."
+      conteudo: "O romance Vidas Secas, publicado em 1938, retrata a vida de uma família de retirantes sertanejos obrigada a se deslocar de tempos em tempos para áreas menos castigadas pela seca. A obra expõe a miséria humana e social diante da hostilidade do meio, mostrando como a escassez molda a psicologia das personagens, reduzindo-as quase à condição animal na luta pela sobrevivência."
     },
     {
       id: 2,
       titulo: "Constituição Federal de 1988",
       tipo: "Artigo",
-      conteudo: "Art. 225. Todos têm direito ao meio ambiente ecologicamente equilibrado, bem de uso comum do povo e essencial à sadia qualidade de vida."
+      conteudo: "Art. 225. Todos têm direito ao meio ambiente ecologicamente equilibrado, bem de uso comum do povo e essencial à sadia qualidade de vida, impondo-se ao Poder Público e à coletividade o dever de defendê-lo e preservá-lo para as presentes e futuras gerações. A responsabilidade ambiental não é apenas do Estado, mas de toda a sociedade."
     },
     {
       id: 3,
-      titulo: "O Contrato Social",
+      titulo: "O Contrato Social - Rousseau",
       tipo: "Citação",
-      conteudo: "O homem nasce livre, e por toda a parte encontra-se a ferros. Jean-Jacques Rousseau discute a liberdade e a responsabilidade do Estado."
+      conteudo: "O homem nasce livre, e por toda a parte encontra-se a ferros. Nesta obra fundamental, Jean-Jacques Rousseau discute a origem da desigualdade entre os homens e propõe o contrato social como uma forma de legitimar a liberdade civil, onde cada indivíduo abre mão de sua liberdade natural em favor da vontade geral para viver em sociedade."
     },
     {
       id: 4,
       titulo: "Modernidade Líquida",
       tipo: "Obra",
-      conteudo: "Zygmunt Bauman explora a fragilidade dos laços humanos e a volatilidade das instituições no mundo contemporâneo."
+      conteudo: "Zygmunt Bauman explora a fragilidade dos laços humanos e a volatilidade das instituições no mundo contemporâneo. Na modernidade líquida, nada é feito para durar, as relações escorrem por entre os dedos e a insegurança torna-se a única constante, afetando diretamente como lidamos com responsabilidades coletivas e ambientais."
     },
     {
       id: 5,
       titulo: "Declaração Universal dos Direitos Humanos",
       tipo: "Artigo",
-      conteudo: "Todos os seres humanos nascem livres e iguais em dignidade e direitos. São dotados de razão e consciência."
+      conteudo: "Todos os seres humanos nascem livres e iguais em dignidade e direitos. São dotados de razão e consciência e devem agir em relação uns aos outros com espírito de fraternidade. Ninguém será submetido à tortura, nem a tratamento ou castigo cruel, desumano ou degradante, garantindo-se a proteção universal da pessoa humana."
     }
   ]
 };
 
 export default function RevisaoRedacaoPage({ tarefaId }: { tarefaId: string }) {
   return (
-    // 3. Aplicando a classe da fonte na tag main
-    <main className={`w-full min-h-screen bg-[#F2F2F2] pb-10 ${montserrat.className}`}>
+    <main className={`w-full min-h-screen pb-10 ${montserrat.className}`}>
       <div className="max-w-[1200px] mx-auto px-4 md:px-8 pt-6">
         
-            <div className="mb-8">
-            {/* PASSE A PROP AQUI */}
-                <RevisaoHeader 
-                    titulo={MOCK_TAREFA.titulo} 
-                tarefaId={tarefaId} 
-            />
-            </div>
+        <div className="mb-8">
+          <RevisaoHeader 
+            titulo={MOCK_TAREFA.titulo} 
+            tarefaId={tarefaId} 
+          />
+        </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           
