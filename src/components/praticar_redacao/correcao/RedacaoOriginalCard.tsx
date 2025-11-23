@@ -30,6 +30,8 @@ export function RedacaoOriginalCard({ textoRedacao, temaRedacao }: RedacaoOrigin
     }
   }, [currentText, view])
 
+  
+
   return (
     <div className="bg-white p-6 md:p-8 rounded-[40px] shadow-sm border border-gray-200">
       {/* Header */}
@@ -40,11 +42,10 @@ export function RedacaoOriginalCard({ textoRedacao, temaRedacao }: RedacaoOrigin
               setView('redacao')
               setIsExpanded(false)
             }}
-            className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${
-              view === 'redacao'
-                ? 'bg-white shadow-sm text-gray-900'
-                : 'text-gray-600 hover:text-gray-800'
-            }`}
+            className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${view === 'redacao'
+              ? 'bg-white shadow-sm text-gray-900'
+              : 'text-gray-600 hover:text-gray-800'
+              }`}
           >
             Redação
           </button>
@@ -53,11 +54,10 @@ export function RedacaoOriginalCard({ textoRedacao, temaRedacao }: RedacaoOrigin
               setView('tema')
               setIsExpanded(false)
             }}
-            className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${
-              view === 'tema'
-                ? 'bg-white shadow-sm text-gray-900'
-                : 'text-gray-600 hover:text-gray-800'
-            }`}
+            className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${view === 'tema'
+              ? 'bg-white shadow-sm text-gray-900'
+              : 'text-gray-600 hover:text-gray-800'
+              }`}
           >
             Tema
           </button>
@@ -66,9 +66,8 @@ export function RedacaoOriginalCard({ textoRedacao, temaRedacao }: RedacaoOrigin
 
       {/* Conteúdo (Redação ou Tema) */}
       <div
-        className={`relative transition-all duration-300 ease-in-out overflow-hidden ${
-          isExpanded ? 'max-h-[1000px]' : 'max-h-32'
-        }`}
+        className={`relative transition-all duration-300 ease-in-out overflow-hidden ${isExpanded ? 'max-h-[1000px]' : 'max-h-32'
+          }`}
       >
         <p ref={textRef} className="text-gray-700 text-base leading-relaxed">
           {currentText}
@@ -102,10 +101,16 @@ export function RedacaoOriginalCard({ textoRedacao, temaRedacao }: RedacaoOrigin
           <div /> // Placeholder
         )}
         <div className="flex items-center space-x-3">
-          <button className="flex items-center justify-center p-2.5 rounded-full bg-[#089993] text-white hover:opacity-90 transition-opacity">
+          <button 
+            className="flex items-center justify-center p-2.5 rounded-full bg-[#089993] text-white hover:opacity-90 transition-opacity"
+            onClick={e => console.log('excluido')}
+          >
             <Trash2 size={18} />
           </button>
-          <button className="px-5 py-2.5 rounded-[40px] bg-[#075F70] text-white text-sm font-medium hover:opacity-90 transition-opacity">
+          <button
+            className="px-5 py-2.5 rounded-[40px] bg-[#075F70] text-white text-sm font-medium hover:opacity-90 transition-opacity"
+            onClick={e => console.log('apertado')}
+          >
             Reescrever
           </button>
           <button className="px-5 py-2.5 rounded-[40px] bg-[#075F70] text-white text-sm font-medium hover:opacity-90 transition-opacity">

@@ -6,8 +6,8 @@ export const createRedacaoLivre = async (data: CreateRedacaoLivreBody): Promise<
   return response.data;
 }
 
-export const getAllRedacaoLivre = async (): Promise<RedacaoLivreDoc[]> => {
-  const response = await apiClient.get<RedacaoLivreDoc[]>('/usuario/redacao');
+export const getAllRedacaoLivre = async (queryString?: string): Promise<RedacaoLivreDoc[]> => {
+  const response = await apiClient.get<RedacaoLivreDoc[]>(`/usuario/redacao${queryString ? `?tema=${queryString}` : ''}`);
   return response.data;
 }
 

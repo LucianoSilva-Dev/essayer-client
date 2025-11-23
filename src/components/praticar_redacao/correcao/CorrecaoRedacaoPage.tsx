@@ -7,7 +7,6 @@ import { CompetenciasSection } from './CompetenciasSection'
 import { AnaliseInteligenciaArtificial } from './AnaliseInteligenciaArtificial'
 
 // Importamos os dados mockados
-import { mockCorrecao } from './mock'
 import { CorrecaoIA, RedacaoLivreDoc } from '@/apiCalls/redacao-livre/types'
 import { getRedacaoLivre } from '@/apiCalls/redacao-livre'
 

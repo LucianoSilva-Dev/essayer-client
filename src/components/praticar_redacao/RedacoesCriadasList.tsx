@@ -2,12 +2,14 @@
 import { RedacaoLivreDoc } from '@/apiCalls/redacao-livre/types';
 import { RedacaoCard, RedacaoStatus } from './RedacaoCard';
 import { Search } from 'lucide-react';
+import { useState } from 'react';
 
 interface RedacoesCriadasListProps {
   redacoes: RedacaoLivreDoc[];
+  handleChange: (text: string) => Promise<void>
 }
 
-export function RedacoesCriadasList({ redacoes }: RedacoesCriadasListProps) {
+export function RedacoesCriadasList({ redacoes, handleChange }: RedacoesCriadasListProps) {
   // A lista agora é recebida via props do componente pai
   const statusRedacao = (redacao: RedacaoLivreDoc): RedacaoStatus => {
     if (redacao.correcoesIA.length === 0) return "sem_correcoes"
@@ -44,6 +46,7 @@ export function RedacoesCriadasList({ redacoes }: RedacoesCriadasListProps) {
           <input
             type="text"
             placeholder="Pesquise por uma redação criada"
+            onChange={e => handleChange(e.target.value)}
             className="w-full bg-transparent text-[#898787] placeholder:text-[#898787] text-[24px] font-light focus:outline-none"
           />
         </div>

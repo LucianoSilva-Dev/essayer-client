@@ -7,6 +7,7 @@ import { RedacaoEditorArea } from './RedacaoEditorArea';
 import { RedacaoHeader } from './RedacaoHeader';
 import { RedacaoFooter } from './RedacaoFooter';
 import { corrigirRedacaoLivre, getRedacaoLivre, updateRedacaoLivre } from '@/apiCalls/redacao-livre';
+import { createAutoSave } from './helpers/autoSave';
 
 type RedacaoData = {
   id: string;
@@ -40,6 +41,16 @@ export function RedacaoPage({ id }: { id: string }) {
   const [tempoRestante, setTempoRestante] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
 
+  const updateText = async (txt: string, duracao: number): Promise<void> => {
+    const redacaoId = data?.id;
+    if (!redacaoId) return;
+
+    await updateRedacaoLivre(redacaoId, { texto: txt, duracao })
+  }
+
+  const autoSave = createAutoSave(updateText, 2000, 1000)
+  const useAutoSave = useCallback(autoSave, [])
+
   // --- Efeitos (sem mudança) ---
   useEffect(() => {
     const palavras = texto.trim().split(/\s+/).filter(Boolean);
@@ -54,7 +65,34 @@ export function RedacaoPage({ id }: { id: string }) {
     return () => clearInterval(interval);
   }, [isPaused, tempoRestante]);
 
+  useEffect(() => {
+    (async () => {
+      if (tempoRestante > 0) return
+
+      const redacaoId = data?.id;
+      if (!redacaoId) return;
+
+      await updateRedacaoLivre(redacaoId, {
+        texto,
+        finalizada: true,
+        dataRealizacao: new Date().toISOString(),
+      });
+
+      await corrigirRedacaoLivre(redacaoId, {
+        textoRedacao: texto,
+        tema: data.tema
+      })
+
+      router.replace(`/praticar_redacao/${redacaoId}/correcao`);
+    })()
+  }, [tempoRestante])
+
   // --- Handlers (ALTERAÇÃO) ---
+  const handleChange = async (txt: string) => {
+    setTexto(txt)
+    await useAutoSave(txt, tempoRestante)
+  }
+
   const handleFinalizar = async () => {
     const redacaoId = data?.id;
     if (!redacaoId) return;
@@ -70,18 +108,14 @@ export function RedacaoPage({ id }: { id: string }) {
       tema: data.tema
     })
 
-    router.push(`/praticar_redacao/${redacaoId}/correcao`);
+    router.replace(`/praticar_redacao/${redacaoId}/correcao`);
   };
 
   const handlePause = async () => {
     setIsPaused(!isPaused);
 
-    const redacaoId = data?.id;
-    if (!redacaoId) return;
-
-    if(!isPaused) {
-      console.log(texto);
-      await updateRedacaoLivre(redacaoId, {texto, duracao: tempoRestante})
+    if (!isPaused) {
+      await updateText(texto, tempoRestante)
     }
   }
 
@@ -103,7 +137,7 @@ export function RedacaoPage({ id }: { id: string }) {
       <div className="mt-12">
         <RedacaoEditorArea
           texto={texto}
-          onTextoChange={setTexto}
+          onTextoChange={handleChange}
         />
       </div>
 

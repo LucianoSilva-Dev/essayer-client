@@ -1,6 +1,6 @@
 'use client'; // Necessário para usar hooks como useState
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { CriarRedacaoForm } from './CriarRedacaoForm';
 import { RedacoesCriadasList } from './RedacoesCriadasList';
 import { createRedacaoLivre, getAllRedacaoLivre } from '@/apiCalls/redacao-livre';
@@ -22,6 +22,11 @@ export default function PraticarRedacaoPage() {
     const response = await createRedacaoLivre({tema, duracao: duration * 60});
     router.push(`/praticar_redacao/${response.id}`);
   };
+
+  const handleChange = async (text: string) => {
+    const response = await getAllRedacaoLivre(text.trim())
+    if (response) setRedacoes(response)
+  }
   
   // Mock de temas para o modal
   const mockThemes = [
@@ -42,7 +47,7 @@ export default function PraticarRedacaoPage() {
         {/* Passa a função de adicionar e a lista de temas para o formulário */}
         <CriarRedacaoForm onRedacaoCreated={addRedacao} mockThemes={mockThemes} />
         {/* Passa a lista de redações para a lista */}
-        <RedacoesCriadasList redacoes={redacoes} />
+        <RedacoesCriadasList redacoes={redacoes} handleChange={handleChange}/>
       </main>
     </div>
   );
