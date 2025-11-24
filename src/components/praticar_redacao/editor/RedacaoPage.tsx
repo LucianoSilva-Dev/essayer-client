@@ -3,14 +3,16 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
+import { toast } from 'react-toastify';
 import { RedacaoEditorArea } from './RedacaoEditorArea';
 import { RedacaoHeader } from './RedacaoHeader';
 import { RedacaoFooter } from './RedacaoFooter';
 import { corrigirRedacaoLivre, getRedacaoLivre, updateRedacaoLivre } from '@/apiCalls/redacao-livre';
 import { createAutoSave } from './helpers/autoSave';
 import { useTextHistory } from '@/hooks/useTextHistory';
-
-// ... (Tipos e interfaces mantêm-se iguais) ...
+import { listenCorrecaoRedacao } from '@/apiCalls/redacao';
+import { CustomEventSourceMap } from '@/apiCalls/types';
+import { GetCorrecaoRedacaoResponse } from '@/apiCalls/redacao/types';
 
 type RedacaoData = {
   id: string;
@@ -22,16 +24,31 @@ type RedacaoData = {
 export function RedacaoPage({ id }: { id: string }) {
   const router = useRouter();
   
-  // Hook de histórico
+  // SEU HOOK
   const { texto, setTexto, undo, redo } = useTextHistory(""); 
 
   const [data, setData] = useState<RedacaoData | null>(null);
   const [contagemPalavras, setContagemPalavras] = useState(0);
   const [tempoRestante, setTempoRestante] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
-  const [loadingCorrigir, setLoadingCorrigir] = useState(false); // Estado de loading para feedback
+  const [loadingCorrigir, setLoadingCorrigir] = useState(false); 
 
-  // ... (useEffects de carregamento, contador e timer iguais ao anterior) ...
+  // --- LÓGICA DO AMIGO (Callbacks) ---
+  const onError = (data: CustomEventSourceMap['appError']) => {
+    toast.error(`error number ${data.data.statusCode}: ${data.data.message}`)
+    setLoadingCorrigir(false);
+  }
+
+  const onDelay = (_: null) => {
+    toast.info('correção em andamento, por favor aguarde!')
+  }
+
+  const onSuccess = (_: GetCorrecaoRedacaoResponse) => {
+    const redacaoId = data?.id;
+    if (!redacaoId) return;
+    router.replace(`/praticar_redacao/${redacaoId}/correcao`);
+  }
+  // -----------------------------------
 
   useEffect(() => {
     (async () => {
@@ -57,8 +74,6 @@ export function RedacaoPage({ id }: { id: string }) {
   const autoSave = createAutoSave(updateText, 2000, 1000)
   const useAutoSave = useCallback(autoSave, [])
 
-  // ... (Demais useEffects iguais) ...
-
   useEffect(() => {
       const palavras = texto.trim().split(/\s+/).filter(Boolean);
       setContagemPalavras(palavras.length === 1 && palavras[0] === '' ? 0 : palavras.length);
@@ -72,7 +87,7 @@ export function RedacaoPage({ id }: { id: string }) {
     return () => clearInterval(interval);
   }, [isPaused, tempoRestante]);
 
-  // Se o tempo acabar, forçamos a correção (comportamento original)
+  // Se o tempo acabar
   useEffect(() => {
     (async () => {
       if (tempoRestante > 0) return
@@ -82,42 +97,35 @@ export function RedacaoPage({ id }: { id: string }) {
   }, [tempoRestante])
 
 
-  const handleChange = async (txt: string) => {
-    setTexto(txt)
-    await useAutoSave(txt, tempoRestante)
-  }
-
-  // --- LÓGICA REORGANIZADA ---
-
-  // Função centralizada para não repetir código
+  // MISTURA: SUA LÓGICA DE LOADING + A LÓGICA DELE DE LISTEN
   const executCorrigirRedacao = async () => {
     const redacaoId = data?.id;
     if (!redacaoId) return;
 
     try {
       setLoadingCorrigir(true);
-      // 1. Salva estado final
+      
       await updateRedacaoLivre(redacaoId, {
         texto,
         finalizada: true,
         dataRealizacao: new Date().toISOString(),
       });
 
-      // 2. Chama a IA
       await corrigirRedacaoLivre(redacaoId, {
         textoRedacao: texto,
         tema: data.tema
       });
 
-      // 3. Navega
-      router.replace(`/praticar_redacao/${redacaoId}/correcao`);
+      // AQUI ENTRA O CÓDIGO DO AMIGO
+      await listenCorrecaoRedacao(redacaoId, onError, onDelay, onSuccess)
+
     } catch (error) {
       console.error("Erro ao corrigir", error);
       setLoadingCorrigir(false);
+      toast.error("Erro ao iniciar correção.");
     }
   }
 
-  // Botão 1: Apenas Finalizar (Salva e marca como finalizada, mas fica na tela ou volta pro menu)
   const handleFinalizar = async () => {
     const redacaoId = data?.id;
     if (!redacaoId) return;
@@ -129,11 +137,8 @@ export function RedacaoPage({ id }: { id: string }) {
     });
     
     alert("Redação salva e finalizada com sucesso!");
-    // Aqui você poderia redirecionar para a lista de redações, se quiser:
-    // router.push('/praticar_redacao');
   };
 
-  // Botão 2: Corrigir (Faz tudo que o finalizar fazia antes + redireciona)
   const handleCorrigir = async () => {
     await executCorrigirRedacao();
   };
@@ -145,40 +150,33 @@ export function RedacaoPage({ id }: { id: string }) {
     }
   }
 
-return (
+  return (
     <div className="relative bg-[#EBEBEB] rounded-[30px] shadow-lg w-full p-6 md:p-10">
-      
-      {/* 1. Timer (Absolute no canto direito) */}
       <RedacaoHeader
         tempoRestante={tempoRestante}
         isPaused={isPaused}
         onPauseToggle={handlePause}
       />
 
-      {/* --- REMOVIDO O BLOCO DE TÍTULO AQUI --- */}
-      {/* O título agora está no arquivo page.tsx, do lado de fora */}
-
-      {/* 2. Área de Edição */}
-      {/* Adicionei mt-8 para dar um espacinho do topo do card até o papel, já que não tem mais título aqui */}
       <div className="mt-12">
         <RedacaoEditorArea
           texto={texto}
-          onTextoChange={handleChange}
+          onTextoChange={async (txt) => {
+            setTexto(txt)
+            await useAutoSave(txt, tempoRestante)
+          }}
           onUndo={undo}
           onRedo={redo}
         />
       </div>
 
-      {/* 3. Rodapé */}
-{/* ALTERAÇÃO AQUI: Passamos o estado de loading para o footer */}
       <RedacaoFooter
         contagemPalavras={contagemPalavras}
-        maxPalavras={400}
+        maxPalavras={400} // Mantido o seu limite
         onFinalizar={handleFinalizar}
         onCorrigir={handleCorrigir}
-        isLoading={loadingCorrigir} // <--- NOVA PROP
+        isLoading={loadingCorrigir} // Mantido o seu loading
       />
     </div>
-
   );
 }

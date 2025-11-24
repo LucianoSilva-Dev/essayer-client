@@ -22,7 +22,7 @@ export async function listenCorrecaoRedacao(
   onCorrecao: OnSuccessCallback) {
   const eventSource =
     new EventSource(
-      API_BASE_URL + `/usuario/redacao/${redacaoId}/corrigir`,
+      API_BASE_URL + `/usuario/redacao/${redacaoId}/correcao/listen`,
       { withCredentials: true }
     )
 
