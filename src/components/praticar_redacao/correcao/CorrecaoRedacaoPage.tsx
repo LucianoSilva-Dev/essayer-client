@@ -6,76 +6,84 @@ import { RedacaoOriginalCard } from './RedacaoOriginalCard'
 import { CompetenciasSection } from './CompetenciasSection'
 import { AnaliseInteligenciaArtificial } from './AnaliseInteligenciaArtificial'
 
-// Importamos os dados mockados
+// Imports da API e Tipos
 import { CorrecaoIA, RedacaoLivreDoc } from '@/apiCalls/redacao-livre/types'
 import { getRedacaoLivre } from '@/apiCalls/redacao-livre'
-
-// Futuramente, você receberá 'redacaoID' como prop ou via useParams
-// e fará um fetch para buscar estes dados.
-//
-// Ex:
-// import { useQuery } from 'react-query'
-// import { getCorrecao } from '@/apiCalls/correcoes'
-// import { useParams } from 'next/navigation'
-//
-// export function CorrecaoRedacaoPage() {
-//   const params = useParams()
-//   const { data: correcao, isLoading } = useQuery(
-//     ['correcao', params.redacaoID],
-//     () => getCorrecao(params.redacaoID as string)
-//   )
-//
-//   if (isLoading || !correcao) {
-//     return <p>Carregando correção...</p>
-//   }
-//
-// ... resto do componente ...
 
 export function CorrecaoRedacaoPage({ id }: { id: string }) {
   const competencias = ['c1', 'c2', 'c3', 'c4', 'c5']
 
   const [data, setData] = useState<RedacaoLivreDoc | null>(null)
+  
+  // Estado da competência ativa (C1, C2, etc)
   const [activeCompetenciaId, setActiveCompetenciaId] = useState(competencias[0])
+  
+  // NOVO: Estado para saber QUAL versão da correção o usuário escolheu no dropdown
+  const [correcaoAtual, setCorrecaoAtual] = useState<CorrecaoIA | null>(null)
+  
   const [feedback, setFeedback] = useState<string>("")
 
-  useEffect(() => {
-    switch (activeCompetenciaId) {
-      case 'c1':
-        setFeedback(data?.correcoesIA[0].feedbackC1 || "")
-        break
-      case 'c2':
-        setFeedback(data?.correcoesIA[0].feedbackC2 || "")
-        break
-      case 'c3':
-        setFeedback(data?.correcoesIA[0].feedbackC3 || "")
-        break
-      case 'c4':
-        setFeedback(data?.correcoesIA[0].feedbackC4 || "")
-        break
-      case 'c5':
-        setFeedback(data?.correcoesIA[0].feedbackC5 || "")
-        break
-    }
-  }, [activeCompetenciaId])
-
+  // 1. Busca os dados iniciais na API
   useEffect(() => {
     (async () => {
       const response = await getRedacaoLivre(id)
       setData(response)
-      setFeedback(response.correcoesIA[0].feedbackC1)
+      
+      // Assim que carregar, define a correção mais recente (index 0) como a atual
+      if (response.correcoesIA && response.correcoesIA.length > 0) {
+        setCorrecaoAtual(response.correcoesIA[0])
+      }
     })()
-  }, [])
+  }, [id])
+
+  // 2. Atualiza o texto da IA sempre que a Competência OU a Correção Atual mudar
+  useEffect(() => {
+    // Se ainda não tiver uma correção selecionada, não faz nada
+    if (!correcaoAtual) return
+
+    switch (activeCompetenciaId) {
+      case 'c1':
+        setFeedback(correcaoAtual.feedbackC1 || "")
+        break
+      case 'c2':
+        setFeedback(correcaoAtual.feedbackC2 || "")
+        break
+      case 'c3':
+        setFeedback(correcaoAtual.feedbackC3 || "")
+        break
+      case 'c4':
+        setFeedback(correcaoAtual.feedbackC4 || "")
+        break
+      case 'c5':
+        setFeedback(correcaoAtual.feedbackC5 || "")
+        break
+      default:
+        setFeedback("")
+    }
+  }, [activeCompetenciaId, correcaoAtual]) // <--- O segredo está aqui: dependência 'correcaoAtual'
 
   return (
     <div className="p-6 md:p-10 max-w-7xl mx-auto">
       <CorrecaoHeader />
 
-      <RedacaoOriginalCard idRedacao={data?.id || ''} idCorrecao={data?.correcoesIA[0].id || ''} textoRedacao={data?.correcoesIA[0].texto || ""} temaRedacao={data?.tema || ""} />
+      <RedacaoOriginalCard 
+        idRedacao={data?.id || ''} 
+        // Passamos o ID e Texto da correção ATUAL selecionada no dropdown
+        idCorrecao={correcaoAtual?.id || ''} 
+        textoRedacao={correcaoAtual?.texto || ""} 
+        temaRedacao={data?.tema || ""} 
+      />
 
       <CompetenciasSection
+        // Passamos a lista completa para o dropdown montar o histórico
         correcoes={data?.correcoesIA || []}
+        
         activeCompetenciaId={activeCompetenciaId}
         onSelectCompetencia={setActiveCompetenciaId}
+        
+        // Conexão entre Pai e Filho: O pai manda a atual, e o filho avisa quando mudar
+        correcaoSelecionada={correcaoAtual}
+        onTrocarCorrecao={setCorrecaoAtual}
       />
 
       {feedback && (

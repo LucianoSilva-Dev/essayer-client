@@ -1,137 +1,102 @@
 'use client'
 
-import { Correcao } from '@/types/correcao' // <-- IMPORT NECESSÁRIO
-import { Trash2 } from 'lucide-react'
+import { Correcao } from '@/types/correcao'
 import { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { deleteRedacaoLivre, updateRedacaoLivre } from '@/apiCalls/redacao-livre'
 import { useRouter } from 'next/navigation'
+import { DeleteCorrectionModal } from './DeleteModal'
+import { RedacaoActions } from './RedacaoActions'
 
-// --- DEFINIÇÕES QUE FALTAVAM ---
 interface RedacaoOriginalCardProps {
   idRedacao: string;
   idCorrecao: string;
   textoRedacao: Correcao['textoRedacao']
-  temaRedacao: string; // Você precisará passar o tema
+  temaRedacao: string;
 }
 
-type View = 'redacao' | 'tema'  
-// --- FIM DAS DEFINIÇÕES ---
-
-const COLLAPSED_HEIGHT_PX = 128 // max-h-32
+const COLLAPSED_HEIGHT_PX = 160
 
 export function RedacaoOriginalCard({ textoRedacao, temaRedacao, idRedacao, idCorrecao }: RedacaoOriginalCardProps) {
   const router = useRouter()
-  
   const [isExpanded, setIsExpanded] = useState(false)
-  const [view, setView] = useState<View>('redacao')
   const [isOverflowing, setIsOverflowing] = useState(false)
-  const textRef = useRef<HTMLParagraphElement>(null)
+  const contentRef = useRef<HTMLDivElement>(null)
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
 
-  const currentText = view === 'redacao' ? textoRedacao : temaRedacao
+  const jaPossuiCorrecao = !!idCorrecao && idCorrecao.length > 0
 
   useEffect(() => {
-    if (textRef.current) {
-      setIsOverflowing(textRef.current.scrollHeight > COLLAPSED_HEIGHT_PX)
+    if (contentRef.current) {
+      setIsOverflowing(contentRef.current.scrollHeight > COLLAPSED_HEIGHT_PX)
     }
-  }, [currentText, view])
+  }, [textoRedacao, temaRedacao])
 
-  const handleReescrever = async () => {
-    await updateRedacaoLivre(idRedacao, {finalizada: false, texto: "", duracao: 30 * 60})
-    router.replace(`/praticar_redacao/${idRedacao}`)
-  }
-
-  const handleDelete = async () => {
+  // Actions Logic
+  const confirmDelete = async () => {
     await deleteRedacaoLivre(idRedacao, idCorrecao)
+    setShowDeleteModal(false)
     router.replace('/praticar_redacao')
   }
 
+  const handleReescrever = async () => {
+    await updateRedacaoLivre(idRedacao, { finalizada: false, texto: "", duracao: 30 * 60 })
+    router.replace(`/praticar_redacao/${idRedacao}`)
+  }
+
+  const handleCorrigir = async () => {
+    console.log("Solicitando correção para a redação:", idRedacao)
+  }
+
   return (
-    <div className="bg-white p-6 md:p-8 rounded-[40px] shadow-sm border border-gray-200">
-      {/* Header */}
-      <div className="flex justify-between items-center mb-4">
-        <div className="flex items-center space-x-2 bg-gray-100 p-1 rounded-full">
-          <button
-            onClick={() => {
-              setView('redacao')
-              setIsExpanded(false)
-            }}
-            className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${view === 'redacao'
-              ? 'bg-white shadow-sm text-gray-900'
-              : 'text-gray-600 hover:text-gray-800'
-              }`}
-          >
-            Redação
-          </button>
-          <button
-            onClick={() => {
-              setView('tema')
-              setIsExpanded(false)
-            }}
-            className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${view === 'tema'
-              ? 'bg-white shadow-sm text-gray-900'
-              : 'text-gray-600 hover:text-gray-800'
-              }`}
-          >
-            Tema
-          </button>
+    <>
+      <div className="bg-white p-6 md:p-8 rounded-[40px] shadow-sm border border-gray-200">
+        {/* Conteúdo Textual */}
+        <div className={`relative transition-all duration-300 ease-in-out overflow-hidden ${isExpanded ? 'max-h-[3000px]' : 'max-h-40'}`}>
+          <div ref={contentRef} className="space-y-6">
+            <div>
+              <span className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Tema Proposto</span>
+              <p className="text-gray-600 text-sm leading-relaxed font-medium">{temaRedacao}</p>
+            </div>
+            <div>
+              <span className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Sua Redação</span>
+              <p className="text-gray-800 text-lg leading-relaxed whitespace-pre-line">{textoRedacao}</p>
+            </div>
+          </div>
+          <AnimatePresence>
+            {!isExpanded && isOverflowing && (
+              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute bottom-0 left-0 w-full h-24 bg-gradient-to-t from-white via-white/90 to-transparent pointer-events-none" />
+            )}
+          </AnimatePresence>
+        </div>
+
+        {/* Footer */}
+        <div className="flex flex-col xl:flex-row justify-between items-center mt-6 gap-4 xl:gap-0">
+          <div className="w-full xl:w-auto flex justify-start">
+            {isOverflowing ? (
+              <button onClick={() => setIsExpanded(!isExpanded)} className="text-sm font-medium text-[#075F70] hover:underline focus:outline-none cursor-pointer">
+                {isExpanded ? 'Ver menos' : 'Ver tudo'}
+              </button>
+            ) : <div />}
+          </div>
+
+          {/* AQUI FICOU MUITO MAIS LIMPO */}
+          <RedacaoActions 
+            onDelete={() => setShowDeleteModal(true)}
+            onRewrite={handleReescrever}
+            onCorrect={handleCorrigir}
+            hasCorrection={jaPossuiCorrecao}
+          />
         </div>
       </div>
 
-      {/* Conteúdo (Redação ou Tema) */}
-      <div
-        className={`relative transition-all duration-300 ease-in-out overflow-hidden ${isExpanded ? 'max-h-[1000px]' : 'max-h-32'
-          }`}
-      >
-        <p ref={textRef} className="text-gray-700 text-base leading-relaxed">
-          {currentText}
-        </p>
-
-        {/* Gradiente */}
-        <AnimatePresence>
-          {!isExpanded && isOverflowing && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="absolute bottom-0 left-0 w-full h-20 
-                         bg-gradient-to-t from-white from-20% to-transparent 
-                         pointer-events-none"
-            />
-          )}
-        </AnimatePresence>
-      </div>
-
-      {/* Footer */}
-      <div className="flex justify-between items-center mt-6 min-h-[44px]">
-        {isOverflowing ? (
-          <button
-            onClick={() => setIsExpanded(!isExpanded)}
-            className="text-sm font-medium text-[#075F70] hover:underline"
-          >
-            {isExpanded ? 'Ver menos' : 'Ver tudo'}
-          </button>
-        ) : (
-          <div /> // Placeholder
-        )}
-        <div className="flex items-center space-x-3">
-          <button 
-            className="flex items-center justify-center p-2.5 rounded-full bg-[#089993] text-white hover:opacity-90 transition-opacity"
-            onClick={handleDelete}
-          >
-            <Trash2 size={18} />
-          </button>
-          <button
-            className="px-5 py-2.5 rounded-[40px] bg-[#075F70] text-white text-sm font-medium hover:opacity-90 transition-opacity"
-            onClick={handleReescrever}
-          >
-            Reescrever
-          </button>
-          <button className="px-5 py-2.5 rounded-[40px] bg-[#075F70] text-white text-sm font-medium hover:opacity-90 transition-opacity">
-            Exportar redação
-          </button>
-        </div>
-      </div>
-    </div>
+      {/* COMPONENTE ISOLADO */}
+      <DeleteCorrectionModal 
+        isOpen={showDeleteModal}
+        onClose={() => setShowDeleteModal(false)}
+        onConfirm={confirmDelete}
+        temaTitle={temaRedacao}
+      />
+    </>
   )
 }

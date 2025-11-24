@@ -1,16 +1,17 @@
 import { CorrecaoRedacaoPage } from '@/components/praticar_redacao/correcao/CorrecaoRedacaoPage'
 
-// Esta página será renderizada no contexto do layout principal,
-// que já inclui o Sidebar e o Header global ("Olá, Nome").
-export default function Page({
+// 1. Adicionamos 'async' na função do componente
+export default async function Page({
   params,
 }: {
-  params: { redacaoID: string };
+  // 2. Definimos o tipo como uma Promise
+  params: Promise<{ redacaoID: string }>;
 }) {
+  
+  // 3. Aguardamos a resolução dos parâmetros antes de ler o ID
+  const { redacaoID } = await params;
+
   return (
-    // O layout principal do app (src/app/layout.tsx) provavelmente 
-    // já define o fundo (ex: bg-gray-50), então só precisamos 
-    // renderizar o conteúdo da página.
-    <CorrecaoRedacaoPage id={params.redacaoID}/>
+    <CorrecaoRedacaoPage id={redacaoID}/>
   )
 }

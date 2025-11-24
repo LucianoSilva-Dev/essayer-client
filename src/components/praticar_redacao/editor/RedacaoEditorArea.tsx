@@ -1,25 +1,94 @@
 // src/components/praticar_redacao/editor/RedacaoEditorArea.tsx
+import { useRef, ChangeEvent, KeyboardEvent, ClipboardEvent } from 'react';
 
 interface Props {
   texto: string;
   onTextoChange: (novoTexto: string) => void;
+  // Novas props opcionais (para manter compatibilidade se não passar)
+  onUndo?: () => void;
+  onRedo?: () => void;
 }
 
-export function RedacaoEditorArea({ texto, onTextoChange }: Props) {
+export function RedacaoEditorArea({ texto, onTextoChange, onUndo, onRedo }: Props) {
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const LINE_HEIGHT = 32; 
+  const TOTAL_LINES = 30; 
+  const PADDING_VERTICAL = 24; 
+  const TOTAL_HEIGHT = (LINE_HEIGHT * TOTAL_LINES) + (PADDING_VERTICAL * 2);
+
+  // 1. Lógica para BLOQUEAR O COLAR (Ctrl+V)
+  const handlePaste = (e: ClipboardEvent<HTMLTextAreaElement>) => {
+    e.preventDefault(); // Impede a ação padrão
+    // Opcional: Avisar o usuário
+    // alert("A função de colar texto está desativada para esta redação.");
+  };
+
+  // 2. Lógica para Interceptar Atalhos (Ctrl+Z / Ctrl+Y)
+  const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
+    // Verifica se CTRL (ou Command no Mac) está pressionado
+    if (e.ctrlKey || e.metaKey) {
+      
+      // Atalho: Undo (Ctrl + Z)
+      if (e.key === 'z' && !e.shiftKey) {
+        e.preventDefault(); // Evita o undo nativo do browser (que pode conflitar)
+        onUndo?.();
+        return;
+      }
+
+      // Atalho: Redo (Ctrl + Y  OU  Ctrl + Shift + Z)
+      if (e.key === 'y' || (e.key === 'z' && e.shiftKey)) {
+        e.preventDefault();
+        onRedo?.();
+        return;
+      }
+    }
+  };
+
+  const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    const novoTexto = e.target.value;
+    const elemento = e.target;
+
+    if (novoTexto.length < texto.length) {
+      onTextoChange(novoTexto);
+      return;
+    }
+
+    const TOLERANCIA = 10;
+    if (elemento.scrollHeight > (elemento.clientHeight + TOLERANCIA)) {
+      return; 
+    }
+    onTextoChange(novoTexto);
+  };
+
   return (
-    // 'typeInsert' do Figma
-    // ALTERAÇÃO: Aumentei de 60vh para 70vh para dar mais altura ao card
-    <div className="bg-white rounded-[20px] w-full min-h-[70vh]">
+    <div 
+      className="bg-white rounded-[20px] w-full border border-gray-200"
+      style={{ height: `${TOTAL_HEIGHT}px` }} 
+    >
       <textarea
+        ref={textareaRef}
         value={texto}
-        onChange={(e) => onTextoChange(e.target.value)}
+        onChange={handleChange}
+        // Adicionamos os listeners aqui:
+        onPaste={handlePaste}
+        onKeyDown={handleKeyDown}
+
         placeholder="Comece a digitar aqui..."
-        // Aumentei aqui também para o textarea preencher
-        className="w-full h-full min-h-[70vh] p-6 
+        className="w-full h-full p-0 px-6
                    text-lg text-gray-800 
                    placeholder:text-[#BDB4B4] placeholder:font-normal placeholder:text-xl
                    resize-none border-none focus:outline-none focus:ring-0
-                   bg-transparent"
+                   bg-transparent
+                   overflow-hidden"
+        style={{
+          lineHeight: `${LINE_HEIGHT}px`,
+          backgroundImage: `linear-gradient(transparent calc(${LINE_HEIGHT}px - 1px), #E5E5E5 calc(${LINE_HEIGHT}px - 1px))`,
+          backgroundSize: `100% ${LINE_HEIGHT}px`,
+          backgroundAttachment: 'local',
+          paddingTop: `${PADDING_VERTICAL}px`,
+          paddingBottom: `${PADDING_VERTICAL}px`,
+          backgroundPosition: `0 ${PADDING_VERTICAL}px`
+        }}
       />
     </div>
   );

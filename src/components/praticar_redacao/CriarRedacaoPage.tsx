@@ -1,6 +1,6 @@
-'use client'; // Necessário para usar hooks como useState
+'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { CriarRedacaoForm } from './CriarRedacaoForm';
 import { RedacoesCriadasList } from './RedacoesCriadasList';
 import { createRedacaoLivre, getAllRedacaoLivre } from '@/apiCalls/redacao-livre';
@@ -28,7 +28,6 @@ export default function PraticarRedacaoPage() {
     if (response) setRedacoes(response)
   }
   
-  // Mock de temas para o modal
   const mockThemes = [
     'O impacto das redes sociais na formação da identidade dos jovens',
     'A crise hídrica no Brasil: desafios e soluções',
@@ -37,18 +36,19 @@ export default function PraticarRedacaoPage() {
   ];
 
   return (
-    <div className="flex-1 p-8 md:p-12 lg:p-16 bg-gray-50"> 
+    <div className="flex-1 p-6 md:p-12 bg-gray-50 font-montserrat min-h-screen"> 
       
-      <h1 className="mb-8 text-[28px] font-medium text-[#3C3C3C]">
-        Crie sua redação e começe a praticar
-      </h1>
+      <div className="max-w-[1400px] mx-auto space-y-8">
+        <h1 className="text-2xl md:text-2xl font-semibold text-[#3C3C3C]">
+          Praticar Redação
+        </h1>
 
-      <main className="space-y-12">
-        {/* Passa a função de adicionar e a lista de temas para o formulário */}
-        <CriarRedacaoForm onRedacaoCreated={addRedacao} mockThemes={mockThemes} />
-        {/* Passa a lista de redações para a lista */}
-        <RedacoesCriadasList redacoes={redacoes} handleChange={handleChange}/>
-      </main>
+        {/* ALTERAÇÃO: Aumentei o espaçamento vertical para space-y-24 (96px) para dar respiro */}
+        <main className="space-y-16">
+          <CriarRedacaoForm onRedacaoCreated={addRedacao} mockThemes={mockThemes} />
+          <RedacoesCriadasList redacoes={redacoes} handleChange={handleChange}/>
+        </main>
+      </div>
     </div>
   );
 }
