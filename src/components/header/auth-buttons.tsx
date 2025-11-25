@@ -56,7 +56,7 @@ export function AuthButtons() {
             )}
           </button>
         </>
-      // Exibe os botões de login/cadastro se NÃO estiver logado E o carregamento estiver concluído
+        // Exibe os botões de login/cadastro se NÃO estiver logado E o carregamento estiver concluído
       ) : !isLoggedIn && !isLoading ? (
         <>
           <Link

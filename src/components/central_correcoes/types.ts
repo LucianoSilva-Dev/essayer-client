@@ -1,9 +1,3 @@
-export interface TurmaMock {
-  id: string;
-  nome: string;
-  ano: string;
-}
-
 export type StatusTarefa = 'ativa' | 'encerrada';
 
 export interface TarefaMock {

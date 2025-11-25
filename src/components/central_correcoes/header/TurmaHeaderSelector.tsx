@@ -2,16 +2,18 @@
 
 import { useState } from "react";
 import { ChevronDown, Check } from "lucide-react";
-import { TurmaMock } from "../types";
+import { TurmaCriadaProfessor } from "@/apiCalls/turma/types";
 
 interface Props {
-  turmas: TurmaMock[];
-  selected: TurmaMock;
-  onSelect: (t: TurmaMock) => void;
+  turmas: TurmaCriadaProfessor[];
+  selected: TurmaCriadaProfessor | undefined;
+  onSelect: (t: TurmaCriadaProfessor) => void;
 }
 
 export function TurmaHeaderSelector({ turmas, selected, onSelect }: Props) {
   const [isOpen, setIsOpen] = useState(false);
+
+  //TODO: Colocar paginação
 
   return (
     <div className="relative inline-block">
@@ -21,7 +23,7 @@ export function TurmaHeaderSelector({ turmas, selected, onSelect }: Props) {
         className="flex items-center gap-2 text-xl md:text-2xl font-bold text-gray-800 hover:text-[#075F70] transition-colors focus:outline-none group"
       >
         <span className="border-b-2 border-transparent group-hover:border-[#075F70]/30 border-dashed pb-0.5 transition-all">
-            {selected.nome}
+            {selected?.nome}
         </span>
         {/* Ícone na cor principal */}
         <ChevronDown size={20} className={`text-[#075F70] transition-transform duration-200 mt-1 ${isOpen ? 'rotate-180' : ''}`} />
@@ -46,9 +48,9 @@ export function TurmaHeaderSelector({ turmas, selected, onSelect }: Props) {
                 <div>
                     {/* Item Hover Text */}
                     <p className="font-semibold text-gray-700 group-hover:text-[#075F70] text-sm">{turma.nome}</p>
-                    <p className="text-xs text-gray-400">{turma.ano}</p>
+                    <p className="text-xs text-gray-400">{turma.escola}</p>
                 </div>
-                {selected.id === turma.id && <Check size={16} className="text-[#075F70]" />}
+                {selected?.id === turma.id && <Check size={16} className="text-[#075F70]" />}
               </button>
             ))}
           </div>

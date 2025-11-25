@@ -12,58 +12,57 @@ import { StudentDrawer } from "./drawer/StudentDrawer";
 import { CentralCorrecoesSkeleton } from "./skeletons/CentralSkeletons";
 
 // Tipos
-import { TurmaMock, TarefaMock, StatusTarefa } from "./types";
+import { TarefaMock, StatusTarefa } from "./types";
+import { getAtividadesCriador, getTurmasCriadas } from "@/apiCalls/turma";
+import { AtividadeProfessor, TurmaCriadaProfessor } from "@/apiCalls/turma/types";
+import { useRouter } from "next/navigation";
 
 const montserrat = Montserrat({
   subsets: ["latin"],
   variable: "--font-montserrat",
 });
 
-// --- MOCKS DATA ---
-const MOCK_TURMAS: TurmaMock[] = [
-  { id: "t1", nome: "Redação Intensiva", ano: "3º Ano A" },
-  { id: "t2", nome: "Literatura Brasileira", ano: "3º Ano B" },
-  { id: "t3", nome: "Gramática Avançada", ano: "2º Ano A" },
-];
-
-const MOCK_TAREFAS_ALL: TarefaMock[] = Array.from({ length: 12 }).map((_, i) => ({
-  id: `task-${i}`,
-  tipo: "Redação",
-  titulo: `Os impactos da inteligência artificial no mercado de trabalho`, 
-  entregues: i === 0 ? 45 : 20 + i,
-  total: 60,
-  prazo: "20/05/2025",
-  status: i % 3 === 0 ? 'encerrada' : 'ativa',
-  tags: [], 
-}));
-
 export function CentralCorrecoesPage() {
+  const router = useRouter()
+
   // --- ESTADOS ---
   const [isLoading, setIsLoading] = useState(true); // Estado de Carregamento
-  
-  const [selectedTurma, setSelectedTurma] = useState<TurmaMock>(MOCK_TURMAS[0]);
+  const [turmas, setTurmas] = useState<TurmaCriadaProfessor[]>([])
+  const [atividades, setAtividades] = useState<AtividadeProfessor[] | undefined>([])
+
+  const [selectedTurma, setSelectedTurma] = useState<TurmaCriadaProfessor | undefined>(turmas[0]);
   const [selectedTarefaId, setSelectedTarefaId] = useState<string | null>(null);
   const [statusFilter, setStatusFilter] = useState<StatusTarefa>('ativa');
   const [searchTerm, setSearchTerm] = useState("");
 
   // --- EFEITO DE CARREGAMENTO (SIMULAÇÃO) ---
-  useEffect(() => {
-    // Simula uma chamada de API de 2 segundos
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 1000);
 
-    return () => clearTimeout(timer);
+  useEffect(() => {
+    (async () => {
+      const response = await getTurmasCriadas()
+      setTurmas(response.documentos)
+      setSelectedTurma(response.documentos[0])
+
+      setIsLoading(false)
+    })()
   }, []);
 
-  // Lógica de Filtragem
-  const filteredTarefas = MOCK_TAREFAS_ALL.filter(t => {
-    const matchesStatus = t.status === statusFilter;
-    const matchesSearch = t.titulo.toLowerCase().includes(searchTerm.toLowerCase());
-    return matchesStatus && matchesSearch;
-  });
+  useEffect(() => {
+    if (!selectedTurma) return
 
-  const handleTurmaChange = (turma: TurmaMock) => {
+    (async () => {
+      const response = await getAtividadesCriador(selectedTurma?.id, searchTerm)
+      setAtividades(response)
+    })()
+  }, [selectedTurma, searchTerm])
+
+  const filteredAtividades = atividades?.filter(tarefa => {
+    const status = new Date(tarefa.dataLimite || '') < new Date() ? 'encerrada' : 'ativa'
+
+    return status === statusFilter
+  })
+
+  const handleTurmaChange = (turma: TurmaCriadaProfessor) => {
     // Opcional: Você poderia ativar o loading novamente ao trocar de turma
     // setIsLoading(true); setTimeout(() => setIsLoading(false), 1000);
     setSelectedTurma(turma);
@@ -75,71 +74,71 @@ export function CentralCorrecoesPage() {
   // 1. Estado de Loading: Mostra o Skeleton
   if (isLoading) {
     return (
-        <div className={`min-h-screen bg-[#FAFAFA] flex flex-col ${montserrat.className}`}>
-            <main className="flex-1 p-6 md:p-8 pt-8 max-w-[1600px] mx-auto w-full">
-                <CentralCorrecoesSkeleton />
-            </main>
-        </div>
+      <div className={`min-h-screen bg-[#FAFAFA] flex flex-col ${montserrat.className}`}>
+        <main className="flex-1 p-6 md:p-8 pt-8 max-w-[1600px] mx-auto w-full">
+          <CentralCorrecoesSkeleton />
+        </main>
+      </div>
     );
   }
 
   // 2. Estado Pronto: Mostra a UI Real
   return (
     <div className={`min-h-screen bg-[#FAFAFA] flex flex-col ${montserrat.className}`}>
-      
+
       <main className="flex-1 p-6 md:p-8 pt-8 max-w-[1600px] mx-auto w-full">
-        
+
         {/* NAVEGAÇÃO DE TOPO */}
         <div className="mb-6">
-            <button 
-                onClick={() => console.log("Voltar logic")} 
-                className="flex items-center gap-2 text-sm font-semibold text-gray-400 hover:text-gray-700 transition-colors group mb-4"
-            >
-                <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" />
-                Voltar para Turmas
-            </button>
+          <button
+            onClick={() => router.back()}
+            className="flex items-center gap-2 text-sm font-semibold text-gray-400 hover:text-gray-700 transition-colors group mb-4"
+          >
+            <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" />
+            Voltar para Turmas
+          </button>
 
-            {/* TÍTULO INTEGRADO */}
-            <div className="flex flex-col md:flex-row md:items-baseline gap-2 md:gap-3">
-                <h1 className="text-xl md:text-2xl font-medium text-gray-400">
-                    Central de Correções <span className="mx-2 text-gray-300">/</span>
-                </h1>
-                
-                <TurmaHeaderSelector 
-                    turmas={MOCK_TURMAS} 
-                    selected={selectedTurma} 
-                    onSelect={handleTurmaChange} 
-                />
-            </div>
-            
-            <p className="text-gray-500 mt-2 text-sm">
-                Gerencie as atividades da turma <strong>{selectedTurma.ano}</strong>
-            </p>
+          {/* TÍTULO INTEGRADO */}
+          <div className="flex flex-col md:flex-row md:items-baseline gap-2 md:gap-3">
+            <h1 className="text-xl md:text-2xl font-medium text-gray-400">
+              Central de Correções <span className="mx-2 text-gray-300">/</span>
+            </h1>
+
+            <TurmaHeaderSelector
+              turmas={turmas}
+              selected={selectedTurma}
+              onSelect={handleTurmaChange}
+            />
+          </div>
+
+          <p className="text-gray-500 mt-2 text-sm">
+            Gerencie as atividades da turma <strong>{selectedTurma?.escola}</strong>
+          </p>
         </div>
 
         {/* Barra de Filtros (Folder Tabs) */}
         <div className="mt-8">
-            <TarefaFilters 
-                activeTab={statusFilter}
-                onTabChange={setStatusFilter}
-                onSearch={setSearchTerm}
-            />
+          <TarefaFilters
+            activeTab={statusFilter}
+            onTabChange={setStatusFilter}
+            onSearch={setSearchTerm}
+          />
         </div>
-        
+
         {/* Grid de Tarefas */}
-        <TarefaGrid 
-            tarefas={filteredTarefas} 
-            onSelectTarefa={setSelectedTarefaId}
+        <TarefaGrid
+          tarefas={filteredAtividades}
+          onSelectTarefa={setSelectedTarefaId}
         />
       </main>
 
       {/* DRAWER LATERAL */}
-      <StudentDrawer 
-        isOpen={!!selectedTarefaId} 
+      <StudentDrawer
+        isOpen={!!selectedTarefaId}
         onClose={() => setSelectedTarefaId(null)}
         tarefaId={selectedTarefaId}
       />
-      
+
     </div>
   );
 }

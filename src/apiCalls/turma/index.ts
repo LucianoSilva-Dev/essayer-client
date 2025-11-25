@@ -81,13 +81,13 @@ export async function getAtividadesByTurma(id: string): Promise<GetAtividadesByT
  * Retorna: AtividadeProfessor[]
  */
 export async function getAtividadesCriador(id: string, titulo?: string): Promise<AtividadeProfessor[]> {
-    const params = new URLSearchParams();
-    if (titulo) {
-        params.append('titulo', titulo);
-    }
-    const queryString = params.toString();
-    const response = await apiClient.get<AtividadeProfessor[]>(`/turma/${id}/atividades/criador${queryString ? `?${queryString}` : ''}`);
-    return response.data;
+  const params = new URLSearchParams();
+  if (titulo) {
+    params.append('titulo', titulo);
+  }
+  const queryString = params.toString();
+  const response = await apiClient.get<AtividadeProfessor[]>(`/turma/${id}/atividades/criador${queryString ? `?${queryString}` : ''}`);
+  return response.data;
 }
 
 
@@ -98,7 +98,7 @@ export async function getAtividadesCriador(id: string, titulo?: string): Promise
  */
 export const getCorrecoesByTurma = async (turmaId: string): Promise<GetCorrecoesByTurma> => {
   const res = await apiClient.get<GetCorrecoesByTurma>(`/turma/${turmaId}/atividades/feedbacks`);
-   // O tipo GetCorrecoesByTurma já é Array<Correcao>
+  // O tipo GetCorrecoesByTurma já é Array<Correcao>
   return res.data;
 }
 
@@ -107,11 +107,11 @@ export const getCorrecoesByTurma = async (turmaId: string): Promise<GetCorrecoes
 // Por enquanto, vou deixá-las aqui por simplicidade, já que estão sob /turma/{id}/...
 
 export {
-    getAlunosTurma,
-    removeAluno,
-    getPedidosEntrada,
-    aprovarPedido,
-    recusarPedido,
-    getCodigoConvite,
-    regenerarCodigoConvite
+  getAlunosTurma,
+  removeAluno,
+  getPedidosEntrada,
+  aprovarPedido,
+  recusarPedido,
+  getCodigoConvite,
+  regenerarCodigoConvite
 } from '../turma-aberta-prof'; // Reexporta as funções que já estavam no outro arquivo

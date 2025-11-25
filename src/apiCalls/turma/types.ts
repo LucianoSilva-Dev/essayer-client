@@ -1,3 +1,4 @@
+import { Feedback } from "../tarefas/types";
 import { Paginacao, PerfilUsuario } from "../types";
 
 // --- Tipos de Turma (mantidos como estavam) ---
@@ -52,7 +53,7 @@ export interface AtividadeRedacaoDetalhada extends AtividadeBasica {
   tema: string;
   tempoLimiteEmMinutos?: number | null; // Campo opcional/nulável
   repertoriosApoio?: string[]; // Array de IDs ou nomes, verificar API
-  respostas?: RespostaAtividade[]; // Array de respostas (se a API incluir)
+  respostas: RespostaAtividade[]; // Array de respostas (se a API incluir)
   // Adicionar outros campos específicos se necessário
 }
 
@@ -60,13 +61,13 @@ export interface AtividadeRedacaoDetalhada extends AtividadeBasica {
  * Interface para a resposta de uma atividade (conforme /atividade/redacao/{id})
  */
 export interface RespostaAtividade {
-    id: string;
-    aluno: PerfilUsuario | string; // Pode ser o objeto PerfilUsuario ou apenas o ID, verificar API
-    texto: string;
-    dataEnvio: string; // ISO 8601 string
-    feedback?: string | null;
-    tempoEmMinutos?: number | null; // Adicionado do /atividade/redacao/{id}/respostas
-    // Adicionar outros campos se a API fornecer (ex: nota)
+  id: string;
+  aluno: PerfilUsuario; // Pode ser o objeto PerfilUsuario ou apenas o ID, verificar API
+  texto: string;
+  dataEnvio: string; // ISO 8601 string
+  feedback?: Feedback;
+  tempoEmMinutos?: number | null; // Adicionado do /atividade/redacao/{id}/respostas
+  // Adicionar outros campos se a API fornecer (ex: nota)
 }
 
 
@@ -75,8 +76,9 @@ export interface RespostaAtividade {
  * Pode incluir informações sobre quem respondeu.
  */
 export interface AtividadeProfessor extends AtividadeBasica {
-    usuariosResponderam?: PerfilUsuario[]; // Lista de usuários que responderam
-    // Adicionar outros campos específicos da visão do professor, se houver
+  usuariosResponderam: PerfilUsuario[]; // Lista de usuários que responderam
+  totalMembros: number
+  // Adicionar outros campos específicos da visão do professor, se houver
 }
 
 // --- Tipos de Correção/Feedback ---
@@ -106,10 +108,10 @@ export interface GetTurmasMatriculadasResponse {
 }
 
 // O tipo de retorno para getAtividadesByTurma já usa AtividadeBasica[] implicitamente
-export interface GetAtividadesByTurmaResponse extends Array<AtividadeBasica> {}
+export interface GetAtividadesByTurmaResponse extends Array<AtividadeBasica> { }
 
 // O tipo de retorno para getCorrecoesByTurma já usa Correcao[] implicitamente
-export interface GetCorrecoesByTurma extends Array<Correcao> {}
+export interface GetCorrecoesByTurma extends Array<Correcao> { }
 
 export interface GetAtividadesRecentesReponse {
   id: string;

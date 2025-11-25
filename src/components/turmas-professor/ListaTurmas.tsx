@@ -18,7 +18,6 @@ export default function ListaTurmas() {
   const [paginaAnterior, setPaginaAnterior] = useState<number | null>(null);
   const [direcao, setDirecao] = useState(1); // 1 = próximo, -1 = anterior
   const totalPaginas = turmas?.paginacao.pagesUrl.length ?? 1;
-  console.log(totalPaginas)
 
   useEffect(() => {
     (async () => {

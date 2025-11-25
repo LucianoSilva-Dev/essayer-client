@@ -8,38 +8,52 @@ import { GenericSuccessResponse, PerfilUsuario } from "../types"; // Import Perf
  * Interface para a resposta de uma atividade (conforme /atividade/redacao/{id})
  * Adicionado export
  */
+
+export interface Feedback {
+  notaC1: number;
+  notaC2: number;
+  notaC3: number;
+  notaC4: number;
+  notaC5: number;
+  feedbackC1: string;
+  feedbackC2: string;
+  feedbackC3: string;
+  feedbackC4: string;
+  feedbackC5: string;
+}
+
 export interface RespostaAtividade {
-    id: string;
-    aluno: PerfilUsuario | string; // Pode ser o objeto PerfilUsuario ou apenas o ID, verificar API
-    texto?: string; // Pode não vir na listagem, tornar opcional? Verificar API /respostas
-    dataEnvio: string; // ISO 8601 string
-    feedback?: string | null;
-    tempoEmMinutos?: number | null; // Adicionado do /atividade/redacao/{id}/respostas
-    // Adicionar outros campos se a API fornecer (ex: nota)
+  id: string;
+  aluno: PerfilUsuario; // Pode ser o objeto PerfilUsuario ou apenas o ID, verificar API
+  texto?: string; // Pode não vir na listagem, tornar opcional? Verificar API /respostas
+  dataEnvio: string; // ISO 8601 string
+  feedback?: Feedback;
+  tempoEmMinutos?: number | null; // Adicionado do /atividade/redacao/{id}/respostas
+  // Adicionar outros campos se a API fornecer (ex: nota)
 }
 
 
 // --- Tipos de Request Body ---
 
 export interface CreateRedacaoBody {
-    titulo: string;
-    descricao: string;
-    turma: string; // ID da turma
-    tema: string;
-    dataLimite?: string; // ISO 8601 string ou undefined
-    tempoLimiteEmMinutos?: number;
-    repertoriosApoio?: string[]; // Array de IDs
+  titulo: string;
+  descricao: string;
+  turma: string; // ID da turma
+  tema: string;
+  dataLimite?: string; // ISO 8601 string ou undefined
+  tempoLimiteEmMinutos?: number;
+  repertoriosApoio?: string[]; // Array de IDs
 }
 
 // UpdateRedacaoBody pode ser um Partial da CreateRedacaoBody, mas excluindo 'turma'
 export type UpdateRedacaoBody = Partial<Omit<CreateRedacaoBody, 'turma'>>;
 
 export interface EnviarRespostaRedacaoBody {
-    texto: string;
+  texto: string;
 }
 
 export interface UpdateFeedbackBody {
-    feedback: string;
+  feedback: string;
 }
 
 // --- Tipos de Resposta de API ---
@@ -49,8 +63,8 @@ export type GetRedacaoDetalhesResponse = AtividadeRedacaoDetalhada;
 
 // Para GET /atividade/redacao/{id}/respostas
 export interface GetRespostasRedacaoResponse {
-    documentos: RespostaAtividade[];
-    // Adicionar paginacao: Paginacao; se a API retornar paginação aqui
+  documentos: RespostaAtividade[];
+  // Adicionar paginacao: Paginacao; se a API retornar paginação aqui
 }
 
 // Para POST /atividade/redacao (resposta é 201 Created sem corpo específico no schema)
