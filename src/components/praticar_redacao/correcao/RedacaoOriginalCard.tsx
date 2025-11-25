@@ -3,7 +3,7 @@
 import { Correcao } from '@/types/correcao'
 import { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { deleteRedacaoLivre, updateRedacaoLivre } from '@/apiCalls/redacao-livre'
+import { deleteCorrecaoRedacaoLivre, updateRedacaoLivre } from '@/apiCalls/redacao-livre'
 import { useRouter } from 'next/navigation'
 import { DeleteCorrectionModal } from './DeleteModal'
 import { RedacaoActions } from './RedacaoActions'
@@ -34,7 +34,7 @@ export function RedacaoOriginalCard({ textoRedacao, temaRedacao, idRedacao, idCo
 
   // Actions Logic
   const confirmDelete = async () => {
-    await deleteRedacaoLivre(idRedacao, idCorrecao)
+    await deleteCorrecaoRedacaoLivre(idRedacao, idCorrecao)
     setShowDeleteModal(false)
     router.replace('/praticar_redacao')
   }

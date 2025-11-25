@@ -20,7 +20,7 @@ export function RedacaoHeader({ tempoRestante, isPaused, onPauseToggle }: Props)
     // Posicionado no canto do 'revestimento'
     <div className="absolute top-6 right-8 flex items-center gap-[15px] z-10">
       {/* Timer com fundo */}
-      <span 
+      <span
         className="bg-[#DCDCDD] rounded-[15px] 
                    px-2 py-1 
                    text-[#3C3C3C] font-semibold text-xl" // Fonte reduzida

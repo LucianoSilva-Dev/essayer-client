@@ -2,13 +2,15 @@ import { useState, useEffect } from 'react';
 import { RedacaoLivreDoc } from '@/apiCalls/redacao-livre/types';
 import { RedacaoCard, RedacaoStatus } from './RedacaoCard';
 import { Search, Trash2, X, AlertTriangle } from 'lucide-react';
+import { deleteRedacaoLivre } from '@/apiCalls/redacao-livre';
 
 interface RedacoesCriadasListProps {
   redacoes: RedacaoLivreDoc[];
   handleChange: (text: string) => Promise<void>
+  onDeletion: (val: boolean) => void
 }
 
-export function RedacoesCriadasList({ redacoes, handleChange }: RedacoesCriadasListProps) {
+export function RedacoesCriadasList({ redacoes, handleChange, onDeletion }: RedacoesCriadasListProps) {
   const [isDeleteMode, setIsDeleteMode] = useState(false);
   const [redacaoToDelete, setRedacaoToDelete] = useState<RedacaoLivreDoc | null>(null);
 
@@ -47,9 +49,12 @@ export function RedacoesCriadasList({ redacoes, handleChange }: RedacoesCriadasL
     setRedacaoToDelete(null);
   };
 
-  const confirmDelete = () => {
+  const confirmDelete = async () => {
     if (redacaoToDelete) {
-      console.log(`[FUTURE IMPLEMENTATION] Deletando redação ID: ${redacaoToDelete.id}`);
+      await deleteRedacaoLivre(redacaoToDelete.id)
+
+      onDeletion(true)
+
       setRedacaoToDelete(null);
       setIsDeleteMode(false);
     }

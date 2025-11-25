@@ -9,14 +9,16 @@ import { useRouter } from 'next/navigation';
 
 export default function PraticarRedacaoPage() {
   const [redacoes, setRedacoes] = useState<RedacaoLivreDoc[]>([]);
+  const [reload, setReload] = useState<Boolean>(false)
   const router = useRouter()
 
   useEffect(() => {
     (async () => {
       const response = await getAllRedacaoLivre();
       setRedacoes(response)
+      setReload(false)
     })()
-  }, [])
+  }, [reload])
 
   const addRedacao = async (tema: string, duration: number) => {
     const response = await createRedacaoLivre({tema, duracao: duration * 60});
@@ -46,7 +48,7 @@ export default function PraticarRedacaoPage() {
         {/* ALTERAÇÃO: Aumentei o espaçamento vertical para space-y-24 (96px) para dar respiro */}
         <main className="space-y-16">
           <CriarRedacaoForm onRedacaoCreated={addRedacao} mockThemes={mockThemes} />
-          <RedacoesCriadasList redacoes={redacoes} handleChange={handleChange}/>
+          <RedacoesCriadasList redacoes={redacoes} handleChange={handleChange} onDeletion={setReload}/>
         </main>
       </div>
     </div>

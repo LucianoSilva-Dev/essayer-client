@@ -23,15 +23,15 @@ type RedacaoData = {
 
 export function RedacaoPage({ id }: { id: string }) {
   const router = useRouter();
-  
+
   // SEU HOOK
-  const { texto, setTexto, undo, redo } = useTextHistory(""); 
+  const { texto, setTexto, undo, redo } = useTextHistory("");
 
   const [data, setData] = useState<RedacaoData | null>(null);
   const [contagemPalavras, setContagemPalavras] = useState(0);
   const [tempoRestante, setTempoRestante] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
-  const [loadingCorrigir, setLoadingCorrigir] = useState(false); 
+  const [loadingCorrigir, setLoadingCorrigir] = useState(false);
 
   // --- LÓGICA DO AMIGO (Callbacks) ---
   const onError = (data: CustomEventSourceMap['appError']) => {
@@ -70,13 +70,13 @@ export function RedacaoPage({ id }: { id: string }) {
     if (!redacaoId) return;
     await updateRedacaoLivre(redacaoId, { texto: txt, duracao })
   }
-  
+
   const autoSave = createAutoSave(updateText, 2000, 1000)
   const useAutoSave = useCallback(autoSave, [])
 
   useEffect(() => {
-      const palavras = texto.trim().split(/\s+/).filter(Boolean);
-      setContagemPalavras(palavras.length === 1 && palavras[0] === '' ? 0 : palavras.length);
+    const palavras = texto.trim().split(/\s+/).filter(Boolean);
+    setContagemPalavras(palavras.length === 1 && palavras[0] === '' ? 0 : palavras.length);
   }, [texto]);
 
   useEffect(() => {
@@ -104,7 +104,7 @@ export function RedacaoPage({ id }: { id: string }) {
 
     try {
       setLoadingCorrigir(true);
-      
+
       await updateRedacaoLivre(redacaoId, {
         texto,
         finalizada: true,
@@ -135,7 +135,9 @@ export function RedacaoPage({ id }: { id: string }) {
       finalizada: true,
       dataRealizacao: new Date().toISOString(),
     });
-    
+
+    setIsPaused(true)
+
     alert("Redação salva e finalizada com sucesso!");
   };
 
