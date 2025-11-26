@@ -2,22 +2,28 @@
 
 import { useEffect, useState, Suspense, useCallback } from "react";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
-import { ArrowLeft } from "lucide-react";
+import { Bookmark, ThumbsUp } from "lucide-react"; 
 import { useAuth } from "@/contexts/auth-context";
+
+// Tipos e API
 import type { Repertorio } from "@/types/repertorio";
 import type { RepertorioDocument } from "@/apiCalls/repertorio/types";
-import {getArtigoById, getCitacaoById, getObraById  } from "@/apiCalls/repertorio";
+import { getArtigoById, getCitacaoById, getObraById } from "@/apiCalls/repertorio";
 import { getProfilePictureLink } from "@/apiCalls/usuario";
 import { mountRepertoire } from "@/app/utils";
 
-// Componentes de UI e Lógica
+// Helpers e Mappers (Certifique-se de que criou este arquivo conforme instrução anterior)
+import { getEixosComRecortes } from "./helpers/repertorio-mapper"; 
+
+// Componentes de UI
 import Loading from "./loading";
 import ConfirmationModal from "@/components/shared/confirmation-modal";
-
-// Componentes locais da página de detalhes
 import { CreatorInfo } from "./components/CreatorInfo";
 import { RepertorioActions } from "./components/RepertorioActions";
 import { CommentSection } from "./components/CommentSection";
+import { RepertorioFooter } from "./components/RepertorioFooter"; // Novo Footer
+
+// Componentes de Conteúdo
 import { ObraContent } from "./components/content/ObraContent";
 import { ArtigoContent } from "./components/content/ArtigoContent";
 import { CitacaoContent } from "./components/content/CitacaoContent";
@@ -33,12 +39,14 @@ function RepertorioDetalhesContent() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   
+  // Estados de Interação
   const [isLiked, setIsLiked] = useState(false);
   const [likes, setLikes] = useState(0);
   const [isFavorito, setIsFavorito] = useState(false);
   const [newComment, setNewComment] = useState("");
   const [isSubmittingComment, setIsSubmittingComment] = useState(false);
   
+  // Estados de Modal e Imagem
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalContent, setModalContent] = useState({ title: '', message: '', onConfirm: async () => {} });
   const [isModalLoading, setIsModalLoading] = useState(false);
@@ -52,10 +60,7 @@ function RepertorioDetalhesContent() {
 
   // --- LÓGICA DE BUSCA DE DADOS ---
   const fetchRepertorio = useCallback(async () => {
-    if (!id || !type) {
-      // Aguarda até que id e type estejam disponíveis
-      return;
-    }
+    if (!id || !type) return;
 
     setLoading(true);
     setError(null);
@@ -103,15 +108,27 @@ function RepertorioDetalhesContent() {
   }, [fetchRepertorio]);
 
   // --- FUNÇÕES DE AÇÃO ---
-  const handleLike = async () => { /* ... sua lógica ... */ };
-  const handleToggleFavorito = async () => { /* ... sua lógica ... */ };
-  const handleShare = async () => { /* ... sua lógica ... */ };
-  const handleCommentSubmit = async (e: React.FormEvent) => { /* ... sua lógica ... */ };
+  const handleLike = async () => { /* Implementar integração */ };
+  const handleToggleFavorito = async () => { /* Implementar integração */ };
+  const handleShare = async () => { /* Implementar share */ };
+  const handleCommentSubmit = async (e: React.FormEvent) => { /* Implementar submit */ };
+  
   const handleEditRepertorio = () => router.push(`/repertorio/${id}/editar?type=${repertorio?.modelo}`);
-  const handleDeleteRepertorio = () => openConfirmationModal({ /* ... */ });
-  const openConfirmationModal = (options: any) => { /* ... */ };
-  const handleConfirmAction = async () => { /* ... */ };
+  
+  const handleDeleteRepertorio = () => {
+      openConfirmationModal({
+          title: "Excluir Repertório",
+          message: "Tem certeza? Essa ação não pode ser desfeita.",
+          onConfirm: async () => { /* Implementar delete */ }
+      });
+  };
+  
+  const openConfirmationModal = (options: any) => { 
+      setModalContent(options);
+      setIsModalOpen(true);
+  };
 
+  // --- RENDERIZADORES AUXILIARES ---
   const renderContent = () => {
     if (!repertorio) return null;
     switch (repertorio.modelo) {
@@ -122,22 +139,27 @@ function RepertorioDetalhesContent() {
     }
   };
 
-  // --- RENDERIZAÇÃO ---
+  const getTypeColorClass = (modelo: string) => {
+    switch (modelo) {
+      case 'artigo': return 'text-[#2258B6]';
+      case 'obra': return 'text-[#CA9C60]';
+      case 'citacao': return 'text-[#0C8462]';
+      default: return 'text-gray-700';
+    }
+  };
+
+  const getRepertorioTitle = () => (repertorio && repertorio.modelo !== 'citacao') ? repertorio.titulo : null;
+  const getRepertorioTypeLabel = () => repertorio ? repertorio.modelo.charAt(0).toUpperCase() + repertorio.modelo.slice(1) : '';
+
+  // --- RENDERIZAÇÃO DA PÁGINA ---
   if (loading) return <Loading />;
   
   if (error) {
     return (
-        <main className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+        <main className="min-h-screen bg-gray-50 flex items-center justify-center p-4 font-montserrat">
             <div className="text-center bg-white p-8 rounded-lg shadow-md">
-                <h2 className="text-xl font-semibold text-red-600 mb-4">Ocorreu um Erro</h2>
                 <p className="text-gray-600 mb-6">{error}</p>
-                <button
-                    onClick={() => router.push("/main")}
-                    className="flex items-center mx-auto px-4 py-2 bg-teal-600 text-white rounded-md hover:bg-teal-700"
-                >
-                    <ArrowLeft size={20} className="mr-2" />
-                    Voltar para a página principal
-                </button>
+                <button onClick={() => router.back()} className="text-teal-600 hover:underline">Voltar</button>
             </div>
         </main>
     );
@@ -145,34 +167,91 @@ function RepertorioDetalhesContent() {
   
   if (!repertorio) return null;
 
+  const typeColorClass = getTypeColorClass(repertorio.modelo);
+  const title = getRepertorioTitle();
+  
+  // Gera os dados mockados para o footer usando o helper
+  const dadosFooter = getEixosComRecortes(repertorio);
+
   return (
-    <main className="min-h-screen bg-gray-50">
+    <main className="min-h-screen bg-gray-50 pb-12 font-montserrat">
       <ConfirmationModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} {...modalContent} isLoading={isModalLoading} />
-      <div className="container mx-auto px-4 py-6 md:py-8">
+      
+      <div className="container mx-auto px-4 pt-6 md:pt-8">
         <div className="max-w-4xl mx-auto">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-end gap-4">
-            <RepertorioActions {...{ canEdit: canEditRepertory, canDelete: canDeleteRepertory, isFavorito, isLiked, likes, onEdit: handleEditRepertorio, onDelete: handleDeleteRepertorio, onShare: handleShare, onToggleFavorito: handleToggleFavorito, onLike: handleLike }} />
+          
+          {/* Header Superior: Apenas Ações Externas, alinhadas à direita */}
+          <div className="flex justify-end items-center mb-4">
+             <RepertorioActions 
+                canEdit={canEditRepertory} 
+                canDelete={canDeleteRepertory} 
+                onEdit={handleEditRepertorio} 
+                onDelete={handleDeleteRepertorio} 
+                onShare={handleShare} 
+             />
           </div>
 
-          <div className="bg-white rounded-lg shadow-lg border-l-4 border-l-[#CA9C60] overflow-hidden mt-4">
-            <CreatorInfo creator={repertorio.criador} profilePictureUrl={authorProfilePictureLink} />
-            <div className="p-4 sm:p-6 md:p-8">
-              {renderContent()}
+          {/* Card Principal */}
+          <div className="bg-[#EAEAEA] rounded-[2rem] p-6 md:p-10 shadow-sm">
+            
+            {/* Header Interno: Autor e Pill + Ações (Like/Save) */}
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+               <CreatorInfo creator={repertorio.criador} profilePictureUrl={authorProfilePictureLink} />
+
+               <div className="flex items-center self-start md:self-center gap-3">
+                  {/* Pill Principal */}
+                  <div className="bg-white rounded-full px-5 py-2 flex items-center shadow-sm">
+                     <span className={`font-bold ${typeColorClass}`}>
+                        {getRepertorioTypeLabel()}
+                     </span>
+                     
+                     {title && (
+                        <>
+                           <span className="mx-2 text-gray-300">|</span>
+                           <span className={`font-bold ${typeColorClass} truncate max-w-[150px] sm:max-w-[250px]`}>
+                              {title}
+                           </span>
+                        </>
+                     )}
+                  </div>
+
+                  {/* Botões Like e Save */}
+                  <button onClick={handleLike} className="p-2 rounded-full hover:bg-white/50 transition-colors text-gray-700 hover:text-blue-600 flex items-center gap-1" title="Curtir">
+                     <ThumbsUp size={22} className={isLiked ? "fill-blue-600 text-blue-600" : ""} />
+                     {likes > 0 && <span className="text-sm font-medium">{likes}</span>}
+                  </button>
+
+                  <button onClick={handleToggleFavorito} className="p-2 rounded-full hover:bg-white/50 transition-colors text-gray-700 hover:text-blue-600" title="Salvar">
+                     <Bookmark size={22} className={isFavorito ? "fill-blue-600 text-blue-600" : ""} />
+                  </button>
+               </div>
             </div>
+
+            {/* Conteúdo do Repertório (mt-12 para dar o gap solicitado) */}
+            <div className="mt-12 text-gray-800">
+               {renderContent()}
+            </div>
+
+            {/* Footer do Card: Eixos e Recortes */}
+            <RepertorioFooter dados={dadosFooter} />
           </div>
 
-          <CommentSection 
-            comments={repertorio.comentarios || []}
-            repertorioId={repertorio.id}
-            isLoggedIn={isLoggedIn}
-            userRole={userData?.cargo}
-            newComment={newComment}
-            setNewComment={setNewComment}
-            isSubmittingComment={isSubmittingComment}
-            onCommentSubmit={handleCommentSubmit}
-            onCommentUpdate={fetchRepertorio}
-            openModal={openConfirmationModal}
-          />
+          {/* Seção de Comentários */}
+          <div className="mt-8">
+            <CommentSection 
+              comments={repertorio.comentarios || []}
+              repertorioId={repertorio.id}
+              isLoggedIn={isLoggedIn}
+              userRole={userData?.cargo}
+              newComment={newComment}
+              setNewComment={setNewComment}
+              isSubmittingComment={isSubmittingComment}
+              onCommentSubmit={handleCommentSubmit}
+              onCommentUpdate={fetchRepertorio}
+              openModal={openConfirmationModal}
+            />
+          </div>
+
         </div>
       </div>
     </main>

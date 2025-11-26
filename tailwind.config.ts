@@ -1,4 +1,3 @@
-import { transform } from 'next/dist/build/swc/generated-native'
 import type { Config } from 'tailwindcss'
 
 const config: Config = {
@@ -8,7 +7,7 @@ const config: Config = {
     "./components/**/*.{ts,tsx}",
     "./src/**/*.{ts,tsx}",
   ],
-  darkMode: 'class', // usando .dark no <html> ou <body>
+  darkMode: 'class', 
   theme: {
     container: {
       center: true,
@@ -52,7 +51,11 @@ const config: Config = {
         slideUp: 'slideUp 0.5s ease-in-out',
       },
       fontFamily: {
-        sans: ['Arial', 'Helvetica', 'sans-serif'],
+        // Mantive o seu padrão sans
+        sans: ['Arial', 'Helvetica', 'sans-serif'], 
+        // Adicionei as novas fontes conectadas ao layout.tsx
+        montserrat: ['var(--font-montserrat)', 'sans-serif'],
+        opensans: ['var(--font-open-sans)', 'sans-serif'],
       },
     },
   },

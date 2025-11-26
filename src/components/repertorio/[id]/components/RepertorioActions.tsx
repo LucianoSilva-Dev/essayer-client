@@ -1,44 +1,49 @@
-import { Edit, Trash2, Share2, Bookmark, ThumbsUp } from "lucide-react";
+import { Edit, Trash2, Share2 } from "lucide-react";
 
 interface RepertorioActionsProps {
   canEdit: boolean;
   canDelete: boolean;
-  isFavorito: boolean;
-  isLiked: boolean;
-  likes: number;
   onEdit: () => void;
   onDelete: () => void;
   onShare: () => void;
-  onToggleFavorito: () => void;
-  onLike: () => void;
 }
 
 export function RepertorioActions({
-  canEdit, canDelete, isFavorito, isLiked, likes,
-  onEdit, onDelete, onShare, onToggleFavorito, onLike
+  canEdit, canDelete,
+  onEdit, onDelete, onShare
 }: RepertorioActionsProps) {
   return (
-    <div className="flex items-center space-x-1 sm:space-x-2 flex-wrap">
+    <div className="flex items-center space-x-2">
+      <button 
+        onClick={onShare} 
+        className="flex items-center px-3 py-2 text-sm font-medium text-gray-600 bg-white rounded-lg border border-gray-200 hover:bg-gray-50 hover:text-[#CA9C60] transition-colors shadow-sm" 
+        title="Compartilhar"
+      >
+        <Share2 size={16} className="mr-2" />
+        <span>Compartilhar</span>
+      </button>
+
       {canEdit && (
-        <button onClick={onEdit} className="flex items-center px-2 py-2 text-sm text-gray-600 hover:text-teal-600 transition-colors" title="Editar">
-          <Edit size={16} className="mr-1" /><span className="hidden sm:inline">Editar</span>
+        <button 
+          onClick={onEdit} 
+          className="flex items-center px-3 py-2 text-sm font-medium text-gray-600 bg-white rounded-lg border border-gray-200 hover:bg-gray-50 hover:text-teal-600 transition-colors shadow-sm" 
+          title="Editar"
+        >
+          <Edit size={16} className="mr-2" />
+          <span>Editar</span>
         </button>
       )}
+
       {canDelete && (
-        <button onClick={onDelete} className="flex items-center px-2 py-2 text-sm text-gray-600 hover:text-red-600 transition-colors" title="Excluir">
-          <Trash2 size={16} className="mr-1" /><span className="hidden sm:inline">Excluir</span>
+        <button 
+          onClick={onDelete} 
+          className="flex items-center px-3 py-2 text-sm font-medium text-gray-600 bg-white rounded-lg border border-gray-200 hover:bg-red-50 hover:text-red-600 hover:border-red-100 transition-colors shadow-sm" 
+          title="Excluir"
+        >
+          <Trash2 size={16} className="mr-2" />
+          <span>Excluir</span>
         </button>
       )}
-      <button onClick={onShare} className="flex items-center px-2 py-2 text-sm text-gray-600 hover:text-[#CA9C60] transition-colors" title="Compartilhar">
-        <Share2 size={16} className="mr-1" /><span className="hidden sm:inline">Compartilhar</span>
-      </button>
-      <button onClick={onToggleFavorito} className={`flex items-center px-2 py-2 text-sm transition-colors ${isFavorito ? "text-blue-600" : "text-gray-600 hover:text-blue-600"}`} title="Favoritar">
-        <Bookmark size={16} className="mr-1" /><span className="hidden sm:inline">{isFavorito ? "Salvo" : "Salvar"}</span>
-      </button>
-      <button onClick={onLike} className={`flex items-center px-2 py-2 text-sm transition-colors ${isLiked ? "text-blue-600" : "text-gray-600 hover:text-blue-600"}`} title="Curtir">
-        <ThumbsUp size={16} className="mr-1" />
-        <span>{likes}</span>
-      </button>
     </div>
   );
 }

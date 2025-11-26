@@ -1,7 +1,7 @@
-// incita/src/app/layout.tsx
 import './globals.css';
 import './swiper-hover.css'
-import { Inter } from 'next/font/google';
+// 1. Importar as novas fontes aqui
+import { Inter, Montserrat, Open_Sans } from 'next/font/google';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { AuthProvider } from '@/./contexts/auth-context';
@@ -12,8 +12,8 @@ import { CitacaoProvider } from '@/./contexts/citacao-context';
 
 // Import Swiper styles
 import 'swiper/css';
-import 'swiper/css/pagination'; // Para os pontinhos de navegação
-import 'swiper/css/navigation'; // Para as setas de navegação (opcional)
+import 'swiper/css/pagination';
+import 'swiper/css/navigation';
 import { HeaderWrapper } from '@/components/header-wrapper';
 import { Sidebar } from '@/components/sidebar/sidebar';
 import { MainWrapper } from '@/components/main-wrapper';
@@ -22,11 +22,24 @@ import { NotificationProvider } from '@/contexts/notification-context';
 
 const inter = Inter({ subsets: ['latin'] });
 
+// 2. Configurar a Montserrat
+const montserrat = Montserrat({ 
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-montserrat', // Cria uma variável CSS para o Tailwind usar
+});
+
+// 3. Configurar a Open Sans
+const openSans = Open_Sans({ 
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-open-sans', // Cria uma variável CSS para o Tailwind usar
+});
+
 export const metadata = {
   title: 'Incita',
   description: 'Sua plataforma de repertórios para redação',
 };
-
 
 export default function RootLayout({
   children,
@@ -35,7 +48,8 @@ export default function RootLayout({
 }) {
   return (
     <html className="scroll-smooth" lang="pt-BR">
-      <body className={inter.className}>
+      {/* 4. Adicionar as variáveis das fontes na className do body */}
+      <body className={`${inter.className} ${montserrat.variable} ${openSans.variable} font-sans`}>
         <AuthProvider>
           <ProfileProvider>
             <AdminProvider>
