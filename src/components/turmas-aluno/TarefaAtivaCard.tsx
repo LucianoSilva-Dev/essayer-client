@@ -58,7 +58,7 @@ export function TarefaAtivaCard({ tarefa }: TarefaAtivaCardProps) {
 
       {/* Botão Iniciar */}
       <Link
-        href={`/atividade/${tarefa.id}`} // Ajuste a rota se o tipo de atividade influenciar
+        href={`/fazer_tarefa/${tarefa.id}`} // Ajuste a rota se o tipo de atividade influenciar
         className="absolute bottom-[30px] right-[30px] z-30 flex rounded-full bg-[#E5EFF0] px-[20px] py-[6px] transition-colors hover:bg-opacity-80"
       >
         <span className="font-montserrat text-[21px] font-semibold text-[#075F70]">

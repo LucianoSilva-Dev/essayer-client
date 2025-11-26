@@ -5,54 +5,66 @@ import { useRouter } from 'next/navigation';
 import { RedacaoEditorArea } from './RedacaoEditorArea';
 import { RedacaoHeader } from './RedacaoHeader';
 import { RedacaoFooter } from './RedacaoFooter';
-// IMPORTAÇÃO NOVA
 import { MotivacionalModal } from './MotivacionalModal';
-
-// --- MOCK DOS TEXTOS (Você substituirá pela API depois) ---
-const MOCK_TEXTOS = [
-  {
-    id: 1,
-    titulo: "Vidas Secas - Graciliano Ramos",
-    tipo: "Obra",
-    conteudo: `O romance Vidas Secas, publicado em 1938, retrata a vida de uma família de retirantes sertanejos obrigada a se deslocar de tempos em tempos para áreas menos castigadas pela seca. A obra pertence à segunda fase do modernismo brasileiro, conhecida como Regionalismo de 30.\n\nO pai, Fabiano, a mãe, Sinha Vitória, os dois filhos e a cadela Baleia formam o núcleo central da narrativa, que expõe de maneira crua e direta a miséria humana e social diante da hostilidade do meio ambiente.`
-  },
-  {
-    id: 2,
-    titulo: "Artigo 6º da Constituição Federal",
-    tipo: "Citação",
-    conteudo: `São direitos sociais a educação, a saúde, a alimentação, o trabalho, a moradia, o transporte, o lazer, a segurança, a previdência social, a proteção à maternidade e à infância, a assistência aos desamparados, na forma desta Constituição.`
-  },
-  {
-    id: 3,
-    titulo: "Envelhecimento Populacional",
-    tipo: "Artigo",
-    conteudo: `O envelhecimento populacional é um fenômeno mundial, mas no Brasil ele ocorre de forma acelerada. Segundo o IBGE, a expectativa de vida do brasileiro aumentou significativamente.\n\nIsso impacta diretamente a previdência e o sistema de saúde.`
-  }
-];
-
-const MOCK_INITIAL_DATA = {
-  id: "mock-123",
-  duracaoConfigurada: 3600,
-  tema: "Envelhecimento populacional e seus impactos econômicos e sociais"
-};
+import { getAtividadeRedacaoDetalhes, enviarRespostaRedacao, iniciarRespostaRedacao } from '@/apiCalls/tarefas';
+import { AtividadeRedacaoDetalhada } from '@/apiCalls/turma/types';
+import { TextoData } from './MotivacionalCard';
 
 export function RedacaoPage({ id }: { id: string }) {
   const router = useRouter();
 
   const [texto, setTexto] = useState("");
   const [contagemPalavras, setContagemPalavras] = useState(0);
-  const [tempoRestante, setTempoRestante] = useState(MOCK_INITIAL_DATA.duracaoConfigurada);
+  const [tempoRestante, setTempoRestante] = useState(0); // Inicializa com 0, atualiza após fetch
   const [isPaused, setIsPaused] = useState(false);
-  
+
   // ESTADO DO MODAL
   const [isMotivacionalOpen, setIsMotivacionalOpen] = useState(false);
+
+  // ESTADOS DE DADOS
+  const [tarefa, setTarefa] = useState<AtividadeRedacaoDetalhada | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [textosMotivadores, setTextosMotivadores] = useState<TextoData[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const data = await getAtividadeRedacaoDetalhes(id);
+        setTarefa(data);
+
+        // Configurar tempo limite (converter minutos para segundos)
+        if (data.tempoLimiteEmMinutos) {
+          setTempoRestante(data.tempoLimiteEmMinutos * 60);
+        }
+
+        // TODO: Buscar textos motivadores usando os IDs em data.repertoriosApoio
+        // Por enquanto, deixaremos vazio pois precisamos saber o tipo de cada repertório (Obra, Citação, etc) para buscar corretamente
+        // ou de um endpoint que retorne os objetos completos.
+        setTextosMotivadores([]);
+
+        // Marcar início da resposta
+        await iniciarRespostaRedacao(id);
+
+      } catch (error) {
+        console.error("Erro ao carregar tarefa:", error);
+        // Tratar erro (ex: redirecionar ou mostrar mensagem)
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (id) {
+      fetchData();
+    }
+  }, [id]);
 
   useEffect(() => {
     const palavras = texto.trim().split(/\s+/).filter(Boolean);
     setContagemPalavras(palavras.length === 1 && palavras[0] === '' ? 0 : palavras.length);
   }, [texto]);
 
-useEffect(() => {
+  useEffect(() => {
     // Agora o timer para se:
     // 1. Estiver pausado manualmente (isPaused) OU
     // 2. O modal estiver aberto (isMotivacionalOpen) OU
@@ -64,39 +76,66 @@ useEffect(() => {
     }, 1000);
 
     return () => clearInterval(interval);
-    
-    // IMPORTANTE: Adicionar isMotivacionalOpen nas dependências do efeito
+
   }, [isPaused, tempoRestante, isMotivacionalOpen]);
 
-  const handleFinalizar = () => {
-    console.log("Finalizar...");
+  const handleFinalizar = async () => {
+    if (!texto.trim()) {
+      alert("Escreva algo antes de finalizar.");
+      return;
+    }
+
+    try {
+      await enviarRespostaRedacao(id, { texto });
+      alert("Redação enviada com sucesso!");
+      router.push('/minhas-tarefas'); // Redirecionar para lista de tarefas ou feedback
+    } catch (error) {
+      console.error("Erro ao enviar redação:", error);
+      alert("Erro ao enviar redação. Tente novamente.");
+    }
   };
 
   const handlePause = () => setIsPaused(!isPaused);
   const handleOpenMotivacional = () => setIsMotivacionalOpen(true);
 
+  if (loading) {
+    return (
+      <main className="flex flex-col items-center justify-center min-h-screen">
+        <p className="text-xl text-[#075F70]">Carregando tarefa...</p>
+      </main>
+    );
+  }
+
+  if (!tarefa) {
+    return (
+      <main className="flex flex-col items-center justify-center min-h-screen">
+        <p className="text-xl text-red-500">Tarefa não encontrada.</p>
+      </main>
+    );
+  }
+
   return (
     <main className="flex flex-col items-center min-h-screen py-12 px-4">
-      
+
       {/* O Modal vive aqui no topo */}
-      <MotivacionalModal 
+      <MotivacionalModal
         isOpen={isMotivacionalOpen}
         onClose={() => setIsMotivacionalOpen(false)}
-        textos={MOCK_TEXTOS}
+        textos={textosMotivadores}
       />
 
       <h1 className="text-2xl md:text-3xl font-bold text-[#075F70] text-center mb-12 px-4">
-        {MOCK_INITIAL_DATA.tema}
+        {tarefa.tema}
       </h1>
 
       <div className="relative w-full max-w-6xl">
-        <div 
+        <div
           className="absolute w-full left-0 top-8 bottom-10 bg-gradient-to-b from-[#F9FAFB] from-[13.46%] to-[#075F70] to-[72.6%] opacity-65 rounded-[70px]"
         />
 
         <div className="relative w-full max-w-5xl mx-auto mt-8">
           <div className="relative bg-[#EBEBEB] rounded-[30px] shadow-lg w-full p-6 md:p-8 flex flex-col gap-6">
-            
+
             <RedacaoHeader
               tempoRestante={tempoRestante}
               isPaused={isPaused}
@@ -113,7 +152,7 @@ useEffect(() => {
 
             <RedacaoFooter
               contagemPalavras={contagemPalavras}
-              maxPalavras={400}
+              maxPalavras={400} // Poderia vir da config da tarefa se existir
               onFinalizar={handleFinalizar}
             />
           </div>

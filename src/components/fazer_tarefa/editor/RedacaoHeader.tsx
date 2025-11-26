@@ -19,14 +19,14 @@ export function RedacaoHeader({ tempoRestante, isPaused, onPauseToggle, onOpenMo
   return (
     <div className="w-full flex justify-end items-center gap-6">
       
-      {/* --- BOTÃO TEXTOS MOTIVACIONAIS --- */}
+      {/* --- BOTÃO TEXTOS MOTIVADORES --- */}
       <button 
         onClick={onOpenMotivacional}
         className="flex items-center gap-2 text-[#3C3C3C] font-semibold text-lg hover:text-[#075F70] transition-colors duration-200"
       >
         {/* REMOVIDO: Classes de cor daqui. O ícone agora herda a cor do botão pai. */}
         <BookOpen size={24} />
-        <span>Textos motivacionais</span>
+        <span>Textos motivadores</span>
       </button>
 
       {/* Bloco do Timer */}
