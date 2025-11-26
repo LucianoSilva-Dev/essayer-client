@@ -8,6 +8,7 @@ import { ComentarioEducador } from './components/ComentarioEducador';
 import { DetalhesRepertorioData, useAddRepertorio } from '@/contexts/add-repertorio-context';
 import { addComentario, createArtigo, createCitacao, createObra } from '@/apiCalls/repertorio';
 import { toast } from 'react-toastify';
+import { useRouter } from 'next/navigation';
 
 export default function DetalhesRepertorioContent() {
   const {
@@ -22,24 +23,26 @@ export default function DetalhesRepertorioContent() {
     fixarComentario
   } = useAddRepertorio();
 
-  const [dados, setDados] = useState({
-    tipoRepertorio,
-    tipoObra,
-    eixosSalvos,
-    recortes,
+  const router = useRouter();
+
+  const [dados, setDados] = useState<DetalhesRepertorioData>({
+    tipoRepertorio: tipoRepertorio || undefined,
+    tipoObra: tipoObra || undefined,
+    eixosSelecionados: eixosSalvos,
+    recortesSelecionados: recortes,
     titulo,
     autoria,
     sintese,
     comentarioEducador,
     fixarComentario
-  })
+  });
 
   const atualizarDados = (novosDados: Partial<DetalhesRepertorioData>) => {
     setDados(prev => ({ ...prev, ...novosDados }));
   };
 
   const validarDados = () => {
-    switch (tipoRepertorio) {
+    switch (dados.tipoRepertorio) {
       case 'artigo':
         if (!dados.titulo.trim()) return { valido: false, mensagem: 'Título é obrigatório para artigos' };
         if (!dados.autoria.trim()) return { valido: false, mensagem: 'Autoria é obrigatória para artigos' };
@@ -62,26 +65,23 @@ export default function DetalhesRepertorioContent() {
     try {
       const validacao = validarDados();
       if (!validacao.valido) {
-        alert(validacao.mensagem);
+        toast.error(validacao.mensagem);
         return;
       }
 
-      switch (tipoRepertorio) {
+      let idRepertorio = '';
+
+      switch (dados.tipoRepertorio) {
         case 'artigo':
           const repArtigo = await createArtigo({
             titulo: dados.titulo,
             resumo: dados.sintese,
             autor: dados.autoria,
             fonte: '',
-            topicos: dados.eixosSalvos.map(eixo => eixo.nome),
-            subtopicos: dados.recortes
-          })
-
-          if(dados.comentarioEducador.trim()) {
-            await addComentario(repArtigo.id, {texto: dados.comentarioEducador, fixar: dados.fixarComentario});
-          }
-
-          toast.success('Repertório publicado com sucesso!');
+            topicos: (dados.eixosSelecionados || []).map(eixo => eixo.nome),
+            subtopicos: dados.recortesSelecionados || []
+          });
+          idRepertorio = repArtigo.id;
           break;
         
         case 'obra':
@@ -90,15 +90,10 @@ export default function DetalhesRepertorioContent() {
             sinopse: dados.sintese,
             autor: dados.autoria,
             tipoObra: dados.tipoObra || 'livro',
-            topicos: dados.eixosSalvos.map(eixo => eixo.nome),
-            subtopicos: dados.recortes
-          })
-
-          if(dados.comentarioEducador.trim()) {
-            await addComentario(repObra.id, {texto: dados.comentarioEducador, fixar: dados.fixarComentario});
-          }
-
-          toast.success('Repertório publicado com sucesso!');
+            topicos: (dados.eixosSelecionados || []).map(eixo => eixo.nome),
+            subtopicos: dados.recortesSelecionados || []
+          });
+          idRepertorio = repObra.id;
           break;
         
         case 'citacao':
@@ -106,21 +101,23 @@ export default function DetalhesRepertorioContent() {
             frase: dados.sintese,
             autor: dados.autoria,
             fonte: dados.titulo,
-            topicos: dados.eixosSalvos.map(eixo => eixo.nome),
-            subtopicos: dados.recortes
-          })
-
-          if(dados.comentarioEducador.trim()) {
-            await addComentario(repCitacao.id, {texto: dados.comentarioEducador, fixar: dados.fixarComentario});
-          }
-
-          toast.success('Repertório publicado com sucesso!');
+            topicos: (dados.eixosSelecionados || []).map(eixo => eixo.nome),
+            subtopicos: dados.recortesSelecionados || []
+          });
+          idRepertorio = repCitacao.id;
           break;
       }
 
+      if (idRepertorio && dados.comentarioEducador.trim()) {
+        await addComentario(idRepertorio, { texto: dados.comentarioEducador, fixar: dados.fixarComentario });
+      }
+
+      toast.success('Repertório publicado com sucesso!');
+      router.push(`/repertorio/${idRepertorio}?type=${dados.tipoRepertorio}`); 
+      
     } catch (error) {
       console.error('Erro ao publicar repertório:', error);
-      alert('Erro ao publicar repertório. Tente novamente.');
+      toast.error('Erro ao publicar repertório. Tente novamente.');
     }
   };
 
@@ -133,8 +130,8 @@ export default function DetalhesRepertorioContent() {
           <div className='bg-[#E8E8E8] rounded-[88px] p-12'>
             {/* Header do repertório */}
             <HeaderDetalhes
-              tipoRepertorio={tipoRepertorio || 'artigo'}
-              tipoObra={tipoObra || undefined}
+              tipoRepertorio={dados.tipoRepertorio || 'artigo'}
+              tipoObra={dados.tipoObra || undefined}
               titulo={dados.titulo}
               autoria={dados.autoria}
               onTituloChange={(titulo) => atualizarDados({ titulo })}
@@ -145,13 +142,13 @@ export default function DetalhesRepertorioContent() {
             <SinteseSection
               sintese={dados.sintese}
               onSinteseChange={(sintese) => atualizarDados({ sintese })}
-              tipoRepertorio={tipoRepertorio || 'artigo'}
+              tipoRepertorio={dados.tipoRepertorio || 'artigo'}
             />
 
             {/* Eixos selecionados */}
             <EixosSelecionados
-              eixosSelecionados={eixosSalvos}
-              recortesSelecionados={recortes}
+              eixosSelecionados={dados.eixosSelecionados || []}
+              recortesSelecionados={dados.recortesSelecionados || []}
             />
           </div>
           {/* Comentário do educador */}

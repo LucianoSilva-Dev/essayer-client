@@ -15,8 +15,8 @@ export interface ObraDocument {
   topicos: string[];
   favoritadoPeloUsuario: boolean;
   likeDoUsuario: boolean;
-  totalComentarios: number;
-  comentarios: Comentario[];
+  totalComentarios?: number;
+  comentarios?: Comentario[];
 }
 
 export interface ArtigoDocument {
@@ -32,8 +32,8 @@ export interface ArtigoDocument {
   topicos: string[];
   favoritadoPeloUsuario: boolean;
   likeDoUsuario: boolean;
-  totalComentarios: number;
-  comentarios: Comentario[];
+  totalComentarios?: number;
+  comentarios?: Comentario[];
 }
 
 export interface CitacaoDocument {
@@ -48,8 +48,8 @@ export interface CitacaoDocument {
   topicos: string[];
   favoritadoPeloUsuario: boolean;
   likeDoUsuario: boolean;
-  totalComentarios: number;
-  comentarios: Comentario[];
+  totalComentarios?: number;
+  comentarios?: Comentario[];
 }
 
 export type RepertorioDocument = ObraDocument | ArtigoDocument | CitacaoDocument;
@@ -97,7 +97,7 @@ export interface CreateObraBody {
   titulo: string;
   sinopse: string;
   autor: string;
-  tipoObra: 'livro' | 'filme' | 'musica' | 'teatro';
+  tipoObra: 'livro' | 'filme' | 'música' | 'teatro';
   subtopicos: string[];
   topicos: string[];
 }

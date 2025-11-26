@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import { Eixo } from '../../hooks/useAdicionarRepertorio';
+import { Eixo } from '@/contexts/add-repertorio-context'; 
 
 interface EixosSelecionadosProps {
   eixosSelecionados: Eixo[];

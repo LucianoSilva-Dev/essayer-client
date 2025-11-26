@@ -107,3 +107,8 @@ export const EixoOptions = [
         ],
     },
 ] as const;
+
+export const EixosTematicos = EixoOptions.reduce((acc, curr) => {
+  acc[curr.nome] = curr.recortes;
+  return acc;
+}, {} as Record<string, readonly string[]>);

@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import { TipoObra } from '../hooks/useTipoRepertorio';
+import { TipoObra } from '@/contexts/add-repertorio-context';
 
 interface BandejaTiposObraProps {
   isOpen: boolean;
@@ -26,7 +26,7 @@ const tiposObra = [
     descricao: 'Produções literárias, filosóficas ou científicas que exploram ideias e contextos históricos. Contribuem com reflexões profundas e exemplos conceituais.'
   },
   {
-    tipo: 'musica' as TipoObra,
+    tipo: 'música' as TipoObra,
     titulo: 'Música',
     descricao: 'Canções que expressam sentimentos, críticas ou narrativas sociais por meio da arte sonora. Servem como referência cultural e simbólica para o tema.'
   }

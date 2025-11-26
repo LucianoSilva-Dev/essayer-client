@@ -4,7 +4,7 @@ import type React from "react"
 import { createContext, useContext, useState } from "react";
 
 export type TipoRepertorio = 'artigo' | 'obra' | 'citacao';
-export type TipoObra = 'filme' | 'teatro' | 'livro' | 'musica';
+export type TipoObra = 'filme' | 'teatro' | 'livro' | 'música';
 
 export interface Eixo {
   id: string;
