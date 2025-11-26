@@ -1,107 +1,91 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { User, Edit, Trash2 } from 'lucide-react';
-import { toast } from 'react-toastify';
+import { User, ThumbsUp, ThumbsDown } from 'lucide-react';
 import type { Comentario } from '@/apiCalls/types';
 import { useAuth } from '@/contexts/auth-context';
 import { getProfilePictureLink } from '@/apiCalls/usuario';
-import { updateComentario, deleteComentario } from '@/apiCalls/repertorio';
 
 interface CommentCardProps {
   comentario: Comentario;
-  repertorioId: string;
-  onCommentUpdate: () => void;
-  openModal: (options: { title: string; message: string; onConfirm: () => Promise<void> }) => void;
+  isAuthorComment?: boolean;
+  preloadedPicture?: string | null; // <--- NOVA PROP
 }
 
-export function CommentCard({ comentario, repertorioId, onCommentUpdate, openModal }: CommentCardProps) {
-  const { userData, isLoggedIn } = useAuth();
-  const [authorProfilePictureLink, setAuthorProfilePictureLink] = useState<string | null>(null);
-  const [isEditing, setIsEditing] = useState(false);
-  const [editedText, setEditedText] = useState(comentario.texto);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const canEdit = isLoggedIn && (userData?.id === comentario.usuario.id);
-  const canDelete = isLoggedIn && (userData?.id === comentario.usuario.id || userData?.cargo === 'admin');
+export function CommentCard({ comentario, isAuthorComment = false, preloadedPicture }: CommentCardProps) {
+  // Se vier preloadedPicture, usamos ela direto no estado inicial
+  const [authorProfilePictureLink, setAuthorProfilePictureLink] = useState<string | null>(preloadedPicture || null);
+  
+  const [liked, setLiked] = useState(false);
+  const [disliked, setDisliked] = useState(false);
 
   useEffect(() => {
+    // Se já temos a imagem pré-carregada, NÃO buscamos na API
+    if (preloadedPicture !== undefined) return;
+
+    // Se o ID for o do mock ("autor-id"), NÃO buscamos na API
+    if (comentario.usuario?.id === "autor-id") return;
+
     async function fetchPicture() {
       if (comentario.usuario?.id) {
-        const link = await getProfilePictureLink(comentario.usuario.id);
-        setAuthorProfilePictureLink(link);
+        try {
+          const link = await getProfilePictureLink(comentario.usuario.id);
+          setAuthorProfilePictureLink(link);
+        } catch (error) {
+          // Silencia erro de imagem não encontrada para evitar toast desnecessário em listas
+          console.error("Erro ao buscar imagem de perfil", error);
+        }
       }
     }
     fetchPicture();
-  }, [comentario.usuario]);
+  }, [comentario.usuario, preloadedPicture]);
 
-  const handleSave = async () => {
-    if (!editedText.trim()) return toast.error("O comentário não pode ficar vazio.");
-    setIsSubmitting(true);
-    try {
-      await updateComentario(repertorioId, comentario.id, { texto: editedText });
-      toast.success("Comentário atualizado!");
-      setIsEditing(false);
-      onCommentUpdate();
-    } catch (e) {
-      toast.error("Erro ao atualizar o comentário.");
-    } finally {
-      setIsSubmitting(false);
-    }
+  // ... (Resto do componente igual: handleLike, return, etc)
+  const handleLike = () => {
+    setLiked(!liked);
+    if (disliked) setDisliked(false);
   };
 
-  const handleDelete = () => {
-    openModal({
-      title: 'Excluir Comentário',
-      message: 'Tem certeza que deseja excluir este comentário? Esta ação é permanente.',
-      onConfirm: async () => {
-        await deleteComentario(repertorioId, comentario.id);
-        toast.success("Comentário excluído!");
-        onCommentUpdate();
-      },
-    });
+  const handleDislike = () => {
+    setDisliked(!disliked);
+    if (liked) setLiked(false);
   };
 
   return (
-    <div className="flex items-start space-x-3 md:space-x-4 py-4">
-      <div className="w-9 h-9 md:w-10 md:h-10 bg-gray-200 rounded-full flex-shrink-0 overflow-hidden">
+    <div className="flex gap-3 md:gap-4 py-4 border-b border-gray-200/50 last:border-0">
+      <div className="w-10 h-10 md:w-12 md:h-12 bg-white rounded-full flex-shrink-0 overflow-hidden border border-gray-100 shadow-sm">
         {authorProfilePictureLink ? (
-          <Image width={40} height={40} src={authorProfilePictureLink} alt={`Foto de ${comentario.usuario.nome}`} className="w-full h-full object-cover" />
+          <Image width={48} height={48} src={authorProfilePictureLink} alt={comentario.usuario.nome} className="w-full h-full object-cover" />
         ) : (
-          <User size={24} className="text-gray-500 m-2" />
+          <div className="w-full h-full flex items-center justify-center bg-gray-50">
+             <User size={20} className="text-gray-300" />
+          </div>
         )}
       </div>
+
       <div className="flex-1">
-        <div className="flex justify-between items-start">
-          <div>
-            <p className="font-semibold text-gray-800 text-sm md:text-base">{comentario.usuario.nome}</p>
-            {!isEditing ? (
-              <p className="text-gray-600 whitespace-pre-wrap text-sm md:text-base">{comentario.texto}</p>
-            ) : (
-              <div className="w-full mt-2">
-                <textarea
-                  value={editedText}
-                  onChange={(e) => setEditedText(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm"
-                  rows={3}
-                  disabled={isSubmitting}
-                />
-                <div className="flex space-x-2 mt-2">
-                  <button onClick={handleSave} disabled={isSubmitting} className="px-3 py-1 bg-teal-600 text-white text-sm rounded-md">
-                    {isSubmitting ? 'Salvando...' : 'Salvar'}
-                  </button>
-                  <button onClick={() => setIsEditing(false)} className="px-3 py-1 bg-gray-200 text-sm rounded-md">Cancelar</button>
-                </div>
-              </div>
-            )}
-          </div>
-          <div className="flex space-x-2 text-gray-500 flex-shrink-0 ml-2">
-            {canEdit && !isEditing && (
-              <button onClick={() => setIsEditing(true)} className="hover:text-teal-600"><Edit size={16} /></button>
-            )}
-            {canDelete && !isEditing && (
-              <button onClick={handleDelete} className="hover:text-red-600"><Trash2 size={16} /></button>
-            )}
-          </div>
+        <div className="flex items-baseline gap-2 mb-1">
+          <span className="text-sm md:text-base font-bold text-gray-800 font-montserrat">
+            {comentario.usuario.nome}
+          </span>
+          {isAuthorComment && (
+            <span className="text-xs md:text-sm text-gray-500 font-opensans">
+              Educador autor
+            </span>
+          )}
+        </div>
+
+        <p className="text-gray-600 text-sm md:text-base leading-relaxed font-opensans mb-3">
+          {comentario.texto}
+        </p>
+
+        <div className="flex items-center gap-4">
+          <button onClick={handleLike} className={`transition-colors ${liked ? 'text-teal-600' : 'text-gray-400 hover:text-gray-600'}`}>
+            <ThumbsUp size={18} className={liked ? "fill-current" : ""} />
+          </button>
+          
+          <button onClick={handleDislike} className={`transition-colors ${disliked ? 'text-red-500' : 'text-gray-400 hover:text-gray-600'}`}>
+            <ThumbsDown size={18} className={disliked ? "fill-current" : ""} />
+          </button>
         </div>
       </div>
     </div>

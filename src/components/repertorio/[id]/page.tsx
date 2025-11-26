@@ -12,7 +12,7 @@ import { getArtigoById, getCitacaoById, getObraById } from "@/apiCalls/repertori
 import { getProfilePictureLink } from "@/apiCalls/usuario";
 import { mountRepertoire } from "@/app/utils";
 
-// Helpers e Mappers (Certifique-se de que criou este arquivo conforme instrução anterior)
+// Helpers e Mappers
 import { getEixosComRecortes } from "./helpers/repertorio-mapper"; 
 
 // Componentes de UI
@@ -21,7 +21,7 @@ import ConfirmationModal from "@/components/shared/confirmation-modal";
 import { CreatorInfo } from "./components/CreatorInfo";
 import { RepertorioActions } from "./components/RepertorioActions";
 import { CommentSection } from "./components/CommentSection";
-import { RepertorioFooter } from "./components/RepertorioFooter"; // Novo Footer
+import { RepertorioFooter } from "./components/RepertorioFooter";
 
 // Componentes de Conteúdo
 import { ObraContent } from "./components/content/ObraContent";
@@ -34,7 +34,7 @@ function RepertorioDetalhesContent() {
   const searchParams = useSearchParams();
   const { userData, isLoggedIn } = useAuth();
 
-  // Estados
+  // Estados de Dados
   const [repertorio, setRepertorio] = useState<Repertorio | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -55,10 +55,11 @@ function RepertorioDetalhesContent() {
   const id = params.id as string;
   const type = searchParams.get('type');
   
+  // Permissões
   const canEditRepertory = isLoggedIn && (repertorio?.criador.id === userData?.id || userData?.cargo === 'admin');
   const canDeleteRepertory = isLoggedIn && (repertorio?.criador.id === userData?.id || userData?.cargo === 'admin');
 
-  // --- LÓGICA DE BUSCA DE DADOS ---
+  // --- BUSCA DE DADOS ---
   const fetchRepertorio = useCallback(async () => {
     if (!id || !type) return;
 
@@ -107,9 +108,9 @@ function RepertorioDetalhesContent() {
     fetchRepertorio();
   }, [fetchRepertorio]);
 
-  // --- FUNÇÕES DE AÇÃO ---
-  const handleLike = async () => { /* Implementar integração */ };
-  const handleToggleFavorito = async () => { /* Implementar integração */ };
+  // --- AÇÕES ---
+  const handleLike = async () => { /* Implementar integração futura */ };
+  const handleToggleFavorito = async () => { /* Implementar integração futura */ };
   const handleShare = async () => { /* Implementar share */ };
   const handleCommentSubmit = async (e: React.FormEvent) => { /* Implementar submit */ };
   
@@ -128,7 +129,7 @@ function RepertorioDetalhesContent() {
       setIsModalOpen(true);
   };
 
-  // --- RENDERIZADORES AUXILIARES ---
+  // --- HELPERS DE RENDERIZAÇÃO ---
   const renderContent = () => {
     if (!repertorio) return null;
     switch (repertorio.modelo) {
@@ -151,7 +152,7 @@ function RepertorioDetalhesContent() {
   const getRepertorioTitle = () => (repertorio && repertorio.modelo !== 'citacao') ? repertorio.titulo : null;
   const getRepertorioTypeLabel = () => repertorio ? repertorio.modelo.charAt(0).toUpperCase() + repertorio.modelo.slice(1) : '';
 
-  // --- RENDERIZAÇÃO DA PÁGINA ---
+  // --- RENDER DA PÁGINA ---
   if (loading) return <Loading />;
   
   if (error) {
@@ -169,8 +170,6 @@ function RepertorioDetalhesContent() {
 
   const typeColorClass = getTypeColorClass(repertorio.modelo);
   const title = getRepertorioTitle();
-  
-  // Gera os dados mockados para o footer usando o helper
   const dadosFooter = getEixosComRecortes(repertorio);
 
   return (
@@ -180,7 +179,7 @@ function RepertorioDetalhesContent() {
       <div className="container mx-auto px-4 pt-6 md:pt-8">
         <div className="max-w-4xl mx-auto">
           
-          {/* Header Superior: Apenas Ações Externas, alinhadas à direita */}
+          {/* Header Superior: Ações Externas */}
           <div className="flex justify-end items-center mb-4">
              <RepertorioActions 
                 canEdit={canEditRepertory} 
@@ -194,7 +193,7 @@ function RepertorioDetalhesContent() {
           {/* Card Principal */}
           <div className="bg-[#EAEAEA] rounded-[2rem] p-6 md:p-10 shadow-sm">
             
-            {/* Header Interno: Autor e Pill + Ações (Like/Save) */}
+            {/* Header Interno */}
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
                <CreatorInfo creator={repertorio.criador} profilePictureUrl={authorProfilePictureLink} />
 
@@ -215,7 +214,7 @@ function RepertorioDetalhesContent() {
                      )}
                   </div>
 
-                  {/* Botões Like e Save */}
+                  {/* Ações Rápidas */}
                   <button onClick={handleLike} className="p-2 rounded-full hover:bg-white/50 transition-colors text-gray-700 hover:text-blue-600 flex items-center gap-1" title="Curtir">
                      <ThumbsUp size={22} className={isLiked ? "fill-blue-600 text-blue-600" : ""} />
                      {likes > 0 && <span className="text-sm font-medium">{likes}</span>}
@@ -227,12 +226,12 @@ function RepertorioDetalhesContent() {
                </div>
             </div>
 
-            {/* Conteúdo do Repertório (mt-12 para dar o gap solicitado) */}
+            {/* Conteúdo Principal */}
             <div className="mt-12 text-gray-800">
                {renderContent()}
             </div>
 
-            {/* Footer do Card: Eixos e Recortes */}
+            {/* Footer do Card */}
             <RepertorioFooter dados={dadosFooter} />
           </div>
 
@@ -249,6 +248,11 @@ function RepertorioDetalhesContent() {
               onCommentSubmit={handleCommentSubmit}
               onCommentUpdate={fetchRepertorio}
               openModal={openConfirmationModal}
+              
+              // Props para o Mock e Correção do Toast
+              authorName={repertorio.criador.nome}
+              authorProfilePicture={authorProfilePictureLink}
+              authorId={repertorio.criador.id}
             />
           </div>
 
