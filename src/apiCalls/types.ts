@@ -30,6 +30,7 @@ export interface Comentario {
   id: string;
   usuario: PerfilUsuario;
   texto: string;
+  fixado?: boolean;
 }
 
 export type CustomEventSourceMap = {

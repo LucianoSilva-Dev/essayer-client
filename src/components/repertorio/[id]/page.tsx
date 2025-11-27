@@ -65,10 +65,10 @@ function RepertorioDetalhesContent() {
   const canDeleteRepertory = isLoggedIn && (repertorio?.criador.id === userData?.id || userData?.cargo === 'admin');
 
   // --- BUSCA DE DADOS ---
-  const fetchRepertorio = useCallback(async () => {
+  const fetchRepertorio = useCallback(async (isBackgroundUpdate = false) => {
     if (!id || !type) return;
 
-    setLoading(true);
+    if (!isBackgroundUpdate) setLoading(true);
     setError(null);
 
     try {
@@ -105,7 +105,7 @@ function RepertorioDetalhesContent() {
       setError("Repertório não encontrado ou ocorreu um erro ao buscá-lo.");
       setRepertorio(null);
     } finally {
-      setLoading(false);
+      if (!isBackgroundUpdate) setLoading(false);
     }
   }, [id, type]);
 
@@ -203,7 +203,7 @@ function RepertorioDetalhesContent() {
       await addComentario(repertorio.id, { texto: newComment });
       setNewComment("");
       toast.success("Comentário adicionado!");
-      await fetchRepertorio();
+      await fetchRepertorio(true);
     } catch (err) {
       console.error("Erro ao adicionar comentário.", err);
     } finally {
@@ -346,12 +346,10 @@ function RepertorioDetalhesContent() {
               setNewComment={setNewComment}
               isSubmittingComment={isSubmittingComment}
               onCommentSubmit={handleCommentSubmit}
-              onCommentUpdate={fetchRepertorio}
+              onCommentUpdate={() => fetchRepertorio(true)}
               openModal={openConfirmationModal}
 
               // Props para o Mock e Correção do Toast
-              authorName={repertorio.criador.nome}
-              authorProfilePicture={authorProfilePictureLink}
               authorId={repertorio.criador.id}
             />
           </div>
