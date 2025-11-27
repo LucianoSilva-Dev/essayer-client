@@ -23,7 +23,7 @@ export default function ProfileSettingsLayout({ children }: { children: React.Re
   }
 
   return (
-    <main className="h-[calc(100vh-80px)] bg-gray-50 p-8 overflow-hidden">
+    <main className="h-[calc(100vh-80px)] bg-gray-50 p-8 overflow-y-auto">
 
       {/* Layout de Duas Colunas */}
       <div className="flex gap-8 max-w-7xl mx-auto">

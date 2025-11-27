@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { CorrecaoHeader } from './CorrecaoHeader'
 import { RedacaoOriginalCard } from './RedacaoOriginalCard'
 import { CompetenciasSection } from './CompetenciasSection'
-import { AnaliseInteligenciaArtificial } from './AnaliseInteligenciaArtificial'
+import { AnaliseFeedback } from './AnaliseFeedback'
 
 // Imports da API e Tipos
 import { CorrecaoIA, RedacaoLivreDoc } from '@/apiCalls/redacao-livre/types'
@@ -87,7 +87,7 @@ export function CorrecaoRedacaoPage({ id }: { id: string }) {
       />
 
       {feedback && (
-        <AnaliseInteligenciaArtificial
+        <AnaliseFeedback
           feedback={feedback}
         />
       )}

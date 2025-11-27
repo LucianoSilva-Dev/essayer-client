@@ -189,10 +189,10 @@ export default function EixosRepertorioContent() {
         </div>
 
         {/* Debug */}
-        <div className="fixed bottom-4 left-4 bg-black text-white p-2 rounded text-sm">
+        {/* <div className="fixed bottom-4 left-4 bg-black text-white p-2 rounded text-sm">
           <div>Eixos: {eixosSelecionados.length}</div>
           <div>Recortes: {recortesSelecionados.length}</div>
-        </div>
+        </div> */}
       </div>
     </main>
   );

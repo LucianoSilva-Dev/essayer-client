@@ -30,8 +30,8 @@ const ConvidarEstudante: FC<ConvidarEstudanteProps> = ({idTurma}: ConvidarEstuda
   }
 
   return (
-    <button 
-      className="w-full py-3 rounded-full bg-teal-700 text-white font-semibold shadow-md hover:bg-teal-600 transition-colors"
+    <button
+      className="w-full py-3 rounded-full cursor-pointer bg-[#075F70] text-white font-semibold shadow-md hover:bg-[#054551] transition-colors"
       onClick={handleCopy}
     >
       Convidar estudante

@@ -1,4 +1,3 @@
-// src/components/turma-aberta-prof/turma-aberta-page.tsx
 "use client";
 
 import { useState, useCallback } from "react";
@@ -71,6 +70,7 @@ export default function TurmaAbertaPage({ turmaId }: Props) {
 
   return (
     <main className="min-h-screen w-full bg-gray-50 px-4 sm:px-6 py-8 flex flex-col gap-6 md:gap-8">
+      {/* Grid principal */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8 flex-grow">
 
         {/* Coluna Esquerda/Central */}
@@ -110,10 +110,7 @@ export default function TurmaAbertaPage({ turmaId }: Props) {
 
         {/* Coluna Direita */}
         <div className="lg:col-span-4 flex flex-col gap-6 md:gap-8 order-1 lg:order-2">
-          <section className="bg-white rounded-2xl shadow-md p-4 md:p-6">
-            <h2 className="text-lg sm:text-xl font-semibold text-gray-800 mb-4">
-              Calendário
-            </h2>
+          <section className="rounded-2xl p-4 md:p-6">
             <DateSelector deliveryDate={selectedDeliveryDate} />
           </section>
 
@@ -128,7 +125,7 @@ export default function TurmaAbertaPage({ turmaId }: Props) {
                 onChange={setMemberSearchTerm}
               />
             </div>
-            <div className="flex-grow mb-4 overflow-y-auto">
+            <div className="flex-grow mb-4 overflow-y-visible">
               <IntegranteList
                 turmaId={turmaId}
                 alunos={alunos}
