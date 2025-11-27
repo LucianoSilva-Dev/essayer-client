@@ -7,6 +7,7 @@ import { RespostaAtividade } from "@/apiCalls/tarefas/types";
 import { respostaStatus } from "../helpers/respostaStatus";
 import { notaTotal } from "../helpers/notaTotal";
 import { formatDate } from "../helpers/formatDate";
+import { useRouter } from "next/navigation";
 
 interface Props {
   isOpen: boolean;
@@ -17,6 +18,7 @@ interface Props {
 type FilterType = 'todos' | 'pendente' | 'corrigido';
 
 export function StudentDrawer({ isOpen, onClose, tarefaId }: Props) {
+  const router = useRouter()
   const [filter, setFilter] = useState<FilterType>('todos');
   const [searchTerm, setSearchTerm] = useState("");
   const [respostas, setRespostas] = useState<RespostaAtividade[]>([])
@@ -155,7 +157,10 @@ export function StudentDrawer({ isOpen, onClose, tarefaId }: Props) {
                   </div>
 
                   {respostaStatus(res) === 'pendente' ? (
-                    <button className="flex items-center gap-2 px-5 py-2.5 bg-[#075F70] hover:bg-[#054a57] text-white text-sm font-bold rounded-xl shadow-lg shadow-[#075F70]/20 hover:shadow-[#075F70]/40 hover:-translate-y-0.5 transition-all w-full sm:w-auto justify-center">
+                    <button 
+                      className="flex items-center gap-2 px-5 py-2.5 bg-[#075F70] hover:bg-[#054a57] text-white text-sm font-bold rounded-xl shadow-lg shadow-[#075F70]/20 hover:shadow-[#075F70]/40 hover:-translate-y-0.5 transition-all w-full sm:w-auto justify-center"
+                      onClick={() => router.push(`/fazer_tarefa/${tarefaId}/editor`)}
+                    >  
                       Corrigir <ChevronRight size={16} />
                     </button>
                   ) : (

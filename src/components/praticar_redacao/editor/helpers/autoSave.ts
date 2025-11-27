@@ -1,12 +1,21 @@
-import debounce from 'lodash.debounce'
-import throttle from 'lodash.throttle'
+export const createAutoSave = (fn: (txt: string, duracao: number) => Promise<void>, throttleDelay: number, debounceDelay: number) => {
+  let canLog = true
+  let timeout: NodeJS.Timeout | undefined
 
-export const createAutoSave = (saveFn: (txt: string, duracao: number) => Promise<void>, debounceDelay: number, throttleDelay: number) => {
-  const throttledSave = throttle(saveFn, throttleDelay)
-  const debouncedSave = debounce(saveFn, debounceDelay)
+  return async (txt: string, duracao: number) => {
+    if (canLog) {
+      console.log('throttle');
+      await fn.apply(this, [txt, duracao])
+      canLog = false
+      setTimeout(() => {
+        canLog = true
+      }, throttleDelay)
+    }
 
-  return async function (txt: string, duracao: number) {
-    await throttledSave(txt, duracao)
-    await debouncedSave(txt, duracao)
+    if (timeout) clearTimeout(timeout)
+    timeout = setTimeout(async () => {
+      console.log('debounce');
+      await fn.apply(this, [txt, duracao])
+    }, debounceDelay)
   }
 }

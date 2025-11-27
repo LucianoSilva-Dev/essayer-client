@@ -9,7 +9,6 @@ import { useAuth } from '@/./contexts/auth-context'
 import { login as apiLogin } from '../../../apiCalls/auth/index'
 import { createProfessorRequest } from "../../../apiCalls/usuario"
 import { motion } from "framer-motion"
-import { AuthButtons } from "@/components/header/auth-buttons"
 
 export default function LoginForm() {
   const { login, isLoggedIn } = useAuth()

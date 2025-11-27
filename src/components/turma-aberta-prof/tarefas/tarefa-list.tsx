@@ -74,7 +74,7 @@ export default function TarefaList({
     fetchData();
   }, [fetchData]);
 
-  const totalAlunosNaTurma = turma?.membros?.length ? Math.max(0, turma.membros.length - 1) : 0;
+  const totalAlunosNaTurma = turma?.membros?.length ? Math.max(0, turma.membros.length) : 0;
 
   // --- Atualiza Componente Pai ---
   useEffect(() => {
