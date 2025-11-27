@@ -8,7 +8,7 @@ import { useAuth } from "@/contexts/auth-context";
 // Tipos e API
 import type { Repertorio } from "@/types/repertorio";
 import type { RepertorioDocument } from "@/apiCalls/repertorio/types";
-import { getArtigoById, getCitacaoById, getObraById } from "@/apiCalls/repertorio";
+import { addComentario, addFavorito, addLike, getArtigoById, getCitacaoById, getObraById, removeFavorito, removeLike } from "@/apiCalls/repertorio";
 import { getProfilePictureLink } from "@/apiCalls/usuario";
 import { mountRepertoire } from "@/app/utils";
 
@@ -27,6 +27,7 @@ import { RepertorioFooter } from "./components/RepertorioFooter";
 import { ObraContent } from "./components/content/ObraContent";
 import { ArtigoContent } from "./components/content/ArtigoContent";
 import { CitacaoContent } from "./components/content/CitacaoContent";
+import { toast } from "react-toastify";
 
 function RepertorioDetalhesContent() {
   const router = useRouter();
@@ -109,10 +110,74 @@ function RepertorioDetalhesContent() {
   }, [fetchRepertorio]);
 
   // --- AÇÕES ---
-  const handleLike = async () => { /* Implementar integração futura */ };
-  const handleToggleFavorito = async () => { /* Implementar integração futura */ };
-  const handleShare = async () => { /* Implementar share */ };
-  const handleCommentSubmit = async (e: React.FormEvent) => { /* Implementar submit */ };
+  const handleLike = async () => {
+    if (!isLoggedIn) return toast.error("Você precisa estar logado para curtir.");
+    if (!repertorio) return;
+
+    try {
+      if (isLiked) {
+        await removeLike(repertorio.id);
+        setLikes(prev => prev - 1);
+      } else {
+        await addLike(repertorio.id);
+        setLikes(prev => prev + 1);
+      }
+      setIsLiked(!isLiked);
+    } catch (err) {
+      console.error("Erro ao processar sua curtida:", err);
+    }
+  }
+
+  const handleToggleFavorito = async () => {
+    if (!isLoggedIn) return toast.error("Você precisa estar logado para favoritar.");
+    if (!repertorio) return;
+
+    try {
+      if (isFavorito) {
+        await removeFavorito(repertorio.id);
+      } else {
+        await addFavorito(repertorio.id);
+      }
+      setIsFavorito(!isFavorito);
+    } catch (err) {
+      console.error("Erro ao salvar nos favoritos:", err);
+    }
+  }
+
+ const handleShare = async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: getTitle(),
+          text: getDescription(),
+          url: window.location.href,
+        })
+      } catch (error) {
+        console.log("Erro ao compartilhar:", error)
+      }
+    } else {
+      navigator.clipboard.writeText(window.location.href)
+      toast.success("Link copiado para a área de transferência!")
+    }
+  }
+
+  const handleCommentSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newComment.trim() || !repertorio) return;
+    if (!isLoggedIn) return toast.error("Você precisa estar logado para comentar.");
+
+    setIsSubmittingComment(true);
+    try {
+      await addComentario(repertorio.id, { texto: newComment });
+      setNewComment("");
+      toast.success("Comentário adicionado!");
+      await fetchRepertorio();
+    } catch (err) {
+      console.error("Erro ao adicionar comentário.", err);
+    } finally {
+      setIsSubmittingComment(false);
+    }
+  };
   
   const handleEditRepertorio = () => router.push(`/repertorio/${id}/editar?type=${repertorio?.modelo}`);
   
@@ -269,3 +334,11 @@ export default function RepertorioDetalhesPage() {
     </Suspense>
   );
 }
+
+function getTitle(): string | undefined {
+  throw new Error("Function not implemented.");
+}
+function getDescription(): string | undefined {
+  throw new Error("Function not implemented.");
+}
+
