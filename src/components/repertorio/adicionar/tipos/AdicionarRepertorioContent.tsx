@@ -76,10 +76,10 @@ export default function AdicionarRepertorioContent() {
         />
 
         {/* Debug (remover na produção) */}
-        <div className="fixed bottom-4 left-24 bg-black text-white p-2 rounded text-sm">
+        {/* <div className="fixed bottom-4 left-24 bg-black text-white p-2 rounded text-sm">
           <div>Selecionado: {tipoSelecionado}</div>
           <div>Bandeja: {bandejaAberta ? 'Aberta' : 'Fechada'}</div>
-        </div>
+        </div> */}
       </div>
     </main>
   );
