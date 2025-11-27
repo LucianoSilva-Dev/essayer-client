@@ -2,18 +2,18 @@
 
 import { useEffect, useState, Suspense, useCallback } from "react";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
-import { Bookmark, ThumbsUp } from "lucide-react"; 
+import { Bookmark, ThumbsUp } from "lucide-react";
 import { useAuth } from "@/contexts/auth-context";
 
 // Tipos e API
 import type { Repertorio } from "@/types/repertorio";
 import type { RepertorioDocument } from "@/apiCalls/repertorio/types";
-import { addComentario, addFavorito, addLike, getArtigoById, getCitacaoById, getObraById, removeFavorito, removeLike } from "@/apiCalls/repertorio";
+import { addComentario, addFavorito, addLike, deleteRepertorio, getArtigoById, getCitacaoById, getObraById, removeFavorito, removeLike } from "@/apiCalls/repertorio";
 import { getProfilePictureLink } from "@/apiCalls/usuario";
 import { mountRepertoire } from "@/app/utils";
 
 // Helpers e Mappers
-import { getEixosComRecortes } from "./helpers/repertorio-mapper"; 
+import { getEixosComRecortes } from "./helpers/repertorio-mapper";
 
 // Componentes de UI
 import Loading from "./loading";
@@ -39,23 +39,27 @@ function RepertorioDetalhesContent() {
   const [repertorio, setRepertorio] = useState<Repertorio | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  
+
   // Estados de Interação
   const [isLiked, setIsLiked] = useState(false);
   const [likes, setLikes] = useState(0);
   const [isFavorito, setIsFavorito] = useState(false);
   const [newComment, setNewComment] = useState("");
   const [isSubmittingComment, setIsSubmittingComment] = useState(false);
-  
+
   // Estados de Modal e Imagem
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalContent, setModalContent] = useState({ title: '', message: '', onConfirm: async () => {} });
+  const [modalContent, setModalContent] = useState({ title: '', message: '', onConfirm: async () => { } });
   const [isModalLoading, setIsModalLoading] = useState(false);
   const [authorProfilePictureLink, setAuthorProfilePictureLink] = useState<string | null>(null);
-  
+
+  const [isLiking, setIsLiking] = useState(false)
+  const [isFavouriting, setIsFavouriting] = useState(false)
+
+
   const id = params.id as string;
   const type = searchParams.get('type');
-  
+
   // Permissões
   const canEditRepertory = isLoggedIn && (repertorio?.criador.id === userData?.id || userData?.cargo === 'admin');
   const canDeleteRepertory = isLoggedIn && (repertorio?.criador.id === userData?.id || userData?.cargo === 'admin');
@@ -69,7 +73,7 @@ function RepertorioDetalhesContent() {
 
     try {
       let repertorioDoc: RepertorioDocument | null = null;
-      
+
       switch (type) {
         case 'obra':
           repertorioDoc = { ...(await getObraById(id)), tipoRepertorio: 'Obra' };
@@ -109,12 +113,34 @@ function RepertorioDetalhesContent() {
     fetchRepertorio();
   }, [fetchRepertorio]);
 
+  const getTitle = () => {
+    if (!repertorio) return undefined;
+    switch (repertorio.modelo) {
+      case "obra": return repertorio.titulo;
+      case "artigo": return repertorio.titulo;
+      case "citacao": return repertorio.autoria;
+      default: return undefined;
+    }
+  }
+
+  const getDescription = () => {
+    if (!repertorio) return undefined;
+    switch (repertorio.modelo) {
+      case "obra": return repertorio.sinopse;
+      case "artigo": return repertorio.sintese;
+      case "citacao": return repertorio.citacao;
+      default: return undefined;
+    }
+  }
+
   // --- AÇÕES ---
   const handleLike = async () => {
     if (!isLoggedIn) return toast.error("Você precisa estar logado para curtir.");
     if (!repertorio) return;
+    if (isLiking) return
 
     try {
+      setIsLiking(true)
       if (isLiked) {
         await removeLike(repertorio.id);
         setLikes(prev => prev - 1);
@@ -125,14 +151,18 @@ function RepertorioDetalhesContent() {
       setIsLiked(!isLiked);
     } catch (err) {
       console.error("Erro ao processar sua curtida:", err);
+    } finally {
+      setIsLiking(false)
     }
   }
 
   const handleToggleFavorito = async () => {
     if (!isLoggedIn) return toast.error("Você precisa estar logado para favoritar.");
     if (!repertorio) return;
+    if (isFavouriting) return
 
     try {
+      setIsFavouriting(true)
       if (isFavorito) {
         await removeFavorito(repertorio.id);
       } else {
@@ -141,10 +171,12 @@ function RepertorioDetalhesContent() {
       setIsFavorito(!isFavorito);
     } catch (err) {
       console.error("Erro ao salvar nos favoritos:", err);
+    } finally {
+      setIsFavouriting(false)
     }
   }
 
- const handleShare = async () => {
+  const handleShare = async () => {
     if (navigator.share) {
       try {
         await navigator.share({
@@ -178,20 +210,23 @@ function RepertorioDetalhesContent() {
       setIsSubmittingComment(false);
     }
   };
-  
+
   const handleEditRepertorio = () => router.push(`/repertorio/${id}/editar?type=${repertorio?.modelo}`);
-  
+
   const handleDeleteRepertorio = () => {
-      openConfirmationModal({
-          title: "Excluir Repertório",
-          message: "Tem certeza? Essa ação não pode ser desfeita.",
-          onConfirm: async () => { /* Implementar delete */ }
-      });
+    openConfirmationModal({
+      title: "Excluir Repertório",
+      message: "Tem certeza? Essa ação não pode ser desfeita.",
+      onConfirm: async () => {
+        await deleteRepertorio(id)
+        router.replace('/main')
+      }
+    });
   };
-  
-  const openConfirmationModal = (options: any) => { 
-      setModalContent(options);
-      setIsModalOpen(true);
+
+  const openConfirmationModal = (options: any) => {
+    setModalContent(options);
+    setIsModalOpen(true);
   };
 
   // --- HELPERS DE RENDERIZAÇÃO ---
@@ -219,18 +254,18 @@ function RepertorioDetalhesContent() {
 
   // --- RENDER DA PÁGINA ---
   if (loading) return <Loading />;
-  
+
   if (error) {
     return (
-        <main className="min-h-screen bg-gray-50 flex items-center justify-center p-4 font-montserrat">
-            <div className="text-center bg-white p-8 rounded-lg shadow-md">
-                <p className="text-gray-600 mb-6">{error}</p>
-                <button onClick={() => router.back()} className="text-teal-600 hover:underline">Voltar</button>
-            </div>
-        </main>
+      <main className="min-h-screen bg-gray-50 flex items-center justify-center p-4 font-montserrat">
+        <div className="text-center bg-white p-8 rounded-lg shadow-md">
+          <p className="text-gray-600 mb-6">{error}</p>
+          <button onClick={() => router.back()} className="text-teal-600 hover:underline">Voltar</button>
+        </div>
+      </main>
     );
   }
-  
+
   if (!repertorio) return null;
 
   const typeColorClass = getTypeColorClass(repertorio.modelo);
@@ -240,60 +275,60 @@ function RepertorioDetalhesContent() {
   return (
     <main className="min-h-screen bg-gray-50 pb-12 font-montserrat">
       <ConfirmationModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} {...modalContent} isLoading={isModalLoading} />
-      
+
       <div className="container mx-auto px-4 pt-6 md:pt-8">
         <div className="max-w-4xl mx-auto">
-          
+
           {/* Header Superior: Ações Externas */}
           <div className="flex justify-end items-center mb-4">
-             <RepertorioActions 
-                canEdit={canEditRepertory} 
-                canDelete={canDeleteRepertory} 
-                onEdit={handleEditRepertorio} 
-                onDelete={handleDeleteRepertorio} 
-                onShare={handleShare} 
-             />
+            <RepertorioActions
+              canEdit={canEditRepertory}
+              canDelete={canDeleteRepertory}
+              onEdit={handleEditRepertorio}
+              onDelete={handleDeleteRepertorio}
+              onShare={handleShare}
+            />
           </div>
 
           {/* Card Principal */}
           <div className="bg-[#EAEAEA] rounded-[2rem] p-6 md:p-10 shadow-sm">
-            
+
             {/* Header Interno */}
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-               <CreatorInfo creator={repertorio.criador} profilePictureUrl={authorProfilePictureLink} />
+              <CreatorInfo creator={repertorio.criador} profilePictureUrl={authorProfilePictureLink} />
 
-               <div className="flex items-center self-start md:self-center gap-3">
-                  {/* Pill Principal */}
-                  <div className="bg-white rounded-full px-5 py-2 flex items-center shadow-sm">
-                     <span className={`font-bold ${typeColorClass}`}>
-                        {getRepertorioTypeLabel()}
-                     </span>
-                     
-                     {title && (
-                        <>
-                           <span className="mx-2 text-gray-300">|</span>
-                           <span className={`font-bold ${typeColorClass} truncate max-w-[150px] sm:max-w-[250px]`}>
-                              {title}
-                           </span>
-                        </>
-                     )}
-                  </div>
+              <div className="flex items-center self-start md:self-center gap-3">
+                {/* Pill Principal */}
+                <div className="bg-white rounded-full px-5 py-2 flex items-center shadow-sm">
+                  <span className={`font-bold ${typeColorClass}`}>
+                    {getRepertorioTypeLabel()}
+                  </span>
 
-                  {/* Ações Rápidas */}
-                  <button onClick={handleLike} className="p-2 rounded-full hover:bg-white/50 transition-colors text-gray-700 hover:text-blue-600 flex items-center gap-1" title="Curtir">
-                     <ThumbsUp size={22} className={isLiked ? "fill-blue-600 text-blue-600" : ""} />
-                     {likes > 0 && <span className="text-sm font-medium">{likes}</span>}
-                  </button>
+                  {title && (
+                    <>
+                      <span className="mx-2 text-gray-300">|</span>
+                      <span className={`font-bold ${typeColorClass} truncate max-w-[150px] sm:max-w-[250px]`}>
+                        {title}
+                      </span>
+                    </>
+                  )}
+                </div>
 
-                  <button onClick={handleToggleFavorito} className="p-2 rounded-full hover:bg-white/50 transition-colors text-gray-700 hover:text-blue-600" title="Salvar">
-                     <Bookmark size={22} className={isFavorito ? "fill-blue-600 text-blue-600" : ""} />
-                  </button>
-               </div>
+                {/* Ações Rápidas */}
+                <button onClick={handleLike} className="p-2 rounded-full hover:bg-white/50 transition-colors text-gray-700 hover:text-blue-600 flex items-center gap-1" title="Curtir">
+                  <ThumbsUp size={22} className={isLiked ? "fill-blue-600 text-blue-600" : ""} />
+                  {likes > 0 && <span className="text-sm font-medium">{likes}</span>}
+                </button>
+
+                <button onClick={handleToggleFavorito} className="p-2 rounded-full hover:bg-white/50 transition-colors text-gray-700 hover:text-blue-600" title="Salvar">
+                  <Bookmark size={22} className={isFavorito ? "fill-blue-600 text-blue-600" : ""} />
+                </button>
+              </div>
             </div>
 
             {/* Conteúdo Principal */}
             <div className="mt-12 text-gray-800">
-               {renderContent()}
+              {renderContent()}
             </div>
 
             {/* Footer do Card */}
@@ -302,7 +337,7 @@ function RepertorioDetalhesContent() {
 
           {/* Seção de Comentários */}
           <div className="mt-8">
-            <CommentSection 
+            <CommentSection
               comments={repertorio.comentarios || []}
               repertorioId={repertorio.id}
               isLoggedIn={isLoggedIn}
@@ -313,7 +348,7 @@ function RepertorioDetalhesContent() {
               onCommentSubmit={handleCommentSubmit}
               onCommentUpdate={fetchRepertorio}
               openModal={openConfirmationModal}
-              
+
               // Props para o Mock e Correção do Toast
               authorName={repertorio.criador.nome}
               authorProfilePicture={authorProfilePictureLink}
