@@ -62,7 +62,6 @@ export function RedacaoCard({ href, tema, status, finalizada, isDeleteMode = fal
           e.stopPropagation();
           onDelete && onDelete();
         }}
-        // CORREÇÃO: Classes em linha única para evitar erro de string não terminada
         className="block bg-white p-8 rounded-[40px] shadow-sm border border-red-200 relative cursor-pointer h-full animate-shake select-none transform transition-transform"
       >
         <CardContent />
@@ -86,7 +85,6 @@ export function RedacaoCard({ href, tema, status, finalizada, isDeleteMode = fal
   return (
     <Link
       href={href}
-      // CORREÇÃO: Classes em linha única
       className="block bg-white p-8 rounded-[40px] shadow-sm border border-gray-100 relative transition-all duration-200 ease-out font-montserrat hover:shadow-md hover:-translate-y-1 hover:border-teal-200 group cursor-pointer h-full"
     >
       <CardContent />
