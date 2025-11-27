@@ -32,22 +32,26 @@ export function RedacaoPage({ id }: { id: string }) {
   const [tempoRestante, setTempoRestante] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [loadingCorrigir, setLoadingCorrigir] = useState(false);
+  const [correcaoIniciada, setCorrecaoIniciada] = useState(false);
 
   // --- LÓGICA DO AMIGO (Callbacks) ---
-  const onError = (data: CustomEventSourceMap['appError']) => {
+  const onError = useCallback((data: CustomEventSourceMap['appError']) => {
     toast.error(`error number ${data.data.statusCode}: ${data.data.message}`)
     setLoadingCorrigir(false);
-  }
+    setCorrecaoIniciada(false);
+  }, []);
 
-  const onDelay = (_: null) => {
+  const onDelay = useCallback((_: null) => {
     toast.info('correção em andamento, por favor aguarde!')
-  }
+  }, []);
 
-  const onSuccess = (_: GetCorrecaoRedacaoResponse) => {
+  const onSuccess = useCallback((_: GetCorrecaoRedacaoResponse) => {
     const redacaoId = data?.id;
     if (!redacaoId) return;
+    setLoadingCorrigir(false);
+    setCorrecaoIniciada(false);
     router.replace(`/praticar_redacao/${redacaoId}/correcao`);
-  }
+  }, [data?.id, router]);
   // -----------------------------------
 
   useEffect(() => {
@@ -96,14 +100,14 @@ export function RedacaoPage({ id }: { id: string }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tempoRestante])
 
-
-  // MISTURA: SUA LÓGICA DE LOADING + A LÓGICA DELE DE LISTEN
-  const executCorrigirRedacao = async () => {
+  // CORREÇÃO: Função que retorna Promise e aguarda a correção
+  const executCorrigirRedacao = async (): Promise<boolean> => {
     const redacaoId = data?.id;
-    if (!redacaoId) return;
+    if (!redacaoId) return false;
 
     try {
       setLoadingCorrigir(true);
+      setCorrecaoIniciada(true);
 
       await updateRedacaoLivre(redacaoId, {
         texto,
@@ -116,13 +120,27 @@ export function RedacaoPage({ id }: { id: string }) {
         tema: data.tema
       });
 
-      // AQUI ENTRA O CÓDIGO DO AMIGO
-      await listenCorrecaoRedacao(redacaoId, onError, onDelay, onSuccess)
+      // CORREÇÃO: Aguarda a correção ser concluída
+      return new Promise((resolve) => {
+        const successWrapper = (response: GetCorrecaoRedacaoResponse) => {
+          onSuccess(response);
+          resolve(true);
+        };
+
+        const errorWrapper = (errorData: CustomEventSourceMap['appError']) => {
+          onError(errorData);
+          resolve(false);
+        };
+
+        listenCorrecaoRedacao(redacaoId, errorWrapper, onDelay, successWrapper);
+      });
 
     } catch (error) {
       console.error("Erro ao corrigir", error);
       setLoadingCorrigir(false);
+      setCorrecaoIniciada(false);
       toast.error("Erro ao iniciar correção.");
+      return false;
     }
   }
 
@@ -137,12 +155,19 @@ export function RedacaoPage({ id }: { id: string }) {
     });
 
     setIsPaused(true)
-
-    alert("Redação salva e finalizada com sucesso!");
+    toast.info("Redação finalizada.");
+    //pode redirecionar, mas ainda a acertar 
   };
 
+  // CORREÇÃO: Aguarda a correção completar antes de redirecionar
   const handleCorrigir = async () => {
-    await executCorrigirRedacao();
+    const correcaoConcluida = await executCorrigirRedacao();
+    
+    // O redirecionamento agora só acontece dentro do onSuccess
+    // Se a correção falhar, não redireciona
+    if (!correcaoConcluida) {
+      toast.error("Falha na correção da redação.");
+    }
   };
 
   const handlePause = async () => {
@@ -150,6 +175,17 @@ export function RedacaoPage({ id }: { id: string }) {
     if (!isPaused) {
       await updateText(texto, tempoRestante)
     }
+  }
+
+  // Função para impedir digitação quando pausado ou corrigindo
+  const handleTextoChange = async (txt: string) => {
+    // Impede digitação se estiver pausado ou corrigindo
+    if (isPaused || loadingCorrigir || correcaoIniciada) {
+      return;
+    }
+    
+    setTexto(txt)
+    await useAutoSave(txt, tempoRestante)
   }
 
   return (
@@ -163,21 +199,21 @@ export function RedacaoPage({ id }: { id: string }) {
       <div className="mt-12">
         <RedacaoEditorArea
           texto={texto}
-          onTextoChange={async (txt) => {
-            setTexto(txt)
-            await useAutoSave(txt, tempoRestante)
-          }}
+          onTextoChange={handleTextoChange}
           onUndo={undo}
           onRedo={redo}
+          disabled={isPaused || loadingCorrigir || correcaoIniciada} 
         />
       </div>
 
       <RedacaoFooter
         contagemPalavras={contagemPalavras}
-        maxPalavras={400} // Mantido o seu limite
+        maxPalavras={400}
         onFinalizar={handleFinalizar}
         onCorrigir={handleCorrigir}
-        isLoading={loadingCorrigir} // Mantido o seu loading
+        isLoading={loadingCorrigir}
+        // Adicione esta prop para desabilitar botões quando necessário
+        disabled={isPaused || correcaoIniciada}
       />
     </div>
   );

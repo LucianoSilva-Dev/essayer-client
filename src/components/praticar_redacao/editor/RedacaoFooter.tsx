@@ -10,6 +10,7 @@ interface Props {
   onFinalizar: () => void;
   onCorrigir: () => void;
   isLoading: boolean; // Nova prop recebida
+  disabled?: boolean; // Nova prop recebida
 }
 
 // As mensagens que vão rotacionar para acalmar o usuário
@@ -26,7 +27,8 @@ export function RedacaoFooter({
   maxPalavras, 
   onFinalizar, 
   onCorrigir,
-  isLoading 
+  isLoading,
+  disabled = false 
 }: Props) {
   // Estado para controlar qual mensagem mostrar
   const [messageIndex, setMessageIndex] = useState(0);

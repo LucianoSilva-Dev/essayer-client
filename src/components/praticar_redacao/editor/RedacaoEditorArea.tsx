@@ -7,9 +7,17 @@ interface Props {
   // Novas props opcionais (para manter compatibilidade se não passar)
   onUndo?: () => void;
   onRedo?: () => void;
+  // NOVA PROP: desabilitar o editor
+  disabled?: boolean;
 }
 
-export function RedacaoEditorArea({ texto, onTextoChange, onUndo, onRedo }: Props) {
+export function RedacaoEditorArea({ 
+  texto, 
+  onTextoChange, 
+  onUndo, 
+  onRedo,
+  disabled = false // Valor padrão false para manter compatibilidade
+}: Props) {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const LINE_HEIGHT = 32; 
   const TOTAL_LINES = 30; 
@@ -25,6 +33,20 @@ export function RedacaoEditorArea({ texto, onTextoChange, onUndo, onRedo }: Prop
 
   // 2. Lógica para Interceptar Atalhos (Ctrl+Z / Ctrl+Y)
   const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
+    // Se estiver desabilitado, bloqueia todas as teclas exceto as de navegação
+    if (disabled) {
+      // Permite apenas teclas de navegação básicas (setas, tab, etc)
+      const allowedKeys = [
+        'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown',
+        'Tab', 'Home', 'End', 'PageUp', 'PageDown'
+      ];
+      
+      if (!allowedKeys.includes(e.key) && !e.ctrlKey && !e.metaKey) {
+        e.preventDefault();
+        return;
+      }
+    }
+
     // Verifica se CTRL (ou Command no Mac) está pressionado
     if (e.ctrlKey || e.metaKey) {
       
@@ -45,6 +67,12 @@ export function RedacaoEditorArea({ texto, onTextoChange, onUndo, onRedo }: Prop
   };
 
   const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    // Se estiver desabilitado, não permite alterações
+    if (disabled) {
+      e.preventDefault();
+      return;
+    }
+
     const novoTexto = e.target.value;
     const elemento = e.target;
 
@@ -62,7 +90,9 @@ export function RedacaoEditorArea({ texto, onTextoChange, onUndo, onRedo }: Prop
 
   return (
     <div 
-      className="bg-white rounded-[20px] w-full border border-gray-200"
+      className={`bg-white rounded-[20px] w-full border border-gray-200 transition-opacity ${
+        disabled ? 'opacity-60 pointer-events-none' : ''
+      }`}
       style={{ height: `${TOTAL_HEIGHT}px` }} 
     >
       <textarea
@@ -72,14 +102,17 @@ export function RedacaoEditorArea({ texto, onTextoChange, onUndo, onRedo }: Prop
         // Adicionamos os listeners aqui:
         onPaste={handlePaste}
         onKeyDown={handleKeyDown}
+        // NOVA PROP: desabilita o textarea
+        disabled={disabled}
 
-        placeholder="Comece a digitar aqui..."
-        className="w-full h-full p-0 px-6
+        placeholder={disabled ? "Redação pausada ou em correção..." : "Comece a digitar aqui..."}
+        className={`w-full h-full p-0 px-6
                    text-lg text-gray-800 
                    placeholder:text-[#BDB4B4] placeholder:font-normal placeholder:text-xl
                    resize-none border-none focus:outline-none focus:ring-0
                    bg-transparent
-                   overflow-hidden"
+                   overflow-hidden
+                   ${disabled ? 'cursor-not-allowed' : ''}`}
         style={{
           lineHeight: `${LINE_HEIGHT}px`,
           backgroundImage: `linear-gradient(transparent calc(${LINE_HEIGHT}px - 1px), #E5E5E5 calc(${LINE_HEIGHT}px - 1px))`,
