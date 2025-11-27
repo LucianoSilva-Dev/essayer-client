@@ -1,7 +1,9 @@
 "use client";
 
+import Image from 'next/image';
 import React from 'react';
-import { Eixo } from '@/contexts/add-repertorio-context'; 
+import { Eixo } from '@/contexts/add-repertorio-context';
+import { getIconForEixo } from '@/components/repertorio/[id]/helpers/repertorio-mapper';
 
 interface EixosSelecionadosProps {
   eixosSelecionados: Eixo[];
@@ -16,29 +18,40 @@ export const EixosSelecionados: React.FC<EixosSelecionadosProps> = ({
     return null;
   }
 
+  console.log(eixosSelecionados);
+
   return (
     <div className="bg-[#E8E8E8] rounded-[52px] p-12">
       <div className="flex flex-row items-center gap-7">
-        
+
         {/* Eixos selecionados */}
-        <div className="flex flex-row items-center bg-[#F1F1F2] rounded-[40px] pr-5 gap-3">
-          {/* Aqui viriam os ícones dos eixos */}
-          <div className="flex items-center justify-center w-17 h-17 bg-white rounded-[40px]">
-            {/* Ícone placeholder */}
-            <div className="w-8 h-8 bg-[#075F70] rounded-full"></div>
+
+        {eixosSelecionados.map((eixo, i) => (
+          <div className="bg-white pl-1.5 pr-4 py-1.5 rounded-full flex items-center gap-2 shadow-sm border border-gray-100">
+            {/* Aqui viriam os ícones dos eixos */}
+            <div className="bg-[#024D4D] w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0">
+              {/* Ícone placeholder */}
+              <Image
+                src={getIconForEixo(eixo.nome)}
+                alt={eixo.nome}
+                width={16}
+                height={16}
+                className="w-4 h-4 invert brightness-0 saturate-100 filter-white z-index-0"
+              />
+            </div>
+
+            <span
+              className="font-medium text-xl"
+              style={{
+                color: '#3C3C3C',
+                fontFamily: 'Montserrat',
+                lineHeight: '29px'
+              }}
+            >
+              {eixo.nome}
+            </span>
           </div>
-          
-          <span 
-            className="font-medium text-xl"
-            style={{
-              color: '#3C3C3C',
-              fontFamily: 'Montserrat',
-              lineHeight: '29px'
-            }}
-          >
-            {eixosSelecionados.length} eixo(s) selecionado(s)
-          </span>
-        </div>
+        ))}
 
         {/* Recortes selecionados */}
         <div className="flex flex-row items-center gap-4 flex-wrap">
@@ -47,7 +60,7 @@ export const EixosSelecionados: React.FC<EixosSelecionadosProps> = ({
               key={index}
               className="flex items-center bg-[#DCDCDD] rounded-[40px] px-4 py-2"
             >
-              <span 
+              <span
                 className="font-medium text-xl"
                 style={{
                   color: '#3C3C3C',
@@ -59,10 +72,10 @@ export const EixosSelecionados: React.FC<EixosSelecionadosProps> = ({
               </span>
             </div>
           ))}
-          
+
           {recortesSelecionados.length > 3 && (
             <div className="flex items-center bg-[#DCDCDD] rounded-[40px] px-4 py-2">
-              <span 
+              <span
                 className="font-medium text-xl"
                 style={{
                   color: '#3C3C3C',

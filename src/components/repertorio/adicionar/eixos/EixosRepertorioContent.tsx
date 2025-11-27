@@ -137,12 +137,48 @@ export default function EixosRepertorioContent() {
 
         {/* Header com animação de entrada */}
         <div className="mb-8 animate-in slide-in-from-top duration-500">
-          <h1 className="text-2xl font-medium text-gray-800 mb-2">
-            Selecione um eixo temático para ver os recortes relacionados
-          </h1>
+
+
+          {/* estilizar depois */}
+          <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
+
+            <h1 className="text-2xl font-medium text-gray-800 mb-2">
+              Selecione um eixo temático para ver os recortes relacionados
+            </h1>
+
+
+            <div>
+              <div>
+                {eixosSelecionados.length} eixo(s) selecionado(s)
+              </div>
+              <div>
+                {recortesSelecionados.length} recorte(s) selecionado(s)
+              </div>
+            </div>
+
+          
+          </div>
+
+
+
+
+          
+
+
+
+
+
           <div className="text-gray-600">
             Criando {tipoRepertorio} {tipoObra && `- ${tipoObra}`}
           </div>
+
+
+
+
+
+
+
+
         </div>
 
         {/* Container dos cartões de eixos */}

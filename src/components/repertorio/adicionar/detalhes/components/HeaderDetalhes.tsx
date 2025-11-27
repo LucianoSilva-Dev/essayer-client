@@ -26,7 +26,7 @@ const getTipoConfig = (tipo: string, tipoObra?: string) => {
       cor: '#CA9C60'
     },
     citacao: {
-      label: 'Citação',
+      label: 'Fonte',
       placeholderTitulo: 'Insira a fonte da citação aqui',
       placeholderAutoria: 'Autor da citação aqui',
       cor: '#0C8462'
@@ -68,9 +68,9 @@ export const HeaderDetalhes: React.FC<HeaderDetalhesProps> = ({
             className="flex-1 bg-transparent outline-none text-xl placeholder-opacity-68"
             style={{
               color: config.cor,
-              fontFamily: 'Montserrat',
+              fontFamily: 'open sans',
               fontWeight: 400,
-              fontSize: '28px',
+              fontSize: '24px',
               lineHeight: '20px'
             }}
           />
@@ -95,9 +95,9 @@ export const HeaderDetalhes: React.FC<HeaderDetalhesProps> = ({
             className="flex-1 bg-transparent outline-none text-xl placeholder-opacity-60"
             style={{
               color: '#616060',
-              fontFamily: 'Montserrat',
+              fontFamily: 'open sans',
               fontWeight: 400,
-              fontSize: '28px',
+              fontSize: '24px',
               lineHeight: '20px',
               opacity: autoria ? 1 : 0.6
             }}

@@ -41,7 +41,7 @@ export const ComentarioEducador: React.FC<ComentarioEducadorProps> = ({
               className="flex-1 bg-transparent outline-none placeholder-opacity-100 mr-4"
               style={{
                 color: '#898787',
-                fontFamily: 'Montserrat',
+                fontFamily: 'open sans',
                 fontWeight: 300,
                 fontSize: '32px',
                 lineHeight: '48px'
