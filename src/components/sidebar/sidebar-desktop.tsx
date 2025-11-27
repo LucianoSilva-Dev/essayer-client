@@ -1,7 +1,7 @@
 import { motion } from "framer-motion"
 import Link from "next/link"
 import Image from "next/image"
-import { Home, PenTool, Users, UsersRound, Info, Settings, MessageCircleQuestion, SquarePlus  } from "lucide-react"
+import { Home, PenTool, Users, UsersRound, Info, Settings, MessageCircleQuestion, SquarePlus } from "lucide-react"
 import { SidebarLogo } from "./sidebar-logo"
 import { SidebarNavigation } from "./sidebar-navigation"
 import { SidebarBottomItems } from "./sidebar-bottom-items"
@@ -35,22 +35,22 @@ const navigationItems = [
   },
   {
     icon: UsersRound,
-    label: "Turmas",
+    label: "Turmas membro",
     href: "/turmas_aluno",
-    roles: ["aluno", "admin"],
+    roles: ["aluno", "professor", "admin"],
   },
   {
-      icon: Users,
-      label: "Turmas",
-      href: "/turmas_professor",
-      roles: ["professor", "admin"], 
-    },
-    {
-      icon: Settings,
-      label: "Admin",
-      href: "/admin",
-      roles: ["admin"], 
-    },
+    icon: Users,
+    label: "Turmas criadas",
+    href: "/turmas_professor",
+    roles: ["professor", "admin"],
+  },
+  {
+    icon: Settings,
+    label: "Admin",
+    href: "/admin",
+    roles: ["admin"],
+  },
 ]
 
 const bottomItems = [
@@ -63,12 +63,12 @@ const bottomItems = [
   }
 ]
 
-export function SidebarDesktop({ 
-  isExpanded, 
-  setIsExpanded, 
-  isLoggedIn, 
-  userData, 
-  pathname 
+export function SidebarDesktop({
+  isExpanded,
+  setIsExpanded,
+  isLoggedIn,
+  userData,
+  pathname
 }: SidebarDesktopProps) {
   const filteredNavItems = navigationItems.filter((item) => {
     if (item.roles) {
@@ -87,9 +87,9 @@ export function SidebarDesktop({
       onMouseLeave={() => setIsExpanded(false)}
     >
       <SidebarLogo />
-      
+
       <nav className="flex-1 px-2">
-        <SidebarNavigation 
+        <SidebarNavigation
           items={filteredNavItems}
           isExpanded={isExpanded}
           pathname={pathname}
@@ -97,7 +97,7 @@ export function SidebarDesktop({
       </nav>
 
       <div className="p-2">
-        <SidebarBottomItems 
+        <SidebarBottomItems
           items={bottomItems}
           isExpanded={isExpanded}
         />

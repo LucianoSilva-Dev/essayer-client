@@ -18,9 +18,9 @@ interface TarefaListProps {
 const CARD_WIDTH_PLUS_GAP = 268 + 16; // 284
 
 export default function TarefaList({
-    turmaId,
-    onSelectedDateChange,
-    onSelectedAtividadeChange
+  turmaId,
+  onSelectedDateChange,
+  onSelectedAtividadeChange
 }: TarefaListProps) {
   const [atividadesProfessor, setAtividadesProfessor] = useState<AtividadeProfessor[]>([]);
   const [turma, setTurma] = useState<Turma | null>(null);
@@ -33,40 +33,40 @@ export default function TarefaList({
   // --- Busca de Dados ---
   const fetchData = useCallback(async () => {
     // ... (código de busca de dados - sem alterações) ...
-     if (!turmaId) {
-        setLoading(false);
-        setError("ID da turma não fornecido.");
-        return;
+    if (!turmaId) {
+      setLoading(false);
+      setError("ID da turma não fornecido.");
+      return;
     }
     setLoading(true);
     setError(null);
     let mounted = true;
     try {
-        const [atividadesData, turmaData] = await Promise.all([
-            getAtividadesCriador(turmaId),
-            getTurmaById(turmaId)
-        ]);
+      const [atividadesData, turmaData] = await Promise.all([
+        getAtividadesCriador(turmaId),
+        getTurmaById(turmaId)
+      ]);
 
-        if (mounted) {
-            setAtividadesProfessor(Array.isArray(atividadesData) ? atividadesData : []);
-            setTurma(turmaData);
-            // Reset selectedIndex if data reloads (optional)
-            // setSelectedIndex(0);
-        }
+      if (mounted) {
+        setAtividadesProfessor(Array.isArray(atividadesData) ? atividadesData : []);
+        setTurma(turmaData);
+        // Reset selectedIndex if data reloads (optional)
+        // setSelectedIndex(0);
+      }
     } catch (err: any) {
-        console.error("Erro ao buscar dados para TarefaList:", err);
-        const msg = err?.response?.data?.error || err.message || "Erro ao carregar dados da lista de tarefas.";
-        if (mounted) {
-            setError(msg);
-            toast.error(msg);
-            setAtividadesProfessor([]);
-            setTurma(null);
-        }
+      console.error("Erro ao buscar dados para TarefaList:", err);
+      const msg = err?.response?.data?.error || err.message || "Erro ao carregar dados da lista de tarefas.";
+      if (mounted) {
+        setError(msg);
+        toast.error(msg);
+        setAtividadesProfessor([]);
+        setTurma(null);
+      }
     } finally {
-        if (mounted) setLoading(false);
+      if (mounted) setLoading(false);
     }
-     return () => {
-        mounted = false;
+    return () => {
+      mounted = false;
     };
   }, [turmaId]);
 
@@ -79,13 +79,13 @@ export default function TarefaList({
   // --- Atualiza Componente Pai ---
   useEffect(() => {
     // ... (código de atualização do pai - sem alterações) ...
-     let selectedDate: Date | undefined = undefined;
+    let selectedDate: Date | undefined = undefined;
     let selectedAtividade: AtividadeProfessor | null = null;
 
     if (atividadesProfessor && atividadesProfessor.length > 0 && selectedIndex < atividadesProfessor.length) {
-       selectedAtividade = atividadesProfessor[selectedIndex];
-       const dateString = selectedAtividade?.dataLimite;
-       if (dateString) {
+      selectedAtividade = atividadesProfessor[selectedIndex];
+      const dateString = selectedAtividade?.dataLimite;
+      if (dateString) {
         const date = new Date(dateString);
         if (!isNaN(date.getTime())) {
           selectedDate = date;
