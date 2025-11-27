@@ -7,7 +7,7 @@ import { GetTurmasCriadasResponse } from "@/apiCalls/turma/types";
 import { getTurmasCriadas } from "@/apiCalls/turma";
 import { defaultIcon } from "@/constants/icons";
 import { getIconPath } from "@/app/utils";
-import NotificationBell from "./NotificationBell"; 
+import NotificationBell from "../shared/NotificationBell"; 
 
 const ArrowRightIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5 text-[#075F70]">
@@ -76,10 +76,10 @@ export default function ListaTurmas() {
   };
 
   return (
-    <section className="col-span-1 bg-transparent p-2 md:p-6 flex flex-col h-full relative z-50">
+    <section className="col-span-1 bg-transparent p-2 md:p-6 flex flex-col h-full relative">
       
       {/* Cabeçalho */}
-      <div className="flex justify-between items-center pb-3 mb-2 border-b border-gray-100 gap-2">
+      <div className="flex justify-between items-center pb-3 mb-2 border-b border-gray-100 gap-2 relative z-30">
         <h2 className="text-[18px] font-bold text-gray-800 truncate min-w-0">
             Minhas Turmas
         </h2>
