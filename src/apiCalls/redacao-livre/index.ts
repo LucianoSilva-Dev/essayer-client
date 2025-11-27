@@ -35,3 +35,8 @@ export const deleteCorrecaoRedacaoLivre = async (idRedacao: string, idCorrecao: 
   const response = await apiClient.delete<void>(`/usuario/redacao/${idRedacao}/correcao/${idCorrecao}`)
   return response.data
 }
+
+export const retryCorrecaoRedacaoLivre = async (idRedacao: string, idCorrecao: string): Promise<void> => {
+  const response = await apiClient.post<void>(`/usuario/redacao/${idRedacao}/correcao/${idCorrecao}/retry`)
+  return response.data
+}

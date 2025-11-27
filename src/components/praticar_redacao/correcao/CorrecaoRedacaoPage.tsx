@@ -84,6 +84,7 @@ export function CorrecaoRedacaoPage({ id }: { id: string }) {
         // Conexão entre Pai e Filho: O pai manda a atual, e o filho avisa quando mudar
         correcaoSelecionada={correcaoAtual}
         onTrocarCorrecao={setCorrecaoAtual}
+        redacaoId={id}
       />
 
       {feedback && (
