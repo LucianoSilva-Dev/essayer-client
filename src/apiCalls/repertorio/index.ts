@@ -137,6 +137,11 @@ export const deleteComentario = async (repertorioId: string, comentarioId: strin
   return response.data;
 };
 
+export const fixarComentario = async (RepertorioId: string, comentarioId: string, fixar: boolean): Promise<GenericSuccessResponse> => {
+  const response = await apiClient.put(`/repertorio/${RepertorioId}/comentario/${comentarioId}/fixar`, { fixar })
+  return response.data
+}
+
 export const addLike = (repertorioId: string): Promise<GenericSuccessResponse> => apiClient.post(`/repertorio/${repertorioId}/like`);
 export const removeLike = (repertorioId: string): Promise<GenericSuccessResponse> => apiClient.delete(`/repertorio/${repertorioId}/like`);
 

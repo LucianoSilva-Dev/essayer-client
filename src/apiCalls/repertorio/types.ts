@@ -87,7 +87,7 @@ export interface CreateArtigoBody {
   titulo: string;
   resumo: string;
   autor: string;
-  fonte: string;
+  fonte?: string;
   subtopicos: string[];
   topicos: string[];
 }
