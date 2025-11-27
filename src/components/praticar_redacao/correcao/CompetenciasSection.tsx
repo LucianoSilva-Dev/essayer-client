@@ -38,7 +38,6 @@ export function CompetenciasSection({
       window.location.reload()
     } catch (error) {
       console.error('Erro ao tentar novamente:', error)
-      alert('Erro ao tentar novamente. Tente mais tarde.')
     } finally {
       setIsRetrying(false)
     }
