@@ -4,212 +4,393 @@ import React, { useEffect, useState } from "react";
 import { useCreateTask } from "../CreateTaskContext";
 import RepertorioCard from "@/components/repertorio/repertorio-card"; 
 import { getAllRepertorios } from "@/apiCalls/repertorio"; 
-import { Repertorio } from "@/types/repertorio";
-import { Search, X } from "lucide-react";
+import { Repertorio } from "@/types/repertorio"; 
+import { Search, X, Check, Plus, Loader2, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { toast } from "react-toastify";
 
-export function Step2_Detalhes() {
-  const { taskData, updateTaskData } = useCreateTask();
-  
-  const [repertorios, setRepertorios] = useState<Repertorio[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [showCarousel, setShowCarousel] = useState(false);
-  const [searchTerm, setSearchTerm] = useState("");
+// --- FUNÇÃO DE MAPEAMENTO ---
+function mapToFrontendRepertorio(doc: any): Repertorio {
+    const eixos = doc.topicos || [];
+    const recortes = doc.subtopicos || [];
+    const base = {
+        id: doc.id,
+        isPublico: true,
+        totalLikes: doc.totalLikes || 0,
+        favoritadoPeloUsuario: doc.favoritadoPeloUsuario || false,
+        likeDoUsuario: doc.likeDoUsuario || false,
+        criador: doc.criador,
+        totalComentarios: doc.totalComentarios || 0,
+        comentarios: doc.comentarios || [],
+        eixos,
+        recortes,
+    };
 
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        setLoading(true);
-        const data = await getAllRepertorios('?limit=10'); 
-        // Ajuste de segurança caso a API retorne paginado ou array direto
-        const docs = Array.isArray(data) ? data : (data?.documentos ?? []);
-        setRepertorios(docs as Repertorio[]);
-      } catch (error) {
-        console.error("Erro ao buscar repertórios:", error);
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchData();
-  }, []);
-
-  // Filtro corrigido com verificação de tipo
-  const filteredRepertorios = repertorios.filter(rep => {
-    const search = searchTerm.toLowerCase();
+    if (doc.tipoRepertorio === 'Obra' || doc.modelo === 'obra') {
+        return {
+            ...base,
+            modelo: 'obra',
+            titulo: doc.titulo,
+            autoria: doc.autor || doc.autoria,
+            sinopse: doc.sinopse,
+            tipoObra: doc.tipoObra || 'livro',
+        } as Repertorio;
+    } 
     
-    // Verifica o modelo para decidir qual campo usar como "título"
-    let tituloBusca = "";
-    if (rep.modelo === 'citacao') {
-        // Citação não tem título, usamos a autoria ou o começo da citação
-        tituloBusca = rep.autoria;
-    } else {
-        // Obra e Artigo têm título
-        tituloBusca = rep.titulo;
+    if (doc.tipoRepertorio === 'Artigo' || doc.modelo === 'artigo') {
+        return {
+            ...base,
+            modelo: 'artigo',
+            titulo: doc.titulo,
+            autoria: doc.autor || doc.autoria,
+            sintese: doc.resumo || doc.sintese,
+            fonte: doc.fonte,
+        } as Repertorio;
     }
 
-    const autoria = rep.autoria || "";
+    if (doc.tipoRepertorio === 'Citacao' || doc.modelo === 'citacao') {
+        return {
+            ...base,
+            modelo: 'citacao',
+            autoria: doc.autor || doc.autoria,
+            citacao: doc.frase || doc.citacao,
+            fonte: doc.fonte,
+        } as Repertorio;
+    }
+
+    return {
+        ...base,
+        modelo: 'citacao',
+        autoria: doc.autor || "Desconhecido",
+        citacao: "Erro ao carregar conteúdo",
+    } as Repertorio;
+}
+
+// --- Modal de Seleção com Paginação ---
+function RepertoireSelectorModal({ 
+    isOpen, 
+    onClose, 
+    eixoFilter, 
+    selectedIds, 
+    onToggleSelect 
+}: { 
+    isOpen: boolean; 
+    onClose: () => void; 
+    eixoFilter: string;
+    selectedIds: string[];
+    onToggleSelect: (rep: Repertorio) => void;
+}) {
+    const [repertorios, setRepertorios] = useState<Repertorio[]>([]);
+    const [loading, setLoading] = useState(false);
+    const [loadingMore, setLoadingMore] = useState(false);
+    const [searchTerm, setSearchTerm] = useState("");
     
-    return tituloBusca.toLowerCase().includes(search) || autoria.toLowerCase().includes(search);
-  });
+    // Estados de Paginação
+    const [offset, setOffset] = useState(0);
+    const [hasMore, setHasMore] = useState(true);
+    const LIMIT = 15; // Limite imposto pela API
 
-  const cardDecorativoEsq = repertorios[0];
-  const cardDecorativoDir = repertorios[1];
+    // Reset ao abrir ou mudar filtro
+    useEffect(() => {
+        if (isOpen) {
+            setRepertorios([]);
+            setOffset(0);
+            setHasMore(true);
+            fetchRepertorios(0, true);
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isOpen, eixoFilter]);
 
-  // Valores seguros para o input (garantindo que não sejam undefined)
-  const tituloValue = taskData.titulo ?? "";
-  const temaValue = taskData.tema ?? "";
-  const currentRepertorioId = taskData.repertorioId ?? null;
+    async function fetchRepertorios(currentOffset: number, isReset: boolean) {
+        if (isReset) setLoading(true);
+        else setLoadingMore(true);
 
-  return (
-    <div className="flex flex-col gap-12 max-w-6xl mx-auto pb-20 animate-in fade-in slide-in-from-right-8 duration-500 relative">
-      
-      {/* ===== Seção 1: Título ===== */}
-      <div className="space-y-4">
-        <label className="font-montserrat font-semibold text-[35px] text-[#3C3C3C]">
-          Adicione um título à tarefa
-        </label>
-        <input
-          type="text"
-          value={tituloValue}
-          onChange={(e) => updateTaskData({ titulo: e.target.value })}
-          placeholder="Ex: Redação - Semana 3"
-          className="w-full text-right p-4 text-[20px] text-[#3C3C3C] bg-transparent border-b-[3px] border-[#898787] focus:outline-none focus:border-[#075F70] placeholder:text-gray-300 font-montserrat"
-        />
-      </div>
+        try {
+            // Construção da Query String
+            let query = `?limit=${LIMIT}&offset=${currentOffset}`;
+            
+            // Tenta filtrar por eixo na API para otimizar os 15 itens retornados
+            if (eixoFilter) {
+                // Ajuste o nome do parâmetro 'eixos' ou 'topicos' conforme sua API espera
+                query += `&eixos=${encodeURIComponent(eixoFilter)}`;
+            }
 
-      {/* ===== Seção 2: Tema ===== */}
-      <div className="space-y-6 relative z-20">
-        <label className="font-montserrat font-semibold text-[35px] text-[#3C3C3C]">
-          Crie um tema aqui
-        </label>
-        
-        <div className="flex flex-col md:flex-row gap-4 items-end">
-          <button 
-            type="button"
-            className="flex items-center justify-center px-6 py-2 border-[2px] border-[#3C3C3C] rounded-[20px] gap-2 hover:bg-gray-50 transition-colors h-[50px] shrink-0"
-            onClick={() => console.log("Lógica futura de Temas Prontos")}
-          >
-             <span className="font-montserrat font-medium text-[20px] text-[#3C3C3C]">Temas prontos</span>
-          </button>
+            const response = await getAllRepertorios(query);
+            
+            // @ts-ignore
+            const rawList: any[] = Array.isArray(response) ? response : (response?.documentos || []);
+            const paginacao = (response as any)?.paginacao;
 
-          <input
-            type="text"
-            value={temaValue}
-            onChange={(e) => updateTaskData({ tema: e.target.value })}
-            placeholder="Digite o tema da redação..."
-            className="w-full text-right p-4 text-[20px] text-[#3C3C3C] bg-transparent border-b-[3px] border-[#898787] focus:outline-none focus:border-[#075F70] font-montserrat"
-          />
-        </div>
-      </div>
+            const mappedList = rawList.map(mapToFrontendRepertorio);
+            
+            setRepertorios(prev => isReset ? mappedList : [...prev, ...mappedList]);
+            
+            // Verifica se tem mais itens baseado na resposta ou no tamanho da lista retornada
+            if (mappedList.length < LIMIT) {
+                setHasMore(false);
+            } else if (paginacao && paginacao.total) {
+                // Se a API retornar o total, podemos comparar
+                const totalLoaded = isReset ? mappedList.length : repertorios.length + mappedList.length;
+                setHasMore(totalLoaded < paginacao.total);
+            }
 
-      {/* ===== Seção 3: Texto Motivador ===== */}
-      <div className="pt-8 relative min-h-[500px] mt-8 flex flex-col items-start transition-all duration-500">
-        <h2 className="font-montserrat font-semibold text-[35px] text-[#3C3C3C] mb-4 relative z-30">
-          Texto motivador
-        </h2>
+        } catch (error) {
+            console.error("Erro ao buscar repertórios:", error);
+            toast.error("Não foi possível carregar os repertórios.");
+            setHasMore(false);
+        } finally {
+            setLoading(false);
+            setLoadingMore(false);
+        }
+    }
 
-        <div className="relative z-30 mb-8">
-            <p className="font-montserrat font-normal text-[30px] leading-[37px] text-[#3C3C3C] max-w-[500px] mb-8">
-            Utilize os repertórios disponíveis em nosso site como textos motivadores! Eles ajudam a compreender melhor o tema.
-            </p>
+    const handleLoadMore = () => {
+        if (!loadingMore && hasMore) {
+            const nextOffset = offset + LIMIT;
+            setOffset(nextOffset);
+            fetchRepertorios(nextOffset, false);
+        }
+    };
 
-            <div className="flex gap-4 items-center">
-                <button
-                    type="button"
-                    onClick={() => setShowCarousel(!showCarousel)}
-                    className={cn(
-                        "flex items-center justify-center gap-[10px] rounded-[25px] w-[227px] h-[57px] shadow-lg transition-colors",
-                        showCarousel ? "bg-[#898787] hover:bg-[#6e6e6e]" : "bg-[#075F70] hover:bg-[#064d5c]"
-                    )}
-                >
-                    <span className="font-montserrat font-medium text-[30px] leading-[37px] text-[#E5EFF0]">
-                        {showCarousel ? "Fechar" : "Ver tudo"}
-                    </span>
-                </button>
+    // Filtro Client-Side (Aplica-se apenas aos itens já carregados)
+    const displayList = repertorios.filter(rep => {
+        const search = searchTerm.toLowerCase();
+        const autor = (rep.autoria || "").toLowerCase();
 
-                {showCarousel && (
-                     <div className="relative animate-in fade-in slide-in-from-left-4">
+        switch (rep.modelo) {
+            case "obra":
+            case "artigo":
+                return (rep.titulo || "").toLowerCase().includes(search) || autor.includes(search);
+            case "citacao":
+                return (rep.citacao || "").toLowerCase().includes(search) || autor.includes(search);
+            default:
+                return false;
+        }
+    });
+
+    if (!isOpen) return null;
+
+    return (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 animate-in fade-in duration-200">
+            <div className="bg-white rounded-3xl w-full max-w-5xl h-[85vh] flex flex-col shadow-2xl overflow-hidden">
+                
+                {/* Header */}
+                <div className="p-6 border-b flex justify-between items-center bg-white">
+                    <div>
+                        <h3 className="text-2xl font-bold font-montserrat text-[#075F70]">Selecionar Textos Motivadores</h3>
+                        <p className="text-gray-500 text-sm font-montserrat">
+                            {eixoFilter ? `Filtrando por: ${eixoFilter}` : "Todos os eixos"}
+                        </p>
+                    </div>
+                    <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-full transition-colors">
+                        <X size={24} className="text-gray-500" />
+                    </button>
+                </div>
+
+                {/* Busca */}
+                <div className="p-4 bg-gray-50 border-b">
+                    <div className="relative max-w-2xl mx-auto">
                         <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
                         <input 
-                            className="w-[300px] bg-white rounded-full py-3 pl-12 pr-4 outline-none border border-gray-200 focus:border-[#075F70] shadow-sm font-montserrat"
-                            placeholder="Filtrar repertórios..."
+                            className="w-full bg-white rounded-xl py-3 pl-12 pr-4 outline-none border border-gray-200 focus:border-[#075F70] focus:ring-1 focus:ring-[#075F70] transition-all font-montserrat"
+                            placeholder="Pesquisar nos itens carregados..."
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
+                            autoFocus
                         />
-                     </div>
-                )}
+                    </div>
+                </div>
+
+                {/* Lista com Scroll Infinito / Load More */}
+                <div className="flex-1 overflow-y-auto p-6 bg-[#F8F9FA]">
+                    {loading ? (
+                        <div className="flex flex-col items-center justify-center h-full text-gray-400 gap-4">
+                            <Loader2 className="animate-spin" size={40} />
+                            <p className="font-montserrat">Carregando repertórios...</p>
+                        </div>
+                    ) : (
+                        <>
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                {displayList.map((rep) => {
+                                    const isSelected = selectedIds.includes(rep.id);
+                                    return (
+                                        <div 
+                                            key={rep.id}
+                                            onClick={() => onToggleSelect(rep)}
+                                            className={cn(
+                                                "cursor-pointer relative transition-all duration-200 group",
+                                                isSelected ? "ring-2 ring-[#075F70] rounded-[20px] scale-[1.02] shadow-md" : "hover:scale-[1.01]"
+                                            )}
+                                        >
+                                            <div className="pointer-events-none select-none">
+                                                <RepertorioCard repertorio={rep} />
+                                            </div>
+                                            
+                                            <div className={cn(
+                                                "absolute inset-0 rounded-[20px] transition-colors flex items-center justify-center",
+                                                isSelected ? "bg-[#075F70]/10" : "group-hover:bg-black/5"
+                                            )}>
+                                                {isSelected && (
+                                                    <div className="absolute top-3 right-3 bg-[#075F70] text-white p-1.5 rounded-full shadow-lg animate-in zoom-in">
+                                                        <Check size={16} strokeWidth={3} />
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </div>
+                                    )
+                                })}
+                            </div>
+
+                            {/* Botão Carregar Mais */}
+                            {displayList.length > 0 && hasMore && (
+                                <div className="mt-8 flex justify-center pb-4">
+                                    <button
+                                        onClick={handleLoadMore}
+                                        disabled={loadingMore}
+                                        className="flex items-center gap-2 px-6 py-2 bg-white border border-gray-300 rounded-full text-gray-600 hover:bg-gray-50 hover:border-[#075F70] hover:text-[#075F70] transition-all shadow-sm disabled:opacity-50"
+                                    >
+                                        {loadingMore ? (
+                                            <Loader2 className="animate-spin" size={18} />
+                                        ) : (
+                                            <ChevronDown size={18} />
+                                        )}
+                                        {loadingMore ? "Carregando..." : "Carregar mais"}
+                                    </button>
+                                </div>
+                            )}
+
+                            {!loading && displayList.length === 0 && (
+                                <div className="col-span-full text-center py-20 text-gray-400 font-montserrat">
+                                    Nenhum repertório encontrado.
+                                </div>
+                            )}
+                        </>
+                    )}
+                </div>
+
+                {/* Footer */}
+                <div className="p-4 border-t bg-white flex justify-between items-center">
+                    <span className="text-gray-500 font-montserrat ml-2">
+                        {selectedIds.length} selecionado(s)
+                    </span>
+                    <button 
+                        onClick={onClose}
+                        className="bg-[#075F70] text-white px-8 py-3 rounded-full font-bold font-montserrat hover:bg-[#064d5c] transition-colors shadow-lg"
+                    >
+                        Concluir Seleção
+                    </button>
+                </div>
             </div>
         </div>
+    );
+}
 
-        {/* ===== CONTEÚDO (CARROSSEL OU DECORAÇÃO) ===== */}
-        {showCarousel ? (
-            <div className="w-full relative z-40 animate-in fade-in zoom-in-95 duration-300 mt-4">
-                {loading ? (
-                    <div className="h-60 flex items-center justify-center text-gray-400 italic">Carregando repertórios...</div>
-                ) : (
-                    <div className="overflow-x-auto pb-10 pt-5 px-2 -mx-2">
-                         <div className="flex gap-8 w-max">
-                            {filteredRepertorios.map((rep) => {
-                                const isSelected = currentRepertorioId === rep.id;
-                                return (
-                                    // Wrapper para aplicar estilos externos e click
-                                    <div 
-                                        key={rep.id} 
-                                        onClick={() => updateTaskData({ repertorioId: rep.id })}
-                                        className={cn(
-                                            "cursor-pointer transition-all duration-300 hover:-translate-y-2 w-[300px]",
-                                            isSelected ? "ring-4 ring-[#075F70] rounded-[30px] scale-105" : "hover:scale-105"
-                                        )}
-                                    >
-                                        <div className="pointer-events-none h-full w-full">
-                                            {/* Removido className e onClick direto do componente filho */}
-                                            <RepertorioCard repertorio={rep} />
-                                        </div>
-                                    </div>
-                                )
-                            })}
-                            {filteredRepertorios.length === 0 && (
-                                <div className="text-gray-500 italic p-4">Nenhum repertório encontrado.</div>
-                            )}
-                         </div>
-                    </div>
-                )}
+// --- Componente Principal do Passo 2 ---
+export function Step2_Detalhes() {
+  const { taskData, updateTaskData } = useCreateTask();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const toggleRepertorio = (rep: Repertorio) => {
+      const exists = taskData.repertorios.find(r => r.id === rep.id);
+      let newList;
+      if (exists) {
+          newList = taskData.repertorios.filter(r => r.id !== rep.id);
+      } else {
+          newList = [...taskData.repertorios, rep];
+      }
+      updateTaskData({ repertorios: newList });
+  };
+
+  return (
+    <div className="flex flex-col gap-10 max-w-5xl mx-auto pb-20 animate-in fade-in slide-in-from-right-8 duration-500">
+      
+      {/* Inputs de Título e Tema */}
+      <div className="space-y-8 bg-white p-8 rounded-[30px] shadow-sm border border-gray-100">
+          <div className="space-y-2">
+            <label className="font-montserrat font-semibold text-[20px] text-[#3C3C3C] pl-2">
+              Dê um título para sua tarefa
+            </label>
+            <input
+              type="text"
+              value={taskData.titulo}
+              onChange={(e) => updateTaskData({ titulo: e.target.value })}
+              placeholder="Ex: Redação Semana 1 - Enem"
+              className="w-full p-4 text-[18px] text-[#3C3C3C] bg-gray-50 rounded-xl border-2 border-transparent focus:border-[#075F70] focus:bg-white transition-all outline-none font-montserrat"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <label className="font-montserrat font-semibold text-[20px] text-[#3C3C3C] pl-2">
+              Qual é o tema da redação?
+            </label>
+            <textarea
+              rows={2}
+              value={taskData.tema}
+              onChange={(e) => updateTaskData({ tema: e.target.value })}
+              placeholder="Digite o tema completo aqui..."
+              className="w-full p-4 text-[18px] text-[#3C3C3C] bg-gray-50 rounded-xl border-2 border-transparent focus:border-[#075F70] focus:bg-white transition-all outline-none font-montserrat resize-none"
+            />
+          </div>
+      </div>
+
+      {/* Área de Textos Motivadores */}
+      <div className="space-y-6">
+        <div className="flex items-center justify-between flex-wrap gap-4">
+            <div className="space-y-1">
+                <h2 className="font-montserrat font-semibold text-[28px] text-[#3C3C3C]">
+                    Textos Motivadores
+                </h2>
+                <p className="text-gray-500 font-montserrat">
+                    Selecione repertórios do banco de dados para auxiliar seus alunos.
+                </p>
+            </div>
+            
+            <button
+                onClick={() => setIsModalOpen(true)}
+                className="flex items-center gap-2 bg-[#075F70] hover:bg-[#064d5c] text-white px-6 py-3 rounded-full font-medium transition-all shadow-lg hover:shadow-xl active:scale-95 font-montserrat"
+            >
+                <Plus size={20} />
+                <span>Escolher Repertórios</span>
+            </button>
+        </div>
+
+        {/* Carrossel Horizontal de Selecionados */}
+        {taskData.repertorios.length > 0 ? (
+            <div className="overflow-x-auto pb-8 -mx-4 px-4 scrollbar-thin scrollbar-thumb-gray-200 hover:scrollbar-thumb-gray-300">
+                <div className="flex gap-6 w-max">
+                    {taskData.repertorios.map((rep) => (
+                        <div key={rep.id} className="w-[300px] relative group animate-in fade-in zoom-in duration-300">
+                            <button 
+                                onClick={() => toggleRepertorio(rep)}
+                                className="absolute -top-2 -right-2 z-10 bg-red-500 text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-all shadow-md hover:bg-red-600 hover:scale-110"
+                                title="Remover"
+                            >
+                                <X size={16} />
+                            </button>
+                            <div className="pointer-events-none scale-[0.95] origin-top-left transition-transform group-hover:scale-[0.97]">
+                                <RepertorioCard repertorio={rep} />
+                            </div>
+                        </div>
+                    ))}
+                </div>
             </div>
         ) : (
-            /* MODO DECORAÇÃO */
-            !loading && (
-            <>
-                {cardDecorativoEsq && (
-                // Wrapper DIV controla a posição e rotação, pois RepertorioCard não aceita className
-                <div className="absolute top-20 right-[350px] opacity-40 transform -rotate-12 scale-90 pointer-events-none hidden xl:block z-10 transition-all duration-700 w-[280px]">
-                    <RepertorioCard repertorio={cardDecorativoEsq} />
-                </div>
-                )}
-
-                {cardDecorativoDir && (
-                <div className="absolute top-32 right-0 opacity-40 transform rotate-12 scale-90 pointer-events-none hidden xl:block z-10 transition-all duration-700 w-[280px]">
-                    <RepertorioCard repertorio={cardDecorativoDir} />
-                </div>
-                )}
-            </>
-            )
+            <div className="h-40 border-2 border-dashed border-gray-300 rounded-[30px] flex items-center justify-center bg-gray-50/50 hover:bg-gray-50 transition-colors cursor-pointer group" onClick={() => setIsModalOpen(true)}>
+                <p className="text-gray-400 font-montserrat font-medium group-hover:text-[#075F70] transition-colors flex items-center gap-2">
+                    <Plus size={20} /> Nenhum texto selecionado. Clique para adicionar.
+                </p>
+            </div>
         )}
-        
-        {/* Feedback de seleção */}
-        {currentRepertorioId != null && (
-             <div className="fixed bottom-10 right-10 bg-[#075F70] text-white px-6 py-3 rounded-full shadow-xl z-50 animate-in slide-in-from-bottom-5 flex items-center gap-3">
-                <span>Repertório selecionado!</span>
-                <button 
-                    type="button"
-                    onClick={() => updateTaskData({ repertorioId: null })} 
-                    className="bg-white/20 rounded-full p-1 hover:bg-white/30"
-                >
-                    <X size={14} />
-                </button>
-             </div>
-        )}
-
       </div>
+
+      {/* Modal de Seleção */}
+      <RepertoireSelectorModal 
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        eixoFilter={taskData.eixoId}
+        selectedIds={taskData.repertorios.map(r => r.id)}
+        onToggleSelect={toggleRepertorio}
+      />
     </div>
   );
 }
