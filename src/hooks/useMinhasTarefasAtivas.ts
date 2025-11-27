@@ -1,4 +1,3 @@
-// src/hooks/useMinhasTarefasAtivas.ts
 "use client";
 
 import { useEffect, useState } from "react";
@@ -21,7 +20,23 @@ export function useMinhasTarefasAtivas() {
         const tarefasData = await getMinhasAtividadesAtivas();
 
         if (mounted) {
-          setTarefas(tarefasData);
+          const agora = new Date();
+          const tarefasFiltradas = tarefasData.filter((tarefa) => {
+            // 1. Verificar Status: Apenas 'pendente' é considerada ativa
+            // O usuário confirmou que 'concluida' e 'encerrada' não devem aparecer
+            const statusOk = tarefa.status?.toLowerCase() === 'pendente';
+
+            // 2. Verificar Prazo: Se houver dataLimite, deve ser maior que agora
+            let prazoOk = true;
+            if (tarefa.dataLimite) {
+              const dataLimite = new Date(tarefa.dataLimite);
+              prazoOk = dataLimite > agora;
+            }
+
+            return statusOk && prazoOk;
+          });
+
+          setTarefas(tarefasFiltradas);
         }
       } catch (err: any) {
         if (mounted) {

@@ -69,7 +69,8 @@ export interface CreateComentarioBody {
 }
 
 export interface UpdateComentarioBody {
-  texto: string;
+  texto?: string;
+  fixar?: boolean;
 }
 
 export interface CreateCitacaoBody {
@@ -86,7 +87,7 @@ export interface CreateArtigoBody {
   titulo: string;
   resumo: string;
   autor: string;
-  fonte: string;
+  fonte?: string;
   subtopicos: string[];
   topicos: string[];
 }

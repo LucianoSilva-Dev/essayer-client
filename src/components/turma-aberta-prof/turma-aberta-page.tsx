@@ -137,7 +137,7 @@ export default function TurmaAbertaPage({ turmaId }: Props) {
                 refetch={refetch}
               />
             </div>
-            <ConvidarEstudante />
+            <ConvidarEstudante idTurma={turmaId}/>
           </section>
         </div>
 
