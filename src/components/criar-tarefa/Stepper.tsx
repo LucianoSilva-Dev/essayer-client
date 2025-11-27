@@ -3,79 +3,90 @@
 import React from "react";
 import { useCreateTask } from "./CreateTaskContext";
 import { cn } from "@/lib/utils";
-import { Check } from "lucide-react";
 
 const steps = [
-  { id: 1, label: "Eixo" },
-  { id: 2, label: "Detalhes" },
-  { id: 3, label: "Prazo" },
-  { id: 4, label: "Instruções" },
+  { id: 1, label: "Eixo temático" },
+  { id: 2, label: "Tema e Texto motivacional" }, // Texto ajustado conforme imagem
+  { id: 3, label: "Prazo de entrega" },
+  { id: 4, label: "Duração e descrição" },
   { id: 5, label: "Revisão" },
 ];
 
 export function Stepper() {
-  const { currentStep, setStep } = useCreateTask();
+  const { currentStep } = useCreateTask();
 
   return (
-    <div className="w-full max-w-5xl mx-auto mb-8 px-4">
-      <div className="relative flex items-center justify-between">
-        
-        {/* Linha de Conexão de Fundo */}
-        <div className="absolute left-0 top-1/2 -translate-y-1/2 w-full h-1 bg-gray-200 rounded-full -z-10" />
-        
-        {/* Linha de Progresso Ativa (Calculada dinamicamente) */}
-        <div 
-            className="absolute left-0 top-1/2 -translate-y-1/2 h-1 bg-[#075F70] rounded-full -z-10 transition-all duration-500 ease-in-out"
-            style={{ width: `${((currentStep - 1) / (steps.length - 1)) * 100}%` }}
-        />
+    <div className="w-full max-w-[1165px] mx-auto mb-12 px-4 flex flex-col gap-10">
+      
+      {/* Título do Stepper conforme Figma */}
+      <h2 className="font-montserrat font-normal text-[25px] leading-[30px] text-[#616060]">
+        Complete a trilha para publicar a tarefa
+      </h2>
 
-        {steps.map((step) => {
+      <div className="relative flex items-center justify-between w-full">
+        {steps.map((step, index) => {
+          // Lógica de Ativo/Inativo
           const isActive = step.id === currentStep;
           const isCompleted = step.id < currentStep;
-          const isClickable = step.id < currentStep; // Permite voltar apenas para passos já visitados
+          // No design, se está completado ou ativo, usa a cor Teal. Se futuro, usa Branco/Cinza.
+          const isActiveOrCompleted = step.id <= currentStep;
 
           return (
-            <div 
-                key={step.id} 
-                className="flex flex-col items-center gap-2 relative group"
-            >
-                {/* Círculo do Passo */}
-                <button
-                    onClick={() => isClickable && setStep(step.id)}
-                    disabled={!isClickable}
-                    className={cn(
-                        "w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center border-[3px] transition-all duration-300 bg-white",
-                        isActive 
-                            ? "border-[#075F70] scale-110 shadow-lg" 
-                            : isCompleted 
-                                ? "border-[#075F70] bg-[#075F70] text-white" 
-                                : "border-gray-300 text-gray-300",
-                        isClickable && "cursor-pointer hover:scale-105"
-                    )}
+            <React.Fragment key={step.id}>
+              {/* O Passo (Círculo + Label) */}
+              <div className="flex flex-col items-center relative z-10 group">
+                
+                {/* Círculo */}
+                <div
+                  className={cn(
+                    "w-[50px] h-[50px] rounded-full flex items-center justify-center transition-all duration-300 shadow-[0px_4px_4px_rgba(0,0,0,0.25)]",
+                    // Estilo Ativo/Completado (Figma State 1)
+                    isActiveOrCompleted
+                      ? "bg-[#075F70] text-[#E5EFF0]"
+                      : "bg-white text-black", // Figma State 2
+                  )}
                 >
-                    {isCompleted ? (
-                        <Check size={20} strokeWidth={3} />
-                    ) : (
-                        <span className={cn(
-                            "text-sm md:text-lg font-bold font-montserrat",
-                            isActive ? "text-[#075F70]" : "text-gray-300"
-                        )}>
-                            {step.id}
-                        </span>
-                    )}
-                </button>
+                  <span className="font-montserrat font-medium text-[35px] leading-[43px]">
+                    {step.id}
+                  </span>
+                </div>
 
-                {/* Label do Passo */}
-                <span className={cn(
-                    "absolute -bottom-8 text-xs md:text-sm font-medium font-montserrat whitespace-nowrap transition-colors duration-300",
-                    isActive ? "text-[#075F70] font-bold" : "text-gray-400"
-                )}>
-                    {step.label}
+                {/* Label (Texto abaixo) */}
+                <span
+                  className={cn(
+                    "absolute -bottom-10 text-center font-montserrat font-medium text-[15px] leading-[18px] whitespace-nowrap w-[150px]",
+                    isActiveOrCompleted ? "text-[#075F70]" : "text-[#898787]"
+                  )}
+                  style={{ 
+                    // Ajuste fino para labels longas ficarem centralizadas
+                    left: "50%", 
+                    transform: "translateX(-50%)" 
+                  }}
+                >
+                  {step.label}
                 </span>
-            </div>
+              </div>
+
+              {/* Linha Conectora (Não renderiza após o último passo) */}
+              {index < steps.length - 1 && (
+                <div 
+                    className={cn(
+                        "flex-1 h-0 border-t-[5px] transition-colors duration-300 mx-2",
+                        // Se o PRÓXIMO passo já foi alcançado, a linha é colorida.
+                        // Ex: Se estou no passo 2, a linha entre 1 e 2 é colorida.
+                        step.id < currentStep 
+                            ? "border-[#075F70]" 
+                            : "border-[#898787]"
+                    )} 
+                />
+              )}
+            </React.Fragment>
           );
         })}
       </div>
+      
+      {/* Espaço extra para as labels não cortarem */}
+      <div className="h-6" />
     </div>
   );
 }
