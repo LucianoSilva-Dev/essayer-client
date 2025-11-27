@@ -1,45 +1,87 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { CorrecaoHeader } from './CorrecaoHeader'
 import { RedacaoOriginalCard } from './RedacaoOriginalCard'
 import { CompetenciasSection } from './CompetenciasSection'
 import { AnaliseFeedback } from './AnaliseFeedback'
 
-// Imports da API e Tipos
+// Imports da API e Tipos (Assumidos)
+// **ATENÇÃO**: Verifique se você tem esses imports configurados corretamente.
 import { CorrecaoIA, RedacaoLivreDoc } from '@/apiCalls/redacao-livre/types'
-import { getRedacaoLivre } from '@/apiCalls/redacao-livre'
+import { getRedacaoLivre, corrigirRedacaoLivre } from '@/apiCalls/redacao-livre' 
+import { toast } from 'react-toastify'; 
+import { listenCorrecaoRedacao } from '@/apiCalls/redacao'; 
+import { CustomEventSourceMap } from '@/apiCalls/types'; 
+import { GetCorrecaoRedacaoResponse } from '@/apiCalls/redacao/types'; 
+import { CorrigirRedacaoLivreBody } from '@/apiCalls/redacao-livre/types';
 
 export function CorrecaoRedacaoPage({ id }: { id: string }) {
   const competencias = ['c1', 'c2', 'c3', 'c4', 'c5']
 
   const [data, setData] = useState<RedacaoLivreDoc | null>(null)
-  
-  // Estado da competência ativa (C1, C2, etc)
   const [activeCompetenciaId, setActiveCompetenciaId] = useState(competencias[0])
-  
-  // NOVO: Estado para saber QUAL versão da correção o usuário escolheu no dropdown
   const [correcaoAtual, setCorrecaoAtual] = useState<CorrecaoIA | null>(null)
-  
   const [feedback, setFeedback] = useState<string>("")
+  
+  // NOVOS ESTADOS PARA O FLUXO DE CORREÇÃO
+  const [isCorrecting, setIsCorrecting] = useState(false) // Loading do botão
+  const [isListening, setIsListening] = useState(false) // Controla se o SSE está ativo
+
+  // Função para buscar e setar os dados (extraída do useEffect para ser reusada)
+  const fetchData = useCallback(async () => {
+    try {
+        const response = await getRedacaoLivre(id)
+        setData(response)
+        
+        // Configura a última correção como a ativa ao carregar/atualizar os dados
+        const ultimaCorrecao = response.correcoesIA[0] 
+        if (ultimaCorrecao) {
+            setCorrecaoAtual(ultimaCorrecao)
+            setActiveCompetenciaId(competencias[0]) 
+        } else {
+            setCorrecaoAtual(null);
+        }
+    } catch (error) {
+        console.error("Erro ao buscar dados da redação:", error);
+        toast.error("Não foi possível carregar os dados da redação.");
+    }
+  }, [id])
+
+  // --- LÓGICA DE CALLBACKS DO SSE ---
+  const onError = useCallback((data: CustomEventSourceMap['appError']) => {
+    toast.error(`Erro na correção: ${data.data.statusCode}: ${data.data.message}`)
+    setIsCorrecting(false);
+    setIsListening(false);
+    fetchData(); 
+  }, [fetchData]);
+
+  const onDelay = useCallback((_: null) => {
+    toast.info('Correção em andamento, por favor aguarde! Você pode fechar esta aba.')
+  }, []);
+
+  const onSuccess = useCallback(async (response: GetCorrecaoRedacaoResponse) => {
+    setIsCorrecting(false);
+    setIsListening(false);
+    toast.success('Correção finalizada com sucesso! Atualizando dados...')
+
+    // Ação principal: Re-fetch dos dados para atualizar a lista de correções e a tela
+    await fetchData(); 
+
+  }, [fetchData]);
+  // ---------------------------------
 
   // 1. Busca os dados iniciais na API
   useEffect(() => {
-    (async () => {
-      const response = await getRedacaoLivre(id)
-      setData(response)
-      
-      // Assim que carregar, define a correção mais recente (index 0) como a atual
-      if (response.correcoesIA && response.correcoesIA.length > 0) {
-        setCorrecaoAtual(response.correcoesIA[0])
-      }
-    })()
-  }, [id])
+    fetchData()
+  }, [fetchData]) 
 
-  // 2. Atualiza o texto da IA sempre que a Competência OU a Correção Atual mudar
+  // 2. Atualiza o feedback quando a competência ou a correção atual muda
   useEffect(() => {
-    // Se ainda não tiver uma correção selecionada, não faz nada
-    if (!correcaoAtual) return
+    if (!correcaoAtual) {
+      setFeedback("")
+      return
+    }
 
     switch (activeCompetenciaId) {
       case 'c1':
@@ -60,7 +102,46 @@ export function CorrecaoRedacaoPage({ id }: { id: string }) {
       default:
         setFeedback("")
     }
-  }, [activeCompetenciaId, correcaoAtual]) // <--- O segredo está aqui: dependência 'correcaoAtual'
+  }, [activeCompetenciaId, correcaoAtual])
+  
+  // NOVO: Função para solicitar nova correção e escutar o evento
+  const handleCorrigirNovamente = async () => {
+    const redacaoId = data?.id;
+    const tema = data?.tema; // Novo: Captura o tema
+    const textoAtual = data?.texto || ""; // Novo: Captura o texto original finalizado
+
+    // Verifica se os dados necessários existem
+    if (isCorrecting || !redacaoId || !tema) {
+        if (!isCorrecting) {
+            toast.error("Dados da redação incompletos para correção.");
+        }
+        return; 
+    }
+
+    try {
+        setIsCorrecting(true)
+        setIsListening(true)
+        toast.info("Solicitando nova correção...")
+
+        // 1. Chama a API para iniciar o processamento (reenviar a redação)
+        // CORRIGIDO: Passando o objeto de corpo esperado pela API
+        const body: CorrigirRedacaoLivreBody = {
+            tema: tema,
+            textoRedacao: textoAtual,
+        };
+        
+        await corrigirRedacaoLivre(redacaoId, body) 
+        
+        // 2. Aguarda a correção ser concluída via SSE/polling
+        listenCorrecaoRedacao(redacaoId, onError, onDelay, onSuccess);
+
+    } catch (error) {
+        console.error("Erro ao solicitar nova correção:", error)
+        toast.error('Erro ao iniciar a correção. Tente novamente.')
+        setIsCorrecting(false)
+        setIsListening(false)
+    }
+}
 
   return (
     <div className="p-6 md:p-10 max-w-7xl mx-auto">
@@ -68,29 +149,26 @@ export function CorrecaoRedacaoPage({ id }: { id: string }) {
 
       <RedacaoOriginalCard 
         idRedacao={data?.id || ''} 
-        // Passamos o ID e Texto da correção ATUAL selecionada no dropdown
         idCorrecao={correcaoAtual?.id || ''} 
-        textoRedacao={correcaoAtual?.texto || ""} 
+        textoRedacao={correcaoAtual?.texto || "" || data?.texto || ""} 
         temaRedacao={data?.tema || ""} 
+        
+        // PROPS INJETADAS
+        onCorrectAgain={handleCorrigirNovamente} 
+        isCorrecting={isCorrecting} 
       />
 
       <CompetenciasSection
-        // Passamos a lista completa para o dropdown montar o histórico
         correcoes={data?.correcoesIA || []}
-        
         activeCompetenciaId={activeCompetenciaId}
         onSelectCompetencia={setActiveCompetenciaId}
-        
-        // Conexão entre Pai e Filho: O pai manda a atual, e o filho avisa quando mudar
         correcaoSelecionada={correcaoAtual}
         onTrocarCorrecao={setCorrecaoAtual}
-        redacaoId={id}
+        redacaoId={data?.id || ''}
       />
 
       {feedback && (
-        <AnaliseFeedback
-          feedback={feedback}
-        />
+          <AnaliseFeedback feedback={feedback} />
       )}
     </div>
   )

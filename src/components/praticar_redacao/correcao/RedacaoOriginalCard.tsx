@@ -3,7 +3,7 @@
 import { Correcao } from '@/types/correcao'
 import { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { deleteCorrecaoRedacaoLivre, updateRedacaoLivre } from '@/apiCalls/redacao-livre'
+import { deleteCorrecaoRedacaoLivre, updateRedacaoLivre } from '@/apiCalls/redacao-livre' 
 import { useRouter } from 'next/navigation'
 import { DeleteCorrectionModal } from './DeleteModal'
 import { RedacaoActions } from './RedacaoActions'
@@ -14,11 +14,22 @@ interface RedacaoOriginalCardProps {
   textoRedacao: Correcao['textoRedacao']
   temaRedacao: string;
   showActions?: boolean;
+  // NOVAS PROPS
+  onCorrectAgain: () => Promise<void>;
+  isCorrecting: boolean;
 }
 
 const COLLAPSED_HEIGHT_PX = 160
 
-export function RedacaoOriginalCard({ textoRedacao, temaRedacao, idRedacao, idCorrecao, showActions = true }: RedacaoOriginalCardProps) {
+export function RedacaoOriginalCard({ 
+    textoRedacao, 
+    temaRedacao, 
+    idRedacao, 
+    idCorrecao, 
+    showActions = true,
+    onCorrectAgain, // RECEBE O HANDLER DO PAI
+    isCorrecting // RECEBE O ESTADO DO PAI
+}: RedacaoOriginalCardProps) {
   const router = useRouter()
   const [isExpanded, setIsExpanded] = useState(false)
   const [isOverflowing, setIsOverflowing] = useState(false)
@@ -33,6 +44,7 @@ export function RedacaoOriginalCard({ textoRedacao, temaRedacao, idRedacao, idCo
     }
   }, [textoRedacao, temaRedacao])
 
+  
   // Actions Logic
   const confirmDelete = async () => {
     await deleteCorrecaoRedacaoLivre(idRedacao, idCorrecao)
@@ -45,9 +57,9 @@ export function RedacaoOriginalCard({ textoRedacao, temaRedacao, idRedacao, idCo
     router.replace(`/praticar_redacao/${idRedacao}`)
   }
 
-  const handleCorrigir = async () => {
-    console.log("Solicitando correção para a redação:", idRedacao)
-  }
+  // Chama a função injetada do pai
+  const handleCorrigir = onCorrectAgain
+
 
   return (
     <>
@@ -81,19 +93,18 @@ export function RedacaoOriginalCard({ textoRedacao, temaRedacao, idRedacao, idCo
             ) : <div />}
           </div>
 
-          {/* AQUI FICOU MUITO MAIS LIMPO */}
           {showActions && (
             <RedacaoActions 
               onDelete={() => setShowDeleteModal(true)}
               onRewrite={handleReescrever}
               onCorrect={handleCorrigir}
               hasCorrection={jaPossuiCorrecao}
+              isCorrecting={isCorrecting} // PASSA O ESTADO DE LOADING
             />
           )}
         </div>
       </div>
 
-      {/* COMPONENTE ISOLADO */}
       <DeleteCorrectionModal 
         isOpen={showDeleteModal}
         onClose={() => setShowDeleteModal(false)}
