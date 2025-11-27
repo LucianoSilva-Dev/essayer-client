@@ -2,7 +2,7 @@
 
 import { Competencia } from '@/types/correcao'
 import { CompetenciaCard } from '../correcao/CompetenciaCard'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Loader2, AlertCircle } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { CorrecaoIA } from '@/apiCalls/redacao-livre/types'
 
@@ -55,7 +55,43 @@ export function CompetenciasProfessorSection({
       </div>
 
       <div className="relative group">
-         <div className="absolute inset-y-0 left-0 w-20 from-gray-50 via-gray-50/80 to-transparent bg-gradient-to-r z-10 pointer-events-none" aria-hidden="true"/>
+          {/* Overlay for Pending or Error Status */}
+          {(correcao?.status === 'pendente' || correcao?.status === 'erro') && (
+            <div className="absolute inset-0 z-40 flex items-center justify-center backdrop-blur-[1px] bg-white/10 rounded-xl overflow-hidden pointer-events-auto">
+               {/* Tape Design */}
+               <div 
+                 className={`
+                   w-[120%] py-6 transform -rotate-3 shadow-2xl flex items-center justify-center gap-4
+                   ${correcao.status === 'pendente' 
+                      ? 'text-white' 
+                      : 'text-white'}
+                 `}
+                 style={{
+                    background: correcao.status === 'pendente'
+                        ? 'repeating-linear-gradient(45deg, #075F70cc, #075F70cc 30px, #054a57cc 30px, #054a57cc 60px)'
+                        : 'repeating-linear-gradient(45deg, #dc2626cc, #dc2626cc 30px, #991b1bcc 30px, #991b1bcc 60px)',
+                    boxShadow: '0 4px 15px rgba(0,0,0,0.2)'
+                 }}
+               >
+                  {correcao.status === 'pendente' ? (
+                    <>
+                      <Loader2 className="animate-spin w-8 h-8 drop-shadow-md" />
+                      <span className="text-2xl font-black uppercase tracking-widest drop-shadow-md">Correção em andamento</span>
+                    </>
+                  ) : (
+                    <div className="flex items-center gap-6">
+                      <div className="flex items-center gap-3">
+                        <AlertCircle className="w-8 h-8 drop-shadow-md" />
+                        <span className="text-2xl font-black uppercase tracking-widest drop-shadow-md">Erro na correção</span>
+                      </div>
+                    </div>
+                  )}
+               </div>
+            </div>
+          )}
+
+         <div className={`transition-all duration-300 ${correcao?.status !== 'finalizada' ? 'opacity-50 pointer-events-none grayscale' : ''}`}>
+            <div className="absolute inset-y-0 left-0 w-20 from-gray-50 via-gray-50/80 to-transparent bg-gradient-to-r z-10 pointer-events-none" aria-hidden="true"/>
             <button onClick={() => scroll('left')} className="absolute left-2 top-1/2 -translate-y-1/2 z-20 p-3 bg-white/90 backdrop-blur-sm rounded-full shadow-[0_4px_20px_rgba(0,0,0,0.08)] border border-gray-100 text-gray-700 opacity-0 group-hover:opacity-100 transition-all hover:scale-110 disabled:opacity-30 cursor-pointer">
                 <ChevronLeft size={20} />
             </button>
@@ -73,6 +109,7 @@ export function CompetenciasProfessorSection({
             <button onClick={() => scroll('right')} className="absolute right-2 top-1/2 -translate-y-1/2 z-20 p-3 bg-white/90 backdrop-blur-sm rounded-full shadow-[0_4px_20px_rgba(0,0,0,0.08)] border border-gray-100 text-gray-700 opacity-0 group-hover:opacity-100 transition-all hover:scale-110 disabled:opacity-30 cursor-pointer">
             <ChevronRight size={20} />
             </button>
+         </div>
       </div>
     </div>
   )

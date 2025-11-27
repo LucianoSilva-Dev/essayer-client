@@ -46,20 +46,6 @@ export interface CreateRedacaoBody {
 }
 
 // UpdateRedacaoBody pode ser um Partial da CreateRedacaoBody, mas excluindo 'turma'
-export type UpdateRedacaoBody = Partial<Omit<CreateRedacaoBody, 'turma'>>;
-
-export interface EnviarRespostaRedacaoBody {
-  texto: string;
-}
-
-export interface UpdateFeedbackBody {
-  feedback: string;
-}
-
-// --- Tipos de Resposta de API ---
-
-// Para GET /atividade/redacao/{id}, podemos reutilizar AtividadeRedacaoDetalhada
-export type GetRedacaoDetalhesResponse = AtividadeRedacaoDetalhada;
 
 // Para GET /atividade/redacao/{id}/respostas
 export interface GetRespostasRedacaoResponse {

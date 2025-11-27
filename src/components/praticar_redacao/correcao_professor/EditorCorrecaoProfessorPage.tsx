@@ -5,17 +5,59 @@ import { CorrecaoHeader } from '../correcao/CorrecaoHeader'
 import { RedacaoOriginalCard } from '../correcao/RedacaoOriginalCard'
 import { CompetenciasProfessorEditorSection } from './CompetenciasProfessorEditorSection'
 import { mockRedacaoComCorrecaoProfessor } from './mocks'
-import { CorrecaoIA } from '@/apiCalls/redacao-livre/types'
-import { ArrowUp } from 'lucide-react'
+import { CorrecaoIA, RedacaoLivreDoc } from '@/apiCalls/redacao-livre/types'
+import { ArrowUp, Loader2 } from 'lucide-react'
+import { getAtividadeRedacaoDetalhes, updateFeedbackResposta } from '@/apiCalls/tarefas'
+import { UpdateFeedbackBody } from '@/apiCalls/tarefas/types'
 
-export function EditorCorrecaoProfessorPage({ id }: { id: string }) {
-  // Inicializamos com os dados do mock para edição
-  const [correcao, setCorrecao] = useState<CorrecaoIA>(mockRedacaoComCorrecaoProfessor.correcoesIA![0])
+interface EditorCorrecaoProfessorPageProps {
+  id: string
+  initialData?: RedacaoLivreDoc
+}
+
+export function EditorCorrecaoProfessorPage({ id, initialData }: EditorCorrecaoProfessorPageProps) {
+  const [data, setData] = useState<RedacaoLivreDoc | null>(initialData || null)
+  const [correcao, setCorrecao] = useState<CorrecaoIA | null>(initialData?.correcoesIA?.[0] || null)
+  const [loading, setLoading] = useState(!initialData)
+  const [saving, setSaving] = useState(false)
+
   const [activeCompetenciaId, setActiveCompetenciaId] = useState('c1')
   const [feedbackAtual, setFeedbackAtual] = useState<string>("")
 
+  useEffect(() => {
+    if (initialData) {
+        setData(initialData)
+        setCorrecao(initialData.correcoesIA?.[0] || null)
+        setLoading(false)
+        return
+    }
+
+    if (id === 'mock-id') {
+        setData(mockRedacaoComCorrecaoProfessor)
+        setCorrecao(mockRedacaoComCorrecaoProfessor.correcoesIA![0])
+        setLoading(false)
+        return
+    }
+
+    const fetchData = async () => {
+        try {
+            const response = await getAtividadeRedacaoDetalhes(id)
+            const redacaoData = response as unknown as RedacaoLivreDoc
+            setData(redacaoData)
+            setCorrecao(redacaoData.correcoesIA?.[0] || null)
+        } catch (error) {
+            console.error("Erro ao buscar redação:", error)
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    fetchData()
+  }, [id, initialData])
+
   // Atualiza o feedback exibido no textarea quando muda a competência
   useEffect(() => {
+    if (!correcao) return
     switch (activeCompetenciaId) {
       case 'c1': setFeedbackAtual(correcao.feedbackC1 || ""); break;
       case 'c2': setFeedbackAtual(correcao.feedbackC2 || ""); break;
@@ -23,10 +65,11 @@ export function EditorCorrecaoProfessorPage({ id }: { id: string }) {
       case 'c4': setFeedbackAtual(correcao.feedbackC4 || ""); break;
       case 'c5': setFeedbackAtual(correcao.feedbackC5 || ""); break;
     }
-  }, [activeCompetenciaId, correcao]) // Depende de 'correcao' para atualizar se a nota mudar (embora feedback seja separado)
+  }, [activeCompetenciaId, correcao])
 
   const handleUpdateNota = (competenciaId: string, novaNota: number) => {
     setCorrecao(prev => {
+        if (!prev) return null
         const key = `nota${competenciaId.toUpperCase()}` as keyof CorrecaoIA
         return { ...prev, [key]: novaNota }
     })
@@ -35,15 +78,48 @@ export function EditorCorrecaoProfessorPage({ id }: { id: string }) {
   const handleUpdateFeedback = (novoFeedback: string) => {
     setFeedbackAtual(novoFeedback)
     setCorrecao(prev => {
+        if (!prev) return null
         const key = `feedback${activeCompetenciaId.toUpperCase()}` as keyof CorrecaoIA
         return { ...prev, [key]: novoFeedback }
     })
   }
 
-  const handleSalvar = () => {
-    console.log("Salvando correção:", correcao)
-    alert("Correção salva com sucesso! (Mock)")
+  const handleSalvar = async () => {
+    if (!correcao) return
+
+    setSaving(true)
+    try {
+        // Prepara o payload para a API
+        const payload: UpdateFeedbackBody = {
+            notaC1: correcao.notaC1,
+            notaC2: correcao.notaC2,
+            notaC3: correcao.notaC3,
+            notaC4: correcao.notaC4,
+            notaC5: correcao.notaC5,
+            feedbackC1: correcao.feedbackC1,
+            feedbackC2: correcao.feedbackC2,
+            feedbackC3: correcao.feedbackC3,
+            feedbackC4: correcao.feedbackC4,
+            feedbackC5: correcao.feedbackC5,
+        }
+
+        if (id === 'mock-id') {
+            console.log("Salvando correção (MOCK):", payload)
+            alert("Correção salva com sucesso! (Mock)")
+        } else {
+            await updateFeedbackResposta(correcao.id, payload)
+            alert("Correção enviada com sucesso!")
+        }
+    } catch (error) {
+        console.error("Erro ao salvar correção:", error)
+        alert("Erro ao salvar correção. Tente novamente.")
+    } finally {
+        setSaving(false)
+    }
   }
+
+  if (loading) return <div className="p-10 text-center">Carregando...</div>
+  if (!data || !correcao) return <div className="p-10 text-center">Redação não encontrada.</div>
 
   return (
     <div className="p-6 md:p-10 max-w-7xl mx-auto">
@@ -51,17 +127,19 @@ export function EditorCorrecaoProfessorPage({ id }: { id: string }) {
         <CorrecaoHeader />
         <button 
             onClick={handleSalvar}
-            className="bg-[#075F70] hover:bg-[#064e5c] text-white px-6 py-2.5 rounded-full font-bold transition-colors shadow-sm"
+            disabled={saving}
+            className="bg-[#075F70] hover:bg-[#064e5c] text-white px-6 py-2.5 rounded-full font-bold transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
         >
+            {saving && <Loader2 size={16} className="animate-spin" />}
             Enviar correção
         </button>
       </div>
 
       <RedacaoOriginalCard 
-        idRedacao={mockRedacaoComCorrecaoProfessor.id || ''} 
+        idRedacao={data.id || ''} 
         idCorrecao={correcao.id || ''} 
         textoRedacao={correcao.texto || ""} 
-        temaRedacao={mockRedacaoComCorrecaoProfessor.tema || ""} 
+        temaRedacao={data.tema || ""} 
         showActions={false}
       />
 
@@ -87,10 +165,11 @@ export function EditorCorrecaoProfessorPage({ id }: { id: string }) {
         <div className="absolute bottom-8 right-8">
             <button 
                 onClick={handleSalvar}
-                className="bg-[#075F70] text-white p-3 rounded-full hover:bg-[#064e5c] transition-colors shadow-lg"
+                disabled={saving}
+                className="bg-[#075F70] text-white p-3 rounded-full hover:bg-[#064e5c] transition-colors shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
                 title="Salvar comentário"
             >
-                <ArrowUp size={20} />
+                {saving ? <Loader2 size={20} className="animate-spin" /> : <ArrowUp size={20} />}
             </button>
         </div>
       </div>
