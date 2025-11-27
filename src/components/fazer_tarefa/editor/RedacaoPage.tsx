@@ -15,8 +15,9 @@ export function RedacaoPage({ id }: { id: string }) {
 
   const [texto, setTexto] = useState("");
   const [contagemPalavras, setContagemPalavras] = useState(0);
-  const [tempoRestante, setTempoRestante] = useState(0); // Inicializa com 0, atualiza após fetch
+  const [tempoRestante, setTempoRestante] = useState(0); 
   const [isPaused, setIsPaused] = useState(false);
+  const [isSending, setIsSending] = useState(false); // Novo estado para feedback de envio
 
   // ESTADO DO MODAL
   const [isMotivacionalOpen, setIsMotivacionalOpen] = useState(false);
@@ -33,22 +34,21 @@ export function RedacaoPage({ id }: { id: string }) {
         const data = await getAtividadeRedacaoDetalhes(id);
         setTarefa(data);
 
-        // Configurar tempo limite (converter minutos para segundos)
-        if (data.tempoLimiteEmMinutos) {
+        if (data && data.tempoLimiteEmMinutos) {
           setTempoRestante(data.tempoLimiteEmMinutos * 60);
         }
 
-        // TODO: Buscar textos motivadores usando os IDs em data.repertoriosApoio
-        // Por enquanto, deixaremos vazio pois precisamos saber o tipo de cada repertório (Obra, Citação, etc) para buscar corretamente
-        // ou de um endpoint que retorne os objetos completos.
         setTextosMotivadores([]);
 
-        // Marcar início da resposta
-        await iniciarRespostaRedacao(id);
+        // Tenta iniciar (ignora erro se já iniciada para não travar a tela)
+        try {
+            await iniciarRespostaRedacao(id);
+        } catch (err) {
+            console.warn("Tarefa já iniciada ou erro ao iniciar:", err);
+        }
 
       } catch (error) {
         console.error("Erro ao carregar tarefa:", error);
-        // Tratar erro (ex: redirecionar ou mostrar mensagem)
       } finally {
         setLoading(false);
       }
@@ -65,10 +65,6 @@ export function RedacaoPage({ id }: { id: string }) {
   }, [texto]);
 
   useEffect(() => {
-    // Agora o timer para se:
-    // 1. Estiver pausado manualmente (isPaused) OU
-    // 2. O modal estiver aberto (isMotivacionalOpen) OU
-    // 3. O tempo acabou
     if (isPaused || isMotivacionalOpen || tempoRestante === 0) return;
 
     const interval = setInterval(() => {
@@ -79,19 +75,30 @@ export function RedacaoPage({ id }: { id: string }) {
 
   }, [isPaused, tempoRestante, isMotivacionalOpen]);
 
+  // --- LÓGICA DE FINALIZAÇÃO ATUALIZADA ---
   const handleFinalizar = async () => {
     if (!texto.trim()) {
-      alert("Escreva algo antes de finalizar.");
+      alert("Sua redação está em branco. Escreva algo antes de finalizar.");
       return;
     }
 
-    try {
-      await enviarRespostaRedacao(id, { texto });
-      alert("Redação enviada com sucesso!");
-      router.push('/minhas-tarefas'); // Redirecionar para lista de tarefas ou feedback
-    } catch (error) {
-      console.error("Erro ao enviar redação:", error);
-      alert("Erro ao enviar redação. Tente novamente.");
+    if (confirm("Tem certeza que deseja finalizar e enviar sua redação?")) {
+        try {
+            setIsSending(true);
+            
+            // Envia o texto para a API
+            await enviarRespostaRedacao(id, { texto });
+            
+            alert("Redação enviada com sucesso!");
+            
+            // Redireciona de volta para a listagem de turmas do aluno
+            router.push('/turmas_aluno'); 
+
+        } catch (error) {
+            console.error("Erro ao enviar redação:", error);
+            alert("Ocorreu um erro ao enviar sua redação. Por favor, tente novamente.");
+            setIsSending(false);
+        }
     }
   };
 
@@ -101,7 +108,7 @@ export function RedacaoPage({ id }: { id: string }) {
   if (loading) {
     return (
       <main className="flex flex-col items-center justify-center min-h-screen">
-        <p className="text-xl text-[#075F70]">Carregando tarefa...</p>
+        <p className="text-xl text-[#075F70] font-montserrat animate-pulse">Carregando tarefa...</p>
       </main>
     );
   }
@@ -110,6 +117,7 @@ export function RedacaoPage({ id }: { id: string }) {
     return (
       <main className="flex flex-col items-center justify-center min-h-screen">
         <p className="text-xl text-red-500">Tarefa não encontrada.</p>
+        <button onClick={() => router.back()} className="mt-4 text-[#075F70] underline">Voltar</button>
       </main>
     );
   }
@@ -117,7 +125,6 @@ export function RedacaoPage({ id }: { id: string }) {
   return (
     <main className="flex flex-col items-center min-h-screen py-12 px-4">
 
-      {/* O Modal vive aqui no topo */}
       <MotivacionalModal
         isOpen={isMotivacionalOpen}
         onClose={() => setIsMotivacionalOpen(false)}
@@ -152,8 +159,10 @@ export function RedacaoPage({ id }: { id: string }) {
 
             <RedacaoFooter
               contagemPalavras={contagemPalavras}
-              maxPalavras={400} // Poderia vir da config da tarefa se existir
+              maxPalavras={400} // Valor padrão, pode vir da API futuramente
               onFinalizar={handleFinalizar}
+              // Se quiser desabilitar o botão enquanto envia:
+              // disabled={isSending} 
             />
           </div>
         </div>
