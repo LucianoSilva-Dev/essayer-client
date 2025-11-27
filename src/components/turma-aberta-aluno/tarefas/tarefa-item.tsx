@@ -5,13 +5,23 @@ import { useRouter } from "next/navigation";
 
 export default function TarefaItem({ tarefa }: { tarefa: AtividadeBasica}) {
   const router = useRouter();
-  const dataFormatada = tarefa.dataLimite
-    ? new Date(tarefa.dataLimite).toLocaleDateString("pt-BR", {
+  
+  // Lógica para Data e Rótulo
+  const dataLimite = tarefa.dataLimite ? new Date(tarefa.dataLimite) : null;
+  const hoje = new Date();
+  
+  const dataFormatada = dataLimite
+    ? dataLimite.toLocaleDateString("pt-BR", {
         day: "2-digit",
         month: "2-digit",
         year: "numeric",
       })
     : "Sem prazo";
+
+  // Define o texto do rótulo baseando-se se a data já passou ou não
+  const labelPrazo = !dataLimite 
+    ? "Prazo" 
+    : (dataLimite < hoje ? "Fechou em" : "Fecha em");
 
   const isConcluida = tarefa.status?.toLowerCase() === 'concluída';
   const isEncerrada = tarefa.status?.toLowerCase() === 'encerrada';
@@ -46,7 +56,10 @@ export default function TarefaItem({ tarefa }: { tarefa: AtividadeBasica}) {
         </div>
 
         <div className="flex-shrink-0 text-center sm:text-left w-full sm:w-auto sm:min-w-[100px]">
-          <span className={`text-xs ${isConcluida ? "text-gray-200" : "text-gray-400"}`}>Fechou em</span>
+          {/* Rótulo dinâmico aqui */}
+          <span className={`text-xs ${isConcluida ? "text-gray-200" : "text-gray-400"}`}>
+            {labelPrazo}
+          </span>
           <br />
           <span className={`text-sm ${isConcluida ? "text-white" : "text-gray-700"}`}>{dataFormatada}</span>
         </div>
