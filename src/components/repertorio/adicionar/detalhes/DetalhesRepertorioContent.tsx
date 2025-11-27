@@ -77,7 +77,6 @@ export default function DetalhesRepertorioContent() {
             titulo: dados.titulo,
             resumo: dados.sintese,
             autor: dados.autoria,
-            fonte: '',
             topicos: (dados.eixosSelecionados || []).map(eixo => eixo.nome),
             subtopicos: dados.recortesSelecionados || []
           });
@@ -107,6 +106,8 @@ export default function DetalhesRepertorioContent() {
           idRepertorio = repCitacao.id;
           break;
       }
+
+      console.log(dados);
 
       if (idRepertorio && dados.comentarioEducador.trim()) {
         await addComentario(idRepertorio, { texto: dados.comentarioEducador, fixar: dados.fixarComentario });

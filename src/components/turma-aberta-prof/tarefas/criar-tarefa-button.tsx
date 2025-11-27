@@ -1,24 +1,28 @@
-"use client"
+"use client";
 
 import React from "react";
+import Link from "next/link";
 import { Plus } from "lucide-react";
-import { useRouter } from "next/navigation";
 
-const CriarTarefaButton: React.FC = () => {
-  
-  const router = useRouter();
-  
-  const handleCreateTarefa = () => {
-    router.push("/criar_tarefa");
-  };
+interface CriarTarefaButtonProps {
+  turmaId: string;
+}
+
+const CriarTarefaButton: React.FC<CriarTarefaButtonProps> = ({ turmaId }) => {
   return (
-    <button
-      className="flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-gray-200 shadow-sm hover:bg-gray-100 transition" 
-      onClick={() => handleCreateTarefa()}
->
-      <Plus size={18} className="text-grey-700" />
-      <span className="text-sm font-medium text-gray-800">Criar tarefa</span>
-    </button>
+    <Link 
+      href={`/turma_aberta_prof/${turmaId}/criar_tarefa`}
+      className="no-underline"
+    >
+      <button
+        className="flex items-center gap-2 px-6 py-2.5 rounded-full bg-[#075F70] hover:bg-[#064d5c] shadow-md hover:shadow-lg transition-all duration-300 group"
+      >
+        <Plus size={20} className="text-white group-hover:scale-110 transition-transform" />
+        <span className="text-sm font-semibold text-white font-montserrat">
+          Criar tarefa
+        </span>
+      </button>
+    </Link>
   );
 };
 

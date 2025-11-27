@@ -1,4 +1,3 @@
-// src/components/turma-aberta-prof/integrantes/integrante-list.tsx
 "use client";
 
 import IntegranteItem from "./integrante-item";
@@ -17,12 +16,13 @@ interface Props {
 }
 
 export default function IntegranteList({ turmaId, alunos, loading, searchTerm, refetch }: Props) {
-    const [removingId, setRemovingId] = useState<string | null>(null); // Estado para indicar qual aluno está sendo removido
+  const [removingId, setRemovingId] = useState<string | null>(null); // Estado para indicar qual aluno está sendo removido
 
-    // Filtrar alunos baseado no searchTerm (case-insensitive)
-    const filteredAlunos = alunos.filter(aluno =>
-        aluno.nome.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+  // Filtrar alunos baseado no searchTerm (case-insensitive)
+  const filteredAlunos = alunos.filter(aluno =>
+    aluno.nome.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
 
     const handleRemove = async (id: string) => {
         if (removingId) return; // Evita cliques múltiplos
@@ -44,9 +44,11 @@ export default function IntegranteList({ turmaId, alunos, loading, searchTerm, r
     if (loading) return <p className="text-gray-500 text-sm p-4 text-center">Carregando integrantes...</p>;
     // if (error) return <p className="text-red-600 text-sm p-4 text-center">{error}</p>;
 
-    if (!alunos || alunos.length === 0) return <p className="text-gray-500 text-sm p-4 text-center">Nenhum integrante nesta turma.</p>;
-    if (filteredAlunos.length === 0 && searchTerm) return <p className="text-gray-500 text-sm p-4 text-center">Nenhum integrante encontrado para "{searchTerm}".</p>;
-    if (filteredAlunos.length === 0) return <p className="text-gray-500 text-sm p-4 text-center">Nenhum integrante nesta turma.</p>; // Caso searchTerm esteja vazio e lista original vazia
+
+  if (!alunos || alunos.length === 0) return <p className="text-gray-500 text-sm p-4 text-center">Nenhum integrante nesta turma.</p>;
+  if (filteredAlunos.length === 0 && searchTerm) return <p className="text-gray-500 text-sm p-4 text-center">Nenhum integrante encontrado para "{searchTerm}".</p>;
+  if (filteredAlunos.length === 0) return <p className="text-gray-500 text-sm p-4 text-center">Nenhum integrante nesta turma.</p>; // Caso searchTerm esteja vazio e lista original vazia
+
 
     return (
         <div className="flex flex-col gap-2"> {/* Usa gap-2 para espaçamento menor */}

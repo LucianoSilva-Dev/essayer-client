@@ -14,16 +14,16 @@ export function EixoSelector({ selectedEixos, onEixoChange, error }: EixoSelecto
       </label>
       <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
         {EixoOptions.map((eixo) => (
-          <label key={eixo} className="flex items-center space-x-2 p-2 rounded-md border border-gray-200 hover:bg-gray-50 cursor-pointer">
+          <label key={eixo.nome} className="flex items-center space-x-2 p-2 rounded-md border border-gray-200 hover:bg-gray-50 cursor-pointer">
             <input
               type="checkbox"
               name="eixos"
-              value={eixo}
-              checked={selectedEixos?.includes(eixo) || false}
+              value={eixo.nome}
+              checked={selectedEixos?.includes(eixo.nome) || false}
               onChange={onEixoChange}
               className="h-4 w-4 rounded border-gray-300 text-teal-600 focus:ring-teal-500"
             />
-            <span className="text-sm text-gray-700">{eixo}</span>
+            <span className="text-sm text-gray-700">{eixo.nome}</span>
           </label>
         ))}
       </div>
