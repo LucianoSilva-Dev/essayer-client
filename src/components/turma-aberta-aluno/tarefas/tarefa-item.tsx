@@ -1,8 +1,10 @@
 import React from "react";
 import Image from "next/image";
 import { AtividadeBasica } from "@/apiCalls/turma/types";
+import { useRouter } from "next/navigation";
 
 export default function TarefaItem({ tarefa }: { tarefa: AtividadeBasica}) {
+  const router = useRouter();
   const dataFormatada = tarefa.dataLimite
     ? new Date(tarefa.dataLimite).toLocaleDateString("pt-BR", {
         day: "2-digit",
@@ -55,7 +57,7 @@ export default function TarefaItem({ tarefa }: { tarefa: AtividadeBasica}) {
           <span className={`text-sm -mt-1 ${getStatusClasses()}`}>{tarefa.status || 'Pendente'}</span>
 
           {isPendente && (
-             <button className="mt-2 px-3 py-1 border border-gray-300 text-gray-700 text-xs font-medium rounded-md hover:bg-gray-50 transition">
+             <button onClick={() => router.push(`/fazer_tarefa/${tarefa.id}`)} className="mt-2 px-3 py-1 border border-gray-300 text-gray-700 text-xs font-medium rounded-md hover:bg-gray-50 transition">
                Ver tarefa
              </button>
            )}
