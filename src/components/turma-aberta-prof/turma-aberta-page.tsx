@@ -77,7 +77,7 @@ export default function TurmaAbertaPage({ turmaId }: Props) {
 
   // --- JSX ---
   return (
-    <main className="min-h-screen w-full bg-gray-50 px-4 sm:px-6 py-8 flex flex-col gap-6 md:gap-8">
+    <main className="max-h-[600px] w-full bg-gray-50 px-4 sm:px-6 py-8 flex flex-col gap-6 md:gap-8">
       {/* Grid principal */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8 flex-grow">
 
@@ -120,17 +120,14 @@ export default function TurmaAbertaPage({ turmaId }: Props) {
         </div>
 
         {/* Coluna Direita (Calendário e Integrantes) */}
-        <div className="lg:col-span-4 flex flex-col gap-6 md:gap-8 order-1 lg:order-2">
+        <div className="lg:col-span-4 flex flex-col gap-4 md:gap-2 order-1 lg:order-2">
           {/* Seção Calendário */}
-          <section className="bg-white rounded-2xl shadow-md p-4 md:p-6">
-            <h2 className="text-lg sm:text-xl font-semibold text-gray-800 mb-4">
-              Calendário
-            </h2>
+          <section className="rounded-2xl p-4 md:p-6">
             <DateSelector deliveryDate={selectedDeliveryDate} />
           </section>
 
           {/* Seção Integrantes */}
-          <section className="bg-white rounded-2xl shadow-md p-4 md:p-6 flex flex-col flex-grow">
+          <section className="bg-white rounded-[40px] shadow-md p-4 md:p-6 flex flex-col flex-grow">
             <div className="flex flex-wrap justify-between items-center gap-4 mb-4">
               <h2 className="text-lg sm:text-xl font-semibold text-gray-800">
                 Integrantes
@@ -141,7 +138,7 @@ export default function TurmaAbertaPage({ turmaId }: Props) {
                 onChange={setMemberSearchTerm}
               />
             </div>
-            <div className="flex-grow mb-4 overflow-y-auto">
+            <div className="flex-grow mb-4 overflow-y-visible">
               <IntegranteList
                 turmaId={turmaId}
                 alunos={alunos}

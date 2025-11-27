@@ -15,11 +15,11 @@ export function SearchBar({
 }: SearchBarProps) {
   return (
     <div className="relative w-full max-w-[250px]">
-      <Search className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
+      <Search className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-[#3C3C3C]" />
       <input
         type="search"
         placeholder={placeholder}
-        className="h-10 w-full rounded-full border border-gray-300 bg-white pl-10 pr-3 text-sm text-gray-700 placeholder-gray-400 focus:ring-2 focus:ring-teal-600 outline-none transition"
+        className="h-10 w-full rounded-[20px] bg-[#E2E2E2] pl-10 pr-3 text-md text-gray-700 placeholder-[#898787] focus:ring-2 focus:ring-teal-600 outline-none transition"
         value={value}
         onChange={(e) => onChange?.(e.target.value)}
       />

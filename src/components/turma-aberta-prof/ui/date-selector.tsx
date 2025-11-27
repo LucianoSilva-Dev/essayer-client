@@ -29,23 +29,23 @@ const DateSelector: React.FC<DateSelectorProps> = ({ deliveryDate }) => {
   });
 
   return (
-    <div className="flex justify-between items-center gap-3 overflow-x-auto scrollbar-hide">
+    <div className="flex justify-between items-center gap-3 overflow-x-auto no-scrollbar">
       {days.map(({ weekDay, day, isDelivery }) => {
         const isToday = day === currentDay;
 
         return (
           <div
             key={day}
-            className={`flex flex-col items-center justify-center rounded-xl px-3 py-2 transition-all
-              ${isToday ? "bg-teal-700 text-white" : "text-gray-700"}
+            className={`flex flex-col items-center justify-center rounded-xl px-2 py-2 transition-all
+              ${isToday ? "bg-[#075F70] text-white" : "text-gray-700"}
             `}
           >
-            <span className="text-sm font-medium capitalize">{weekDay}</span>
+            <span className="text-md font-medium capitalize">{weekDay}</span>
             <span className="text-base font-semibold mt-1">{day}</span>
 
             {/* ✅ Bolinha do dia de entrega */}
             {isDelivery && (
-              <span className="w-2 h-2 rounded-full bg-teal-700 mt-1"></span>
+              <span className="w-2 h-2 rounded-full bg-[#075F70] mt-1"></span>
             )}
           </div>
         );
