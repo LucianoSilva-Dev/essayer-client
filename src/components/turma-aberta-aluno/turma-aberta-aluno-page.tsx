@@ -3,7 +3,7 @@
 import React from "react";
 import { useTurmaAbertaAluno } from "@/hooks/useTurmaAbertaAluno";
 import TarefaList from "@/components/turma-aberta-aluno/tarefas/tarefa-list";
-import CorrecaoList from "@/components/turma-aberta-aluno/correcoes/correcao-list"; //
+import CorrecaoList from "@/components/turma-aberta-aluno/correcoes/correcao-list";
 import IntegranteList from "@/components/turma-aberta-aluno/comunidade/integrante-list";
 import DateSelector from "@/components/turma-aberta-prof/ui/date-selector";
 import EntrarTurmaCardForm from "./entrar-button/entrar-turma-card";
@@ -12,7 +12,7 @@ import { AlertCircle } from "lucide-react";
 import TarefaItem from "./tarefas/tarefa-item";
 
 export default function TurmaAbertaAlunoPage({ turmaId }: { turmaId: string }) {
-  const { turma, tarefas, correcoes, loading, error } = useTurmaAbertaAluno(turmaId); //
+  const { turma, tarefas, correcoes, loading, error } = useTurmaAbertaAluno(turmaId);
 
   const professor = turma?.membros?.find(m => m.id === turma?.criador?.id);
   const alunos = turma?.membros?.filter(m => m.id !== turma?.criador?.id) ?? [];
@@ -58,12 +58,18 @@ export default function TurmaAbertaAlunoPage({ turmaId }: { turmaId: string }) {
             <h3 className="font-semibold text-lg text-gray-800 mb-4">
               Histórico de tarefas
             </h3>
-             {primeiraTarefaConcluida && (
-                 <div className="mb-4">
-                    <TarefaItem tarefa={primeiraTarefaConcluida} />
-                 </div>
-             )}
-             <TarefaList tarefas={outrasTarefas} />
+            
+            {/* Lista de Tarefas com Scroll */}
+            <div className="overflow-y-auto max-h-[calc(100vh-250px)] pr-2 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent">
+               {primeiraTarefaConcluida && (
+                   <div className="mb-4">
+                      <TarefaItem tarefa={primeiraTarefaConcluida} />
+                   </div>
+               )}
+               <TarefaList tarefas={outrasTarefas} />
+            </div>
+            {/* ----------------------------- */}
+
           </section>
         </div>
 
@@ -72,7 +78,6 @@ export default function TurmaAbertaAlunoPage({ turmaId }: { turmaId: string }) {
             <div className="bg-white p-4 rounded-lg shadow">
                 <DateSelector deliveryDate={undefined} />
             </div>
-            {/* Passa o array 'correcoes', 'loading' e 'error' diretamente */}
            <div className="bg-white p-4 rounded-lg shadow">
              <CorrecaoList correcoes={correcoes} loading={loading} error={error} />
            </div>
@@ -88,7 +93,7 @@ export default function TurmaAbertaAlunoPage({ turmaId }: { turmaId: string }) {
                     totalAlunos={totalMembros}
                  />
              </div>
-             <div className="mt-4">
+             <div className="mt-4 pt-6 ">
                <EntrarTurmaCard className="!scale-100 min-h-[200px]" />
              </div>
         </aside>
