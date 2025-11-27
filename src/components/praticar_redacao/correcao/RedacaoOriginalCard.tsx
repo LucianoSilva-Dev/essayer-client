@@ -13,11 +13,12 @@ interface RedacaoOriginalCardProps {
   idCorrecao: string;
   textoRedacao: Correcao['textoRedacao']
   temaRedacao: string;
+  showActions?: boolean;
 }
 
 const COLLAPSED_HEIGHT_PX = 160
 
-export function RedacaoOriginalCard({ textoRedacao, temaRedacao, idRedacao, idCorrecao }: RedacaoOriginalCardProps) {
+export function RedacaoOriginalCard({ textoRedacao, temaRedacao, idRedacao, idCorrecao, showActions = true }: RedacaoOriginalCardProps) {
   const router = useRouter()
   const [isExpanded, setIsExpanded] = useState(false)
   const [isOverflowing, setIsOverflowing] = useState(false)
@@ -81,12 +82,14 @@ export function RedacaoOriginalCard({ textoRedacao, temaRedacao, idRedacao, idCo
           </div>
 
           {/* AQUI FICOU MUITO MAIS LIMPO */}
-          <RedacaoActions 
-            onDelete={() => setShowDeleteModal(true)}
-            onRewrite={handleReescrever}
-            onCorrect={handleCorrigir}
-            hasCorrection={jaPossuiCorrecao}
-          />
+          {showActions && (
+            <RedacaoActions 
+              onDelete={() => setShowDeleteModal(true)}
+              onRewrite={handleReescrever}
+              onCorrect={handleCorrigir}
+              hasCorrection={jaPossuiCorrecao}
+            />
+          )}
         </div>
       </div>
 
