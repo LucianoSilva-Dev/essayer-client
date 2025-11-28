@@ -9,12 +9,11 @@ import { AnaliseFeedback } from './AnaliseFeedback'
 // Imports da API e Tipos (Assumidos)
 // **ATENÇÃO**: Verifique se você tem esses imports configurados corretamente.
 import { CorrecaoIA, RedacaoLivreDoc } from '@/apiCalls/redacao-livre/types'
-import { getRedacaoLivre, corrigirRedacaoLivre } from '@/apiCalls/redacao-livre' 
+import { getRedacaoLivre } from '@/apiCalls/redacao-livre' 
 import { toast } from 'react-toastify'; 
-import { listenCorrecaoRedacao } from '@/apiCalls/redacao'; 
+import { encaminharCorrecaoRedacao, listenCorrecaoRedacao } from '@/apiCalls/redacao'; 
 import { CustomEventSourceMap } from '@/apiCalls/types'; 
 import { GetCorrecaoRedacaoResponse } from '@/apiCalls/redacao/types'; 
-import { CorrigirRedacaoLivreBody } from '@/apiCalls/redacao-livre/types';
 
 export function CorrecaoRedacaoPage({ id }: { id: string }) {
   const competencias = ['c1', 'c2', 'c3', 'c4', 'c5']
@@ -39,6 +38,8 @@ export function CorrecaoRedacaoPage({ id }: { id: string }) {
         if (ultimaCorrecao) {
             setCorrecaoAtual(ultimaCorrecao)
             setActiveCompetenciaId(competencias[0]) 
+            // Se já tem correção, não deve estar carregando
+            setIsCorrecting(false)
         } else {
             setCorrecaoAtual(null);
         }
@@ -63,7 +64,7 @@ export function CorrecaoRedacaoPage({ id }: { id: string }) {
   const onSuccess = useCallback(async (response: GetCorrecaoRedacaoResponse) => {
     setIsCorrecting(false);
     setIsListening(false);
-    toast.success('Correção finalizada com sucesso! Atualizando dados...')
+    toast.success('Correção finalizada com sucesso!')
 
     // Ação principal: Re-fetch dos dados para atualizar a lista de correções e a tela
     await fetchData(); 
@@ -124,13 +125,7 @@ export function CorrecaoRedacaoPage({ id }: { id: string }) {
         toast.info("Solicitando nova correção...")
 
         // 1. Chama a API para iniciar o processamento (reenviar a redação)
-        // CORRIGIDO: Passando o objeto de corpo esperado pela API
-        const body: CorrigirRedacaoLivreBody = {
-            tema: tema,
-            textoRedacao: textoAtual,
-        };
-        
-        await corrigirRedacaoLivre(redacaoId, body) 
+        await encaminharCorrecaoRedacao(redacaoId, textoAtual, tema) 
         
         // 2. Aguarda a correção ser concluída via SSE/polling
         listenCorrecaoRedacao(redacaoId, onError, onDelay, onSuccess);
@@ -141,7 +136,7 @@ export function CorrecaoRedacaoPage({ id }: { id: string }) {
         setIsCorrecting(false)
         setIsListening(false)
     }
-}
+  }
 
   return (
     <div className="p-6 md:p-10 max-w-7xl mx-auto">

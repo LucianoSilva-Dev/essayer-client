@@ -7,10 +7,10 @@ import { toast } from 'react-toastify';
 import { RedacaoEditorArea } from './RedacaoEditorArea';
 import { RedacaoHeader } from './RedacaoHeader';
 import { RedacaoFooter } from './RedacaoFooter';
-import { corrigirRedacaoLivre, getRedacaoLivre, updateRedacaoLivre } from '@/apiCalls/redacao-livre';
+import { getRedacaoLivre, updateRedacaoLivre } from '@/apiCalls/redacao-livre';
 import { createAutoSave } from './helpers/autoSave';
 import { useTextHistory } from '@/hooks/useTextHistory';
-import { listenCorrecaoRedacao } from '@/apiCalls/redacao';
+import { encaminharCorrecaoRedacao, listenCorrecaoRedacao } from '@/apiCalls/redacao';
 import { CustomEventSourceMap } from '@/apiCalls/types';
 import { GetCorrecaoRedacaoResponse } from '@/apiCalls/redacao/types';
 
@@ -115,10 +115,7 @@ export function RedacaoPage({ id }: { id: string }) {
         dataRealizacao: new Date().toISOString(),
       });
 
-      await corrigirRedacaoLivre(redacaoId, {
-        textoRedacao: texto,
-        tema: data.tema
-      });
+      await encaminharCorrecaoRedacao(redacaoId, texto, data.tema);
 
       // CORREÇÃO: Aguarda a correção ser concluída
       return new Promise((resolve) => {

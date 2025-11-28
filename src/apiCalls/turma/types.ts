@@ -45,16 +45,19 @@ export interface AtividadeBasica {
  * Inclui campos específicos como tema, tempo limite, etc.
  */
 export interface AtividadeRedacaoDetalhada extends AtividadeBasica {
-  tipoAtividade: "Redacao"; // Especifica o tipo
-  turma: { // Informação da turma associada
+  tipoAtividade: "Redacao"; 
+  turma: { 
     id: string;
     nome: string;
   };
   tema: string;
-  tempoLimiteEmMinutos?: number | null; // Campo opcional/nulável
-  repertoriosApoio?: string[]; // Array de IDs ou nomes, verificar API
-  respostas: RespostaAtividade[]; // Array de respostas (se a API incluir)
-  // Adicionar outros campos específicos se necessário
+  
+  // ADICIONADO: Propriedade que estava faltando
+  eixoTematico?: string; 
+
+  tempoLimiteEmMinutos?: number | null; 
+  repertoriosApoio?: string[]; // Considere tipar melhor se tiver a interface de Repertorio
+  respostas: RespostaAtividade[]; 
 }
 
 /**

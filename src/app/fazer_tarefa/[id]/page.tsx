@@ -1,6 +1,6 @@
 // src/app/fazer_tarefa/[id]/page.tsx
 import React from "react";
-import { RedacaoPage } from "@/components/fazer_tarefa/editor/RedacaoPage";
+import { RevisaoRedacaoPage }  from "@/components/fazer_tarefa/tarefarevisao/revisaoredacao/RevisaoRedacaoPage";
 
 interface PageProps {
   params: Promise<{
@@ -10,5 +10,5 @@ interface PageProps {
 
 export default async function Page({ params }: PageProps) {
   const resolvedParams = await params;
-  return <RedacaoPage id={resolvedParams.id} />;
+  return <RevisaoRedacaoPage id={resolvedParams.id} />;
 }
