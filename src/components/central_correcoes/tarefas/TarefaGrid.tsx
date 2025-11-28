@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { AtividadeProfessor } from "@/apiCalls/turma/types";
 import { ArrowUpRight, Eye } from "lucide-react"; // Importei Eye para variar o ícone se quiser
 import { formatDate } from "../helpers/formatDate";
@@ -90,10 +91,12 @@ export function TarefaGrid({ tarefas, onSelectTarefa }: Props) {
                                 `}
                       >
                         {user.fotoPath ? (
-                          <img 
+                          <Image 
                             src={user.fotoPath} 
                             alt={user.nome} 
-                            className="w-full h-full object-cover"
+                            fill
+                            sizes="36px"
+                            className="object-cover"
                           />
                         ) : (
                           <div className="w-full h-full bg-gradient-to-br from-gray-200 to-gray-400 flex items-center justify-center text-[10px] font-bold text-gray-500">
