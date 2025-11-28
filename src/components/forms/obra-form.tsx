@@ -1,6 +1,7 @@
 "use client"
 
 import type React from "react"
+import { Book, Film, Music, Theater } from "lucide-react"
 
 interface ObraFormData {
   titulo: string
@@ -27,100 +28,116 @@ export default function ObraForm({ titulo, autoria, sinopse, fonte, tipoObra, on
     onDataChange({ [name]: value });
   }
 
+  // Styles
+  const inputBase = "w-full rounded-xl border-2 px-4 py-2.5 text-sm font-medium transition-all placeholder:text-gray-400 focus:outline-none focus:ring-4";
+  const inputNormal = "border-transparent bg-gray-50 text-gray-700 hover:bg-gray-100 focus:border-amber-400 focus:bg-white focus:ring-amber-100";
+  const inputError = "border-red-300 bg-red-50 text-red-900 focus:border-red-500 focus:ring-red-100";
+  const getClass = (hasError: boolean) => `${inputBase} ${hasError ? inputError : inputNormal}`;
+  const labelClass = "mb-1.5 block text-[11px] font-bold uppercase tracking-wider text-gray-500 ml-1";
+
+  const getTypeIcon = () => {
+    switch(tipoObra) {
+        case 'filme': return <Film size={16} className="text-amber-500" />;
+        case 'livro': return <Book size={16} className="text-amber-500" />;
+        case 'música': return <Music size={16} className="text-amber-500" />;
+        case 'teatro': return <Theater size={16} className="text-amber-500" />;
+        default: return <Film size={16} className="text-gray-400" />;
+    }
+  };
+
   return (
-    <>
-      <div className="mb-5">
-        <label htmlFor="titulo" className="block text-sm font-medium text-gray-700 mb-1">
-          Título <span className="text-red-500">*</span>
-        </label>
+    <div className="space-y-5 animate-in fade-in slide-in-from-bottom-2 duration-500">
+      
+      {/* Título */}
+      <div>
+        <label htmlFor="titulo" className={labelClass}>Título da Obra <span className="text-amber-500">*</span></label>
         <input
           type="text"
           id="titulo"
           name="titulo"
           value={titulo}
           onChange={handleChange}
-          className={`w-full px-3 py-2 border ${
-            errors.titulo ? "border-red-500" : "border-gray-300"
-          } rounded-md focus:outline-none focus:ring-1 focus:ring-teal-600`}
-          placeholder="Ex: 1984, O Cortiço, Cidade de Deus"
+          className={`${getClass(!!errors.titulo)} text-lg`}
+          placeholder="Ex: Cidade de Deus"
         />
-        {errors.titulo && <p className="mt-1 text-sm text-red-500">{errors.titulo}</p>}
+        {errors.titulo && <p className="mt-1 text-xs font-bold text-red-500 ml-1">{errors.titulo}</p>}
       </div>
 
-      <div className="mb-5">
-        <label htmlFor="autoria" className="block text-sm font-medium text-gray-700 mb-1">
-          Autoria <span className="text-red-500">*</span>
-        </label>
-        <input
-          type="text"
-          id="autoria"
-          name="autoria"
-          value={autoria}
-          onChange={handleChange}
-          className={`w-full px-3 py-2 border ${
-            errors.autoria ? "border-red-500" : "border-gray-300"
-          } rounded-md focus:outline-none focus:ring-1 focus:ring-teal-600`}
-          placeholder="Nome do autor, diretor ou criador"
-        />
-        {errors.autoria && <p className="mt-1 text-sm text-red-500">{errors.autoria}</p>}
-      </div>
+      {/* Grid: Autoria e Tipo */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+            <label htmlFor="autoria" className={labelClass}>Autoria <span className="text-amber-500">*</span></label>
+            <input
+            type="text"
+            id="autoria"
+            name="autoria"
+            value={autoria}
+            onChange={handleChange}
+            className={getClass(!!errors.autoria)}
+            placeholder="Diretor, Autor ou Criador"
+            />
+            {errors.autoria && <p className="mt-1 text-xs font-bold text-red-500 ml-1">{errors.autoria}</p>}
+        </div>
 
-      <div className="mb-5">
-        <label htmlFor="tipoObra" className="block text-sm font-medium text-gray-700 mb-1">
-          Tipo de Obra <span className="text-red-500">*</span>
-        </label>
-        <select
-          id="tipoObra"
-          name="tipoObra"
-          value={tipoObra}
-          onChange={handleChange}
-          className={`w-full px-3 py-2 border ${
-            errors.tipoObra ? "border-red-500" : "border-gray-300"
-          } rounded-md focus:outline-none focus:ring-1 focus:ring-teal-600 bg-white`}
-        >
-          <option value="livro">Livro</option>
-          <option value="filme">Filme</option>
-          <option value="música">Música</option>
-          <option value="teatro">Teatro</option>
-        </select>
-        {errors.tipoObra && <p className="mt-1 text-sm text-red-500">{errors.tipoObra}</p>}
+        <div>
+            <label htmlFor="tipoObra" className={labelClass}>Tipo de Mídia</label>
+            <div className="relative">
+                <div className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none">
+                    {getTypeIcon()}
+                </div>
+                <select
+                    id="tipoObra"
+                    name="tipoObra"
+                    value={tipoObra}
+                    onChange={handleChange}
+                    className={`${getClass(!!errors.tipoObra)} pl-11 appearance-none cursor-pointer`}
+                >
+                    <option value="livro">Livro</option>
+                    <option value="filme">Filme</option>
+                    <option value="música">Música</option>
+                    <option value="teatro">Teatro</option>
+                </select>
+                <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
+                    <svg width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M1 1L5 5L9 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                </div>
+            </div>
+        </div>
       </div>
       
-      <div className="mb-5">
-        <label htmlFor="sinopse" className="block text-sm font-medium text-gray-700 mb-1">
-          Sinopse <span className="text-red-500">*</span>
-        </label>
+      {/* Sinopse */}
+      <div>
+        <label htmlFor="sinopse" className={labelClass}>Sinopse <span className="text-amber-500">*</span></label>
         <textarea
           id="sinopse"
           name="sinopse"
           value={sinopse}
           onChange={handleChange}
-          rows={6}
-          className={`w-full px-3 py-2 border ${
-            errors.sinopse ? "border-red-500" : "border-gray-300"
-          } rounded-md focus:outline-none focus:ring-1 focus:ring-teal-600`}
-          placeholder="Descreva o enredo, tema principal e relevância da obra"
+          rows={5}
+          className={`${getClass(!!errors.sinopse)} resize-none leading-relaxed`}
+          placeholder="Descreva o enredo e os pontos principais..."
         />
-        {errors.sinopse && <p className="mt-1 text-sm text-red-500">{errors.sinopse}</p>}
+        {errors.sinopse && <p className="mt-1 text-xs font-bold text-red-500 ml-1">{errors.sinopse}</p>}
       </div>
 
-      <div className="mb-5">
-        <label htmlFor="fonte" className="block text-sm font-medium text-gray-700 mb-1">
-          Fonte <span className="text-red-500">*</span>
-        </label>
-         <input
-          type="text"
-          id="fonte"
-          name="fonte"
-          value={fonte}
-          onChange={handleChange}
-          className={`w-full px-3 py-2 border ${
-            errors.fonte ? "border-red-500" : "border-gray-300"
-          } rounded-md focus:outline-none focus:ring-1 focus:ring-teal-600`}
-          placeholder="Ex: Editora Companhia das Letras, 2009"
-        />
-        {errors.fonte && <p className="mt-1 text-sm text-red-500">{errors.fonte}</p>} 
-      </div>
-    </>
+      {/* CAMPO FONTE COMENTADO */}
+      {/* <div>
+        <label htmlFor="fonte" className={labelClass}>Fonte / Ano <span className="text-amber-500">*</span></label>
+        <div className="relative">
+            <input
+                type="text"
+                id="fonte"
+                name="fonte"
+                value={fonte}
+                onChange={handleChange}
+                className={getClass(!!errors.fonte)}
+                placeholder="Ex: Netflix, 2002"
+            />
+        </div>
+        {errors.fonte && <p className="mt-1 text-xs font-bold text-red-500 ml-1">{errors.fonte}</p>} 
+      </div> 
+      */}
+    </div>
   )
 }

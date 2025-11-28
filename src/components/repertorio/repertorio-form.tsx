@@ -1,89 +1,100 @@
 "use client";
 
 import React, { useState, useEffect, useMemo } from "react";
+import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { EixosTematicos } from "@/constants/eixos";
-import type { RepertorioFormData, ModeloRepertorio } from "@/types/repertorio";
-import { createArtigo, createCitacao, createObra } from "@/apiCalls/repertorio";
-import type { CreateArtigoBody, CreateCitacaoBody, CreateObraBody } from "@/apiCalls/repertorio/types";
-import { AlertCircle } from "lucide-react";
+import { RepertorioFormData } from "@/types/repertorio";
+import { Save, Sparkles, BookOpen, Quote, FileText, Loader2 } from "lucide-react";
 
-// Importando os componentes filhos da nova estrutura
-import { RepertorioTypeSelector } from "./form/RepertorioTypeSelector";
+// Importamos as funções específicas da API
+import { 
+  getObraById, getArtigoById, getCitacaoById,
+  updateObra, updateArtigo, updateCitacao, createObra, createArtigo, createCitacao
+} from "@/apiCalls/repertorio"; 
+
+// Componentes
 import { EixoSelector } from "./form/EixoSelector";
 import { RecorteSelector } from "./form/RecorteSelector";
-import { FormActions } from "./form/FormActions";
-
-// Importando os formulários específicos que agora vivem em 'forms'
 import ObraForm from "@/components/forms/obra-form";
 import ArtigoForm from "@/components/forms/artigo-form";
 import CitacaoForm from "@/components/forms/citacao-form";
 
 type RepertorioFormProps = {
-  onSubmit: (data: RepertorioFormData) => Promise<void>;
-  onCancel: () => void;
-  initialData?: RepertorioFormData;
+  repertoireId?: string;
+  repertoireType?: string; 
+  initialData?: any;
   isEditing?: boolean;
+  onSubmit?: (data: RepertorioFormData) => Promise<void>;
+  onCancel?: () => void;
 };
 
-// Função auxiliar para salvar o repertório
-async function saveRepertoire(repertoire: RepertorioFormData) {
-  switch (repertoire.modelo) {
-    case 'obra':
-      const obra: CreateObraBody = {
-        autor: repertoire.autoria,
-        sinopse: (repertoire as any).sinopse,
-        subtopicos: repertoire.recortes,
-        topicos: repertoire.eixos,
-        titulo: (repertoire as any).titulo,
-        tipoObra: (repertoire as any).tipoObra || 'livro',
-      };
-      await createObra(obra);
-      toast.success("Obra salva com sucesso!");
-      break;
-    case 'artigo':
-      const artigo: CreateArtigoBody = {
-          autor: repertoire.autoria,
-          resumo: (repertoire as any).sintese,
-          fonte: (repertoire as any).fonte,
-          subtopicos: repertoire.recortes,
-          titulo: (repertoire as any).titulo,
-          topicos: repertoire.eixos,
-      };
-      await createArtigo(artigo);
-      toast.success("Artigo salvo com sucesso!");
-      break;
-    case 'citacao':
-      const citacao: CreateCitacaoBody = {
-          autor: repertoire.autoria,
-          frase: (repertoire as any).citacao,
-          fonte: (repertoire as any).fonte,
-          subtopicos: repertoire.recortes,
-          topicos: repertoire.eixos,
-      };
-      await createCitacao(citacao);
-      toast.success("Citação salva com sucesso!");
-      break;
-  }
-}
-
-// --- Componente Principal ---
-export default function RepertorioForm({ onSubmit, onCancel, initialData, isEditing = false }: RepertorioFormProps) {
+export default function RepertorioForm({ repertoireId, repertoireType, initialData, isEditing = false, onSubmit, onCancel }: RepertorioFormProps) {
+  const router = useRouter();
+  
   const [formData, setFormData] = useState<any>(
-    initialData || { modelo: "obra", eixos: [], recortes: [], tipoObra: "livro" }
+    initialData || { modelo: repertoireType || "obra", eixos: [], recortes: [], tipoObra: "livro" }
   );
-  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [loading, setLoading] = useState(!!repertoireId);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const maxRecortes = 4;
 
-  // Efeito para carregar dados iniciais ao editar
+  // Lógica de Busca Específica
   useEffect(() => {
-    if (initialData) {
-      setFormData(initialData);
-    }
-  }, [initialData]);
+    const fetchData = async () => {
+      if (!repertoireId) return;
+      
+      try {
+        setLoading(true);
+        let rawData: any = null;
+        let modelo = repertoireType || 'obra';
 
-  // Memoiza as opções de recorte com base nos eixos selecionados
+        if (repertoireType === 'artigo') {
+            rawData = await getArtigoById(repertoireId);
+            modelo = 'artigo';
+        } else if (repertoireType === 'citacao') {
+            rawData = await getCitacaoById(repertoireId);
+            modelo = 'citacao';
+        } else {
+            rawData = await getObraById(repertoireId);
+            modelo = 'obra';
+        }
+
+        if (rawData) {
+           setFormData({
+             modelo: modelo,
+             id: rawData.id,
+             eixos: rawData.topicos || rawData.eixos || [],
+             recortes: rawData.subtopicos || rawData.recortes || [],
+             sinopse: rawData.sinopse || '',
+             tipoObra: rawData.tipoObra || 'livro',
+             sintese: rawData.resumo || '',
+             citacao: rawData.frase || '',
+             titulo: rawData.titulo || '',
+             autoria: rawData.autor || rawData.autoria || '',
+             fonte: rawData.fonte || ''
+           });
+        }
+      } catch (error) {
+        console.error("Erro ao buscar repertório:", error);
+        toast.error("Não foi possível carregar os dados.");
+        router.push('/repertorio');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (repertoireId && !initialData) {
+      fetchData();
+    }
+  }, [repertoireId, repertoireType, initialData, router]);
+
+  const handleCancel = () => {
+    if (onCancel) onCancel();
+    else router.back();
+  };
+
   const recorteOptions = useMemo(() => {
     if (formData.eixos && formData.eixos.length > 0) {
       const allRecortes = formData.eixos.flatMap((eixo: string) => EixosTematicos[eixo as keyof typeof EixosTematicos] || []) as string[];
@@ -91,12 +102,6 @@ export default function RepertorioForm({ onSubmit, onCancel, initialData, isEdit
     }
     return [];
   }, [formData.eixos]);
-
-  const handleModeloChange = (novoModelo: ModeloRepertorio) => {
-    if (isEditing) return; // Impede a troca de tipo durante a edição
-    setFormData({ modelo: novoModelo, eixos: [], recortes: [], tipoObra: "livro" });
-    setErrors({}); // Limpa os erros ao trocar de tipo
-  };
 
   const handleSpecificDataChange = (update: Partial<RepertorioFormData>) => {
     setFormData((prev: any) => ({ ...prev, ...update }));
@@ -107,14 +112,12 @@ export default function RepertorioForm({ onSubmit, onCancel, initialData, isEdit
     const currentEixos = formData.eixos || [];
     const newEixos = checked ? [...currentEixos, value] : currentEixos.filter((eixo: string) => eixo !== value);
     
-    // Filtra recortes para manter apenas os que pertencem aos eixos selecionados
     const currentRecortes = formData.recortes || [];
     const newRecortesValidos = currentRecortes.filter((recorte: string) =>
       newEixos.flatMap((eixo: string) => EixosTematicos[eixo as keyof typeof EixosTematicos] || []).includes(recorte)
     );
     
     setFormData((prev: any) => ({ ...prev, eixos: newEixos, recortes: newRecortesValidos }));
-    if (errors.eixos) setErrors(prev => { delete prev.eixos; return prev; });
   };
 
   const handleRecorteChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -124,47 +127,59 @@ export default function RepertorioForm({ onSubmit, onCancel, initialData, isEdit
 
     if (checked) {
       if (currentRecortes.length >= maxRecortes) {
-        toast.warn(`Você pode selecionar no máximo ${maxRecortes} recortes.`);
+        toast.warn(`Máximo de ${maxRecortes} recortes.`);
         return;
       }
       newRecortes = [...currentRecortes, value];
     } else {
       newRecortes = currentRecortes.filter((rec: string) => rec !== value);
     }
-    
     setFormData((prev: any) => ({ ...prev, recortes: newRecortes }));
-    if (errors.recortes) setErrors(prev => { delete prev.recortes; return prev; });
-  };
-
-  const validateForm = (): boolean => {
-    // A lógica de validação original permanece aqui...
-    const newErrors: Record<string, string> = {};
-    // ... validações ...
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!validateForm()) return;
-
     setIsSubmitting(true);
+    
+    const payload = {
+        autor: formData.autoria,
+        fonte: formData.fonte,
+        topicos: formData.eixos,
+        subtopicos: formData.recortes,
+        titulo: formData.titulo,
+        sinopse: formData.sinopse,
+        tipoObra: formData.tipoObra,
+        resumo: formData.sintese,
+        frase: formData.citacao
+    };
+
     try {
-      if (isEditing) {
-        await onSubmit(formData);
-      } else {
-        await saveRepertoire(formData);
-        await onSubmit(formData);
-      }
+        if (onSubmit) {
+            await onSubmit(formData);
+        } else if (repertoireId) {
+             if (formData.modelo === 'artigo') await updateArtigo(repertoireId, payload as any);
+             else if (formData.modelo === 'citacao') await updateCitacao(repertoireId, payload as any);
+             else await updateObra(repertoireId, payload as any);
+
+             toast.success("Repertório atualizado!");
+             router.refresh();
+             router.back();
+        } else {
+             if (formData.modelo === 'artigo') await createArtigo(payload as any);
+             else if (formData.modelo === 'citacao') await createCitacao(payload as any);
+             else await createObra(payload as any);
+             
+             toast.success("Repertório criado!");
+             router.push('/repertorio');
+        }
     } catch (error) {
-      console.error("Erro ao salvar repertório:", error);
-      setErrors({ form: "Ocorreu um erro ao salvar o repertório. Tente novamente." });
+      console.error("Erro ao salvar:", error);
+      toast.error("Erro ao salvar.");
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  // Função para renderizar o formulário específico do tipo
   const renderSpecificForm = () => {
     const props = { onDataChange: handleSpecificDataChange, errors, ...formData };
     switch (formData.modelo) {
@@ -175,47 +190,142 @@ export default function RepertorioForm({ onSubmit, onCancel, initialData, isEdit
     }
   };
 
+  const getTheme = () => {
+    switch(formData.modelo) {
+        case 'obra': return { 
+            color: 'text-amber-600', 
+            bg: 'bg-amber-50', 
+            border: 'border-amber-100', 
+            icon: <BookOpen size={20} />, 
+            label: 'Obra',
+            btn: 'bg-amber-600 hover:bg-amber-700 focus:ring-amber-500'
+        };
+        case 'artigo': return { 
+            color: 'text-blue-600', 
+            bg: 'bg-blue-50', 
+            border: 'border-blue-100', 
+            icon: <FileText size={20} />, 
+            label: 'Artigo',
+            btn: 'bg-blue-600 hover:bg-blue-700 focus:ring-blue-500'
+        };
+        case 'citacao': return { 
+            color: 'text-emerald-600', 
+            bg: 'bg-emerald-50', 
+            border: 'border-emerald-100', 
+            icon: <Quote size={20} />, 
+            label: 'Citação',
+            btn: 'bg-emerald-600 hover:bg-emerald-700 focus:ring-emerald-500'
+        };
+        default: return { 
+            color: 'text-gray-600', 
+            bg: 'bg-gray-50', 
+            border: 'border-gray-100', 
+            icon: <Sparkles size={20} />, 
+            label: 'Repertório',
+            btn: 'bg-gray-900 hover:bg-black focus:ring-gray-500'
+        };
+    }
+  };
+
+  const theme = getTheme();
+
+  if (loading) {
+    return (
+        <div className="min-h-screen flex items-center justify-center bg-gray-50/50">
+            <Loader2 className="w-8 h-8 animate-spin text-gray-400" />
+        </div>
+    );
+  }
+
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden">
-      <div className="bg-[#075F70] text-white p-4 flex justify-between items-center">
-        <h2 className="text-xl font-semibold">{isEditing ? "Editando Repertório" : "Novo Repertório"}</h2>
-      </div>
+    <div className="min-h-screen bg-gray-50/30 py-8 flex justify-center items-start">
+        
+        {/* Container Único do Formulário */}
+        <div className="w-full max-w-3xl bg-white rounded-3xl shadow-xl shadow-gray-200/50 border border-gray-100 overflow-hidden animate-in fade-in zoom-in-95 duration-300 mx-4">
+            
+            {/* Header / Toolbar Integrada */}
+            <div className="px-8 py-6 border-b border-gray-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white">
+                
+                {/* Lado Esquerdo: Identificação do Tipo */}
+                <div className="flex items-center gap-4">
+                    <div className={`w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 ${theme.bg} ${theme.color} border ${theme.border}`}>
+                        {theme.icon}
+                    </div>
+                    <div>
+                        <h2 className={`text-lg font-bold ${theme.color} uppercase tracking-wide`}>
+                            {theme.label}
+                        </h2>
+                        <p className="text-xs text-gray-400 font-medium">
+                            {isEditing ? 'Editando informações' : 'Criando novo repertório'}
+                        </p>
+                    </div>
+                </div>
 
-      <div className="p-6">
-        <form onSubmit={handleSubmit} className="max-w-3xl mx-auto space-y-8">
-          {errors.form && (
-            <div className="p-4 bg-red-100 text-red-700 border border-red-200 rounded-md flex items-start">
-              <AlertCircle size={20} className="mr-2 flex-shrink-0 mt-0.5" />
-              <span>{errors.form}</span>
+                {/* Lado Direito: Ações */}
+                <div className="flex items-center gap-3 w-full sm:w-auto">
+                    <button 
+                        type="button"
+                        onClick={handleCancel}
+                        className="flex-1 sm:flex-none px-4 py-2.5 rounded-xl text-sm font-bold text-gray-400 hover:text-gray-600 hover:bg-gray-50 transition-colors"
+                    >
+                        Cancelar
+                    </button>
+                    <button 
+                        type="button"
+                        onClick={handleSubmit}
+                        disabled={isSubmitting}
+                        className={`
+                            flex-1 sm:flex-none px-6 py-2.5 rounded-xl text-white text-sm font-bold shadow-md 
+                            flex items-center justify-center gap-2 transition-all transform active:scale-95 focus:outline-none focus:ring-2 focus:ring-offset-2
+                            ${theme.btn} disabled:opacity-70 disabled:cursor-not-allowed
+                        `}
+                    >
+                        {isSubmitting ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />}
+                        <span>Salvar</span>
+                    </button>
+                </div>
             </div>
-          )}
 
-          <RepertorioTypeSelector
-            modeloSelecionado={formData.modelo}
-            onModeloChange={handleModeloChange}
-            isEditing={isEditing}
-          />
+            {/* Corpo do Formulário */}
+            <div className="p-6 sm:p-8 space-y-8">
+                
+                {/* Seção 1: Dados Específicos */}
+                <section>
+                    {renderSpecificForm()}
+                </section>
 
-          {renderSpecificForm()}
+                {/* Divisor Suave */}
+                <div className="w-full h-px bg-gray-100"></div>
 
-          <EixoSelector
-            selectedEixos={formData.eixos}
-            onEixoChange={handleEixoChange}
-            error={errors.eixos}
-          />
+                {/* Seção 2: Conexões (Eixos e Recortes) */}
+                <section className="space-y-6">
+                    <div className="flex items-center gap-2 mb-4">
+                        <Sparkles size={16} className="text-gray-400" />
+                        <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest">
+                            Contextualização
+                        </h3>
+                    </div>
 
-          <RecorteSelector
-            recorteOptions={recorteOptions}
-            selectedRecortes={formData.recortes}
-            hasSelectedEixos={formData.eixos?.length > 0}
-            onRecorteChange={handleRecorteChange}
-            maxRecortes={maxRecortes}
-            error={errors.recortes}
-          />
+                    <EixoSelector
+                        selectedEixos={formData.eixos}
+                        onEixoChange={handleEixoChange}
+                        error={errors.eixos}
+                    />
 
-          <FormActions onCancel={onCancel} isSubmitting={isSubmitting} />
-        </form>
-      </div>
+                    <div className="pt-2">
+                        <RecorteSelector
+                            recorteOptions={recorteOptions}
+                            selectedRecortes={formData.recortes}
+                            hasSelectedEixos={formData.eixos?.length > 0}
+                            onRecorteChange={handleRecorteChange}
+                            maxRecortes={maxRecortes}
+                            error={errors.recortes}
+                        />
+                    </div>
+                </section>
+
+            </div>
+        </div>
     </div>
   );
 }
