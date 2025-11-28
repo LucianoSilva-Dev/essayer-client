@@ -2,9 +2,11 @@ import React from "react";
 import Image from "next/image";
 import { AtividadeBasica } from "@/apiCalls/turma/types";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/contexts/auth-context";
 
 export default function TarefaItem({ tarefa }: { tarefa: AtividadeBasica}) {
   const router = useRouter();
+  const { userData } = useAuth();
   
   // Lógica para Data e Rótulo
   const dataLimite = tarefa.dataLimite ? new Date(tarefa.dataLimite) : null;
@@ -75,7 +77,7 @@ export default function TarefaItem({ tarefa }: { tarefa: AtividadeBasica}) {
              </button>
            )}
            {isConcluida && (
-              <button onClick={() => router.push(`/corrigir_tarefa/${tarefa.id}`)} className="mt-2 px-3 py-1 bg-white text-teal-700 text-xs font-medium rounded-md hover:bg-gray-100 transition">
+              <button onClick={() => router.push(`/fazer_tarefa/${tarefa.id}/correcao?alunoId=${userData?.id}`)} className="mt-2 px-3 py-1 bg-white text-teal-700 text-xs font-medium rounded-md hover:bg-gray-100 transition">
                 Ver correção
               </button>
            )}

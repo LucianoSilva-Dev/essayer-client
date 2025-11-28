@@ -67,16 +67,16 @@ export function EditorCorrecaoProfessorPage({ id, alunoId, initialData }: Editor
                     tema: response.tema,
                     status: 'finalizada',
                     createdAt: new Date(),
-                    notaC1: response.feedback.notaC1,
-                    notaC2: response.feedback.notaC2,
-                    notaC3: response.feedback.notaC3,
-                    notaC4: response.feedback.notaC4,
-                    notaC5: response.feedback.notaC5,
-                    feedbackC1: response.feedback.feedbackC1,
-                    feedbackC2: response.feedback.feedbackC2,
-                    feedbackC3: response.feedback.feedbackC3,
-                    feedbackC4: response.feedback.feedbackC4,
-                    feedbackC5: response.feedback.feedbackC5
+                    notaC1: response.feedback?.notaC1 || 0,
+                    notaC2: response.feedback?.notaC2 || 0,
+                    notaC3: response.feedback?.notaC3 || 0,
+                    notaC4: response.feedback?.notaC4 || 0,
+                    notaC5: response.feedback?.notaC5 || 0,
+                    feedbackC1: response.feedback?.feedbackC1 || "",
+                    feedbackC2: response.feedback?.feedbackC2 || "",
+                    feedbackC3: response.feedback?.feedbackC3 || "",
+                    feedbackC4: response.feedback?.feedbackC4 || "",
+                    feedbackC5: response.feedback?.feedbackC5 || ""
                 }]
             }
 

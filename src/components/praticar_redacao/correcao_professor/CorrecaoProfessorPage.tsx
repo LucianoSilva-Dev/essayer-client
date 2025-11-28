@@ -59,6 +59,11 @@ export function CorrecaoProfessorPage({ id, alunoId, initialData }: CorrecaoProf
 
             const response = await getCorrecaoRedacao(id, targetAlunoId)
             
+            const isPendente = !response.feedback || (
+                !response.feedback.notaC1 && 
+                !response.feedback.feedbackC1
+            );
+
             // Adapter: Converte GetCorrecaoRedacaoResponse para RedacaoLivreDoc
             const adaptedData: RedacaoLivreDoc = {
                 id: response.id,
@@ -70,18 +75,18 @@ export function CorrecaoProfessorPage({ id, alunoId, initialData }: CorrecaoProf
                     id: response.id,
                     texto: response.texto,
                     tema: response.tema,
-                    status: 'finalizada',
+                    status: isPendente ? 'pendente' : 'finalizada',
                     createdAt: new Date(),
-                    notaC1: response.feedback.notaC1,
-                    notaC2: response.feedback.notaC2,
-                    notaC3: response.feedback.notaC3,
-                    notaC4: response.feedback.notaC4,
-                    notaC5: response.feedback.notaC5,
-                    feedbackC1: response.feedback.feedbackC1,
-                    feedbackC2: response.feedback.feedbackC2,
-                    feedbackC3: response.feedback.feedbackC3,
-                    feedbackC4: response.feedback.feedbackC4,
-                    feedbackC5: response.feedback.feedbackC5
+                    notaC1: response.feedback?.notaC1 || 0,
+                    notaC2: response.feedback?.notaC2 || 0,
+                    notaC3: response.feedback?.notaC3 || 0,
+                    notaC4: response.feedback?.notaC4 || 0,
+                    notaC5: response.feedback?.notaC5 || 0,
+                    feedbackC1: response.feedback?.feedbackC1 || "",
+                    feedbackC2: response.feedback?.feedbackC2 || "",
+                    feedbackC3: response.feedback?.feedbackC3 || "",
+                    feedbackC4: response.feedback?.feedbackC4 || "",
+                    feedbackC5: response.feedback?.feedbackC5 || ""
                 }]
             }
             
@@ -158,7 +163,7 @@ export function CorrecaoProfessorPage({ id, alunoId, initialData }: CorrecaoProf
         onSelectCompetencia={setActiveCompetenciaId}
       />
 
-      {feedback && (
+      {feedback && correcao?.status !== 'pendente' && (
         <AnaliseFeedback
           title={`Análise do professor sobre a competência ${activeCompetenciaId.replace('c', '')}`}
           feedback={feedback}

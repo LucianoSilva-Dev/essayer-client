@@ -159,7 +159,7 @@ export function StudentDrawer({ isOpen, onClose, tarefaId }: Props) {
                   {respostaStatus(res) === 'pendente' ? (
                     <button 
                       className="flex items-center gap-2 px-5 py-2.5 bg-[#075F70] hover:bg-[#054a57] text-white text-sm font-bold rounded-xl shadow-lg shadow-[#075F70]/20 hover:shadow-[#075F70]/40 hover:-translate-y-0.5 transition-all w-full sm:w-auto justify-center"
-                      onClick={() => router.push(`/fazer_tarefa/${tarefaId}/corrigir`)}
+                      onClick={() => router.push(`/fazer_tarefa/${tarefaId}/corrigir?alunoId=${res.aluno.id}`)}
                     >  
                       Corrigir <ChevronRight size={16} />
                     </button>
