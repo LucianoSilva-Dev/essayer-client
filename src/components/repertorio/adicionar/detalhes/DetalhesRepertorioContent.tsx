@@ -44,22 +44,24 @@ export default function DetalhesRepertorioContent() {
   const validarDados = () => {
     switch (dados.tipoRepertorio) {
       case 'artigo':
-        if (!dados.titulo.trim()) return { valido: false, mensagem: 'Título é obrigatório para artigos' };
-        if (!dados.autoria.trim()) return { valido: false, mensagem: 'Autoria é obrigatória para artigos' };
-        if (!dados.sintese.trim()) return { valido: false, mensagem: 'Síntese é obrigatória para artigos' };
+        if (!((dados.titulo || '').trim())) return { valido: false, mensagem: 'Título é obrigatório para artigos' };
+        if (!((dados.autoria || '').trim())) return { valido: false, mensagem: 'Autoria é obrigatória para artigos' };
+        if (!((dados.sintese || '').trim())) return { valido: false, mensagem: 'Síntese é obrigatória para artigos' };
         break;
       case 'obra':
-        if (!dados.titulo.trim()) return { valido: false, mensagem: 'Título é obrigatório para obras' };
-        if (!dados.autoria.trim()) return { valido: false, mensagem: 'Autoria é obrigatória para obras' };
-        if (!dados.sintese.trim()) return { valido: false, mensagem: 'Sinopse é obrigatória para obras' };
+        if (!((dados.titulo || '').trim())) return { valido: false, mensagem: 'Título é obrigatório para obras' };
+        if (!((dados.autoria || '').trim())) return { valido: false, mensagem: 'Autoria é obrigatória para obras' };
+        if (!((dados.sintese || '').trim())) return { valido: false, mensagem: 'Sinopse é obrigatória para obras' };
         break;
       case 'citacao':
-        if (!dados.autoria.trim()) return { valido: false, mensagem: 'Autoria é obrigatória para citações' };
-        if (!dados.sintese.trim()) return { valido: false, mensagem: 'Citação é obrigatória' };
+        if (!((dados.autoria || '').trim())) return { valido: false, mensagem: 'Autoria é obrigatória para citações' };
+        if (!((dados.sintese || '').trim())) return { valido: false, mensagem: 'Citação é obrigatória' };
         break;
     }
     return { valido: true, mensagem: '' };
   };
+
+  const isDisabled = !validarDados().valido;
 
   const publicarRepertorio = async () => {
     try {
@@ -163,15 +165,17 @@ export default function DetalhesRepertorioContent() {
           {/* Botão publicar */}
           <div className="flex justify-center">
             <button
+              type="button"
               onClick={publicarRepertorio}
-              className="px-12 py-4 bg-[#898787] bg-opacity-80 rounded-[34px] hover:bg-opacity-100 transition-all duration-300 hover:scale-105"
+              disabled={isDisabled}
+              className={`px-12 py-4 w-[580px] rounded-[34px] font-semibold text-2xl transition-colors duration-300 ${
+                isDisabled
+                  ? "bg-[#898787] cursor-not-allowed text-[#3C3C3C]"
+                  : "bg-[#075F70] text-[#E5EFF0] hover:bg-[#019DA3] cursor-pointer delay-200"
+              }`}
+              style={{ fontFamily: 'Montserrat' }}
             >
-              <span
-                className="text-[#3C3C3C] font-semibold text-2xl"
-                style={{ fontFamily: 'Montserrat' }}
-              >
-                Publicar repertório
-              </span>
+              Publicar repertório
             </button>
           </div>
         </div>
