@@ -11,7 +11,8 @@ import {
     EnviarRedacaoResponse,
     EnviarRespostaRedacaoBody,
     UpdateFeedbackBody,
-    UpdateFeedbackResponse
+    UpdateFeedbackResponse,
+    GetCorrecaoRedacaoResponse
 } from './types'; // Importa os tipos definidos localmente
 import { MinhaTarefaAtiva } from './types';
 
@@ -31,6 +32,15 @@ export const createAtividadeRedacao = async (data: CreateRedacaoBody): Promise<C
  */
 export const getAtividadeRedacaoDetalhes = async (id: string): Promise<GetRedacaoDetalhesResponse> => {
     const response = await apiClient.get<GetRedacaoDetalhesResponse>(`/atividade/redacao/${id}`);
+    return response.data;
+};
+
+/**
+ * Busca a correção de uma atividade de Redação para um aluno específico.
+ * Endpoint: GET /atividade/redacao/{id}/correcao/{alunoId}
+ */
+export const getCorrecaoRedacao = async (id: string, alunoId: string): Promise<GetCorrecaoRedacaoResponse> => {
+    const response = await apiClient.get<GetCorrecaoRedacaoResponse>(`/atividade/redacao/${id}/correcao/${alunoId}`);
     return response.data;
 };
 

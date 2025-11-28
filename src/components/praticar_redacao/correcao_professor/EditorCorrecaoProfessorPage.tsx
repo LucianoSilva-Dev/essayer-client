@@ -7,15 +7,19 @@ import { CompetenciasProfessorEditorSection } from './CompetenciasProfessorEdito
 import { mockRedacaoComCorrecaoProfessor } from './mocks'
 import { CorrecaoIA, RedacaoLivreDoc } from '@/apiCalls/redacao-livre/types'
 import { ArrowUp, Loader2 } from 'lucide-react'
-import { getAtividadeRedacaoDetalhes, updateFeedbackResposta } from '@/apiCalls/tarefas'
+import { getCorrecaoRedacao, updateFeedbackResposta } from '@/apiCalls/tarefas'
+import { useAuth } from '@/contexts/auth-context'
 import { UpdateFeedbackBody } from '@/apiCalls/tarefas/types'
+import { toast } from 'react-toastify'
 
 interface EditorCorrecaoProfessorPageProps {
   id: string
+  alunoId?: string
   initialData?: RedacaoLivreDoc
 }
 
-export function EditorCorrecaoProfessorPage({ id, initialData }: EditorCorrecaoProfessorPageProps) {
+export function EditorCorrecaoProfessorPage({ id, alunoId, initialData }: EditorCorrecaoProfessorPageProps) {
+  const { userData } = useAuth()
   const [data, setData] = useState<RedacaoLivreDoc | null>(initialData || null)
   const [correcao, setCorrecao] = useState<CorrecaoIA | null>(initialData?.correcoesIA?.[0] || null)
   const [loading, setLoading] = useState(!initialData)
@@ -41,10 +45,43 @@ export function EditorCorrecaoProfessorPage({ id, initialData }: EditorCorrecaoP
 
     const fetchData = async () => {
         try {
-            const response = await getAtividadeRedacaoDetalhes(id)
-            const redacaoData = response as unknown as RedacaoLivreDoc
-            setData(redacaoData)
-            setCorrecao(redacaoData.correcoesIA?.[0] || null)
+            const targetAlunoId = alunoId || userData?.id
+            
+            if (!targetAlunoId) {
+                console.error("Aluno ID não encontrado")
+                return
+            }
+
+            const response = await getCorrecaoRedacao(id, targetAlunoId)
+            
+            // Adapter: Converte GetCorrecaoRedacaoResponse para RedacaoLivreDoc
+            const adaptedData: RedacaoLivreDoc = {
+                id: response.id,
+                tema: response.tema,
+                texto: response.texto,
+                finalizada: true,
+                updatedAt: new Date(),
+                correcoesIA: [{
+                    id: response.id, // ID da resposta/correção
+                    texto: response.texto,
+                    tema: response.tema,
+                    status: 'finalizada',
+                    createdAt: new Date(),
+                    notaC1: response.feedback.notaC1,
+                    notaC2: response.feedback.notaC2,
+                    notaC3: response.feedback.notaC3,
+                    notaC4: response.feedback.notaC4,
+                    notaC5: response.feedback.notaC5,
+                    feedbackC1: response.feedback.feedbackC1,
+                    feedbackC2: response.feedback.feedbackC2,
+                    feedbackC3: response.feedback.feedbackC3,
+                    feedbackC4: response.feedback.feedbackC4,
+                    feedbackC5: response.feedback.feedbackC5
+                }]
+            }
+
+            setData(adaptedData)
+            setCorrecao(adaptedData.correcoesIA[0])
         } catch (error) {
             console.error("Erro ao buscar redação:", error)
         } finally {
@@ -53,7 +90,7 @@ export function EditorCorrecaoProfessorPage({ id, initialData }: EditorCorrecaoP
     }
 
     fetchData()
-  }, [id, initialData])
+  }, [id, initialData, userData, alunoId])
 
   // Atualiza o feedback exibido no textarea quando muda a competência
   useEffect(() => {
@@ -105,14 +142,14 @@ export function EditorCorrecaoProfessorPage({ id, initialData }: EditorCorrecaoP
 
         if (id === 'mock-id') {
             console.log("Salvando correção (MOCK):", payload)
-            alert("Correção salva com sucesso! (Mock)")
+            toast.success("Correção salva com sucesso! (Mock)")
         } else {
             await updateFeedbackResposta(correcao.id, payload)
-            alert("Correção enviada com sucesso!")
+            toast.success("Correção enviada com sucesso!")
         }
     } catch (error) {
         console.error("Erro ao salvar correção:", error)
-        alert("Erro ao salvar correção. Tente novamente.")
+        toast.error("Erro ao salvar correção. Tente novamente.")
     } finally {
         setSaving(false)
     }
@@ -141,6 +178,8 @@ export function EditorCorrecaoProfessorPage({ id, initialData }: EditorCorrecaoP
         textoRedacao={correcao.texto || ""} 
         temaRedacao={data.tema || ""} 
         showActions={false}
+        onCorrectAgain={async () => {}}
+        isCorrecting={false}
       />
 
       <CompetenciasProfessorEditorSection

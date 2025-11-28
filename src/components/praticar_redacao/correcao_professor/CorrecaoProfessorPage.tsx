@@ -7,14 +7,17 @@ import { AnaliseFeedback } from '../correcao/AnaliseFeedback'
 import { CompetenciasProfessorSection } from './CompetenciasProfessorSection'
 import { mockRedacaoComCorrecaoProfessor } from './mocks'
 import { CorrecaoIA, RedacaoLivreDoc } from '@/apiCalls/redacao-livre/types'
-import { getAtividadeRedacaoDetalhes } from '@/apiCalls/tarefas'
+import { getCorrecaoRedacao } from '@/apiCalls/tarefas'
+import { useAuth } from '@/contexts/auth-context'
 
 interface CorrecaoProfessorPageProps {
   id: string
+  alunoId?: string
   initialData?: RedacaoLivreDoc
 }
 
-export function CorrecaoProfessorPage({ id, initialData }: CorrecaoProfessorPageProps) {
+export function CorrecaoProfessorPage({ id, alunoId, initialData }: CorrecaoProfessorPageProps) {
+  const { userData } = useAuth()
   const [data, setData] = useState<RedacaoLivreDoc | null>(initialData || null)
   const [loading, setLoading] = useState(!initialData)
   
@@ -47,12 +50,42 @@ export function CorrecaoProfessorPage({ id, initialData }: CorrecaoProfessorPage
     // Fetch real data
     const fetchData = async () => {
         try {
-            const response = await getAtividadeRedacaoDetalhes(id)
-            // Adapter: A resposta da API de tarefas pode precisar de adaptação para RedacaoLivreDoc
-            // Por enquanto, assumimos que a estrutura é compatível ou que o componente espera RedacaoLivreDoc
-            // Se getAtividadeRedacaoDetalhes retornar algo diferente, precisaremos adaptar aqui.
-            // Verificando types.ts, GetRedacaoDetalhesResponse parece compatível ou precisaremos de cast.
-            setData(response as unknown as RedacaoLivreDoc) 
+            const targetAlunoId = alunoId || userData?.id
+            
+            if (!targetAlunoId) {
+                console.error("Aluno ID não encontrado")
+                return
+            }
+
+            const response = await getCorrecaoRedacao(id, targetAlunoId)
+            
+            // Adapter: Converte GetCorrecaoRedacaoResponse para RedacaoLivreDoc
+            const adaptedData: RedacaoLivreDoc = {
+                id: response.id,
+                tema: response.tema,
+                texto: response.texto,
+                finalizada: true,
+                updatedAt: new Date(), // Data fictícia, API não retorna
+                correcoesIA: [{
+                    id: response.id,
+                    texto: response.texto,
+                    tema: response.tema,
+                    status: 'finalizada',
+                    createdAt: new Date(),
+                    notaC1: response.feedback.notaC1,
+                    notaC2: response.feedback.notaC2,
+                    notaC3: response.feedback.notaC3,
+                    notaC4: response.feedback.notaC4,
+                    notaC5: response.feedback.notaC5,
+                    feedbackC1: response.feedback.feedbackC1,
+                    feedbackC2: response.feedback.feedbackC2,
+                    feedbackC3: response.feedback.feedbackC3,
+                    feedbackC4: response.feedback.feedbackC4,
+                    feedbackC5: response.feedback.feedbackC5
+                }]
+            }
+            
+            setData(adaptedData) 
         } catch (error) {
             console.error("Erro ao buscar redação:", error)
         } finally {
@@ -61,7 +94,7 @@ export function CorrecaoProfessorPage({ id, initialData }: CorrecaoProfessorPage
     }
 
     fetchData()
-  }, [id, initialData, usePendingMock])
+  }, [id, initialData, usePendingMock, userData, alunoId])
 
   const correcao = data?.correcoesIA ? data.correcoesIA[0] : null
 
@@ -115,6 +148,8 @@ export function CorrecaoProfessorPage({ id, initialData }: CorrecaoProfessorPage
         textoRedacao={correcao.texto || ""} 
         temaRedacao={data.tema || ""} 
         showActions={false}
+        onCorrectAgain={async () => {}}
+        isCorrecting={false}
       />
 
       <CompetenciasProfessorSection

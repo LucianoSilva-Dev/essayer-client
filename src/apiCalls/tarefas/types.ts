@@ -1,13 +1,8 @@
 // src/apiCalls/tarefas/types.ts
-// Reutiliza tipos se possível, certifique-se que estão exportados de turma/types
 import { AtividadeRedacaoDetalhada, AtividadeBasica } from "../turma/types";
-import { GenericSuccessResponse, PerfilUsuario } from "../types"; // Import PerfilUsuario
+import { GenericSuccessResponse, PerfilUsuario } from "../types";
 
 // --- Tipos para Respostas ---
-/**
- * Interface para a resposta de uma atividade (conforme /atividade/redacao/{id})
- * Adicionado export
- */
 
 export interface Feedback {
   notaC1: number;
@@ -24,55 +19,62 @@ export interface Feedback {
 
 export interface RespostaAtividade {
   id: string;
-  aluno: PerfilUsuario; // Pode ser o objeto PerfilUsuario ou apenas o ID, verificar API
-  texto?: string; // Pode não vir na listagem, tornar opcional? Verificar API /respostas
-  dataEnvio: string; // ISO 8601 string
+  aluno: PerfilUsuario;
+  texto?: string;
+  dataEnvio: string;
   feedback?: Feedback;
-  tempoEmMinutos?: number | null; // Adicionado do /atividade/redacao/{id}/respostas
-  // Adicionar outros campos se a API fornecer (ex: nota)
+  tempoEmMinutos?: number | null;
 }
-
 
 // --- Tipos de Request Body ---
 
 export interface CreateRedacaoBody {
   titulo: string;
   descricao: string;
-  turma: string; // ID da turma
+  turma: string;
   tema: string;
-  dataLimite?: string; // ISO 8601 string ou undefined
+  dataLimite?: string;
   tempoLimiteEmMinutos?: number;
-  repertoriosApoio?: string[]; // Array de IDs
+  repertoriosApoio?: string[];
 }
 
-// UpdateRedacaoBody pode ser um Partial da CreateRedacaoBody, mas excluindo 'turma'
+export type UpdateRedacaoBody = Partial<Omit<CreateRedacaoBody, 'turma'>>;
 
-// Para GET /atividade/redacao/{id}/respostas
+export interface EnviarRespostaRedacaoBody {
+    texto: string;
+    tempoEmMinutos: number;
+}
+
+// --- Tipos de Response ---
+
+export type GetRedacaoDetalhesResponse = AtividadeRedacaoDetalhada;
+
+export interface GetCorrecaoRedacaoResponse {
+  id: string;
+  titulo: string;
+  tema: string;
+  texto: string;
+  feedback: Feedback;
+}
+
 export interface GetRespostasRedacaoResponse {
   documentos: RespostaAtividade[];
-  // Adicionar paginacao: Paginacao; se a API retornar paginação aqui
 }
 
-// Para POST /atividade/redacao (resposta é 201 Created sem corpo específico no schema)
-export type CreateRedacaoResponse = GenericSuccessResponse | { id: string }; // Ajustar conforme a resposta real da API
+export type CreateRedacaoResponse = GenericSuccessResponse | { id: string };
 
-// Para POST /atividade/redacao/{id}/iniciar (resposta é 200 OK sem corpo no schema)
 export type IniciarRedacaoResponse = GenericSuccessResponse;
 
-// Para POST /atividade/redacao/{id}/enviar (resposta é 200 OK sem corpo no schema)
 export type EnviarRedacaoResponse = GenericSuccessResponse;
 
-// Para PUT /atividade/respostas/{id}/feedback (resposta é 200 OK com { message: string })
 export type UpdateFeedbackResponse = GenericSuccessResponse;
 
-// Para DELETE /atividade/{id} (resposta é 204 No Content)
-// Não precisa de tipo específico, a ausência de erro indica sucesso.
+export type UpdateFeedbackBody = Feedback;
 
 export interface MinhaTarefaAtiva extends AtividadeBasica {
   turma: {
     id: string;
     nome: string;
-    iconeId: string; // Ou number, dependendo da API real
+    iconeId: string;
   };
-  // Adicione outros campos se a API /atividade/ retornar mais dados relevantes
 }

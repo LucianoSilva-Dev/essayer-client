@@ -9,6 +9,8 @@ import { MotivacionalModal } from './MotivacionalModal';
 import { getAtividadeRedacaoDetalhes, enviarRespostaRedacao, iniciarRespostaRedacao } from '@/apiCalls/tarefas';
 import { AtividadeRedacaoDetalhada } from '@/apiCalls/turma/types';
 import { TextoData } from './MotivacionalCard';
+import { ConfirmationModal } from '@/components/ConfirmationModal';
+import { toast } from 'react-toastify';
 
 export function RedacaoPage({ id }: { id: string }) {
   const router = useRouter();
@@ -21,6 +23,7 @@ export function RedacaoPage({ id }: { id: string }) {
 
   // ESTADO DO MODAL
   const [isMotivacionalOpen, setIsMotivacionalOpen] = useState(false);
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
 
   // ESTADOS DE DADOS
   const [tarefa, setTarefa] = useState<AtividadeRedacaoDetalhada | null>(null);
@@ -76,29 +79,39 @@ export function RedacaoPage({ id }: { id: string }) {
   }, [isPaused, tempoRestante, isMotivacionalOpen]);
 
   // --- LÓGICA DE FINALIZAÇÃO ATUALIZADA ---
-  const handleFinalizar = async () => {
+  const handleFinalizar = () => {
     if (!texto.trim()) {
-      alert("Sua redação está em branco. Escreva algo antes de finalizar.");
+      toast.warn("Sua redação está em branco. Escreva algo antes de finalizar.");
       return;
     }
+    setIsConfirmModalOpen(true);
+  };
 
-    if (confirm("Tem certeza que deseja finalizar e enviar sua redação?")) {
-        try {
-            setIsSending(true);
-            
-            // Envia o texto para a API
-            await enviarRespostaRedacao(id, { texto });
-            
-            alert("Redação enviada com sucesso!");
-            
-            // Redireciona de volta para a listagem de turmas do aluno
-            router.push('/turmas_aluno'); 
+  const handleConfirmFinalizar = async () => {
+    try {
+        setIsSending(true);
+        setIsConfirmModalOpen(false);
+        
+        // Calcula o tempo gasto em minutos
+        const tempoTotal = tarefa?.tempoLimiteEmMinutos ? tarefa.tempoLimiteEmMinutos * 60 : 0;
+        const tempoGastoSegundos = tempoTotal - tempoRestante;
+        const tempoEmMinutos = Math.ceil(tempoGastoSegundos / 60);
 
-        } catch (error) {
-            console.error("Erro ao enviar redação:", error);
-            alert("Ocorreu um erro ao enviar sua redação. Por favor, tente novamente.");
-            setIsSending(false);
-        }
+        // Envia o texto para a API
+        await enviarRespostaRedacao(id, { 
+            texto,
+            tempoEmMinutos: tempoEmMinutos > 0 ? tempoEmMinutos : 1 // Garante pelo menos 1 minuto
+        });
+        
+        toast.success("Redação enviada com sucesso!");
+        
+        // Redireciona de volta para a listagem de turmas do aluno
+        router.push('/turmas_aluno'); 
+
+    } catch (error) {
+        console.error("Erro ao enviar redação:", error);
+        toast.error("Ocorreu um erro ao enviar sua redação. Por favor, tente novamente.");
+        setIsSending(false);
     }
   };
 
@@ -129,6 +142,15 @@ export function RedacaoPage({ id }: { id: string }) {
         isOpen={isMotivacionalOpen}
         onClose={() => setIsMotivacionalOpen(false)}
         textos={textosMotivadores}
+      />
+
+      <ConfirmationModal
+        isOpen={isConfirmModalOpen}
+        onClose={() => setIsConfirmModalOpen(false)}
+        onConfirm={handleConfirmFinalizar}
+        title="Finalizar Redação"
+        description="Tem certeza que deseja finalizar e enviar sua redação? Essa ação não pode ser desfeita."
+        confirmText="Sim, enviar"
       />
 
       <h1 className="text-2xl md:text-3xl font-bold text-[#075F70] text-center mb-12 px-4">
