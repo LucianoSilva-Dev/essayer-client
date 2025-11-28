@@ -17,7 +17,7 @@ const ConvidarEstudante: FC<ConvidarEstudanteProps> = ({idTurma}: ConvidarEstuda
 
       setCode(codigoConvite)
     })()
-  }, [])
+  }, [idTurma])
 
   const handleCopy = async () => {
     try {

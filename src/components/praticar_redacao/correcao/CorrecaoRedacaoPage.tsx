@@ -5,9 +5,6 @@ import { CorrecaoHeader } from './CorrecaoHeader'
 import { RedacaoOriginalCard } from './RedacaoOriginalCard'
 import { CompetenciasSection } from './CompetenciasSection'
 import { AnaliseFeedback } from './AnaliseFeedback'
-
-// Imports da API e Tipos (Assumidos)
-// **ATENÇÃO**: Verifique se você tem esses imports configurados corretamente.
 import { CorrecaoIA, RedacaoLivreDoc } from '@/apiCalls/redacao-livre/types'
 import { getRedacaoLivre } from '@/apiCalls/redacao-livre' 
 import { toast } from 'react-toastify'; 
@@ -15,9 +12,9 @@ import { encaminharCorrecaoRedacao, listenCorrecaoRedacao } from '@/apiCalls/red
 import { CustomEventSourceMap } from '@/apiCalls/types'; 
 import { GetCorrecaoRedacaoResponse } from '@/apiCalls/redacao/types'; 
 
-export function CorrecaoRedacaoPage({ id }: { id: string }) {
-  const competencias = ['c1', 'c2', 'c3', 'c4', 'c5']
+const competencias = ['c1', 'c2', 'c3', 'c4', 'c5']
 
+export function CorrecaoRedacaoPage({ id }: { id: string }) {
   const [data, setData] = useState<RedacaoLivreDoc | null>(null)
   const [activeCompetenciaId, setActiveCompetenciaId] = useState(competencias[0])
   const [correcaoAtual, setCorrecaoAtual] = useState<CorrecaoIA | null>(null)

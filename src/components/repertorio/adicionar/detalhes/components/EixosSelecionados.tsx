@@ -27,7 +27,7 @@ export const EixosSelecionados: React.FC<EixosSelecionadosProps> = ({
         {/* Eixos selecionados */}
 
         {eixosSelecionados.map((eixo, i) => (
-          <div className="bg-white pl-1.5 pr-4 py-1.5 rounded-full flex items-center gap-2 shadow-sm border border-gray-100">
+          <div key={i} className="bg-white pl-1.5 pr-4 py-1.5 rounded-full flex items-center gap-2 shadow-sm border border-gray-100">
             {/* Aqui viriam os ícones dos eixos */}
             <div className="bg-[#024D4D] w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0">
               {/* Ícone placeholder */}

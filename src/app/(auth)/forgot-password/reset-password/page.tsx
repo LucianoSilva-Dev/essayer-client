@@ -1,5 +1,7 @@
 import ResetPassword from "../../../../components/auth/New_Password/reset-password"
 import { Suspense } from "react"
+export const dynamic = 'force-dynamic';
+
 export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center bg-gray-50">

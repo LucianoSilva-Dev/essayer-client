@@ -65,7 +65,7 @@ export default function MainPage() {
             setPage(0);
         }
     }
-  }, [termoBusca, eixosAtivos, recorteAtivo, modeloAtivo, ordenarPor, tipoVisualizacao, setPage]);
+  }, [termoBusca, eixosAtivos, recorteAtivo, modeloAtivo, ordenarPor, tipoVisualizacao, setPage, currentPage]);
 
 
   return (

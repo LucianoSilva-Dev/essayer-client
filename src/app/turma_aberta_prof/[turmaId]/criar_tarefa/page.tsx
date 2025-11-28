@@ -3,14 +3,14 @@ import CreateTaskWrapper from "@/components/criar-tarefa/CreateTaskWrapper";
 import { notFound } from "next/navigation";
 
 interface PageProps {
-  params: {
+  params: Promise<{
     turmaId: string;
-  };
+  }>;
 }
 
-export default function CriarTarefaPage({ params }: PageProps) {
+export default async function CriarTarefaPage({ params }: PageProps) {
   // Captura o ID da URL automaticamente
-  const { turmaId } = params;
+  const { turmaId } = await params;
 
   if (!turmaId) {
     return notFound();

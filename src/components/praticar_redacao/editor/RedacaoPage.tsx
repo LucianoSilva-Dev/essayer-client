@@ -76,7 +76,8 @@ export function RedacaoPage({ id }: { id: string }) {
   }
 
   const autoSave = createAutoSave(updateText, 2000, 1000)
-  const useAutoSave = useCallback(autoSave, [])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const debouncedAutoSave = useCallback(autoSave, [data?.id])
 
   useEffect(() => {
     const palavras = texto.trim().split(/\s+/).filter(Boolean);
@@ -182,7 +183,7 @@ export function RedacaoPage({ id }: { id: string }) {
     }
     
     setTexto(txt)
-    await useAutoSave(txt, tempoRestante)
+    await debouncedAutoSave(txt, tempoRestante)
   }
 
   return (

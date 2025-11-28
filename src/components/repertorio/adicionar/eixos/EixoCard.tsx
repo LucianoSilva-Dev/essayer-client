@@ -2,7 +2,7 @@
 "use client";
 
 import React from 'react';
-import { Eixo } from '../hooks/useEixosRepertorio';
+import { Eixo } from '@/contexts/add-repertorio-context';
 import { Leaf, Brain, HeartPulse, Palette, Scale, BookOpen, Cpu, BarChart3, X } from 'lucide-react';
 
 interface EixoCardProps {
@@ -122,7 +122,7 @@ export const EixoCard: React.FC<EixoCardProps> = ({
           {/* Grid de Recortes Expandido */}
           <div className="mb-6">
             <div className="flex flex-row flex-wrap gap-4">
-              {eixo.recortes.map((recorte, recorteIndex) => {
+              {eixo.recortes.map((recorte: string, recorteIndex: number) => {
                 const recorteSelecionado = recortesSelecionados.includes(recorte);
                 return (
                   <button
@@ -204,7 +204,7 @@ export const EixoCard: React.FC<EixoCardProps> = ({
 
           {/* Recortes (máximo 2 mostrados) */}
           <div className="flex flex-row items-start gap-3 pb-3">
-            {recortesParaMostrar.map((recorte, recorteIndex) => {
+            {recortesParaMostrar.map((recorte: string, recorteIndex: number) => {
               const recorteSelecionado = recortesSelecionados.includes(recorte);
               const isPrimeiroSelecionado = selecionado && recorteIndex === 0 && recorteSelecionado;
               const isSegundoSelecionado = selecionado && recorteIndex === 1 && recorteSelecionado;

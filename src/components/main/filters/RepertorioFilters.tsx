@@ -142,7 +142,7 @@ export default function RepertorioFilters({
                             : "bg-gray-200 text-gray-700 border-gray-200 hover:bg-gray-300"
                             }`}
                         >
-                          <img src={modelo.icone} alt={modelo.nome} className="mr-1.5 w-4 h-4 inline-block" />
+                          <Image src={modelo.icone} alt={modelo.nome} width={16} height={16} className="mr-1.5 w-4 h-4 inline-block" />
                           {modelo.nome}
                         </button>
                       ))}

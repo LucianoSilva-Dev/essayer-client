@@ -9,6 +9,7 @@ import { ProfileProvider } from '@/./contexts/profile-context';
 import { AdminProvider } from '@/./contexts/admin-context';
 import { RepertorioProvider } from '@/./contexts/repertorio-context';
 import { CitacaoProvider } from '@/./contexts/citacao-context';
+import { Suspense } from 'react';
 
 // Import Swiper styles
 import 'swiper/css';
@@ -58,7 +59,9 @@ export default function RootLayout({
                   <AddRepertorioProvider>
                     <NotificationProvider>
                       <ToastContainer />
-                      <HeaderWrapper />
+                      <Suspense fallback={<div>Loading header...</div>}>
+                        <HeaderWrapper />
+                      </Suspense>
                       <Sidebar />
                       <MainWrapper>
                         {children}
