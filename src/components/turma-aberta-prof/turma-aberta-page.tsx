@@ -93,7 +93,7 @@ export default function TurmaAbertaPage({ turmaId }: Props) {
             />
           </section>
 
-          <section className="bg-white rounded-2xl shadow-md p-4 md:p-6">
+          <section className="bg-transparent rounded-2xl p-4 md:p-6">
             <div className="flex flex-wrap justify-between items-center gap-4 mb-4">
               <h2 className="text-lg sm:text-xl font-semibold text-gray-800">
                 {selectedAtividadeTitulo

@@ -22,7 +22,7 @@ export default function SettingsSidebar() {
           icon={<User className="text-[#075F70]" />} // Ícone com cor
           text="Dados pessoais"
         />
-        <SidebarItem
+        {/* <SidebarItem
           href="/profile/social" // Rota de exemplo
           icon={<Users />}
           text="Perfil social"
@@ -31,7 +31,7 @@ export default function SettingsSidebar() {
           href="/profile/solicitacoes" // Rota de exemplo
           icon={<FileText />}
           text="Solicitações"
-        />
+        /> */}
       </nav>
 
       {/* Espaçador */}
