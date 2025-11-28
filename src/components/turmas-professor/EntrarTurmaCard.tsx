@@ -1,28 +1,39 @@
 import Link from "next/link";
+import Image from "next/image";
 
 export default function EntrarTurmaCard({ className }: { className?: string }) {
   return (
-    <div className={`relative w-full h-full min-h-[312px] scale-90 bg-[#E5EFF0] rounded-[40px] p-4 cursor-pointer group transition-all duration-300 ${className}`}>
-      <div className="absolute w-[100%] h-[100%] right-[2%] top-[-14%] z-0">
-        <img
-          src="/entrarTurmaStudents.png"
-          alt="Entrar Turma"
-          className="w-full h-full object-contain transition-all duration-500 group-hover:brightness-110 group-hover:scale-105"
-        />
+    <div className={`relative w-full h-full min-h-[20rem] bg-[#E5EFF0] rounded-[2.5rem] overflow-hidden cursor-pointer group transition-all duration-300 hover:shadow-lg hover:-translate-y-1 ${className}`}>
+      
+      {/* --- IMAGEM --- */}
+      <div className="absolute inset-0 z-0">
+        <div className="relative w-full h-[85%] transform transition-transform duration-500 group-hover:scale-105 origin-bottom">
+           <Image
+            src="/entrarTurmaStudents.png"
+            alt="Ilustração de estudantes"
+            fill
+            className="object-contain object-top p-6"
+            priority
+          />
+        </div>
       </div>
 
-      <div className="absolute w-[calc(100%-20px)] h-[95px] left-1/2 bottom-8 transform -translate-x-1/2 flex flex-col justify-center items-center gap-1 bg-[#E5EFF0] shadow-[0px_0px_8px_7px_#E5EFF0] z-10 transition-all duration-300 group-hover:shadow-[0px_0px_12px_10px_#E5EFF0]">
-        <h2 className="font-montserrat font-semibold text-[26px] leading-[32px] text-[#075F70] text-center w-full transition-colors duration-300 group-hover:text-[#054551]">
+      {/* --- CONTEÚDO DE TEXTO --- */}
+      {/* O gradiente cria o efeito de fade suave sobre a imagem se ela descer muito */}
+      <div className="absolute bottom-0 left-0 right-0 flex flex-col justify-end items-center pb-8 pt-16 px-4 z-10 bg-gradient-to-t from-[#E5EFF0] via-[#E5EFF0] to-transparent">
+        <h2 className="font-montserrat font-semibold text-2xl leading-tight text-[#075F70] text-center transition-colors duration-300 group-hover:text-[#054551]">
           Entre para uma turma
         </h2>
-        <p className="font-montserrat font-medium text-[22px] leading-[27px] text-[#075F70] text-center w-full transition-colors duration-300 group-hover:text-[#054551]">
+        <p className="font-montserrat font-medium text-lg leading-snug text-[#075F70]/80 text-center mt-1 transition-colors duration-300 group-hover:text-[#054551]">
           Clique aqui para entrar em uma nova turma!
         </p>
       </div>
 
+      {/* Link Overlay (Cobre todo o card) */}
       <Link 
         href="/entrar_turma" 
-        className="absolute inset-0 z-20 rounded-[40px] transition-all duration-300 hover:bg-opacity-10"
+        className="absolute inset-0 z-20"
+        aria-label="Ir para página de entrar em turma"
       />
     </div>
   );

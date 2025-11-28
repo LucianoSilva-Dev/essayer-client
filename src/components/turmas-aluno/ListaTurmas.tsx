@@ -3,7 +3,6 @@ import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-// Importe a tipagem correta da sua API
 import { TurmaMatriculadaAluno } from "@/apiCalls/turma/types"; 
 import { defaultIcon } from "@/constants/icons";
 import { getIconPath } from "@/app/utils";
@@ -61,9 +60,9 @@ export default function ListaTurmasAluno({
       <Link
         key={turma.id}
         href={`${baseUrl}/${turma.id}`}
-        className="block mb-3 group"
+        className="block mb-3 group w-full"
       >
-        <div className="p-3 bg-white border border-gray-100 rounded-[20px] shadow-sm transition-all duration-300 group-hover:shadow-md group-hover:border-[#075F70]/30 flex items-center gap-3 relative overflow-hidden">
+        <div className="p-3 bg-white border border-gray-100 rounded-[20px] shadow-sm transition-all duration-300 group-hover:shadow-md group-hover:border-[#075F70]/30 flex items-center gap-3 relative overflow-hidden w-full">
           <div className="h-14 w-14 bg-[#F0F7F8] rounded-xl flex items-center justify-center shrink-0 group-hover:bg-[#E5EFF0] transition-colors">
             <Image
               width={32}
@@ -75,10 +74,10 @@ export default function ListaTurmasAluno({
           </div>
 
           <div className="flex flex-col flex-1 min-w-0 gap-0.5">
-            <h3 className="font-montserrat font-bold text-[16px] leading-tight text-[#3C3C3C] group-hover:text-[#075F70] transition-colors truncate">
+            <h3 className="font-montserrat font-bold text-base leading-tight text-[#3C3C3C] group-hover:text-[#075F70] transition-colors truncate">
               {turma.nome}
             </h3>
-            <p className="font-montserrat font-medium text-[13px] text-gray-500 truncate">
+            <p className="font-montserrat font-medium text-xs text-gray-500 truncate">
               {turma.escola || "Escola não informada"}
             </p>
           </div>
@@ -92,12 +91,11 @@ export default function ListaTurmasAluno({
   };
 
   return (
-    <section className="col-span-1 bg-transparent p-0 md:p-0 flex flex-col h-full relative z-0">
+    <section className="col-span-1 bg-transparent flex flex-col h-full relative z-0 w-full">
       
       {/* Cabeçalho */}
-      {/* CORREÇÃO: z-30 em vez de z-[100] para não cobrir a Sidebar */}
       <div className="flex justify-between items-center pb-3 mb-2 border-b border-gray-100 gap-2 relative z-30">
-        <h2 className="text-[18px] font-bold text-gray-800 truncate min-w-0">
+        <h2 className="text-lg font-bold text-gray-800 truncate min-w-0">
             {titulo}
         </h2>
 
@@ -114,7 +112,7 @@ export default function ListaTurmasAluno({
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={3} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
                     </button>
                     
-                    <span className="text-[12px] font-bold text-[#075F70] w-6 text-center">
+                    <span className="text-xs font-bold text-[#075F70] w-6 text-center">
                         {paginaAtual}/{totalPaginas}
                     </span>
                     
@@ -132,7 +130,7 @@ export default function ListaTurmasAluno({
                <div className="h-6 w-20 bg-gray-200 rounded-full animate-pulse" />
             )}
 
-            <div className="h-5 w-[1px] bg-gray-200 mx-1"></div>
+            <div className="h-5 w-px bg-gray-200 mx-1"></div>
 
             <NotificationBell />
 

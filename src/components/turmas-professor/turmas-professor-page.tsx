@@ -5,25 +5,21 @@ import NovoEntrarTurmaCard from "./NovoEntrarTurma";
 
 export default function TurmasProfessorPage() {
   return (
-    // Mantive o min-h na página principal para o footer não subir,
-    // mas os elementos internos não vão mais ser forçados a esticar.
-    <main className="grid grid-cols-3 gap-8 pt-6 w-full min-h-[calc(100vh-80px)] pb-10 pr-12">
-      {/* Coluna esquerda */}
+    // Grid responsivo: 1 coluna no mobile, 3 colunas no desktop (lg)
+    // min-h-[calc(100vh-5rem)] substitui o valor fixo de 80px por 5rem
+    <main className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8 pt-6 w-full min-h-[calc(100vh-5rem)] pb-10 px-4 md:pr-12 md:pl-0">
+      {/* Coluna esquerda (Lista ocupa 100% no mobile e 1/3 no desktop) */}
       <ListaTurmas />
 
-      {/* Coluna direita */}
-      <div className="col-span-2 flex flex-col gap-8">
+      {/* Coluna direita (Ocupa 100% no mobile e 2/3 no desktop) */}
+      <div className="col-span-1 lg:col-span-2 flex flex-col gap-6 md:gap-8">
         {/* Card Criar Turma */}
         <NovoCriarTurmaCard />
         
-        {/* Grid Inferior: Correções e Entrar em Turma */}
-        {/* ALTERAÇÃO AQUI: Removido 'h-full'. Mantido 'items-stretch'. */}
-        <div className="grid grid-cols-4 gap-6 items-stretch">
-          
-          <ModernCorrecoesCard className="col-span-2" />
-          
-          <NovoEntrarTurmaCard className="col-span-2" />
-          
+        {/* Grid Inferior: Transforma em 1 coluna no mobile e 2 no tablet/desktop */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
+          <ModernCorrecoesCard className="w-full" />
+          <NovoEntrarTurmaCard className="w-full" />
         </div>
       </div>
     </main>
