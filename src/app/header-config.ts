@@ -62,7 +62,11 @@ export const headerConfig: Record<string, HeaderConfig> = {
     currentPage: 'Editar Repertório',
     description: (params: Record<string, string>, repertorioData?: any) =>
       repertorioData?.titulo || 'Carregando...',
-    backPage: (params: Record<string, string>) => `/repertorio/${params.id}`,
+    backPage: (params: Record<string, string>, searchParams?: URLSearchParams | any) => {
+      const typeFromQuery = searchParams?.get ? searchParams.get('type') : undefined
+      const type = typeFromQuery ?? (params as any).type ?? ''
+      return `/repertorio/${params.id}${type ? `?type=${type}` : ''}`
+    },
     dynamicData: true
   },
   '/turma_aberta_prof/[turmaId]': {

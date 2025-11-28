@@ -1,6 +1,7 @@
 // components/header-wrapper.tsx
 "use client"
 import { usePathname, useParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { Header } from './header/header'
 import { headerConfig } from '@/app/header-config'
@@ -11,6 +12,7 @@ import { ResolvedHeaderProps } from '@/app/header-types'
 export function HeaderWrapper() {
   const pathname = usePathname()
   const params = useParams()
+  const searchParams = useSearchParams()
   const [dynamicData, setDynamicData] = useState<any>(null)
   const [resolvedProps, setResolvedProps] = useState<ResolvedHeaderProps>({ 
     currentPage: 'Incita'
@@ -36,17 +38,17 @@ export function HeaderWrapper() {
         return // Será re-executado quando dynamicData mudar
       }
 
-      // Resolve funções dinâmicas
+      // Resolve funções dinâmicas (passando também searchParams quando disponível)
       const currentPage = typeof config.currentPage === 'function' 
-        ? config.currentPage(params as Record<string, string>, dynamicData) 
+        ? config.currentPage(params as Record<string, string>, dynamicData, searchParams) 
         : config.currentPage
 
       const description = typeof config.description === 'function'
-        ? config.description(params as Record<string, string>, dynamicData)
+        ? config.description(params as Record<string, string>, dynamicData, searchParams)
         : config.description
 
       const backPage = typeof config.backPage === 'function'
-        ? config.backPage(params as Record<string, string>)
+        ? config.backPage(params as Record<string, string>, searchParams)
         : config.backPage
 
       setResolvedProps({ 
@@ -57,7 +59,7 @@ export function HeaderWrapper() {
     }
 
     resolveHeaderProps()
-  }, [pathname, params, dynamicData])
+  }, [pathname, params, dynamicData, searchParams])
 
   const findMatchingConfig = (currentPathname: string) => {
     // 1. Tenta match exato primeiro
