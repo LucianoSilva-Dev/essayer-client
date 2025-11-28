@@ -53,7 +53,8 @@ export function RedacaoOriginalCard({
   }
 
   const handleReescrever = async () => {
-    await updateRedacaoLivre(idRedacao, { finalizada: false, texto: "", duracao: 30 * 60 })
+    // FIX: Mantém o texto da redação ao reescrever
+    await updateRedacaoLivre(idRedacao, { finalizada: false, texto: textoRedacao, duracao: 30 * 60 })
     router.replace(`/praticar_redacao/${idRedacao}`)
   }
 
