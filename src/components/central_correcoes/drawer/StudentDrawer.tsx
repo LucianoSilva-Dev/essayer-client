@@ -124,13 +124,21 @@ export function StudentDrawer({ isOpen, onClose, tarefaId }: Props) {
               >
                 {/* LADO ESQUERDO: Identificação */}
                 <div className="flex items-center gap-4 w-full sm:w-auto">
-                  <div className={`w-12 h-12 rounded-full flex items-center justify-center font-bold text-sm border-2 shrink-0
+                  <div className={`w-12 h-12 rounded-full flex items-center justify-center font-bold text-sm border-2 shrink-0 overflow-hidden
                                 ${respostaStatus(res) === 'corrigido'
                       ? 'bg-[#075F70]/10 text-[#075F70] border-[#075F70]/20'
                       : 'bg-gray-100 text-gray-500 border-gray-200'
                     }`}
                   >
-                    {res.aluno.nome.substring(0, 2).toUpperCase()}
+                    {res.aluno.fotoPath ? (
+                       <img 
+                         src={res.aluno.fotoPath} 
+                         alt={res.aluno.nome} 
+                         className="w-full h-full object-cover"
+                       />
+                    ) : (
+                      res.aluno.nome.substring(0, 2).toUpperCase()
+                    )}
                   </div>
 
                   <div>

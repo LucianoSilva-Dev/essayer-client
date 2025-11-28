@@ -89,7 +89,17 @@ export function TarefaGrid({ tarefas, onSelectTarefa }: Props) {
                                     ${i === 0 ? 'blur-[0.5px] opacity-90 grayscale-[0.2]' : ''} 
                                 `}
                       >
-                        <div className="w-full h-full bg-gradient-to-br from-gray-200 to-gray-400"></div>
+                        {user.fotoPath ? (
+                          <img 
+                            src={user.fotoPath} 
+                            alt={user.nome} 
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          <div className="w-full h-full bg-gradient-to-br from-gray-200 to-gray-400 flex items-center justify-center text-[10px] font-bold text-gray-500">
+                             {user.nome ? user.nome.substring(0, 2).toUpperCase() : "??"}
+                          </div>
+                        )}
                       </div>
                     ))}
                   </div>

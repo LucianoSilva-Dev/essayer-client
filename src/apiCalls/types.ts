@@ -24,6 +24,7 @@ export interface Paginacao {
 export interface PerfilUsuario {
   id: string;
   nome: string;
+  fotoPath?: string;
 }
 
 export interface Comentario {
