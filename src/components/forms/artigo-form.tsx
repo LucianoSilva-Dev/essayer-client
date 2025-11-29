@@ -7,7 +7,6 @@ interface ArtigoFormData {
   titulo: string
   autoria: string
   sintese: string
-  fonte: string
 }
 
 interface ArtigoFormProps {
@@ -16,10 +15,9 @@ interface ArtigoFormProps {
   titulo: string
   autoria: string
   sintese: string
-  fonte: string
 }
 
-export default function ArtigoForm({ titulo, autoria, sintese, fonte, onDataChange, errors }: ArtigoFormProps) {
+export default function ArtigoForm({ titulo, autoria, sintese, onDataChange, errors }: ArtigoFormProps) {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target

@@ -4,9 +4,9 @@ import type React from "react"
 import { createContext, useContext, useState, useEffect, useCallback } from "react"
 import type { RepertorioPendente, ProfessorPendente } from "../types/admin"
 import { getAllRequisicaoProfessor, updateStatus } from "../apiCalls/requisicao-professor"
-import { getRequisicaoProfessorResponse } from "../apiCalls/requisicao-professor/types"
+import { GetRequisicaoProfessorResponse } from "../apiCalls/requisicao-professor/types"
 
-const mountProfessor = (requisicao: getRequisicaoProfessorResponse): ProfessorPendente => {
+const mountProfessor = (requisicao: GetRequisicaoProfessorResponse): ProfessorPendente => {
   if (requisicao.requisitante) {
     return {
       id: requisicao.id,
