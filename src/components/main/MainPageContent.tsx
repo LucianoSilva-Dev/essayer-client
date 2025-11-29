@@ -34,7 +34,6 @@ export default function MainPage() {
 
   // Efeito para buscar os dados sempre que um filtro ou a página mudar
   useEffect(() => {
-    // Na montagem inicial, não faz nada, pois o contexto já busca os dados
     if (isInitialMount.current) {
       isInitialMount.current = false;
       return;
@@ -51,21 +50,22 @@ export default function MainPage() {
         limit: 15,
         favoritedByCurrentUser: tipoVisualizacao === "salvos"
       });
-    }, 500); // Debounce de 500ms
+    }, 500);
 
     return () => {
       clearTimeout(handler);
     };
   }, [termoBusca, eixosAtivos, recorteAtivo, modeloAtivo, ordenarPor, tipoVisualizacao, currentPage, pesquisarRepertorios]);
 
-  // Efeito para resetar a página para 0 quando os filtros mudam
+  // CORREÇÃO AQUI:
+  // Removi 'currentPage' das dependências. Agora ele só reseta se os FILTROS mudarem.
   useEffect(() => {
+    // Verificamos se não é a montagem inicial para evitar reset desnecessário no load
     if (!isInitialMount.current) {
-        if (currentPage !== 0) {
-            setPage(0);
-        }
+        setPage(0);
     }
-  }, [termoBusca, eixosAtivos, recorteAtivo, modeloAtivo, ordenarPor, tipoVisualizacao, setPage, currentPage]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [termoBusca, eixosAtivos, recorteAtivo, modeloAtivo, ordenarPor, tipoVisualizacao, setPage]); 
 
 
   return (

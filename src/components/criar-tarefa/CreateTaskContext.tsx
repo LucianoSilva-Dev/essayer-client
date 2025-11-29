@@ -1,27 +1,21 @@
 "use client";
 
-import React, { createContext, useContext, useState, ReactNode } from "react";
+import React, { createContext, useContext, useState, ReactNode, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Repertorio } from "@/types/repertorio"; 
 import { createAtividadeRedacao } from "@/apiCalls/tarefas";
 import { CreateRedacaoBody } from "@/apiCalls/tarefas/types";
-import { toast } from "react-toastify"; // ✅ Importação corrigida
+import { toast } from "react-toastify";
 
 interface TaskData {
-  // Passo 1
   eixoId: string;
-  
-  // Passo 2
   titulo: string;
   tema: string;
-  repertorios: Repertorio[]; 
-  
-  // Passo 3
+  textoMotivacional?: string;
+  repertorios: Repertorio[];
   dataEntrega: Date | undefined;
-  horaEntrega: string; 
-  
-  // Passo 4
-  duracao: number; 
+  horaEntrega: string;
+  duracao: number;
   descricao: string;
 }
 
@@ -35,6 +29,7 @@ interface CreateTaskContextType {
   updateTaskData: (data: Partial<TaskData>) => void;
   submitTask: () => Promise<void>;
   isSubmitting: boolean;
+  canNavigateToStep: (targetStep: number) => boolean; 
 }
 
 const CreateTaskContext = createContext<CreateTaskContextType | undefined>(undefined);
@@ -47,9 +42,13 @@ export function CreateTaskProvider({
   turmaId: string; 
 }) {
   const router = useRouter();
+  
   const [currentStep, setCurrentStep] = useState(1);
   const totalSteps = 5;
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  const STORAGE_KEY = `draft_task_${turmaId}`;
 
   const [taskData, setTaskData] = useState<TaskData>({
     eixoId: "",
@@ -62,28 +61,121 @@ export function CreateTaskProvider({
     descricao: "",
   });
 
-  const nextStep = () => setCurrentStep((prev) => Math.min(prev + 1, totalSteps));
+  // --- CARREGAR DADOS ---
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        if (parsed.taskData) {
+            if (parsed.taskData.dataEntrega) {
+                parsed.taskData.dataEntrega = new Date(parsed.taskData.dataEntrega);
+            }
+            setTaskData(parsed.taskData);
+        }
+        if (parsed.currentStep) {
+            setCurrentStep(parsed.currentStep);
+        }
+      } catch (error) {
+        console.error("Erro ao restaurar rascunho:", error);
+      }
+    }
+    setIsLoaded(true);
+  }, [STORAGE_KEY]);
+
+  // --- SALVAR DADOS ---
+  useEffect(() => {
+    if (!isLoaded) return;
+
+    const stateToSave = {
+        taskData,
+        currentStep 
+    };
+    
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(stateToSave));
+  }, [taskData, currentStep, isLoaded, STORAGE_KEY]);
+
+
+  // --- VALIDAÇÃO ---
+  const validateStepData = (step: number): boolean => {
+    switch (step) {
+      case 1: return !!taskData.eixoId;
+      case 2: return !!(taskData.titulo?.trim() && taskData.tema?.trim());
+      case 3: return !!(taskData.dataEntrega && taskData.horaEntrega);
+      case 4: return taskData.duracao > 0;
+      default: return true;
+    }
+  };
+
+  const getStepError = (step: number): string => {
+      switch (step) {
+          case 1: return "Selecione um Eixo Temático.";
+          case 2: return "Preencha o Título e o Tema.";
+          case 3: return "Defina a Data e Hora de entrega.";
+          case 4: return "Verifique a duração da tarefa.";
+          default: return "Complete o passo anterior.";
+      }
+  }
+
+  // Apenas verifica (sem toast) para uso visual
+  const canNavigateToStep = (targetStep: number): boolean => {
+    if (targetStep < currentStep) return true;
+    for (let i = 1; i < targetStep; i++) {
+        if (!validateStepData(i)) {
+            return false;
+        }
+    }
+    return true;
+  };
+
+  const nextStep = () => {
+    if (validateStepData(currentStep)) {
+        setCurrentStep((prev) => Math.min(prev + 1, totalSteps));
+    } else {
+        // CORREÇÃO: Adicionado toastId para evitar duplicatas no botão "Próximo"
+        toast.warn(getStepError(currentStep), {
+            toastId: `error-step-${currentStep}`
+        });
+    }
+  };
+
   const prevStep = () => setCurrentStep((prev) => Math.max(prev - 1, 1));
-  const setStep = (step: number) => setCurrentStep(step);
+
+  const setStep = (targetStep: number) => {
+      if (targetStep < currentStep) {
+          setCurrentStep(targetStep);
+          return;
+      }
+      for (let i = 1; i < targetStep; i++) {
+          if (!validateStepData(i)) {
+              // CORREÇÃO: Adicionado toastId para evitar duplicatas na Timeline
+              toast.warn(`Complete o passo ${i} para avançar: ${getStepError(i)}`, {
+                  toastId: `error-timeline-${i}`
+              });
+              return; 
+          }
+      }
+      setCurrentStep(targetStep);
+  };
 
   const updateTaskData = (data: Partial<TaskData>) => {
     setTaskData((prev) => ({ ...prev, ...data }));
   };
 
   const submitTask = async () => {
-    if (!taskData.dataEntrega) {
-      toast.error("Defina uma data de entrega.");
-      return;
-    }
-    if (!taskData.titulo || !taskData.tema) {
-       toast.error("Preencha o título e o tema.");
-       return;
+    if (!canNavigateToStep(totalSteps)) {
+        toast.warn("Preencha todos os campos obrigatórios antes de publicar.", {
+            toastId: "error-submit"
+        });
+        return;
     }
 
     try {
       setIsSubmitting(true);
 
-      const dataLimite = new Date(taskData.dataEntrega);
+      const dataLimite = new Date(taskData.dataEntrega!);
       const [horas, minutos] = taskData.horaEntrega.split(":").map(Number);
       dataLimite.setHours(horas, minutos, 0, 0);
 
@@ -100,6 +192,8 @@ export function CreateTaskProvider({
       };
 
       await createAtividadeRedacao(payload);
+
+      localStorage.removeItem(STORAGE_KEY);
 
       toast.success("Tarefa criada com sucesso!");
       router.push(`/turma_aberta_prof/${turmaId}`);
@@ -124,7 +218,8 @@ export function CreateTaskProvider({
         setStep, 
         updateTaskData,
         submitTask,
-        isSubmitting
+        isSubmitting,
+        canNavigateToStep 
       }}
     >
       {children}

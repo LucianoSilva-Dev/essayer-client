@@ -3,7 +3,7 @@
 import React from "react";
 import { useCreateTask } from "./CreateTaskContext";
 import { Button } from "@/components/landing/ui/button"; 
-import { ArrowRight, ArrowLeft, Check, Loader2 } from "lucide-react";
+import { ArrowRight, ArrowLeft, Loader2, Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export function StepNavigation() {
@@ -20,53 +20,64 @@ export function StepNavigation() {
   };
 
   return (
-    <div className="flex justify-between mt-8 pt-8 border-t border-gray-200 max-w-[1165px] mx-auto w-full px-4">
+    <div className="flex justify-between items-center mt-4 pt-6 border-t border-gray-100 max-w-[1165px] mx-auto w-full px-4">
+      
       {/* Botão Voltar */}
       <Button
-        variant="outline"
+        variant="ghost"
         onClick={prevStep}
         disabled={currentStep === 1 || isSubmitting}
         className={cn(
-            "gap-2 font-montserrat font-bold text-[20px] rounded-[25px] h-[44px] px-[15px] border-none shadow-none text-[#898787] hover:text-[#434343] hover:bg-gray-100 transition-all",
+            "group flex items-center gap-2 font-montserrat font-semibold text-lg rounded-full px-6 py-6 transition-all duration-300",
+            "text-gray-400 hover:text-gray-600 hover:bg-gray-50",
              currentStep === 1 ? "opacity-0 pointer-events-none" : "opacity-100"
         )}
       >
-        <ArrowLeft size={24} />
-        Voltar
+        <ArrowLeft 
+            size={20} 
+            className="transition-transform duration-300 group-hover:-translate-x-1" 
+        />
+        <span>Voltar</span>
       </Button>
 
-      {/* Botão Próximo / Publicar (Estilo Figma) */}
+      {/* Botão Próximo / Publicar */}
       <Button 
         onClick={handleNextClick}
         disabled={isSubmitting}
         className={cn(
-            "h-[44px] rounded-[25px] px-[20px] gap-2 shadow-lg transition-all flex items-center justify-center min-w-[185px]",
-            // Tipografia Figma
-            "font-montserrat font-bold text-[20px] leading-[24px]",
-            
-            // Cores:
-            // Se for o último passo (Publicar), usa o estilo verde forte.
-            // Se for passos intermediários, também mantive verde para consistência de "ação primária",
-            // mas você pode mudar para cinza se preferir que o botão "Próximo" seja neutro.
-            "bg-[#075F70] hover:bg-[#064d5c] text-[#E5EFF0]"
+            "group relative overflow-hidden h-[56px] rounded-full px-8 shadow-md hover:shadow-xl transition-all duration-300",
+            "bg-[#075F70] hover:bg-[#054a57] text-white min-w-[160px]",
+            "font-montserrat font-bold text-lg tracking-wide"
         )}
       >
         {isSubmitting ? (
-             <>
+             <div className="flex items-center gap-2">
                 <Loader2 className="animate-spin" size={20} />
-                Publicando...
-             </>
+                <span>Processando...</span>
+             </div>
         ) : isLastStep ? (
-             <>
-                Publicar tarefa
-                {/* O ícone não está no Figma, mas é boa prática de UX. Se quiser idêntico ao Figma, remova a linha abaixo */}
-                {/* <Check size={20} /> */} 
-             </>
+             <div className="flex items-center gap-3">
+                <span>Publicar Tarefa</span>
+                <Check className="w-5 h-5 transition-transform group-hover:scale-125" />
+             </div>
         ) : (
-             <>
-                Próximo
-                <ArrowRight size={24} />
-             </>
+             // Animação Ajustada
+             <div className="relative flex items-center justify-center w-full h-full">
+                {/* Texto: Desliza para esquerda */}
+                <span className="transition-transform duration-300 group-hover:-translate-x-4">
+                    Próximo
+                </span>
+                
+                {/* Seta: 
+                    - absolute -right-4: Empurra a seta para dentro da área de padding do botão (mais para a direita da pill)
+                    - opacity-0: Começa invisível
+                    - transition-opacity: Apenas fade-in, fixa no lugar
+                */}
+                <ArrowRight 
+                    size={22} 
+                    className="absolute -right-4 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                />
+             </div>
         )}
       </Button>
     </div>

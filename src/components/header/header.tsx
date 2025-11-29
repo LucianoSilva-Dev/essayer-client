@@ -4,10 +4,9 @@ import { AuthButtons } from "./auth-buttons"
 import { MobileMenu } from "./mobile-menu"
 import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import Link from "next/link"
 import { useAuth } from "../../contexts/auth-context"
-import { useRouter } from "next/navigation"
 import Image from "next/image"
 import { getProfilePictureLink } from "../../apiCalls/usuario"
 import { Redo2 } from 'lucide-react';
@@ -24,6 +23,9 @@ export function Header({ currentPage, description, backPage }: HeaderProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [profilePic, setProfilePic] = useState<string | null>(null)
   const pathname = usePathname()
+
+  // Verifica se estamos na página de entrar turma
+  const isEntrarTurmaPage = pathname === "/entrar_turma";
 
   useEffect(() => {
     const fetchProfilePic = async () => {
@@ -56,19 +58,38 @@ export function Header({ currentPage, description, backPage }: HeaderProps) {
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
         {/* Lado Esquerdo: Seta de voltar + Nome da página */}
         <div className="flex items-center gap-4">
-          {/* Seta de voltar - condicional */}
+          
+          {/* Seta de voltar - Lógica condicional aplicada aqui */}
           {backPage && (
-            <Link
-              href={backPage}
-              className="flex items-center gap-3 group transition-all duration-200"
-            >
-              <div className="w-11 h-8 flex items-center justify-center" title="Voltar">
-                <Redo2 
-                  size={32} 
-                  className="text-[#3C3C3C] transform rotate-180 group-hover:scale-110 transition-transform duration-200" 
-                />
-              </div>
-            </Link>
+            isEntrarTurmaPage ? (
+              // Se for a página 'entrar_turma', usa o roteador para voltar no histórico
+              <button
+                onClick={() => router.back()}
+                className="flex items-center gap-3 group transition-all duration-200"
+                type="button"
+                title="Voltar"
+              >
+                <div className="w-11 h-8 flex items-center justify-center">
+                  <Redo2 
+                    size={32} 
+                    className="text-[#3C3C3C] transform rotate-180 group-hover:scale-110 transition-transform duration-200" 
+                  />
+                </div>
+              </button>
+            ) : (
+              // Para todas as outras páginas, mantém o Link padrão com href fixo
+              <Link
+                href={backPage}
+                className="flex items-center gap-3 group transition-all duration-200"
+              >
+                <div className="w-11 h-8 flex items-center justify-center" title="Voltar">
+                  <Redo2 
+                    size={32} 
+                    className="text-[#3C3C3C] transform rotate-180 group-hover:scale-110 transition-transform duration-200" 
+                  />
+                </div>
+              </Link>
+            )
           )}
           
           {/* Título e Subtítulo */}

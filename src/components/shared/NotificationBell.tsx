@@ -4,7 +4,7 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNotification } from "@/contexts/notification-context";
-import NotificationItem from "./NotificationItem"; // <--- Importando o componente novo
+import NotificationItem from "./NotificationItem"; 
 
 // Ícone do Sino
 const BellIcon = ({ className }: { className?: string }) => (
@@ -64,7 +64,8 @@ export default function NotificationBell() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 10, scale: 0.95 }}
             transition={{ duration: 0.2 }}
-            className="absolute right-0 top-full mt-2 w-80 sm:w-96 bg-white rounded-2xl shadow-xl border border-gray-100 z-[100] overflow-hidden origin-top-right"
+            // MUDANÇA AQUI: Alterado 'right-0' para 'left-0' e 'origin-top-right' para 'origin-top-left'
+            className="absolute left-0 top-full mt-2 w-80 sm:w-96 bg-white rounded-2xl shadow-xl border border-gray-100 z-[100] overflow-hidden origin-top-left"
           >
             {/* Header */}
             <div className="flex items-center justify-between p-4 border-b border-gray-50 bg-gray-50/50">

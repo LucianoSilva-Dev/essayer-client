@@ -5,7 +5,6 @@ import { CreateTaskProvider, useCreateTask } from "./CreateTaskContext";
 import { Stepper } from "./Stepper";
 import { StepNavigation } from "./StepNavigation";
 
-// Importação dos Passos (Crie os arquivos vazios se ainda não existirem para evitar erro de compilação)
 import { Step1_Eixo } from "./steps/Step1_Eixo";
 import { Step2_Detalhes } from "./steps/Step2_Detalhes";
 import { Step3_Prazo } from "./steps/Step3_Prazo";
@@ -30,16 +29,16 @@ function StepContentManager() {
     <div className="max-w-7xl mx-auto w-full flex flex-col min-h-screen">
       
       {/* 1. Header Fixo: Título + Stepper */}
-      <div className="pt-8 px-4 mb-8">
-        <h1 className="text-3xl font-bold text-[#3C3C3C] mb-8 font-montserrat pl-4">
+      <div className="pt-8 px-4 mb-0">
+        <h1 className="text-3xl font-bold text-[#3C3C3C] mb-4 font-montserrat pl-4">
           Criar nova tarefa
         </h1>
         <Stepper />
       </div>
 
       {/* 2. Área de Conteúdo Dinâmica */}
-      {/* animate-in adiciona uma transição suave entre os passos se usar Tailwind animate */}
-      <div className="flex-1 px-4 mt-4 min-h-[500px]">
+      {/* AJUSTE: Aumentado de mt-2 para mt-10 para dar mais respiro */}
+      <div className="flex-1 px-4 mt-12 min-h-[500px]">
         {renderStepContent()}
       </div>
 
@@ -53,7 +52,6 @@ function StepContentManager() {
 
 export default function CreateTaskWrapper({ turmaId }: { turmaId: string }) {
   return (
-    // Passamos o turmaId para o Provider para ser usado no envio final
     <CreateTaskProvider turmaId={turmaId}>
       <StepContentManager />
     </CreateTaskProvider>
