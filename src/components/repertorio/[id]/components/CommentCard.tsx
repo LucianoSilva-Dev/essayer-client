@@ -43,29 +43,29 @@ export function CommentCard({ comentario, isAuthorComment = false, preloadedPict
   }, [comentario.usuario, preloadedPicture]);
 
   // ... (Resto do componente igual: handleLike, return, etc)
-  const handleLike = async () => {
-    if (isActionLoading) return;
-    setIsActionLoading(true);
-    try {
-      // Simula delay de rede ou chamada real se houvesse
-      // await addLike(comentario.id); 
-      setLiked(!liked);
-      if (disliked) setDisliked(false);
-    } finally {
-      setIsActionLoading(false);
-    }
-  };
+  // const handleLike = async () => {
+  //   if (isActionLoading) return;
+  //   setIsActionLoading(true);
+  //   try {
+  //     // Simula delay de rede ou chamada real se houvesse
+  //     // await addLike(comentario.id); 
+  //     setLiked(!liked);
+  //     if (disliked) setDisliked(false);
+  //   } finally {
+  //     setIsActionLoading(false);
+  //   }
+  // };
 
-  const handleDislike = async () => {
-    if (isActionLoading) return;
-    setIsActionLoading(true);
-    try {
-      setDisliked(!disliked);
-      if (liked) setLiked(false);
-    } finally {
-      setIsActionLoading(false);
-    }
-  };
+  // const handleDislike = async () => {
+  //   if (isActionLoading) return;
+  //   setIsActionLoading(true);
+  //   try {
+  //     setDisliked(!disliked);
+  //     if (liked) setLiked(false);
+  //   } finally {
+  //     setIsActionLoading(false);
+  //   }
+  // };
 
   const handlePinClick = async () => {
     if (isActionLoading || !onPin) return;
@@ -124,7 +124,7 @@ export function CommentCard({ comentario, isAuthorComment = false, preloadedPict
           {comentario.texto}
         </p>
 
-        <div className="flex items-center gap-4">
+        {/* <div className="flex items-center gap-4">
           <button onClick={handleLike} disabled={isActionLoading} className={`transition-colors ${liked ? 'text-teal-600' : 'text-gray-400 hover:text-gray-600'} ${isActionLoading ? 'opacity-50 cursor-not-allowed' : ''}`}>
             <ThumbsUp size={18} className={liked ? "fill-current" : ""} />
           </button>
@@ -132,7 +132,7 @@ export function CommentCard({ comentario, isAuthorComment = false, preloadedPict
           <button onClick={handleDislike} disabled={isActionLoading} className={`transition-colors ${disliked ? 'text-red-500' : 'text-gray-400 hover:text-gray-600'} ${isActionLoading ? 'opacity-50 cursor-not-allowed' : ''}`}>
             <ThumbsDown size={18} className={disliked ? "fill-current" : ""} />
           </button>
-        </div>
+        </div> */}
       </div>
     </div>
   );

@@ -37,10 +37,6 @@ export default function LoginForm() {
       const response = await apiLogin({ email, senha: password })
       login(response)
 
-      if (lattes && lattes !== "null") {
-        await createProfessorRequest({ lattes })
-      }
-
       router.push("/main")
     } catch { }
   }
