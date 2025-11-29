@@ -37,11 +37,11 @@ export default function SettingsSidebar({ cargo }: {cargo: string}) {
           icon={<FileText />}
           text="Virar Professor"
         />}
-        <SidebarItem
+        {/* <SidebarItem
           href='' //criar modal de confirmação
           icon={<Delete />}
           text="Excluir conta"
-        />
+        /> */}
       </nav>
 
       {/* Espaçador */}
