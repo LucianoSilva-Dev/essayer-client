@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { User, ThumbsUp, ThumbsDown, Pin } from 'lucide-react';
+import { User, ThumbsUp, ThumbsDown, Pin, Trash2 } from 'lucide-react';
 import type { Comentario } from '@/apiCalls/types';
 import { useAuth } from '@/contexts/auth-context';
 import { getProfilePictureLink } from '@/apiCalls/usuario';
@@ -11,9 +11,11 @@ interface CommentCardProps {
   preloadedPicture?: string | null;
   canPin?: boolean;
   onPin?: (id: string, currentStatus: boolean) => Promise<void>;
+  canDelete?: boolean;
+  onDelete?: (id: string) => void;
 }
 
-export function CommentCard({ comentario, isAuthorComment = false, preloadedPicture, canPin, onPin }: CommentCardProps) {
+export function CommentCard({ comentario, isAuthorComment = false, preloadedPicture, canPin, onPin, canDelete, onDelete }: CommentCardProps) {
   // Se vier preloadedPicture, usamos ela direto no estado inicial
   const [authorProfilePictureLink, setAuthorProfilePictureLink] = useState<string | null>(preloadedPicture || null);
   
@@ -108,16 +110,29 @@ export function CommentCard({ comentario, isAuthorComment = false, preloadedPict
             )}
           </div>
 
-          {canPin && onPin && (
-            <button 
-              onClick={handlePinClick}
-              disabled={isActionLoading}
-              className={`p-1.5 rounded-full transition-colors ${comentario.fixado ? 'text-[#024D4D] bg-[#024D4D]/10 hover:bg-[#024D4D]/20' : 'text-gray-400 hover:text-[#024D4D] hover:bg-gray-100'} ${isActionLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
-              title={comentario.fixado ? "Desafixar comentário" : "Fixar comentário"}
-            >
-              <Pin size={16} className={comentario.fixado ? "fill-current" : ""} />
-            </button>
-          )}
+          <div className="flex items-center gap-2">
+            {canPin && onPin && (
+              <button 
+                onClick={handlePinClick}
+                disabled={isActionLoading}
+                className={`p-1.5 rounded-full transition-colors ${comentario.fixado ? 'text-[#024D4D] bg-[#024D4D]/10 hover:bg-[#024D4D]/20' : 'text-gray-400 hover:text-[#024D4D] hover:bg-gray-100'} ${isActionLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                title={comentario.fixado ? "Desafixar comentário" : "Fixar comentário"}
+              >
+                <Pin size={16} className={comentario.fixado ? "fill-current" : ""} />
+              </button>
+            )}
+
+            {canDelete && onDelete && (
+              <button 
+                onClick={() => onDelete(comentario.id)}
+                disabled={isActionLoading}
+                className="p-1.5 rounded-full transition-colors text-gray-400 hover:text-red-600 hover:bg-red-50"
+                title="Excluir comentário"
+              >
+                <Trash2 size={16} />
+              </button>
+            )}
+          </div>
         </div>
 
         <p className="text-gray-600 text-sm md:text-base leading-relaxed font-opensans mb-3">

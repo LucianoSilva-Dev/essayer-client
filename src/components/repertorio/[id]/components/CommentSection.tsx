@@ -3,8 +3,10 @@ import { User } from 'lucide-react';
 import type { Comentario } from '@/apiCalls/types';
 import { CommentCard } from './CommentCard';
 import { useAuth } from '@/contexts/auth-context';
-import { fixarComentario } from '@/apiCalls/repertorio';
+import { fixarComentario, deleteComentario } from '@/apiCalls/repertorio';
 import { toast } from 'react-toastify';
+import { ConfirmationModal } from '@/components/ConfirmationModal';
+
 
 interface CommentSectionProps {
   comments: Comentario[];
@@ -27,8 +29,12 @@ export function CommentSection({
 }: CommentSectionProps) {
   
   const { userData } = useAuth(); 
+  const [deleteModalOpen, setDeleteModalOpen] = React.useState(false);
+  const [commentToDelete, setCommentToDelete] = React.useState<string | null>(null);
 
   const canPin = isLoggedIn && (userData?.id === authorId || userData?.cargo === 'admin');
+  const canDelete = isLoggedIn && (userData?.id === authorId || userData?.cargo === 'admin');
+
 
   const handlePin = async (commentId: string, currentStatus: boolean) => {
     try {
@@ -40,6 +46,28 @@ export function CommentSection({
       toast.error("Erro ao atualizar status do comentário.");
     }
   };
+
+  const handleDeleteClick = (commentId: string) => {
+    setCommentToDelete(commentId);
+    setDeleteModalOpen(true);
+  };
+
+  const confirmDelete = async () => {
+    if (!commentToDelete) return;
+
+    try {
+      await deleteComentario(repertorioId, commentToDelete);
+      toast.success("Comentário excluído com sucesso!");
+      onCommentUpdate();
+    } catch (error) {
+      console.error("Erro ao excluir comentário:", error);
+      toast.error("Erro ao excluir comentário.");
+    } finally {
+      setDeleteModalOpen(false);
+      setCommentToDelete(null);
+    }
+  };
+
 
   // Ordena comentários: fixados primeiro
   const sortedComments = [...comments].sort((a, b) => {
@@ -68,6 +96,8 @@ export function CommentSection({
                 comentario={comment} 
                 canPin={canPin}
                 onPin={handlePin}
+                canDelete={canDelete}
+                onDelete={handleDeleteClick}
                 isAuthorComment={comment.usuario.id === authorId}
               />
             ))
@@ -109,6 +139,17 @@ export function CommentSection({
           </form>
         </div>
       )}
+
+      <ConfirmationModal
+        isOpen={deleteModalOpen}
+        onClose={() => setDeleteModalOpen(false)}
+        onConfirm={confirmDelete}
+        title="Excluir comentário"
+        description="Tem certeza que deseja excluir este comentário? Esta ação não pode ser desfeita."
+        confirmText="Excluir"
+        cancelText="Cancelar"
+        variant="danger"
+      />
     </div>
   );
 }
