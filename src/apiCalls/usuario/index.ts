@@ -48,8 +48,11 @@ export const deleteUser = async (id: string): Promise<GenericSuccessResponse> =>
 
 export const getProfilePictureLink = async (id: string | null | undefined): Promise<string | null> => {
   if (!id) return null
-  const foto = await apiClient.get(`/usuario/foto/${id}`, { cache: { ttl: 120_000 } })
-  if (!foto.data) return null
+  const foto = await apiClient.get(`/usuario/foto/${id}`, {
+    cache: { ttl: 900_000 }, // 15 minutes
+    validateStatus: (status) => (status >= 200 && status < 300) || status === 404
+  })
+  if (foto.status === 404 || !foto.data) return null
   return foto.data.fotoUrl
 }
 

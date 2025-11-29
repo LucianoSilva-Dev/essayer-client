@@ -37,14 +37,12 @@ export function CommentCard({ comentario, isAuthorComment = false, preloadedPict
           setAuthorProfilePictureLink(link);
         } catch (error) {
           // Silencia erro de imagem não encontrada para evitar toast desnecessário em listas
-          console.error("Erro ao buscar imagem de perfil", error);
         }
       }
     }
     fetchPicture();
   }, [comentario.usuario, preloadedPicture]);
 
-  // ... (Resto do componente igual: handleLike, return, etc)
   // const handleLike = async () => {
   //   if (isActionLoading) return;
   //   setIsActionLoading(true);

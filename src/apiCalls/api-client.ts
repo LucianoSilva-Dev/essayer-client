@@ -8,7 +8,10 @@ const apiClient = setupCache(axios.create({
   withCredentials: true,
 }), {
   ttl: 0,
-  location: 'client'
+  location: 'client',
+  cachePredicate: {
+    statusCheck: (status) => status >= 200 && status < 300 || status === 404,
+  }
 });
 
 let isRefreshing = false;
