@@ -16,7 +16,7 @@ export default function JoinBox() {
 
     const response = await entrarTurma(codigo)
     toast.success('Solictação enviada.')
-    redirect("/turmas_professor") // Mudar para turma do aluno quando estiver pronta
+    redirect("/turmas_aluno") // Mudar para turma do aluno quando estiver pronta
   }
 
   return (

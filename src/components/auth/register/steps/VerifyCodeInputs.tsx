@@ -17,7 +17,7 @@ interface VerifyCodeInputsProps {
   itemVariants: Variants
   requestId: string
   // Chamado quando o código for verificado com sucesso
-  onVerifySuccess: () => void
+  onVerifySuccess: (id: string) => void
   // Chamado para simular o reenvio de código
   onResendCode: (nome: string, email: string, senha: string) => Promise<void>
 }
@@ -64,16 +64,16 @@ export const VerifyCodeInputs: React.FC<VerifyCodeInputsProps> = ({
     console.log("Verificando código:", fullCode, "para o email:", email)
 
     try {
-      await validateUser(requestId, {codigo: fullCode})
+      const { id } = await validateUser(requestId, { codigo: fullCode })
       toast.success("Email verificado com sucesso!")
-      onVerifySuccess() // Informa o pai (register-form) para redirecionar
-    } catch (e) { 
-      console.error("Erro ao verificar o código:", e) 
+      onVerifySuccess(id) // Informa o pai (register-form) para redirecionar
+    } catch (e) {
+      console.error("Erro ao verificar o código:", e)
       toast.error("Código incorreto. Tente novamente.")
     } finally {
       setIsSubmitting(false)
     }
-    
+
 
     // // Simulação de API
     // setTimeout(() => {

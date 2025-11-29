@@ -16,7 +16,7 @@ import { PasswordInputs } from "./steps/PasswordInputs"
 import { VerifyCodeInputs } from "./steps/VerifyCodeInputs"
 import { RegisterFormData } from "./register-form-types"
 import { CreateUsuarioBody } from "@/apiCalls/usuario/types"
-import { createUser } from "@/apiCalls/usuario"
+import { createProfessorRequest, createUser } from "@/apiCalls/usuario"
 
 type CardType = "student" | "teacher"
 
@@ -137,7 +137,7 @@ export default function RegisterForm() {
       }
 
     }
-    
+
     // A etapa 5 tem sua própria lógica de submissão
     // dentro do VerifyCodeInputs, então este
     // handleNextStep não fará nada na etapa 5.
@@ -152,15 +152,16 @@ export default function RegisterForm() {
   }
 
   // --- 3. Funções para a Etapa 5 ---
-  
+
   // Chamado quando a verificação do código é bem-sucedida
-  const handleVerifySuccess = () => {
+  const handleVerifySuccess = async (id: string) => {
+    if (formData.userType === 'teacher') await createProfessorRequest(id, {lattes: formData.lattes})
     router.push("/login?message=register-success")
   }
-  
+
   // Chamado quando o usuário pede um novo código
   const handleResendCode = async (email: string, nome: string, senha: string) => {
-    const createUsuarioBody: CreateUsuarioBody = { email, nome, senha}
+    const createUsuarioBody: CreateUsuarioBody = { email, nome, senha }
     console.log('userData para reenvio de código: ', createUsuarioBody)
     // re-envia o codigo criando o usuario novamente (não duplicará o email)
     await createUser(createUsuarioBody)
@@ -221,7 +222,7 @@ export default function RegisterForm() {
 
         {/* --- Container das Etapas com Animação --- */}
         {/* A altura mínima ajuda a evitar "saltos" de layout */}
-        <div className={`${ step === 5 ? "" : "mb-6"} min-h-[350px] transition-all duration-300`} >
+        <div className={`${step === 5 ? "" : "mb-6"} min-h-[350px] transition-all duration-300`} >
           <AnimatePresence mode="wait">
             {step === 1 && (
               <motion.div
@@ -277,12 +278,12 @@ export default function RegisterForm() {
                 animate="visible"
                 exit="exit"
               >
-                 {/* Descrição da etapa 3 */}
+                {/* Descrição da etapa 3 */}
                 <motion.p
                   variants={itemVariants}
                   className="text-base md:text-[25px] text-[#3C3C3C] mb-6 md:mb-8 max-w-full md:max-w-2xl leading-relaxed"
                 >
-                   Cadastro para {formData.userType === "student" ? "Estudante" : "Educador"}
+                  Cadastro para {formData.userType === "student" ? "Estudante" : "Educador"}
                 </motion.p>
                 <EmailLattesInputs
                   email={formData.email}
@@ -302,12 +303,12 @@ export default function RegisterForm() {
                 animate="visible"
                 exit="exit"
               >
-                 {/* Descrição da etapa 4 */}
+                {/* Descrição da etapa 4 */}
                 <motion.p
                   variants={itemVariants}
                   className="text-base md:text-[25px] text-[#3C3C3C] mb-6 md:mb-8 max-w-full md:max-w-2xl leading-relaxed"
                 >
-                   Cadastro para {formData.userType === "student" ? "Estudante" : "Educador"}
+                  Cadastro para {formData.userType === "student" ? "Estudante" : "Educador"}
                 </motion.p>
                 <PasswordInputs
                   password={formData.password}
@@ -394,8 +395,8 @@ export default function RegisterForm() {
               {isSubmitting
                 ? "Cadastrando..."
                 : step === 4
-                ? "Cadastrar-se"
-                : "Avançar"}
+                  ? "Cadastrar-se"
+                  : "Avançar"}
             </button>
           </motion.div>
         )}

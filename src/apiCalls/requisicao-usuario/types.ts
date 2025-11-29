@@ -1,3 +1,7 @@
 export interface ValidateUserBody {
-    codigo: string
+  codigo: string
+}
+
+export interface ValidateUserResponse {
+  id: string
 }
