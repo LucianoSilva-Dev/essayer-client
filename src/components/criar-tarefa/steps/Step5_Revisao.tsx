@@ -76,7 +76,7 @@ export function Step5_Revisao() {
             <div className="bg-white p-8 rounded-[30px] shadow-sm border border-gray-100 space-y-4">
                 <div className="flex items-center gap-2 text-[#075F70] mb-2">
                     <FileText size={20} />
-                    <h3 className="font-bold font-montserrat text-lg">Instruções para o aluno</h3>
+                    <h3 className="font-bold font-montserrat text-lg">Descrição da tarefa</h3>
                 </div>
                 <div className="text-gray-600 font-montserrat whitespace-pre-wrap leading-relaxed">
                     {taskData.descricao || "Nenhuma instrução adicional fornecida."}

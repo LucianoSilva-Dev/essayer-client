@@ -1,9 +1,10 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { 
   format, addMonths, subMonths, startOfMonth, endOfMonth, 
-  startOfWeek, endOfWeek, eachDayOfInterval, isSameMonth, isSameDay 
+  startOfWeek, endOfWeek, eachDayOfInterval, isSameMonth, isSameDay, isToday,
+  isBefore, startOfToday 
 } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { cn } from "@/lib/utils";
@@ -17,99 +18,127 @@ interface CalendarWidgetProps {
 
 export function CalendarWidget({ selectedDate, onSelectDate, daysWithTasks = [] }: CalendarWidgetProps) {
   const [viewDate, setViewDate] = useState(new Date());
+  const today = startOfToday(); 
+
+  useEffect(() => {
+    if (selectedDate) {
+      setViewDate(selectedDate);
+    }
+  }, [selectedDate]);
+
+  // Verifica se o mês visível é o mês atual para bloquear o "voltar"
+  const isCurrentViewMonth = isSameMonth(viewDate, today);
 
   const nextMonth = () => setViewDate(prev => addMonths(prev, 1));
-  const prevMonth = () => setViewDate(prev => subMonths(prev, 1));
+  
+  const prevMonth = () => {
+      // Só volta se não for o mês atual
+      if (!isCurrentViewMonth) {
+          setViewDate(prev => subMonths(prev, 1));
+      }
+  };
 
-  // Gera os dias da grade (do início da semana do dia 1 até o fim da semana do último dia)
   const monthStart = startOfMonth(viewDate);
   const monthEnd = endOfMonth(monthStart);
   const startDate = startOfWeek(monthStart);
   const endDate = endOfWeek(monthEnd);
   
   const calendarDays = eachDayOfInterval({ start: startDate, end: endDate });
+  const weekDays = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
+
+  const handleDayClick = (day: Date, isPast: boolean) => {
+      if (isPast) return;
+
+      if (!isSameMonth(day, viewDate)) {
+          setViewDate(day);
+      }
+      onSelectDate(day);
+  };
 
   return (
-    <div className="bg-white rounded-[30px] p-[30px] w-full shadow-sm border border-gray-100 relative min-h-[650px]">
+    <div className="bg-white rounded-[40px] p-8 shadow-xl border border-gray-100 w-full h-full flex flex-col min-h-[500px]">
       
-      {/* --- Header (Mês e Navegação) --- */}
-      <div className="flex items-center gap-4 mb-8 bg-white border border-gray-200 rounded-[15px] px-4 py-2 w-max shadow-sm absolute top-8 left-8 z-10">
-          <button onClick={prevMonth} className="p-1 hover:bg-gray-100 rounded-full transition-colors">
-             <ChevronLeft className="text-[#898787]" />
-          </button>
-          
-          <span className="font-montserrat font-semibold text-[22px] text-[#3C3C3C] capitalize min-w-[140px] text-center">
-              {format(viewDate, "MMMM", { locale: ptBR })}
-          </span>
+      <div className="flex items-center justify-between mb-8 px-2">
+        <div className="flex flex-col">
+            <span className="text-sm font-bold text-gray-400 uppercase tracking-widest">
+                Mês de Referência
+            </span>
+            <h2 className="text-3xl font-bold text-[#3C3C3C] capitalize font-montserrat">
+                {format(viewDate, "MMMM yyyy", { locale: ptBR })}
+            </h2>
+        </div>
 
-          <button onClick={nextMonth} className="p-1 hover:bg-gray-100 rounded-full transition-colors">
-             <ChevronRight className="text-[#898787]" />
-          </button>
+        <div className="flex gap-2">
+            {/* Botão Voltar: Desabilitado se for o mês atual */}
+            <button 
+                onClick={prevMonth} 
+                disabled={isCurrentViewMonth}
+                className={cn(
+                    "p-3 rounded-full border border-gray-200 transition-all group",
+                    isCurrentViewMonth 
+                        ? "opacity-30 cursor-not-allowed bg-gray-50" 
+                        : "hover:bg-gray-50 hover:border-[#075F70] hover:text-[#075F70]"
+                )}
+            >
+                <ChevronLeft size={24} className={isCurrentViewMonth ? "text-gray-300" : "text-gray-400 group-hover:text-[#075F70]"} />
+            </button>
+
+            <button onClick={nextMonth} className="p-3 hover:bg-gray-50 rounded-full border border-gray-200 hover:border-[#075F70] hover:text-[#075F70] transition-all group">
+                <ChevronRight size={24} className="text-gray-400 group-hover:text-[#075F70]" />
+            </button>
+        </div>
       </div>
 
-      {/* Espaço para não cobrir o header */}
-      <div className="h-20" />
-
-      {/* --- Dias da Semana --- */}
-      <div className="grid grid-cols-7 mb-2 text-center">
-        {["Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado"].map((day) => (
-            <span key={day} className="font-montserrat font-medium text-[16px] md:text-[20px] text-[#616060] py-2">
+      <div className="grid grid-cols-7 mb-4">
+        {weekDays.map((day) => (
+            <div key={day} className="text-center font-montserrat font-bold text-gray-400 text-sm uppercase tracking-wider py-2">
                 {day}
-            </span>
+            </div>
         ))}
       </div>
 
-      {/* --- Grade do Calendário --- */}
-      <div className="w-full border border-black rounded-[10px] overflow-hidden bg-[#E2E2E2] flex flex-wrap">
-        {calendarDays.map((day, idx) => {
+      <div className="grid grid-cols-7 gap-2 md:gap-4 flex-1">
+        {calendarDays.map((day) => {
             const isCurrentMonth = isSameMonth(day, viewDate);
             const isSelected = selectedDate && isSameDay(day, selectedDate);
-            
-            // Verifica se o dia atual tem tarefa
+            const isDayToday = isToday(day);
             const hasTask = daysWithTasks.some(taskDate => isSameDay(taskDate, day));
             
-            // Lógica de bordas para simular a tabela (sem borda na direita da última coluna e no fundo da última linha)
-            const isLastCol = (idx + 1) % 7 === 0;
-            const isLastRow = idx >= calendarDays.length - 7;
+            const isPast = isBefore(day, today);
 
             return (
-                <div 
+                <button 
                     key={day.toString()}
-                    onClick={() => onSelectDate(day)}
+                    onClick={() => handleDayClick(day, isPast)}
+                    disabled={isPast}
                     className={cn(
-                        "w-[calc(100%/7)] h-[100px] relative flex flex-col justify-end items-end p-[10px] cursor-pointer transition-colors select-none",
-                        isCurrentMonth ? "bg-[#F1F1F1]" : "bg-[#BDB4B4]", // Dias de outros meses mais escuros
-                        isSelected && "bg-[#E5EFF0]", // Selecionado
-                        !isLastCol && "border-r border-black",
-                        !isLastRow && "border-b border-black",
-                        "hover:opacity-90"
+                        "aspect-square relative flex flex-col items-center justify-center rounded-[20px] transition-all duration-300 group",
+                        
+                        isPast && "text-gray-300 bg-gray-50/30 cursor-not-allowed font-normal",
+                        
+                        !isCurrentMonth && !isPast && "text-gray-400 opacity-70 hover:opacity-100",
+
+                        isSelected && !isPast
+                            ? "bg-[#075F70] text-white shadow-lg shadow-[#075F70]/30 scale-105 z-10 font-bold" 
+                            : !isPast && !isSelected && "hover:bg-gray-50 text-[#3C3C3C] font-medium",
+
+                        isDayToday && !isSelected && !isPast && "border-2 border-[#075F70]/30 text-[#075F70]"
                     )}
                 >
-                    {/* Bolinha Vermelha/Verde indicando tarefa */}
-                    {hasTask && (
-                        <div className="absolute left-[15px] top-[65px] w-[12px] h-[12px] bg-[#075F70] rounded-full" title="Tarefa existente" />
-                    )}
-
-                    {/* Número do Dia */}
-                    <span className={cn(
-                        "font-montserrat text-[22px] leading-none",
-                        isSelected ? "text-[#075F70] font-bold" : "text-[#3C3C3C] font-normal"
-                    )}>
-                        {format(day, "dd")}
+                    <span className="font-montserrat text-lg md:text-xl">
+                        {format(day, "d")}
                     </span>
-                </div>
+
+                    {hasTask && !isPast && (
+                        <span className={cn(
+                            "absolute bottom-2 md:bottom-3 w-1.5 h-1.5 rounded-full",
+                            isSelected ? "bg-white" : "bg-[#075F70]"
+                        )} />
+                    )}
+                </button>
             );
         })}
       </div>
-
-      {/* --- Legenda --- */}
-      <div className="flex items-center gap-3 mt-6 ml-2">
-        <div className="w-[15px] h-[15px] bg-[#075F70] rounded-full" />
-        <span className="font-montserrat font-normal text-[16px] text-black">
-            Tarefas já atribuídas ao dia
-        </span>
-      </div>
-
     </div>
   );
 }
