@@ -22,6 +22,9 @@ export const handleAxiosError = (error: unknown) => {
 		if (response?.status === 404 && config?.url?.includes('/usuario/foto/')) {
 			return Promise.reject(error); // Reject without showing a toast
 		}
+		if (response?.status === 401 && config?.url?.includes('/auth/refresh')) {
+			return Promise.reject(error); // Reject without showing a toast
+		}
 
 		if (!response) {
 			toast.error('Erro de conexão. Verifique sua internet e tente novamente.');

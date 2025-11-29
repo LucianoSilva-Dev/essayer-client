@@ -49,7 +49,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     // Adiciona um listener para o evento de sessão expirada (disparado pelo api-client)
     const handleSessionExpired = () => {
-      toast.error('Sua sessão expirou. Por favor, faça login novamente.')
+      // toast.error('Sua sessão expirou. Por favor, faça login novamente.')
       logout()
     }
 
