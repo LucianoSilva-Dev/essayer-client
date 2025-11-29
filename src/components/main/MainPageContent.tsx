@@ -64,7 +64,6 @@ export default function MainPage() {
     if (!isInitialMount.current) {
         setPage(0);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [termoBusca, eixosAtivos, recorteAtivo, modeloAtivo, ordenarPor, tipoVisualizacao, setPage]); 
 
 

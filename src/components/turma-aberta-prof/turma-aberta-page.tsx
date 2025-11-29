@@ -8,6 +8,7 @@ import DateSelector from "./ui/date-selector";
 import CriarTarefaButton from "./tarefas/criar-tarefa-button";
 import { SearchBar } from "./ui/search-bar";
 import ConvidarEstudante from "./integrantes/convidar-estudante";
+import SolicitacoesList from "./solicitacoes/solicitacoes-list";
 import { useTurmaData } from "@/hooks/useTurmaData";
 import { AtividadeProfessor } from "@/apiCalls/turma/types";
 import { AlertCircle } from "lucide-react";
@@ -22,9 +23,10 @@ export default function TurmaAbertaPage({ turmaId }: Props) {
   const [memberSearchTerm, setMemberSearchTerm] = useState("");
   const [selectedAtividadeId, setSelectedAtividadeId] = useState<string | null>(null);
   const [selectedAtividadeTitulo, setSelectedAtividadeTitulo] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState<'integrantes' | 'solicitacoes'>('integrantes');
 
   // --- Data Fetching ---
-  const { turma, alunos, loading, error, refetch } = useTurmaData(turmaId);
+  const { turma, alunos, pedidos, loading, error, refetch, removePedido, addAluno } = useTurmaData(turmaId);
 
   // --- Callbacks ---
   const handleSelectedDateChange = useCallback((date: Date | undefined) => {
@@ -115,26 +117,65 @@ export default function TurmaAbertaPage({ turmaId }: Props) {
           </section>
 
           <section className="bg-white rounded-2xl shadow-md p-4 md:p-6 flex flex-col flex-grow">
-            <div className="flex flex-wrap justify-between items-center gap-4 mb-4">
-              <h2 className="text-lg sm:text-xl font-semibold text-gray-800">
-                Integrantes
-              </h2>
+            <div className="flex flex-wrap justify-between items-center gap-4 mb-4 border-b border-gray-100 pb-2">
+              <div className="flex gap-4">
+                <button
+                  onClick={() => setActiveTab('integrantes')}
+                  className={`text-lg sm:text-xl font-semibold transition-colors ${
+                    activeTab === 'integrantes'
+                      ? 'text-gray-800 border-b-2 border-teal-600'
+                      : 'text-gray-400 hover:text-gray-600'
+                  }`}
+                >
+                  Integrantes
+                </button>
+                <button
+                  onClick={() => setActiveTab('solicitacoes')}
+                  className={`text-lg sm:text-xl font-semibold transition-colors flex items-center gap-2 ${
+                    activeTab === 'solicitacoes'
+                      ? 'text-gray-800 border-b-2 border-teal-600'
+                      : 'text-gray-400 hover:text-gray-600'
+                  }`}
+                >
+                  Solicitações
+                  {pedidos && pedidos.length > 0 && (
+                    <span className="bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">
+                      {pedidos.length}
+                    </span>
+                  )}
+                </button>
+              </div>
+              
               <SearchBar
                 placeholder="Pesquisar estudante"
                 value={memberSearchTerm}
                 onChange={setMemberSearchTerm}
               />
             </div>
+            
             <div className="flex-grow mb-4 overflow-y-visible">
-              <IntegranteList
-                turmaId={turmaId}
-                alunos={alunos}
-                loading={loading}
-                searchTerm={memberSearchTerm}
-                refetch={refetch}
-              />
+              {activeTab === 'integrantes' ? (
+                <IntegranteList
+                  turmaId={turmaId}
+                  alunos={alunos}
+                  loading={loading}
+                  searchTerm={memberSearchTerm}
+                  refetch={refetch}
+                />
+              ) : (
+                <SolicitacoesList
+                  turmaId={turmaId}
+                  pedidos={pedidos}
+                  loading={loading}
+                  searchTerm={memberSearchTerm}
+                  refetch={refetch}
+                  onRemovePedido={removePedido}
+                  onAddAluno={addAluno}
+                />
+              )}
             </div>
-            <ConvidarEstudante idTurma={turmaId}/>
+            
+            {activeTab === 'integrantes' && <ConvidarEstudante idTurma={turmaId}/>}
           </section>
         </div>
 

@@ -83,9 +83,15 @@ export function useTurmaData(turmaId?: string) {
 
   useEffect(() => {
     fetchData();
-    // Return a cleanup function if necessary, but fetchData itself shouldn't return it
-    // return () => { /* potential cleanup */ };
   }, [fetchData]);
+
+  const removePedido = useCallback((id: string) => {
+    setPedidos((prev) => prev.filter((p) => p.id !== id));
+  }, []);
+
+  const addAluno = useCallback((aluno: Aluno) => {
+    setAlunos((prev) => [...prev, aluno]);
+  }, []);
 
   return {
     turma, // This is type Turma from turma-aberta-prof/types
@@ -95,6 +101,8 @@ export function useTurmaData(turmaId?: string) {
     convite,
     loading,
     error,
-    refetch: fetchData, // Pass the fetchData function directly
+    refetch: fetchData,
+    removePedido,
+    addAluno,
   };
 }
