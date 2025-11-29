@@ -3,9 +3,9 @@
 import ProfileImageUpload from "./ProfileImageUpload"
 import SidebarItem from "./SidebarItem"
 import LogoutButton from "./LogoutButton"
-import { User, Users, FileText } from "lucide-react"
+import { User, Users, FileText, Delete } from "lucide-react"
 
-export default function SettingsSidebar() {
+export default function SettingsSidebar({ cargo }: {cargo: string}) {
   return (
     // O container branco já é definido no layout, este é o conteúdo
     <div className="w-full bg-white rounded-2xl shadow-sm p-10 flex flex-col gap-8 min-h-[700px]">
@@ -32,6 +32,16 @@ export default function SettingsSidebar() {
           icon={<FileText />}
           text="Solicitações"
         /> */}
+        {cargo === 'aluno' && <SidebarItem
+          href=''  //criar formulário com o lattes
+          icon={<FileText />}
+          text="Virar Professor"
+        />}
+        <SidebarItem
+          href='' //criar modal de confirmação
+          icon={<Delete />}
+          text="Excluir conta"
+        />
       </nav>
 
       {/* Espaçador */}

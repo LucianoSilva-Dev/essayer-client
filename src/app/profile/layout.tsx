@@ -29,7 +29,7 @@ export default function ProfileSettingsLayout({ children }: { children: React.Re
       <div className="flex gap-8 max-w-7xl mx-auto">
         {/* Coluna 1: Sidebar de Configurações */}
         <aside className="w-[464px] flex-shrink-0">
-          <SettingsSidebar />
+          <SettingsSidebar cargo={userData.cargo} />
         </aside>
 
         {/* Coluna 2: Conteúdo da Página (com Animação) */}
