@@ -175,7 +175,7 @@ export default function TurmaAbertaPage({ turmaId }: Props) {
               )}
             </div>
             
-            {activeTab === 'integrantes' && <ConvidarEstudante idTurma={turmaId}/>}
+            <ConvidarEstudante idTurma={turmaId}/>
           </section>
         </div>
 
