@@ -48,7 +48,7 @@ export default function MainPage() {
         orderBy: ordenarPor,
         offset: currentPage * 15,
         limit: 15,
-        favoritedByCurrentUser: tipoVisualizacao === "salvos"
+        favoritedByCurrentUser: tipoVisualizacao === "salvos" ? true : undefined
       });
     }, 500);
 
