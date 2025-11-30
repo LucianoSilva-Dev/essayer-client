@@ -33,7 +33,7 @@ export default function SettingsSidebar({ cargo }: {cargo: string}) {
           text="Solicitações"
         /> */}
         {cargo === 'aluno' && <SidebarItem
-          href=''  //criar formulário com o lattes
+          href='/profile/become-professor'
           icon={<FileText />}
           text="Virar Professor"
         />}
