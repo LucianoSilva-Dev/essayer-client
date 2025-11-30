@@ -61,8 +61,8 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
 
   // Carregar dados iniciais
   useEffect(() => {
-    
-  })
+    getProfessores()
+  }, [getProfessores])
 
 
 

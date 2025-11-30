@@ -115,6 +115,7 @@ interface ProfessorModalProps {
 function ProfessorModal({ professor, onClose }: ProfessorModalProps) {
   const { aprovarProfessor, recusarProfessor } = useAdmin()
   const [feedback, setFeedback] = useState("")
+  const [feedbackError, setFeedbackError] = useState<string | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const handleAprovar = async () => {
@@ -126,7 +127,7 @@ function ProfessorModal({ professor, onClose }: ProfessorModalProps) {
 
   const handleRecusar = async () => {
     if (!feedback.trim()) {
-      alert("Por favor, forneça um feedback para a recusa.")
+      setFeedbackError("Por favor, forneça um feedback para a recusa.")
       return
     }
     setIsSubmitting(true)
@@ -181,11 +182,17 @@ function ProfessorModal({ professor, onClose }: ProfessorModalProps) {
                 <label className="block text-sm font-medium text-gray-700 mb-2">Feedback do administrador</label>
                 <textarea
                   value={feedback}
-                  onChange={(e) => setFeedback(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
+                  onChange={(e) => {
+                    setFeedback(e.target.value)
+                    if (feedbackError) setFeedbackError(null)
+                  }}
+                  className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 ${
+                    feedbackError ? "border-red-500 focus:ring-red-500" : "border-gray-300"
+                  }`}
                   rows={4}
                   placeholder="Adicionar mensagem de retorno"
                 />
+                {feedbackError && <p className="mt-1 text-sm text-red-500">{feedbackError}</p>}
               </div>
 
               <div className="flex justify-end space-x-4">
