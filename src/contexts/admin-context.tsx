@@ -2,6 +2,7 @@
 
 import type React from "react"
 import { createContext, useContext, useState, useEffect, useCallback } from "react"
+import { useAuth } from "./auth-context"
 import type { RepertorioPendente, ProfessorPendente } from "../types/admin"
 import { getAllRequisicaoProfessor, updateStatus } from "../apiCalls/requisicao-professor"
 import { GetRequisicaoProfessorResponse } from "../apiCalls/requisicao-professor/types"
@@ -44,6 +45,7 @@ const AdminContext = createContext<AdminContextType | undefined>(undefined)
 export function AdminProvider({ children }: { children: React.ReactNode }) {
   const [repertoriosPendentes, setRepertoriosPendentes] = useState<RepertorioPendente[]>([])
   const [professoresPendentes, setProfessoresPendentes] = useState<ProfessorPendente[]>([])
+  const { userData } = useAuth()
 
   const getProfessores = useCallback(async () => {
     try {
@@ -61,8 +63,10 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
 
   // Carregar dados iniciais
   useEffect(() => {
-    getProfessores()
-  }, [getProfessores])
+    if (userData?.cargo === "admin") {
+      getProfessores()
+    }
+  }, [getProfessores, userData])
 
 
 
