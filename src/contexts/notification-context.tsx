@@ -7,7 +7,6 @@ import React, {
   useState,
   useCallback,
 } from 'react';
-import { API_BASE_URL } from '@/app/constants';
 import {
   getAllNotifications,
   changeStatusNotification,

@@ -1,3 +1,4 @@
+import { API_BASE_URL } from "@/app/constants";
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
@@ -10,7 +11,19 @@ const nextConfig: NextConfig = {
         pathname: '**',
       }
     ],
-  }
+  },
+  rewrites: async () => {
+    return [
+      {
+        source: '/admin/:path*',
+        destination: '/admin/:path*',
+      },
+      {
+        source: '/api/:path*',
+        destination: `${API_BASE_URL}/:path*`,
+      },
+    ];
+  },
 };
 
 export default nextConfig;

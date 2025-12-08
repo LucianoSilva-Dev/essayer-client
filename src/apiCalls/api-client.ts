@@ -1,10 +1,9 @@
 import axios from 'axios';
-import { API_BASE_URL } from '@/app/constants';
 import { handleAxiosError } from '@/app/utils';
 import { setupCache } from 'axios-cache-interceptor';
 
 const apiClient = setupCache(axios.create({
-  baseURL: API_BASE_URL,
+  baseURL: '/api',
   withCredentials: true,
 }), {
   ttl: 0,

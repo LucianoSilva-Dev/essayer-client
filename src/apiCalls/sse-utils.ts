@@ -23,7 +23,7 @@ export function createResilientEventSource(
   const connect = () => {
     if (isClosed) return;
 
-    const url = endpoint.startsWith('http') ? endpoint : `${API_BASE_URL}${endpoint}`;
+    const url = endpoint.startsWith('http') ? endpoint : `/api${endpoint}`;
     eventSource = new EventSource(url, { withCredentials: true });
 
     if (onOpen) {

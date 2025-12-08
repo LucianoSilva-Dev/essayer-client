@@ -3,8 +3,7 @@
 import type React from "react"
 
 import { createContext, useContext, useState, useEffect } from "react"
-import axios from "axios"
-import { API_BASE_URL } from "@/app/constants"
+import apiClient from "@/apiCalls/api-client"
 import { handleAxiosError } from "@/app/utils"
 
 export interface CitacaoData {
@@ -36,7 +35,7 @@ export function CitacaoProvider({ children }: { children: React.ReactNode }) {
   // Carregar dados do localStorage na inicialização
   const getCitations = async () => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/background`)
+      const response = await apiClient.get('/background')
       setCitacoes(response.data)
     } catch (e) {
       handleAxiosError(e)
