@@ -12,8 +12,9 @@ import type {
   ObraDocument,
   UpdateArtigoBody,
   UpdateCitacaoBody,
-  UpdateComentarioBody, // ADICIONADO
+  UpdateComentarioBody,
   UpdateObraBody,
+  RepertorioDocument,
 } from './types';
 
 // --- Serviços Gerais de Repertório ---
@@ -59,6 +60,18 @@ export const getRepertoriosIds = async (queryString?: string, fetchAllPages = fa
   }
 
   return Array.from(idsSet);
+};
+
+/**
+ * Busca detalhes de vários repertórios por uma lista de IDs.
+ * Endpoint: GET /repertorio/bulk-search
+ */
+export const getRepertoriosBulk = async (ids: string[]): Promise<RepertorioDocument[]> => {
+  const params = new URLSearchParams();
+  ids.forEach(id => params.append('ids', id));
+  
+  const response = await apiClient.get<RepertorioDocument[]>(`/repertorio/bulk-search?${params.toString()}`);
+  return response.data;
 };
 
 /**

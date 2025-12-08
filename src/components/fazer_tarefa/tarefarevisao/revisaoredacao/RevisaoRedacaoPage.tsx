@@ -11,6 +11,8 @@ import RepertorioCard from "@/components/repertorio/repertorio-card";
 import { AtividadeRedacaoDetalhada } from "@/apiCalls/turma/types";
 import { Repertorio } from "@/types/repertorio";
 import { getAtividadeRedacaoDetalhes } from "@/apiCalls/tarefas";
+import { getRepertoriosBulk } from "@/apiCalls/repertorio";
+import { RepertorioDocument } from "@/apiCalls/repertorio/types";
 
 // Agora aceita 'id' em vez do objeto tarefa completo
 interface RevisaoRedacaoPageProps {
@@ -19,6 +21,7 @@ interface RevisaoRedacaoPageProps {
 
 export function RevisaoRedacaoPage({ id }: RevisaoRedacaoPageProps) {
   const [tarefa, setTarefa] = useState<AtividadeRedacaoDetalhada | null>(null);
+  const [repertoriosDetalhados, setRepertoriosDetalhados] = useState<Repertorio[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
@@ -45,6 +48,70 @@ export function RevisaoRedacaoPage({ id }: RevisaoRedacaoPageProps) {
       fetchData();
     }
   }, [id]);
+
+  // Busca os detalhes dos repertórios quando a tarefa é carregada
+  useEffect(() => {
+    const fetchRepertorios = async () => {
+      if (tarefa?.repertoriosApoio && tarefa.repertoriosApoio.length > 0) {
+        try {
+          const ids = tarefa.repertoriosApoio.map(r => r.id);
+          const data = await getRepertoriosBulk(ids);
+          
+          // Mapeamento de RepertorioDocument para Repertorio
+          const mappedRepertorios: Repertorio[] = data.map((doc: RepertorioDocument) => {
+            const base = {
+              id: doc.id,
+              totalLikes: doc.totalLikes,
+              favoritadoPeloUsuario: doc.favoritadoPeloUsuario,
+              likeDoUsuario: doc.likeDoUsuario,
+              criador: doc.criador,
+              totalComentarios: doc.totalComentarios || 0,
+              comentarios: doc.comentarios || [],
+              eixos: doc.subtopicos || [],
+              recortes: doc.topicos || [],
+              isPublico: true, // Assumindo true pois veio da API
+            };
+
+            if (doc.tipoRepertorio === 'Obra') {
+              return {
+                ...base,
+                modelo: 'obra',
+                titulo: doc.titulo,
+                autoria: doc.autor,
+                sinopse: doc.sinopse,
+                tipoObra: doc.tipoObra,
+              } as any;
+            } else if (doc.tipoRepertorio === 'Artigo') {
+              return {
+                ...base,
+                modelo: 'artigo',
+                titulo: doc.titulo,
+                autoria: doc.autor,
+                sintese: doc.resumo,
+                fonte: doc.fonte,
+              } as any;
+            } else { // Citacao
+              return {
+                ...base,
+                modelo: 'citacao',
+                autoria: doc.autor,
+                citacao: doc.frase,
+                fonte: doc.fonte,
+              } as any;
+            }
+          });
+
+          setRepertoriosDetalhados(mappedRepertorios);
+        } catch (error) {
+          console.error("Erro ao buscar repertórios:", error);
+        }
+      }
+    };
+
+    if (tarefa) {
+      fetchRepertorios();
+    }
+  }, [tarefa]);
 
   // --- Estado de Loading ---
   if (loading) {
@@ -155,20 +222,23 @@ export function RevisaoRedacaoPage({ id }: RevisaoRedacaoPageProps) {
                 
                 {tarefa.repertoriosApoio && tarefa.repertoriosApoio.length > 0 ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {tarefa.repertoriosApoio.map((rep: any, index: number) => (
-                             <div 
-                                key={rep.id || rep._id || index} 
-                                className="hover:scale-[1.02] transition-transform duration-300"
-                             >
-                                {typeof rep === 'object' ? (
-                                    <RepertorioCard repertorio={rep as Repertorio} />
-                                ) : (
-                                    <div className="bg-white p-4 rounded-2xl border border-gray-200 text-gray-400 text-sm text-center">
-                                        Carregando texto de apoio...
-                                    </div>
-                                )}
-                             </div>
-                        ))}
+                        {repertoriosDetalhados.length > 0 ? (
+                            repertoriosDetalhados.map((rep) => (
+                                <div 
+                                   key={rep.id} 
+                                   className="hover:scale-[1.02] transition-transform duration-300"
+                                >
+                                   <RepertorioCard repertorio={rep} />
+                                </div>
+                           ))
+                        ) : (
+                            // Skeleton loading ou estado de carregamento inicial
+                             tarefa.repertoriosApoio.map((rep, index) => (
+                                <div key={rep.id || index} className="bg-white p-4 rounded-2xl border border-gray-200 text-gray-400 text-sm text-center animate-pulse">
+                                    Carregando texto de apoio...
+                                </div>
+                             ))
+                        )}
                     </div>
                 ) : (
                     <div className="bg-gray-50 border border-dashed border-gray-300 rounded-2xl p-8 text-center flex flex-col items-center gap-2 text-gray-400 font-montserrat">

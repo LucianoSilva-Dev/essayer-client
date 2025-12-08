@@ -56,7 +56,7 @@ export interface AtividadeRedacaoDetalhada extends AtividadeBasica {
   eixoTematico?: string; 
 
   tempoLimiteEmMinutos?: number | null; 
-  repertoriosApoio?: string[]; // Considere tipar melhor se tiver a interface de Repertorio
+  repertoriosApoio?: { id: string; tipo: string }[];
   respostas: RespostaAtividade[]; 
 }
 
