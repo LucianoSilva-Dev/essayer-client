@@ -10,12 +10,16 @@ interface Props {
 }
 
 function formatarTempo(segundos: number) {
-  const min = Math.floor(segundos / 60);
-  const seg = segundos % 60;
-  return `${min.toString().padStart(2, '0')}:${seg.toString().padStart(2, '0')}`;
+  const isNegative = segundos < 0;
+  const absSegundos = Math.abs(segundos);
+  const min = Math.floor(absSegundos / 60);
+  const seg = absSegundos % 60;
+  return `${isNegative ? '-' : ''}${min.toString().padStart(2, '0')}:${seg.toString().padStart(2, '0')}`;
 }
 
 export function RedacaoHeader({ tempoRestante, isPaused, onPauseToggle, onOpenMotivacional }: Props) {
+  const isLate = tempoRestante < 0;
+
   return (
     <div className="w-full flex justify-end items-center gap-6">
       
@@ -32,9 +36,10 @@ export function RedacaoHeader({ tempoRestante, isPaused, onPauseToggle, onOpenMo
       {/* Bloco do Timer */}
       <div className="flex items-center gap-[15px]">
         <span 
-          className="bg-[#DCDCDD] rounded-[15px] 
+          className={`rounded-[15px] 
                      px-2 py-1 
-                     text-[#3C3C3C] font-semibold text-xl"
+                     font-semibold text-xl
+                     ${isLate ? 'bg-red-100 text-red-600' : 'bg-[#DCDCDD] text-[#3C3C3C]'}`}
         >
           {formatarTempo(tempoRestante)}
         </span>

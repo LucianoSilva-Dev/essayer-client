@@ -11,6 +11,7 @@ import { AtividadeRedacaoDetalhada } from '@/apiCalls/turma/types';
 import { TextoData } from './MotivacionalCard';
 import { ConfirmationModal } from '@/components/ConfirmationModal';
 import { toast } from 'react-toastify';
+import { createAutoSave } from '@/components/praticar_redacao/editor/helpers/autoSave';
 
 export function RedacaoPage({ id }: { id: string }) {
   const router = useRouter();
@@ -37,17 +38,62 @@ export function RedacaoPage({ id }: { id: string }) {
         const data = await getAtividadeRedacaoDetalhes(id);
         setTarefa(data);
 
-        if (data && data.tempoLimiteEmMinutos) {
-          setTempoRestante(data.tempoLimiteEmMinutos * 60);
+        // Chave do localStorage: tarefa_inprogress_{id}
+        const storageKey = `tarefa_inprogress_${id}`;
+        const savedDataString = localStorage.getItem(storageKey);
+        
+        let shouldStartApi = true;
+        let duracaoRestante = data?.tempoLimiteEmMinutos ? data.tempoLimiteEmMinutos * 60 : 0;
+
+        if (savedDataString) {
+          try {
+            const savedData = JSON.parse(savedDataString);
+            
+            // Restaura o texto
+            if (savedData.texto) {
+               setTexto(savedData.texto);
+            }
+
+            // Lógica de tempo - Restaurar e calcular tempo decorrido
+            if (savedData.startedAt && data?.tempoLimiteEmMinutos) {
+                const now = Date.now();
+                const diffSeconds = Math.floor((now - savedData.startedAt) / 1000);
+                const totalSeconds = data.tempoLimiteEmMinutos * 60;
+                // O tempo restante pode ser negativo agora
+                duracaoRestante = totalSeconds - diffSeconds;
+                
+                // Se encontramos dados locais válidos, assumimos que a tarefa já foi iniciada na API anteriormente
+                // (ou pelo menos o aluno já começou localmente).
+                // Para evitar erro de "tarefa já iniciada", podemos pular a chamada de API se quisermos,
+                // OU tentamos chamar e ignoramos erro (como já estava feito abaixo).
+                // O requisito pede: "se já não existe um salvamento, caso haja, a chamada a API para iniciar a redação deve ser bloqueada"
+                shouldStartApi = false;
+            }
+
+          } catch (e) {
+            console.error("Erro ao ler localStorage", e);
+          }
+        } else {
+            // Se não tem salvo, inicializa o startedAt agora
+            if (data?.tempoLimiteEmMinutos) {
+                const initialData = {
+                    texto: "",
+                    startedAt: Date.now()
+                };
+                localStorage.setItem(storageKey, JSON.stringify(initialData));
+            }
         }
 
+        setTempoRestante(duracaoRestante);
         setTextosMotivadores([]);
 
-        // Tenta iniciar (ignora erro se já iniciada para não travar a tela)
-        try {
-            await iniciarRespostaRedacao(id);
-        } catch (err) {
-            console.warn("Tarefa já iniciada ou erro ao iniciar:", err);
+        if (shouldStartApi) {
+            // Tenta iniciar (ignora erro se já iniciada para não travar a tela)
+            try {
+                await iniciarRespostaRedacao(id);
+            } catch (err) {
+                console.warn("Tarefa já iniciada ou erro ao iniciar:", err);
+            }
         }
 
       } catch (error) {
@@ -71,12 +117,46 @@ export function RedacaoPage({ id }: { id: string }) {
     if (isPaused || isMotivacionalOpen || tempoRestante === 0) return;
 
     const interval = setInterval(() => {
-      setTempoRestante((t) => (t > 0 ? t - 1 : 0));
+      // Modificado para permitir tempo negativo
+      setTempoRestante((t) => t - 1);
     }, 1000);
 
     return () => clearInterval(interval);
 
   }, [isPaused, tempoRestante, isMotivacionalOpen]);
+
+  // --- AUTOSAVE LOGIC ---
+  const saveToLocalStorage = async (txt: string) => {
+     const storageKey = `tarefa_inprogress_${id}`;
+     // Precisamos preservar o startedAt se ele existir
+     const currentSaved = localStorage.getItem(storageKey);
+     let startedAt = Date.now();
+     
+     if (currentSaved) {
+         try {
+             const parsed = JSON.parse(currentSaved);
+             if (parsed.startedAt) startedAt = parsed.startedAt;
+         } catch(e) { /* ignore */ }
+     }
+
+     const dataToSave = {
+         texto: txt,
+         startedAt: startedAt
+     };
+     localStorage.setItem(storageKey, JSON.stringify(dataToSave));
+  };
+  
+  // Reuse existing createAutoSave (which returns an async function)
+  // We mock 'duracao' as 0 because we don't store duration in the same way here, we rely on startedAt
+  // 30s throttle, 2s debounce
+  const autoSave = createAutoSave(async (t, d) => { await saveToLocalStorage(t) }, 20000, 2000);
+  const debouncedAutoSave = useState(() => autoSave)[0]; // Stable reference
+
+  const handleTextoChange = (txt: string) => {
+      setTexto(txt);
+      // Fire autosave
+      debouncedAutoSave(txt, 0);
+  };
 
   // --- LÓGICA DE FINALIZAÇÃO ATUALIZADA ---
   const handleFinalizar = () => {
@@ -105,8 +185,11 @@ export function RedacaoPage({ id }: { id: string }) {
         
         toast.success("Redação enviada com sucesso!");
         
+        // Remover do localStorage ao finalizar com sucesso
+        localStorage.removeItem(`tarefa_inprogress_${id}`);
+
         // Redireciona de volta para a listagem de turmas do aluno
-        router.push('/turmas_aluno'); 
+        router.push('/turmas_aluno');  
 
     } catch (error) {
         console.error("Erro ao enviar redação:", error);
@@ -175,7 +258,7 @@ export function RedacaoPage({ id }: { id: string }) {
             <div className="w-full">
               <RedacaoEditorArea
                 texto={texto}
-                onTextoChange={setTexto}
+                onTextoChange={handleTextoChange}
               />
             </div>
 

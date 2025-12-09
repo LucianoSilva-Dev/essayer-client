@@ -24,6 +24,7 @@ export function RevisaoRedacaoPage({ id }: RevisaoRedacaoPageProps) {
   const [repertoriosDetalhados, setRepertoriosDetalhados] = useState<Repertorio[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [hasDraft, setHasDraft] = useState(false);
 
   // Busca os dados da tarefa ao carregar o componente
   useEffect(() => {
@@ -108,10 +109,22 @@ export function RevisaoRedacaoPage({ id }: RevisaoRedacaoPageProps) {
       }
     };
 
+
     if (tarefa) {
       fetchRepertorios();
     }
   }, [tarefa]);
+
+  // Checar se existe rascunho salvo localmente
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+        const storageKey = `tarefa_inprogress_${id}`;
+        const savedDataString = localStorage.getItem(storageKey);
+        if (savedDataString) {
+            setHasDraft(true);
+        }
+    }
+  }, [id]);
 
   // --- Estado de Loading ---
   if (loading) {
@@ -315,7 +328,7 @@ export function RevisaoRedacaoPage({ id }: RevisaoRedacaoPageProps) {
                 
                 {/* Ajustei o link para a rota correta do seu editor: /fazer_tarefa/[id]/editor */}
                 <Link 
-                    href={`/fazer_tarefa/${tarefa.id}/editor`} 
+                    href={`/fazer_tarefa/${id}/editor`} 
                     className="
                         group w-full bg-[#075F70] hover:bg-[#054a57] 
                         text-white font-bold py-4 rounded-2xl 
@@ -325,7 +338,7 @@ export function RevisaoRedacaoPage({ id }: RevisaoRedacaoPageProps) {
                     "
                 >
                     <PlayCircle size={22} className="group-hover:scale-110 transition-transform" />
-                    <span>Iniciar Redação</span>
+                    <span>{hasDraft ? "Continuar Redação" : "Iniciar Redação"}</span>
                 </Link>
             </div>
 
