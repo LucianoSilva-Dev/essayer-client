@@ -75,7 +75,8 @@ export function RedacaoPage({ id }: { id: string }) {
     await updateRedacaoLivre(redacaoId, { texto: txt, duracao })
   }
 
-  const autoSave = createAutoSave(updateText, 2000, 1000)
+  // 30s throttle (maxWait), 2s debounce
+  const autoSave = createAutoSave(updateText, 20000, 2000)
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const debouncedAutoSave = useCallback(autoSave, [data?.id])
 
