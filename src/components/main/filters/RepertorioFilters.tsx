@@ -62,7 +62,7 @@ export default function RepertorioFilters({
         suas redações?
       </h1>
 
-      <div className="flex justify-center gap-4 mb-8">
+      <div className="flex flex-col-reverse items-center md:flex-row md:justify-center gap-4 mb-8">
         <button
           onClick={() => onTipoVisualizacaoChange("salvos")}
           className={`w-[330px] h-[54px] rounded-[40px] text-[22px] font-montserrat font-medium italic transition-all duration-500 origin-bottom cursor-pointer px-10 ${tipoVisualizacao === "salvos"

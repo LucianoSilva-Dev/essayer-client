@@ -70,19 +70,19 @@ export default function ProfileImageUpload() {
   }
 
   return (
-    <div className="text-center flex flex-col items-center gap-6">
-      <h2 className="text-2xl font-semibold text-[#3C3C3C] self-start">
+    <div className="text-center flex flex-col items-center gap-4 sm:gap-6">
+      <h2 className="text-lg sm:text-xl lg:text-2xl font-semibold text-[#3C3C3C] w-full text-left">
         Alterar imagem
       </h2>
       
       <button
         type="button"
         onClick={handleImageClick}
-        className="relative w-44 h-44 rounded-full group cursor-pointer bg-gray-200 flex items-center justify-center shadow-md"
+        className="relative w-32 h-32 sm:w-40 sm:h-40 lg:w-44 lg:h-44 rounded-full group cursor-pointer bg-gray-200 flex items-center justify-center shadow-md hover:shadow-lg transition-shadow disabled:opacity-70"
         disabled={isLoading}
       >
         {isLoading ? (
-          <Loader2 className="w-12 h-12 text-gray-500 animate-spin" />
+          <Loader2 className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 text-gray-500 animate-spin" />
         ) : (
           <>
             {profilePic ? (
@@ -95,11 +95,11 @@ export default function ProfileImageUpload() {
               />
             ) : (
               // Ícone de placeholder como na UI
-              <User className="w-24 h-24 text-gray-500" />
+              <User className="w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 text-gray-500" />
             )}
             
             <div className="absolute inset-0 rounded-full bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-              <span className="text-white font-medium">Trocar</span>
+              <span className="text-white font-medium text-sm sm:text-base">Trocar</span>
             </div>
           </>
         )}

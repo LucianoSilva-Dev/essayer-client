@@ -15,8 +15,8 @@ export default function SidebarItem({ href, icon, text }: SidebarItemProps) {
   const pathname = usePathname()
   const isActive = pathname === href
 
-  const activeClasses = "text-[#075F70] font-semibold"
-  const inactiveClasses = "text-[#898787] font-medium hover:text-[#3C3C3C]"
+  const activeClasses = "text-[#075F70] font-semibold bg-[#075F70]/5"
+  const inactiveClasses = "text-[#898787] font-medium hover:text-[#3C3C3C] hover:bg-gray-50"
 
   let iconWithClassName = icon // Define um ícone padrão
 
@@ -25,17 +25,17 @@ export default function SidebarItem({ href, icon, text }: SidebarItemProps) {
     // Corrigido: O nome da variável agora é válido
     iconWithClassName = cloneElement(icon, {
       // Aplicamos as classes de tamanho e cor
-      className: `h-8 w-8 group-hover:text-[#3C3C3C] ${isActive ? "text-[#075F70]" : "text-[#898787]"}`,
+      className: `h-6 w-6 sm:h-7 sm:w-7 group-hover:text-[#3C3C3C] ${isActive ? "text-[#075F70]" : "text-[#898787]"}`,
     })
   }
 
   return (
     <Link
       href={href}
-      className={`group flex items-center gap-5 p-2 rounded-lg transition-colors ${isActive ? activeClasses : inactiveClasses}`}
+      className={`group flex items-center gap-3 sm:gap-5 px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg transition-all duration-200 ${isActive ? activeClasses : inactiveClasses}`}
     >
       {iconWithClassName}
-      <span className="text-3xl">{text}</span>
+      <span className="text-lg sm:text-2xl lg:text-3xl">{text}</span>
     </Link>
   )
 }

@@ -5,10 +5,10 @@ import SidebarItem from "./SidebarItem"
 import LogoutButton from "./LogoutButton"
 import { User, Users, FileText, Delete } from "lucide-react"
 
-export default function SettingsSidebar({ cargo }: {cargo: string}) {
+export default function SettingsSidebar({ cargo, onItemClick }: {cargo: string; onItemClick?: () => void}) {
   return (
     // O container branco já é definido no layout, este é o conteúdo
-    <div className="w-full bg-white rounded-2xl shadow-sm p-10 flex flex-col gap-8 min-h-[700px]">
+    <div className="w-full bg-white rounded-2xl shadow-sm p-4 sm:p-6 lg:p-10 flex flex-col gap-6 sm:gap-8 min-h-auto lg:min-h-[700px]">
       {/* Seção de Alterar Imagem */}
       <ProfileImageUpload />
       
@@ -16,12 +16,14 @@ export default function SettingsSidebar({ cargo }: {cargo: string}) {
       <hr className="border-gray-200" />
       
       {/* Itens de Navegação */}
-      <nav className="flex flex-col gap-6">
-        <SidebarItem
-          href="/profile"
-          icon={<User className="text-[#075F70]" />} // Ícone com cor
-          text="Dados pessoais"
-        />
+      <nav className="flex flex-col gap-4 sm:gap-6">
+        <div onClick={onItemClick}>
+          <SidebarItem
+            href="/profile"
+            icon={<User className="text-[#075F70]" />} // Ícone com cor
+            text="Dados pessoais"
+          />
+        </div>
         {/* <SidebarItem
           href="/profile/social" // Rota de exemplo
           icon={<Users />}
@@ -32,11 +34,15 @@ export default function SettingsSidebar({ cargo }: {cargo: string}) {
           icon={<FileText />}
           text="Solicitações"
         /> */}
-        {cargo === 'aluno' && <SidebarItem
-          href='/profile/become-professor'
-          icon={<FileText />}
-          text="Virar Professor"
-        />}
+        {cargo === 'aluno' && (
+          <div onClick={onItemClick}>
+            <SidebarItem
+              href='/profile/become-professor'
+              icon={<FileText />}
+              text="Tornar-se Professor"
+            />
+          </div>
+        )}
         {/* <SidebarItem
           href='' //criar modal de confirmação
           icon={<Delete />}
@@ -45,7 +51,7 @@ export default function SettingsSidebar({ cargo }: {cargo: string}) {
       </nav>
 
       {/* Espaçador */}
-      <div className="flex-grow"></div>
+      <div className="flex-grow hidden lg:block"></div>
 
       {/* Botão de Sair */}
       <LogoutButton />

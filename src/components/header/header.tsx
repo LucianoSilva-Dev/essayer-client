@@ -117,82 +117,108 @@ export function Header({ currentPage, description, backPage }: HeaderProps) {
         {/* Menu Mobile */}
         <MobileMenu onClick={toggleMenu} />
 
-        {/* Menu Mobile Expandido */}
+        {/* Menu Mobile Expandido: overlay + bandeja integrada ao header (melhoria UI/UX) */}
         <AnimatePresence>
           {isMenuOpen && (
-            <motion.div 
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.3, ease: 'easeInOut' }}
-              className="absolute top-23 left-0 right-0 bg-white z-50 p-4 shadow-md md:hidden"
-            >
-              <div className="flex flex-col space-y-4 mb-4">
-                <Link href="/main" className="text-gray-800 text-lg font-medium py-2">
-                  Repertórios
-                </Link>
-                {isLoggedIn && (userData?.cargo === "professor" || userData?.cargo === "admin") && (
-                  <Link href="/adicionar" className="text-gray-800 text-lg font-medium py-2">
-                    Adicionar Repertório
-                  </Link>
-                )}
-                {isLoggedIn && userData?.cargo === "admin" && (
-                  <Link href="/admin" className="text-gray-800 text-lg font-medium py-2">
-                    Admin
-                  </Link>
-                )}
-              </div>
-              <div className="flex items-center space-x-4">
-                {isLoggedIn ? (
-                  <>
-                    <button
-                      onClick={() => router.push("/profile")}
-                      className="flex items-center focus:outline-none"
-                      title="Ver perfil"
-                      type="button"
-                    >
-                      {profilePic ? (
-                        <span className="w-9 h-9 rounded-full cursor-pointer overflow-hidden border-1 border-[#CA9C60] flex items-center justify-center">
-                          <Image
-                            src={profilePic}
-                            alt="Foto de perfil"
-                            width={36}
-                            height={36}
-                            className="object-cover w-full h-full"
-                          />
-                        </span>
-                      ) : (
-                        <div className="w-9 h-9 rounded-full bg-gray-300 flex items-center justify-center text-gray-600 font-bold">
-                          {userData?.nome?.[0] || "U"}
-                        </div>
-                      )}
-                    </button>
-                    <button
-                      onClick={handleLogout}
-                      className="px-6 py-3 rounded-[20px] bg-[#CA9C60] text-white text-[20px] hover:bg-[#a68050] duration-200 cursor-pointer"
-                    >
-                      Sair
-                    </button>
-                  </>
+            <>
+              {/* Backdrop escuro para integrar visualmente a bandeja ao resto da tela */}
+              <motion.div
+                key="backdrop"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 0.35 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                className="fixed inset-0 bg-black z-40 md:hidden"
+                onClick={() => setIsMenuOpen(false)}
+              />
 
-                ) : (
-                  <>
-                    <Link
-                      href="/login"
-                      className="px-6 py-3 rounded-[10px] border border-gray-300 text-gray-800 text-[20px] hover:bg-[#CA9C60] hover:border-[#CA9C60] hover:text-white duration-300 transition-colors"
-                    >
-                      Entrar
-                    </Link>
-                    <Link
-                      href="/register"
-                      className="px-6 py-3 rounded-[10px] bg-[#CA9C60] text-white text-[20px] hover:bg-[#a68050] duration-300 transition-colors"
-                    >
-                      Cadastrar-se
-                    </Link>
-                  </>
-                )}
-              </div>
-            </motion.div>
+              {/* Bandeja deslizando a partir do header com animação de altura */}
+              <motion.div
+                key="tray"
+                initial={{ opacity: 0, height: 0, y: -8 }}
+                animate={{ opacity: 1, height: "auto", y: 0 }}
+                exit={{ opacity: 0, height: 0, y: -8 }}
+                transition={{ duration: 0.28, ease: 'easeInOut' }}
+                className="absolute left-4 right-4 top-full z-50 md:hidden"
+                style={{ pointerEvents: 'auto' }}
+              >
+                <div className="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
+                  <div className="p-4">
+                    <div className="flex flex-col space-y-3 mb-3">
+                      <Link href="/main" className="text-gray-800 text-lg font-medium py-2 rounded-md hover:bg-gray-50 px-2">
+                        Repertórios
+                      </Link>
+                      <Link href="/praticar_redacao" className="text-gray-800 text-lg font-medium py-2 rounded-md hover:bg-gray-50 px-2">
+                        Praticar Redação
+                      </Link>
+                      {isLoggedIn && (userData?.cargo === "professor" || userData?.cargo === "admin") && (
+                        <Link href="/adicionar" className="text-gray-800 text-lg font-medium py-2 rounded-md hover:bg-gray-50 px-2">
+                          Adicionar Repertório
+                        </Link>
+                      )}
+                      {isLoggedIn && userData?.cargo === "admin" && (
+                        <Link href="/admin" className="text-gray-800 text-lg font-medium py-2 rounded-md hover:bg-gray-50 px-2">
+                          Admin
+                        </Link>
+                      )}
+                    </div>
+
+                    <div className="flex items-center space-x-3 pt-2 border-t border-gray-100 mt-2">
+                      {isLoggedIn ? (
+                        <>
+                          <button
+                            onClick={() => { setIsMenuOpen(false); router.push("/profile"); }}
+                            className="flex items-center focus:outline-none"
+                            title="Ver perfil"
+                            type="button"
+                          >
+                            {profilePic ? (
+                              <span className="w-9 h-9 rounded-full cursor-pointer overflow-hidden border-1 border-[#CA9C60] flex items-center justify-center">
+                                <Image
+                                  src={profilePic}
+                                  alt="Foto de perfil"
+                                  width={36}
+                                  height={36}
+                                  className="object-cover w-full h-full"
+                                />
+                              </span>
+                            ) : (
+                              <div className="w-9 h-9 rounded-full bg-gray-300 flex items-center justify-center text-gray-600 font-bold">
+                                {userData?.nome?.[0] || "U"}
+                              </div>
+                            )}
+                          </button>
+                          <button
+                            onClick={() => { handleLogout(); setIsMenuOpen(false); }}
+                            className="px-4 py-2 rounded-[18px] bg-[#CA9C60] text-white text-sm hover:bg-[#a68050] duration-200"
+                          >
+                            Sair
+                          </button>
+                        </>
+
+                      ) : (
+                        <>
+                          <Link
+                            href="/login"
+                            onClick={() => setIsMenuOpen(false)}
+                            className="px-4 py-2 rounded-[12px] border border-gray-300 text-gray-800 text-sm hover:bg-[#CA9C60] hover:border-[#CA9C60] hover:text-white duration-200 transition-colors"
+                          >
+                            Entrar
+                          </Link>
+                          <Link
+                            href="/register"
+                            onClick={() => setIsMenuOpen(false)}
+                            className="px-4 py-2 rounded-[10px] bg-[#CA9C60] text-white text-sm hover:bg-[#a68050] duration-200"
+                          >
+                            Cadastrar-se
+                          </Link>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            </>
           )}
         </AnimatePresence>
       </div>
