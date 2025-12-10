@@ -27,7 +27,7 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [notifications, setNotifications] = useState<Notification[]>([]);
-  const { userData: user } = useAuth();
+  const { userData: user, refreshToken } = useAuth();
 
   const fetchNotifications = useCallback(async () => {
     try {
@@ -53,6 +53,10 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({
       try {
         const newNotification: Notification = JSON.parse(event.data);
         setNotifications((prev) => [newNotification, ...prev]);
+
+        if (newNotification.tipoNotificacao === TiposNotificacao.RequisicaoProfessorStatus) {
+          refreshToken();
+        }
       } catch (error) {
         console.error('Error parsing notification:', error);
       }
@@ -68,7 +72,7 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({
     return () => {
       connection.close();
     };
-  }, [user]);
+  }, [user, refreshToken]);
 
   const markAsRead = async (notificationIds: string[]) => {
     try {

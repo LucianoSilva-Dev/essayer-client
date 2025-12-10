@@ -11,6 +11,7 @@ interface AuthContextType {
   userData: UserLoginResponse | null
   login: (user: UserLoginResponse) => void
   logout: () => void
+  refreshToken: () => Promise<void>
 }
 
 const AuthContext = createContext<AuthContextType>({
@@ -18,7 +19,8 @@ const AuthContext = createContext<AuthContextType>({
   isLoading: true,
   userData: null,
   login: () => {},
-  logout: () => {}
+  logout: () => {},
+  refreshToken: async () => {},
 })
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
@@ -26,25 +28,27 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [isLoading, setIsLoading] = useState(true)
   const [userData, setUserData] = useState<UserLoginResponse | null>(null)
 
-  useEffect(() => {
-    const checkUserSession = async () => {
-      try {
-        const data = await getMe()
-        if (data) {
-          setIsLoggedIn(true)
-          setUserData(data)
-        } else {
-          setIsLoggedIn(false)
-          setUserData(null)
-        }
-      } catch (error) {
+  const checkUserSession = async () => {
+    try {
+      const data = await getMe()
+      if (data) {
+        setIsLoggedIn(true)
+        setUserData(data)
+      } else {
         setIsLoggedIn(false)
         setUserData(null)
-      } finally {
-        setIsLoading(false)
       }
+    } catch (error) {
+      setIsLoggedIn(false)
+      setUserData(null)
+      // Se der erro no getMe, não necessariamente queremos deslogar se for apenas erro de rede, 
+      // mas aqui mantemos o comportamento original de assumir logout.
+    } finally {
+      setIsLoading(false)
     }
+  }
 
+  useEffect(() => {
     checkUserSession()
 
     // Adiciona um listener para o evento de sessão expirada (disparado pelo api-client)
@@ -84,8 +88,19 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }
 
+  const refreshToken = async () => {
+    try {
+      // Força a atualização do token (cookies)
+      await apiClient.post('/auth/refresh')
+      // Busca os dados atualizados do usuário (com a nova role, se houver)
+      await checkUserSession()
+    } catch (error) {
+      console.error('Erro ao atualizar token:', error)
+    }
+  }
+
   return (
-    <AuthContext.Provider value={{ isLoggedIn, isLoading, userData, login, logout }}>
+    <AuthContext.Provider value={{ isLoggedIn, isLoading, userData, login, logout, refreshToken }}>
       {children}
     </AuthContext.Provider>
   )
