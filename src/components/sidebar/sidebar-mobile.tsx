@@ -1,11 +1,12 @@
 // import Link from "next/link"
 // import { Home, PenTool, Users, UsersRound, Info, Settings, MessageCircleQuestion, SquarePlus } from "lucide-react"
+import { UserLoginResponse } from "@/apiCalls/auth/types"
 
-// interface SidebarMobileProps {
-//   isLoggedIn: boolean
-//   userData: any
-//   pathname: string
-// }
+interface SidebarMobileProps {
+  isLoggedIn: boolean;
+  userData: UserLoginResponse | null;
+  pathname: string;
+}
 
 // const navigationItems = [
 //   {

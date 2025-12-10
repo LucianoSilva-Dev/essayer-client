@@ -26,11 +26,6 @@ export function Sidebar() {
         userData={userData}
         pathname={pathname}
       />
-      <SidebarMobile 
-        isLoggedIn={isLoggedIn}
-        userData={userData}
-        pathname={pathname}
-      />
     </>
   )
 }
