@@ -111,13 +111,13 @@ export function RedacaoPage({ id }: { id: string }) {
                    // Normaliza dados baseado no tipo
                    const d = doc as any; // Bypass de tipagem estrita para union types
                    
-                   if (doc.tipoRepertorio === 'Obra') {
+                   if (d.tipoRepertorio === 'Obra') {
                        tipo = 'Obra';
                        conteudo = d.sinopse || d.resumo || '';
-                   } else if (doc.tipoRepertorio === 'Artigo') {
+                   } else if (d.tipoRepertorio === 'Artigo') {
                        tipo = 'Artigo';
                        conteudo = d.resumo || '';
-                   } else if (doc.tipoRepertorio === 'Citacao' || doc.tipoRepertorio === 'Citação') {
+                   } else if (d.tipoRepertorio === 'Citacao' || d.tipoRepertorio === 'Citação') {
                        tipo = 'Citação';
                        conteudo = d.frase || ''; 
                    } else {
