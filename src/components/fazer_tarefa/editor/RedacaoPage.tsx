@@ -12,6 +12,8 @@ import { TextoData } from './MotivacionalCard';
 import { ConfirmationModal } from '@/components/ConfirmationModal';
 import { toast } from 'react-toastify';
 import { createAutoSave } from '@/components/praticar_redacao/editor/helpers/autoSave';
+import { getRepertoriosBulk } from '@/apiCalls/repertorio';
+import { RepertorioDocument } from '@/apiCalls/repertorio/types';
 
 export function RedacaoPage({ id }: { id: string }) {
   const router = useRouter();
@@ -94,6 +96,47 @@ export function RedacaoPage({ id }: { id: string }) {
             } catch (err) {
                 console.warn("Tarefa já iniciada ou erro ao iniciar:", err);
             }
+        }
+
+        // --- BUSCA DE TEXTOS MOTIVADORES ---
+        if (data && data.repertoriosApoio && data.repertoriosApoio.length > 0) {
+           try {
+               const ids = data.repertoriosApoio.map(r => r.id);
+               const docs = await getRepertoriosBulk(ids);
+               
+               const mappedTextos: TextoData[] = docs.map(doc => {
+                   let tipo = 'Outro';
+                   let conteudo = '';
+                   
+                   // Normaliza dados baseado no tipo
+                   const d = doc as any; // Bypass de tipagem estrita para union types
+                   
+                   if (doc.tipoRepertorio === 'Obra') {
+                       tipo = 'Obra';
+                       conteudo = d.sinopse || d.resumo || '';
+                   } else if (doc.tipoRepertorio === 'Artigo') {
+                       tipo = 'Artigo';
+                       conteudo = d.resumo || '';
+                   } else if (doc.tipoRepertorio === 'Citacao' || doc.tipoRepertorio === 'Citação') {
+                       tipo = 'Citação';
+                       conteudo = d.frase || ''; 
+                   } else {
+                       conteudo = d.resumo || d.sinopse || '';
+                   }
+                   
+                   return {
+                       id: doc.id,
+                       titulo: d.titulo || 'Sem título',
+                       tipo,
+                       conteudo: conteudo || 'Sem conteúdo disponível.'
+                   };
+               });
+               
+               setTextosMotivadores(mappedTextos);
+
+           } catch (repertorioErr) {
+               console.error("Erro ao buscar textos motivadores:", repertorioErr);
+           }
         }
 
       } catch (error) {

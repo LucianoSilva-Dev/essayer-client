@@ -27,7 +27,7 @@ export default function TarefaItem({ tarefa }: { tarefa: AtividadeBasica}) {
 
   const isConcluida = tarefa.status?.toLowerCase() === 'concluída';
   const isEncerrada = tarefa.status?.toLowerCase() === 'encerrada';
-  const isPendente =  tarefa.status?.toLowerCase() === 'pendente' || !tarefa.status;
+  const isPendente =  tarefa.status?.toLowerCase() === 'pendente' || tarefa.status?.toLowerCase() === 'em andamento' || !tarefa.status;
 
   const getStatusClasses = () => {
     if (isConcluida) return "text-green-600 font-medium";

@@ -2,7 +2,7 @@ import React from 'react';
 import Image from 'next/image';
 
 export interface TextoData {
-  id: number;
+  id: string | number;
   titulo: string;
   tipo: string;
   conteudo: string;
