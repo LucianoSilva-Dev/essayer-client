@@ -1,3 +1,4 @@
+// src/components/turma-aberta-aluno/comunidade/integrante-item.tsx
 import React from "react";
 import Image from "next/image";
 import { User } from "lucide-react";
@@ -13,26 +14,30 @@ export default function IntegranteItem({ integrante }: { integrante: Integrante 
   const isProfessor = integrante.role === 'professor';
 
   return (
-    <div className={`flex items-center gap-3 p-2 rounded-md ${isProfessor ? 'bg-teal-50 border border-teal-100' : ''}`}>
-      <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden border">
+    <div className={`flex items-center gap-3 p-2 rounded-xl transition-colors ${isProfessor ? 'bg-white' : 'hover:bg-gray-50'}`}>
+      <div className={`relative w-9 h-9 rounded-full flex items-center justify-center overflow-hidden border-2 ${isProfessor ? 'border-custom-blue p-0.5' : 'border-transparent bg-gray-100'}`}>
           {integrante.fotoPath ? (
+             <div className="relative w-full h-full rounded-full overflow-hidden">
               <Image
                   src={integrante.fotoPath}
                   alt={integrante.nome}
-                  width={32}
-                  height={32}
+                  fill
                   className="object-cover"
               />
+             </div>
           ) : (
-              <User size={18} className="text-gray-500" />
+              <User size={16} className={isProfessor ? "text-custom-blue" : "text-gray-400"} />
           )}
       </div>
-      <div>
-          <span className={`text-sm font-medium truncate ${isProfessor ? 'text-teal-800' : 'text-gray-700'}`}>
-              {integrante.nome}
-          </span>
+      
+      <div className="min-w-0 flex-1">
+          <div className="flex items-center justify-between">
+              <span className={`text-sm font-bold truncate ${isProfessor ? 'text-gray-900' : 'text-gray-600'}`}>
+                  {integrante.nome}
+              </span>
+          </div>
           {isProfessor && (
-              <span className="block text-xs text-teal-600">Professor da turma</span>
+              <p className="text-[10px] text-custom-blue font-medium truncate">Responsável</p>
           )}
       </div>
     </div>
