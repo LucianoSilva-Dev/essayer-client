@@ -6,6 +6,7 @@ import { TipoObra } from '@/contexts/add-repertorio-context';
 interface BandejaTiposObraProps {
   isOpen: boolean;
   onSelect: (tipo: TipoObra) => void;
+  onClose?: () => void;
 }
 
 const tiposObra = [
@@ -33,29 +34,59 @@ const tiposObra = [
 
 export const BandejaTiposObra: React.FC<BandejaTiposObraProps> = ({
   isOpen,
-  onSelect
+  onSelect,
+  onClose
 }) => {
   return (
-    <div 
-      className={`
-        absolute top-0 left-0 h-full 
-        transition-all duration-700 ease-[cubic-bezier(0.25,0.8,0.25,1)]
-        bg-white rounded-r-3xl shadow-xl border-t border-r border-b border-gray-100
-        flex flex-col justify-center 
-        /* AQUI ESTÁ O AJUSTE DO GAP: Aumentamos o padding da esquerda (pl-20) */
-        py-8 pr-8 pl-20
-        ${isOpen 
-          ? 'translate-x-[360px] opacity-100 pointer-events-auto' 
-          : 'translate-x-0 opacity-0 pointer-events-none'
-        }
-      `}
-      style={{
-         width: '680px',
-         zIndex: 10, 
-         height: '568px'
-      }}
-    >
-      <div className="grid grid-cols-2 gap-6 h-full content-center">
+    <>
+      {/* Mobile modal overlay */}
+      <div className={`md:hidden ${isOpen ? 'fixed inset-0 z-50 flex items-center justify-center' : 'hidden'}`}>
+        <div className="absolute inset-0 bg-black/50" onClick={() => onClose?.()} />
+        <div className="relative w-full max-w-md mx-4 bg-white rounded-2xl shadow-xl z-10 p-6">
+          <button
+            onClick={() => onClose?.()}
+            className="absolute left-4 top-4 p-2 rounded-full hover:bg-gray-100"
+            aria-label="Voltar"
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M19 12H5" stroke="#111827" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M12 19L5 12L12 5" stroke="#111827" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </button>
+
+          <div className="grid mt-6 grid-cols-1 sm:grid-cols-2 gap-4">
+            {tiposObra.map((item) => (
+              <div
+                key={item.tipo}
+                onClick={() => onSelect(item.tipo)}
+                className="group flex flex-col gap-2 p-4 rounded-2xl border-2 border-amber-100 bg-white hover:border-amber-400 cursor-pointer transition-all duration-300"
+              >
+                <h3 className="text-lg font-bold text-amber-600/90 group-hover:text-amber-700">
+                  {item.titulo}
+                </h3>
+                <p className="text-gray-500 text-xs leading-relaxed">
+                  {item.descricao}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Desktop / md+ bandeja drawer */}
+      <div 
+        className={`
+          hidden md:block md:absolute md:top-0 md:left-0
+          transition-all duration-700 ease-[cubic-bezier(0.25,0.8,0.25,1)]
+          bg-white md:rounded-r-3xl md:shadow-xl md:border-t md:border-r md:border-b border-gray-100
+          flex flex-col justify-center
+          md:py-8 md:pr-8 md:pl-20
+          md:w-[680px] md:h-[568px]
+          ${isOpen ? 'md:opacity-100 md:pointer-events-auto md:translate-x-[360px]' : 'md:opacity-0 md:pointer-events-none md:translate-x-0'}
+        `}
+        style={{ zIndex: 10 }}
+      >
+        <div className="grid grid-cols-2 gap-6 h-full content-center">
         {tiposObra.map((item) => (
           <div
             key={item.tipo}
@@ -74,7 +105,8 @@ export const BandejaTiposObra: React.FC<BandejaTiposObraProps> = ({
             </p>
           </div>
         ))}
+        </div>
       </div>
-    </div>
+    </>
   );
 };

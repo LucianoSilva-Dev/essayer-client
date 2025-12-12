@@ -71,6 +71,19 @@ export default function EixosRepertorioContent() {
   const { eixosSalvos, recortes, setEixos } = useAddRepertorio();
   const router = useRouter()
 
+  const [isDesktop, setIsDesktop] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+    const handleResize = () => {
+      setIsDesktop(window.innerWidth >= 1024);
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   const [eixosSelecionados, setEixosSelecionados] = useState<string[]>(
     eixosSalvos.map(e => e.id)
   );
@@ -185,7 +198,7 @@ export default function EixosRepertorioContent() {
         <div
           className="relative max-w-[1168px] mx-auto"
           style={{
-            height: 'calc(4 * 260px)'
+            height: !mounted ? 'calc(4 * 260px)' : (isDesktop ? 'calc(4 * 260px)' : 'calc(8 * 260px)')
           }}
         >
           {eixos.map((eixo, index) => (

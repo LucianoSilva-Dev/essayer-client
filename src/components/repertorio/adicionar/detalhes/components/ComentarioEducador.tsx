@@ -43,25 +43,25 @@ export const ComentarioEducador: React.FC<ComentarioEducadorProps> = ({
                 color: '#898787',
                 fontFamily: 'open sans',
                 fontWeight: 300,
-                fontSize: '32px',
-                lineHeight: '48px'
+                fontSize: '16px',
+                lineHeight: '32px'
               }}
             />
             
             <button
               onClick={() => onFixarChange(!fixarComentario)}
-              className={`flex items-center justify-center px-6 py-2 rounded-[32px] transition-colors ${
-                fixarComentario ? 'bg-[#075F70] text-white' : 'bg-white text-[#075F70]'
+              className={`flex items-center justify-center  py-2 rounded-[32px] transition-colors ${
+                fixarComentario ? 'bg-[#075F70] text-white px-2' : 'bg-white text-[#075F70] px-4'
               }`}
             >
               <span 
                 className="font-semibold text-2xl"
                 style={{
                   fontFamily: 'Montserrat',
-                  lineHeight: '48px'
+                  lineHeight: '18px'
                 }}
               >
-                Fixar
+                {fixarComentario ? 'Fixado' : 'Fixar'}
               </span>
             </button>
           </div>

@@ -47,12 +47,12 @@ export const HeaderDetalhes: React.FC<HeaderDetalhesProps> = ({
   const config = getTipoConfig(tipoRepertorio, tipoObra);
 
   return (
-    <div className="bg-[#E8E8E8] rounded-[88px] px-12 py-4">
-      <div className="flex flex-row justify-between items-center gap-4 mb-8">
+    <div className="bg-[#E8E8E8] rounded-[88px] px-6 md:px-12 py-4">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 md:gap-4 mb-6 md:mb-8">
         {/* Campo Tipo + Título */}
-        <div className="flex items-center bg-white rounded-[40px] px-7 py-3 gap-6 flex-1">
+        <div className="flex items-center bg-white rounded-[40px] px-4 md:px-7 py-2 md:py-3 gap-3 md:gap-6 flex-1 w-full md:w-auto">
           <span 
-            className="font-medium text-xl whitespace-nowrap"
+            className="font-medium text-sm md:text-xl whitespace-nowrap flex-shrink-0"
             style={{ 
               color: config.cor,
               fontFamily: 'Montserrat'
@@ -65,21 +65,21 @@ export const HeaderDetalhes: React.FC<HeaderDetalhesProps> = ({
             value={titulo}
             onChange={(e) => onTituloChange(e.target.value)}
             placeholder={config.placeholderTitulo}
-            className="flex-1 bg-transparent outline-none text-xl placeholder-opacity-68"
+            className="flex-1 bg-transparent outline-none text-base md:text-xl placeholder-opacity-68 min-w-0"
             style={{
               color: config.cor,
               fontFamily: 'open sans',
               fontWeight: 400,
-              fontSize: '24px',
+              fontSize: '16px',
               lineHeight: '20px'
             }}
           />
         </div>
 
         {/* Campo Autoria */}
-        <div className="flex items-center bg-white rounded-[40px] px-7 py-3 gap-6 flex-1">
+        <div className="flex items-center bg-white rounded-[40px] px-4 md:px-7 py-2 md:py-3 gap-3 md:gap-6 flex-1 w-full md:w-auto">
           <span 
-            className="font-medium text-xl whitespace-nowrap"
+            className="font-medium text-sm md:text-xl whitespace-nowrap flex-shrink-0"
             style={{ 
               color: '#3C3C3C',
               fontFamily: 'Montserrat'
@@ -92,12 +92,12 @@ export const HeaderDetalhes: React.FC<HeaderDetalhesProps> = ({
             value={autoria}
             onChange={(e) => onAutoriaChange(e.target.value)}
             placeholder={config.placeholderAutoria}
-            className="flex-1 bg-transparent outline-none text-xl placeholder-opacity-60"
+            className="flex-1 bg-transparent outline-none text-base md:text-xl placeholder-opacity-60 min-w-0"
             style={{
               color: '#616060',
               fontFamily: 'open sans',
               fontWeight: 400,
-              fontSize: '24px',
+              fontSize: '16px',
               lineHeight: '20px',
               opacity: autoria ? 1 : 0.6
             }}

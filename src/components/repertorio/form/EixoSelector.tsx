@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import { EixosTematicos } from '@/constants/eixos';
+import { EixosTematicos, EixoOptions } from '@/constants/eixos';
 
 interface EixoSelectorProps {
   selectedEixos: string[];
@@ -21,9 +21,11 @@ export const EixoSelector: React.FC<EixoSelectorProps> = ({ selectedEixos, onEix
         <span className="text-[10px] text-gray-400 font-medium">Selecione pelo menos um</span>
       </div>
       
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
         {eixos.map((eixo) => {
           const isSelected = selectedEixos.includes(eixo);
+          const meta = EixoOptions.find(e => e.nome === eixo as any);
+          const previewRecortes = meta ? (meta.recortes.slice(0,3) as string[]) : [];
           
           return (
             <label 
@@ -47,6 +49,23 @@ export const EixoSelector: React.FC<EixoSelectorProps> = ({ selectedEixos, onEix
               <span className="text-xs font-semibold leading-tight">
                 {eixo}
               </span>
+              {/* Preview de recortes visível apenas em mobile quando selecionado: expansão vertical */}
+              {isSelected && (
+                <div className="md:hidden mt-2 w-full text-left text-[11px] text-gray-500">
+                  {previewRecortes.length > 0 ? (
+                    <>
+                      <div className="font-medium text-[12px] text-gray-700 mb-1">Recortes:</div>
+                      <ul className="list-disc list-inside text-[11px]">
+                        {previewRecortes.map(r => (
+                          <li key={r}>{r}</li>
+                        ))}
+                      </ul>
+                    </>
+                  ) : (
+                    <div className="text-[11px] text-gray-400">Sem recortes disponíveis</div>
+                  )}
+                </div>
+              )}
             </label>
           );
         })}

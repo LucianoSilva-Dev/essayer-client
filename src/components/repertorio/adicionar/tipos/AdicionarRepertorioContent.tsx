@@ -47,16 +47,16 @@ export default function AdicionarRepertorioContent() {
         {/* Título */}
         <h1 
           className={`
-            text-3xl font-medium text-gray-800 text-center mb-12 transition-all duration-500
+            text-3xl font-medium text-gray-800 text-center pt-8 mb-12 transition-all duration-500
             ${bandejaAberta ? 'opacity-0 -translate-y-4 pointer-events-none' : 'opacity-100'}
           `}
         >
           Selecione um tipo de repertório que queira criar
         </h1>
 
-        <div className="flex justify-center items-center h-[600px] w-full relative">
+        <div className="flex justify-center items-center h-auto md:h-[600px] w-full relative">
           
-          <div className="flex flex-row items-center justify-center gap-10 transition-all duration-700">
+          <div className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-10 transition-all duration-700 w-full">
             
             {cardOrder.map((tipo, index) => {
               const isObra = tipo === 'obra';
@@ -66,16 +66,16 @@ export default function AdicionarRepertorioContent() {
                 <div 
                   key={tipo}
                   className={`
-                    relative transition-all duration-500 ease-in-out
+                    relative transition-all duration-500 ease-in-out flex justify-center w-full md:w-auto
                     ${shouldHide ? 'opacity-0 pointer-events-none' : 'opacity-100'}
-                    ${/* Se for Obra e estiver aberta, trazemos este container para frente de tudo */ ''}
                     ${isObra && bandejaAberta ? 'z-40' : 'z-auto'}
                   `}
                 >
                   {isObra && (
                      <BandejaTiposObra
-                        isOpen={bandejaAberta}
-                        onSelect={selecionarTipoObra}
+                      isOpen={bandejaAberta}
+                      onSelect={selecionarTipoObra}
+                      onClose={fecharBandeja}
                      />
                   )}
 
