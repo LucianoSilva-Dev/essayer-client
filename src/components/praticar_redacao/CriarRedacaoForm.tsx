@@ -99,7 +99,7 @@ export function CriarRedacaoForm({ onRedacaoCreated, mockThemes }: CriarRedacaoF
                 onChange={(e) => setTema(e.target.value)}
                 placeholder="Digite o tema aqui..."
                 className={`
-                  w-full ${ELEMENT_HEIGHT} pl-8 pr-[13rem] 
+                  w-full ${ELEMENT_HEIGHT} pl-8 pr-8 md:pr-[13rem] 
                   bg-gray-50 border-2 
                   ${isFocused ? 'border-[#075F70] bg-white' : 'border-transparent hover:bg-gray-100'}
                   rounded-[28px] text-lg text-[#3C3C3C] font-medium
@@ -112,7 +112,7 @@ export function CriarRedacaoForm({ onRedacaoCreated, mockThemes }: CriarRedacaoF
                 type="button"
                 onClick={() => setIsModalOpen(true)}
                 className={`
-                  absolute right-3 top-3 bottom-3 px-6 
+                  hidden md:flex absolute right-3 top-3 bottom-3 px-6 
                   bg-white text-[#075F70] border border-gray-200
                   rounded-[20px] font-medium text-sm
                   flex items-center gap-2
@@ -124,6 +124,22 @@ export function CriarRedacaoForm({ onRedacaoCreated, mockThemes }: CriarRedacaoF
                 <span>Temas prontos</span>
               </button>
             </div>
+
+            {/* Botão para telas menores (renderiza fora do input) */}
+            <button
+              type="button"
+              onClick={() => setIsModalOpen(true)}
+              className={`
+                md:hidden mt-2 w-full flex items-center justify-center gap-2 px-4 py-3
+                bg-white text-[#075F70] border border-gray-200
+                rounded-[20px] font-medium text-sm
+                hover:border-[#075F70] hover:bg-[#075F70]/5
+                transition-all duration-200 active:scale-95
+              `}
+            >
+              <Sparkles size={16} />
+              <span>Temas prontos</span>
+            </button>
           </div>
 
           {/* --- SEÇÃO INFERIOR: DURAÇÃO + AÇÃO --- */}
@@ -137,7 +153,7 @@ export function CriarRedacaoForm({ onRedacaoCreated, mockThemes }: CriarRedacaoF
 
               <div
                 className={`
-                  flex items-center justify-between bg-gray-50 border-2 border-transparent hover:border-gray-100
+                  flex items-center sm:justify-center md:justify-between bg-gray-50 border-2 border-transparent hover:border-gray-100
                   rounded-[32px] ${ELEMENT_HEIGHT} pl-2 pr-3 w-full lg:w-auto min-w-[300px]
                   transition-all duration-200
                 `}

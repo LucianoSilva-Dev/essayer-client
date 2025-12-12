@@ -87,14 +87,13 @@ export default function RepertorioFilters({
 
       <div className="max-w-2xl mx-auto">
         <form onSubmit={(e) => e.preventDefault()} className="relative">
-          {/* DIV PAI - CORREÇÃO 1: Removendo o max-h e transição CSS, Framer Motion controlará a altura */}
           <div
             className={`bg-white rounded-[20px] shadow-lg border border-gray-200 overflow-hidden`}
             // Nota: O 'overflow-hidden' é mantido para garantir que a animação de altura funcione corretamente.
           >
             {/* SearchBar (Sempre visível) */}
             <div className={`flex items-center h-[65px] px-4 shadow-sm rounded-[20px] ${showFilters ? "mb-5" : ""} transition-all duration-300`}>
-              <Search className="text-gray-800 mr-3" size={28} />
+              <Search className={`text-gray-800 mr-3 text-md`} size={28} />
               <input
                 type="text"
                 placeholder="Pesquise por palavra-chave, título, autor ou obra"
@@ -116,7 +115,6 @@ export default function RepertorioFilters({
               </button>
             </div>
 
-            {/* DIV BANDEJA DE FILTROS - CORREÇÃO 2: Usando AnimatePresence e motion.div */}
             <AnimatePresence initial={false}>
               {showFilters && (
                 <motion.div
@@ -125,8 +123,6 @@ export default function RepertorioFilters({
                   animate={{ opacity: 1, height: "auto", paddingBottom: 0 }} // pb-6 é 24px
                   exit={{ opacity: 0, height: 0, paddingBottom: 0 }}
                   transition={{ duration: 0.3, ease: "easeInOut" }}
-                  
-                  // Mantendo px-6, removendo pb-6 (controlado pelo framer-motion)
                   className={`px-6`} 
                 >
                   {/* Filtros por tipo */}
