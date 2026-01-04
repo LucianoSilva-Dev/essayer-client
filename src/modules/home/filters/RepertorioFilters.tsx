@@ -7,9 +7,9 @@ import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 
 const modelosOptions = [
-  { id: "Obra", nome: "Obra", icone: "/coloredObraIcon.svg", cor: "bg-yellow-100 text-yellow-700 border-yellow-200" },
-  { id: "Artigo", nome: "Artigo", icone: "/coloredArtigoIcon.svg", cor: "bg-blue-100 text-blue-700 border-blue-200" },
-  { id: "Citacao", nome: "Citação", icone: "/coloredCitacaoIcon.svg", cor: "bg-green-100 text-green-700 border-green-200" },
+  { id: "Obra", nome: "Obra", icone: "/icons/coloredObraIcon.svg", cor: "bg-yellow-100 text-yellow-700 border-yellow-200" },
+  { id: "Artigo", nome: "Artigo", icone: "/icons/coloredArtigoIcon.svg", cor: "bg-blue-100 text-blue-700 border-blue-200" },
+  { id: "Citacao", nome: "Citação", icone: "/icons/coloredCitacaoIcon.svg", cor: "bg-green-100 text-green-700 border-green-200" },
 ];
 
 interface RepertorioFiltersProps {
@@ -158,8 +158,8 @@ export default function RepertorioFilters({
                             : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                             }`}
                         >
-                          <div className={`flex items-center justify-center mr-2 w-10 h-10 rounded-full shadow-inner transition-all duration-300 ${eixosAtivos.includes(eixo.nome) ? "bg-[#075F70] border border-1 border-[#E5EFF0]" : "bg-[#E5EFF0]"}`}>
-                            <Image width={24} height={24} src={eixo.icon} alt={eixo.nome} className={`transition-all duration-300 scale-80 ${eixosAtivos.includes(eixo.nome) ? "filter brightness-0 invert" : ""}`} />
+                          <div className={`flex items-center justify-center mr-2 w-10 h-10 rounded-full shadow-inner transition-all duration-300 ${eixosAtivos.includes(eixo.nome) ? "bg-[#075F70] border-1 border-[#E5EFF0]" : "bg-[#E5EFF0]"}`}>
+                            <Image width={24} height={24} src={`/icons/${eixo.icon}`} alt={eixo.nome} className={`transition-all duration-300 scale-80 ${eixosAtivos.includes(eixo.nome) ? "filter brightness-0 invert" : ""}`} />
                           </div>
                           {eixo.nome}
                         </button>

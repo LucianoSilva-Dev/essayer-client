@@ -15,21 +15,21 @@ interface TipoRepertorioCardProps {
 
 const tipoConfig = {
   obra: {
-    icone: "/obraIcon.svg",
+    icone: "/icons/obraIcon.svg",
     titulo: "Obra",
     descricao: "Filmes, músicas, séries, pinturas, peças teatrais ou livros que expressam uma visão sobre o tema. São usados como referência artística ou simbólica na construção da argumentação.",
     cor: "#CA9C60",
     corClara: "#FDF6EC",
   },
   artigo: {
-    icone: "/artigoIcon.svg",
+    icone: "/icons/artigoIcon.svg",
     titulo: "Artigo",
     descricao: "Textos informativos, notícias ou análises que abordam fatos, ideias ou reflexões sobre temas sociais e culturais. Servem para embasar argumentos com dados e interpretações da realidade.",
     cor: "#2258B6",
     corClara: "#E6EFFF",
   },
   citacao: {
-    icone: "/citacaoIcon.svg",
+    icone: "/icons/citacaoIcon.svg",
     titulo: "Citação",
     descricao: "Frases ou trechos ditos por pensadores, autores ou personalidades que sintetizam uma ideia relevante sobre o tema. Ajudam a iniciar ou reforçar o ponto de vista na redação.",
     cor: "#0C8462",

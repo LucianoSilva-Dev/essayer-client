@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import React from 'react';
 import { Eixo } from '@/shared/contexts/add-repertorio-context';
-import { getIconForEixo } from '@/components/repertorio/[id]/helpers/repertorio-mapper';
+import { getIconForEixo } from '@/modules/repertorio/[id]/helpers/repertorio-mapper';
 
 interface EixosSelecionadosProps {
   eixosSelecionados: Eixo[];

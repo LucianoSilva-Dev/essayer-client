@@ -184,7 +184,7 @@ export function RevisaoRedacaoPage({ id }: RevisaoRedacaoPageProps) {
                             {selectedEixo ? (
                                 <>
                                     <Image 
-                                        src={`/${selectedEixo.icon}`} 
+                                        src={`/icons/${selectedEixo.icon}`} 
                                         alt={selectedEixo.nome} 
                                         width={16} 
                                         height={16} 

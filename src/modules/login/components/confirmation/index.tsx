@@ -61,7 +61,7 @@ export default function VerifyCodeForm() {
     <div className="w-full max-w-xl mx-auto flex flex-col items-center shadow-lg px-8 py-8">
       {/* Logo */}
       <div className="mb-6">
-        <Image src="/favicon_2d.png" alt="Incita Logo" width={180} height={120} priority />
+        <Image src="/icons/favicon_2d.png" alt="Incita Logo" width={180} height={120} priority />
       </div>
 
       {/* Título */}

@@ -219,7 +219,7 @@ export default function ResetPasswordForm() {
         className="hidden md:flex flex-1 relative bg-[#E0E0E0] rounded-[25px] h-[92vh] w-[60vw] overflow-hidden mt-1"
       >
         <Image
-          src="/login.jpg"
+          src="/images/login.jpg"
           alt="Redefinir senha background"
           fill
           style={{ objectFit: 'cover' }}

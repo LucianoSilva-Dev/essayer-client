@@ -5,7 +5,7 @@ export function Logo() {
   return (
     <Link href="/main" className="flex items-center">
       <div className="relative h-25 w-25">
-        <Image src="/favicon_2d.png" alt="Logo" fill className="object-contain" priority />
+        <Image src="/icons/favicon_2d.png" alt="Logo" fill className="object-contain" priority />
       </div>
     </Link>
   )

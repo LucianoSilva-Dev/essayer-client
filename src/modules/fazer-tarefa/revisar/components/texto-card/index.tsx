@@ -15,23 +15,23 @@ const getTypeStyle = (tipo: string) => {
     case 'obra':
       return {
         color: '#CA9C60', // Dourado
-        icon: '/coloredObraIcon.svg'
+        icon: '/icons/coloredObraIcon.svg'
       };
     case 'citação':
     case 'citacao':
       return {
         color: '#0C8462', // Verde
-        icon: '/coloredCitacaoIcon.svg'
+        icon: '/icons/coloredCitacaoIcon.svg'
       };
     case 'artigo':
       return {
         color: '#2258B6', // Azul
-        icon: '/coloredArtigoIcon.svg'
+        icon: '/icons/coloredArtigoIcon.svg'
       };
     default:
       return {
         color: '#0F5F68', 
-        icon: '/coloredObraIcon.svg' 
+        icon: '/icons/coloredObraIcon.svg' 
       };
   }
 };

@@ -1,16 +1,16 @@
-"use client"
-import React, { useState } from "react"
-import { motion, Variants } from "framer-motion"
-import { Eye, EyeOff } from "lucide-react"
+"use client";
+import React, { useState } from "react";
+import { motion, Variants } from "framer-motion";
+import { Eye, EyeOff } from "lucide-react";
 
 // Definimos as props para este componente
 interface PasswordInputsProps {
-  password: string
-  confirmPassword: string
-  onFormChange: (e: React.ChangeEvent<HTMLInputElement>) => void
-  itemVariants: Variants
-  passwordsMatch: boolean
-  passwordRegex: RegExp
+  password: string;
+  confirmPassword: string;
+  onFormChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  itemVariants: Variants;
+  passwordsMatch: boolean;
+  passwordRegex: RegExp;
 }
 
 export const PasswordInputs: React.FC<PasswordInputsProps> = ({
@@ -22,11 +22,11 @@ export const PasswordInputs: React.FC<PasswordInputsProps> = ({
   passwordRegex,
 }) => {
   // Estado local apenas para visibilidade da senha
-  const [showPassword, setShowPassword] = useState(false)
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  const isPasswordEmpty = password.length === 0
-  const isPasswordValid = passwordRegex.test(password)
+  const isPasswordEmpty = password.length === 0;
+  const isPasswordValid = passwordRegex.test(password);
 
   return (
     <motion.div
@@ -50,35 +50,38 @@ export const PasswordInputs: React.FC<PasswordInputsProps> = ({
         >
           Insira uma senha
         </label>
-        <div className="relative group">
+        <div className="relative w-full max-w-[640px]">
           <input
             type={showPassword ? "text" : "password"}
             id="password"
-            name="password" // Importante para o onFormChange
+            name="password"
             value={password}
             onChange={onFormChange}
-            // Estilos do Figma + Interação
-            className="w-full max-w-[640px] px-6 py-4 bg-white rounded-[32px] 
+            className="
+              w-full px-6 py-4 pr-14 md:pr-16
+               bg-white rounded-[32px]
               text-lg md:text-xl
               shadow-[0px_0px_15px_-6px_rgba(0,0,0,0.25)]
-              focus:outline-none focus:ring-2 focus:ring-[#075F70] 
-              focus:shadow-lg group-focus-within:-translate-y-[0.5em]
+              focus:outline-none focus:ring-2 focus:ring-[#075F70]
               transition-all duration-300"
             required
             minLength={8}
           />
+
           <button
             type="button"
-            className="absolute right-4 md:right-6 top-1/2 transform -translate-y-1/2 
-              text-gray-500 hover:text-gray-700
-              group-focus-within:-translate-y-[calc(50%+0.5em)] group-focus-within:text-[#075F70]
-              transition-all duration-300 z-10"
             onClick={() => setShowPassword(!showPassword)}
             aria-label="Alternar visibilidade da senha"
+            className="
+              cursor-pointer absolute right-4 md:right-6 top-1/2
+              -translate-y-1/2
+             text-gray-500 hover:text-[#075F70]
+              transition-colors duration-200"
           >
             {showPassword ? <EyeOff size={22} /> : <Eye size={22} />}
           </button>
         </div>
+
         {/* Mensagem de Validação do Regex (do reset-password.tsx) */}
         <p
           className={`text-xs mt-1 ml-3 transition-colors duration-300 ${
@@ -89,7 +92,8 @@ export const PasswordInputs: React.FC<PasswordInputsProps> = ({
               : "text-red-500" // senha inválida
           }`}
         >
-          A senha precisa ter de 8 a 24 caracteres, ao menos uma letra minúscula e um número.
+          A senha precisa ter de 8 a 24 caracteres, ao menos uma letra minúscula
+          e um número.
         </p>
       </motion.div>
 
@@ -102,34 +106,38 @@ export const PasswordInputs: React.FC<PasswordInputsProps> = ({
         >
           Confirme a senha
         </label>
-        <div className="relative group">
+        <div className="relative w-full max-w-[640px]">
           <input
             type={showConfirmPassword ? "text" : "password"}
             id="confirmPassword"
-            name="confirmPassword" // Importante para o onFormChange
+            name="confirmPassword"
             value={confirmPassword}
             onChange={onFormChange}
-            // Estilos do Figma + Interação
-            className="w-full max-w-[640px] px-6 py-4 bg-white rounded-[32px] 
-              text-lg md:text-xl
-              shadow-[0px_0px_15px_-6px_rgba(0,0,0,0.25)]
-              focus:outline-none focus:ring-2 focus:ring-[#075F70] 
-              focus:shadow-lg group-focus-within:-translate-y-[0.5em]
-              transition-all duration-300"
+            className="
+           w-full px-6 py-4 pr-14 md:pr-16
+           bg-white rounded-[32px]
+           text-lg md:text-xl
+           shadow-[0px_0px_15px_-6px_rgba(0,0,0,0.25)]
+           focus:outline-none focus:ring-2 focus:ring-[#075F70]
+           transition-all duration-300"
             required
           />
+
           <button
             type="button"
-            className="absolute right-4 md:right-6 top-1/2 transform -translate-y-1/2 
-              text-gray-500 hover:text-gray-700
-              group-focus-within:-translate-y-[calc(50%+0.5em)] group-focus-within:text-[#075F70]
-              transition-all duration-300 z-10"
             onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-            aria-label="Alternar visibilidade da senha"
+            aria-label="Alternar visibilidade da confirmação de senha"
+            className="
+            cursor-pointer
+            absolute right-4 md:right-6 top-1/2
+            -translate-y-1/2
+           text-gray-500 hover:text-[#075F70]
+            transition-colors duration-200"
           >
             {showConfirmPassword ? <EyeOff size={22} /> : <Eye size={22} />}
           </button>
         </div>
+
         {/* Mensagem de Coincidência de Senha (do reset-password.tsx) */}
         <p
           className={`text-xs mt-1 ml-3 transition-all duration-300 ${
@@ -144,5 +152,5 @@ export const PasswordInputs: React.FC<PasswordInputsProps> = ({
         </p>
       </motion.div>
     </motion.div>
-  )
-}
+  );
+};

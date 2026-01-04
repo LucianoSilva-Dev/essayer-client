@@ -12,13 +12,13 @@ export interface EixoComRecortes {
 // Mapeamento centralizado dos ícones (Baseado na sua pasta public)
 // Mantendo para retrocompatibilidade caso o nome venha diferente do EixoOptions
 export const EIXO_ICON_MAP: Record<string, string> = {
-  "Arte e cultura": "/iconArte.svg",
-  "Educação": "/educacaoIcon.svg",
-  "Ciência e tecnologia": "/techIcon.svg",
-  "Meio ambiente": "/iconMeioAmb.svg",
-  "Direito e cidadania": "/iconDireito.svg",
-  "Saúde": "/saudeIcon.svg",
-  "Economia": "/EconomiaIcon.svg",
+  "Arte e cultura": "/icons/iconArte.svg",
+  "Educação": "/icons/educacaoIcon.svg",
+  "Ciência e tecnologia": "/icons/techIcon.svg",
+  "Meio ambiente": "/icons/iconMeioAmb.svg",
+  "Direito e cidadania": "/icons/iconDireito.svg",
+  "Saúde": "/icons/saudeIcon.svg",
+  "Economia": "/icons/EconomiaIcon.svg",
   // Adicione outros conforme necessário
 };
 
@@ -28,7 +28,7 @@ export const getIconForEixo = (nome: string) => {
   if (option) return `/${option.icon}`;
 
   // Fallback para o mapa manual
-  return EIXO_ICON_MAP[nome] || "/placeholder-logo.svg";
+  return EIXO_ICON_MAP[nome] || "/svgs/placeholder-logo.svg";
 };
 
 /**

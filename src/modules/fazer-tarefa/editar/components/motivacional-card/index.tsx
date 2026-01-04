@@ -12,14 +12,14 @@ const getTypeStyle = (tipo: string) => {
   const tipoNormalized = tipo.toLowerCase();
   switch (tipoNormalized) {
     case 'obra':
-      return { color: '#CA9C60', icon: '/coloredObraIcon.svg' };
+      return { color: '#CA9C60', icon: '/icons/coloredObraIcon.svg' };
     case 'citação':
     case 'citacao':
-      return { color: '#0C8462', icon: '/coloredCitacaoIcon.svg' };
+      return { color: '#0C8462', icon: '/icons/coloredCitacaoIcon.svg' };
     case 'artigo':
-      return { color: '#2258B6', icon: '/coloredArtigoIcon.svg' };
+      return { color: '#2258B6', icon: '/icons/coloredArtigoIcon.svg' };
     default:
-      return { color: '#0F5F68', icon: '/coloredObraIcon.svg' };
+      return { color: '#0F5F68', icon: '/icons/coloredObraIcon.svg' };
   }
 };
 

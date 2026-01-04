@@ -148,7 +148,7 @@ export function Step1_Eixo() {
                 >
                   <div className="relative w-9 h-9">
                     <Image
-                      src={`/${eixo.icon}`}
+                      src={`/icons/${eixo.icon}`}
                       alt={eixo.nome}
                       fill
                       className={cn(

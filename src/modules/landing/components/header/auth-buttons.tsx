@@ -29,7 +29,7 @@ export function AuthButtons() {
               onClick={handleLogout}
               className="px-6 py-3 rounded-[20px] bg-[#CA9C60] text-white text-[20px] hover:bg-[#a68050] duration-200 cursor-pointer"
             >
-              <Image src={'/exitIcon.svg'} alt={'Sair'} width={25} height={25} className="inline mr-2">
+              <Image src={'/icons/exitIcon.svg'} alt={'Sair'} width={25} height={25} className="inline mr-2">
               </Image>
               Sair
             </button>
