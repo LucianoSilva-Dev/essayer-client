@@ -1,4 +1,4 @@
-import LandingPage from "../../components/landing/page"
+import LandingPage from "../../modules/landing/components/content"
 
 export default async function Landing() {
   // await new Promise(resolve => setTimeout(resolve, 1000)); //Simula um delay de 1 segundo

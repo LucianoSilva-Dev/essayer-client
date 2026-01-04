@@ -1,25 +1,25 @@
-import './globals.css';
-import './swiper-hover.css'
+import '../shared/styles/globals.css';
+import '../shared/styles/swiper-hover.css';
 // 1. Importar as novas fontes aqui
 import { Inter, Montserrat, Open_Sans } from 'next/font/google';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { AuthProvider } from '@/./contexts/auth-context';
-import { ProfileProvider } from '@/./contexts/profile-context';
-import { AdminProvider } from '@/./contexts/admin-context';
-import { RepertorioProvider } from '@/./contexts/repertorio-context';
-import { CitacaoProvider } from '@/./contexts/citacao-context';
+import { AuthProvider } from '@/shared/contexts/auth-context';
+import { ProfileProvider } from '@/shared/contexts/profile-context';
+import { AdminProvider } from '@/shared/contexts/admin-context';
+import { RepertorioProvider } from '@/shared/contexts/repertorio-context';
+import { CitacaoProvider } from '@/shared/contexts/citacao-context';
 import { Suspense } from 'react';
 
 // Import Swiper styles
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
-import { HeaderWrapper } from '@/components/header-wrapper';
-import { Sidebar } from '@/components/sidebar/sidebar';
-import { MainWrapper } from '@/components/main-wrapper';
-import { AddRepertorioProvider } from '@/contexts/add-repertorio-context';
-import { NotificationProvider } from '@/contexts/notification-context';
+import { HeaderWrapper } from '@/shared/components/main-header/wrapper';
+import { Sidebar } from '@/shared/components/sidebar/sidebar';
+import { MainWrapper } from '@/shared/components/main-wrapper';
+import { AddRepertorioProvider } from '@/shared/contexts/add-repertorio-context';
+import { NotificationProvider } from '@/shared/contexts/notification-context';
 
 const inter = Inter({ subsets: ['latin'] });
 

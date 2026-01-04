@@ -1,4 +1,4 @@
-import ResetPassword from "../../../../components/auth/New_Password/reset-password"
+import ResetPassword from "../../../../modules/new-password/reset-password/components/content"
 import { Suspense } from "react"
 export const dynamic = 'force-dynamic';
 

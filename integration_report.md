@@ -26,7 +26,7 @@ Estas páginas estão conectadas ao backend e consumindo dados reais via API.
 - `/turmas_professor` (Listagem de turmas criadas)  
 - `/turma_aberta_prof/[id]` (Gerenciamento da turma, alunos, correções)  
 - `/criar_turma` (Criação de nova turma)  
-- `/central_correcoes` (Visão geral de correções)
+- `/central-correcoes` (Visão geral de correções)
 
 ### **Redação:**
 - `/praticar_redacao` (Redação livre)
@@ -51,7 +51,7 @@ Estas páginas têm partes integradas, mas funcionalidades incompletas ou em con
 ## 🔴 Não Integradas (Mockadas)  
 Estas páginas usam dados estáticos (hardcoded) e não se comunicam com o backend.
 
-### **/fazer_tarefa (Revisão/Visualização de Tarefa):**
+### **/fazer-tarefa (Revisão/Visualização de Tarefa):**
 - O componente `RevisaoRedacaoPage` usa um objeto `MOCK_TAREFA` fixo no código.  
 - Não busca dados da API.
 

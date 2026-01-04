@@ -1,5 +1,5 @@
 import { Suspense } from "react"
-import CodeForm from "../../../../components/auth/New_Password/verify-code"
+import CodeForm from "../../../../modules/new-password/verify-code/components/content"
 
 export default function Home() {
   return (

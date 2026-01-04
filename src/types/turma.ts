@@ -1,6 +1,6 @@
 // TypeScript types based on the API schema
 
-import { PerfilUsuario } from "@/apiCalls/types"
+import { PerfilUsuario } from "@/types/types"
 
 export interface Turma {
   id: string
