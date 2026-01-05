@@ -1,4 +1,4 @@
-import { CorrecaoRedacaoPage } from '@/modules/redacao/correcao/correcao-redacao/CorrecaoRedacaoPage'
+import { CorrecaoRedacaoPage } from "@/modules/redacao/correcao/correcao-redacao/components/content";
 
 // 1. Adicionamos 'async' na função do componente
 export default async function Page({

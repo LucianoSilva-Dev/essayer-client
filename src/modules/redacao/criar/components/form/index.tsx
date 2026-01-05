@@ -111,7 +111,7 @@ export function CriarRedacaoForm({ onRedacaoCreated, mockThemes }: CriarRedacaoF
               <button
                 type="button"
                 onClick={() => setIsModalOpen(true)}
-                className={`
+                className={`cursor-pointer
                   hidden md:flex absolute right-3 top-3 bottom-3 px-6 
                   bg-white text-[#075F70] border border-gray-200
                   rounded-[20px] font-medium text-sm items-center gap-2
@@ -128,7 +128,7 @@ export function CriarRedacaoForm({ onRedacaoCreated, mockThemes }: CriarRedacaoF
             <button
               type="button"
               onClick={() => setIsModalOpen(true)}
-              className={`
+              className={`cursor-pointer
                 md:hidden mt-2 w-full flex items-center justify-center gap-2 px-4 py-3
                 bg-white text-[#075F70] border border-gray-200
                 rounded-[20px] font-medium text-sm
@@ -170,7 +170,7 @@ export function CriarRedacaoForm({ onRedacaoCreated, mockThemes }: CriarRedacaoF
                     // Desabilitado se for 30 ou menos
                     disabled={duration <= 30}
                     className={`
-                      w-12 h-12 rounded-full flex items-center justify-center
+                      cursor-pointer w-12 h-12 rounded-full flex items-center justify-center
                       text-gray-400 hover:text-[#075F70] hover:bg-white hover:shadow-sm
                       disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-gray-400
                       transition-all duration-200 active:scale-90 select-none
@@ -200,7 +200,7 @@ export function CriarRedacaoForm({ onRedacaoCreated, mockThemes }: CriarRedacaoF
                     onTouchEnd={stopChange}
                     disabled={duration >= 180}
                     className={`
-                      w-12 h-12 rounded-full flex items-center justify-center
+                      cursor-pointer w-12 h-12 rounded-full flex items-center justify-center
                       text-gray-400 hover:text-[#075F70] hover:bg-white hover:shadow-sm
                       disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-gray-400
                       transition-all duration-200 active:scale-90 select-none

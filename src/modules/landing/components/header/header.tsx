@@ -70,8 +70,8 @@ export function HeaderLanding() {
               {isLoggedIn ? (
                         <>
                         <Link
-                          href="/main"
-                          className={`px-6 py-3 rounded-[10px] bg-[transparent] border-solid border-2 border-[#CA9C60] text-center ${isActive("/main") ? "text-black" : "text-[#CA9C60] text-[20px] hover:text-white hover:bg-[#CA9C60] transition-colors duration-300 cursor-pointer"}`}
+                          href="/home"
+                          className={`px-6 py-3 rounded-[10px] bg-[transparent] border-solid border-2 border-[#CA9C60] text-center ${isActive("/home") ? "text-black" : "text-[#CA9C60] text-[20px] hover:text-white hover:bg-[#CA9C60] transition-colors duration-300 cursor-pointer"}`}
                         >
                           Acessar
                         </Link>

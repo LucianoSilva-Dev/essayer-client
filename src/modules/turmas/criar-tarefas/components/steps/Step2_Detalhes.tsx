@@ -417,7 +417,7 @@ export function Step2_Detalhes() {
              <button
                 type="button"
                 onClick={() => setIsTemasModalOpen(true)}
-                className="flex items-center gap-2 bg-gray-50 border border-gray-200 text-gray-600 px-4 py-2 rounded-full transition-all hover:bg-[#075F70] hover:text-white hover:border-[#075F70] hover:shadow-lg group/btn active:scale-95"
+                className="cursor-pointer flex items-center gap-2 bg-gray-50 border border-gray-200 text-gray-600 px-4 py-2 rounded-full transition-all hover:bg-[#075F70] hover:text-white hover:border-[#075F70] hover:shadow-lg group/btn active:scale-95"
              >
                 <Sparkles size={16} className="text-[#075F70] group-hover/btn:text-white transition-colors" />
                 <span className="text-sm font-bold">Temas Prontos</span>

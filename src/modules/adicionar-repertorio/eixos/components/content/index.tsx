@@ -159,7 +159,6 @@ export default function EixosRepertorioContent() {
               Selecione um eixo temático para ver os recortes relacionados
             </h1>
 
-
             <div>
               <div>
                 {eixosSelecionados.length} eixo(s) selecionado(s)
@@ -172,25 +171,9 @@ export default function EixosRepertorioContent() {
           
           </div>
 
-
-
-
-          
-
-
-
-
-
           <div className="text-gray-600">
             Criando {tipoRepertorio} {tipoObra && `- ${tipoObra}`}
           </div>
-
-
-
-
-
-
-
 
         </div>
 

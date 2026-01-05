@@ -219,7 +219,7 @@ function RepertorioDetalhesContent() {
       message: "Tem certeza? Essa ação não pode ser desfeita.",
       onConfirm: async () => {
         await deleteRepertorio(id)
-        router.replace('/main')
+        router.replace('/home')
       }
     });
   };

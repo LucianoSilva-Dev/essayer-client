@@ -12,7 +12,7 @@ interface SidebarMobileProps {
 //   {
 //     icon: Home,
 //     label: "Início",
-//     href: "/main",
+//     href: "/home",
 //     roles: null,
 //   },
 //   {

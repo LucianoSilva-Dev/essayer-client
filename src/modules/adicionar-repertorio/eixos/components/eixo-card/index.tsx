@@ -160,7 +160,7 @@ export const EixoCard: React.FC<EixoCardProps> = ({
                     key={recorteIndex}
                     onClick={() => onToggleRecorte(recorte)}
                     className={`
-                      flex items-center px-4 py-3 rounded-[40px] transition-all duration-200
+                      cursor-pointer flex items-center px-4 py-3 rounded-[40px] transition-all duration-200
                       ${recorteSelecionado
                         ? 'bg-[#075F70] text-white shadow-md'
                         : 'bg-white text-[#3C3C3C] hover:bg-gray-50'

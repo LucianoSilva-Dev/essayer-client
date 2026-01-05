@@ -65,7 +65,7 @@ export default function NovoCriarTurmaCard() {
         {/* COLUNA DA DIREITA */}
         <div className="hidden md:flex col-span-2 h-full relative items-end justify-end -mr-6 -mb-0">
              <Image
-                src="/criarTurmaStudents.png"
+                src="/images/criarTurmaStudents.png"
                 alt="Ilustração de professores e alunos"
                 width={450} 
                 height={400}

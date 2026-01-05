@@ -61,7 +61,7 @@ export default function Pagination({ currentPage, totalPages, onPageChange }: Pa
           <button
             key={page}
             onClick={() => onPageChange(page)}
-            className={`px-4 py-2 rounded-full ${currentPage === page ? "bg-teal-600 text-white" : "bg-white text-gray-700 hover:bg-gray-100"}`}
+            className={`cursor-pointer px-4 py-2 rounded-full ${currentPage === page ? "bg-teal-600 text-white" : "bg-white text-gray-700 hover:bg-gray-100"}`}
           >
             {page + 1}
           </button>

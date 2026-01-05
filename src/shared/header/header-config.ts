@@ -2,13 +2,13 @@ import { HeaderConfig } from './header-types'
 
 export const headerConfig: Record<string, HeaderConfig> = {
   // Rotas estáticas
-  '/main': {
+  '/home': {
     currentPage: 'Repertórios',
     backPage: undefined
   },
   '/profile': {
     currentPage: 'Meu Perfil',
-    backPage: '/main'
+    backPage: '/home'
   },
   '/profile/editar': {
     currentPage: 'Editar Perfil',
@@ -16,7 +16,7 @@ export const headerConfig: Record<string, HeaderConfig> = {
   },
   '/adicionar': {
     currentPage: 'Adicionar Repertório',
-    backPage: '/main'
+    backPage: '/home'
   },
   '/adicionar/eixos': {
     currentPage: 'Adicionar Repertório',
@@ -28,7 +28,7 @@ export const headerConfig: Record<string, HeaderConfig> = {
   },
   '/admin': {
     currentPage: 'Admin',
-    backPage: '/main'
+    backPage: '/home'
   },
   '/turmas_professor': {
     currentPage: 'Minhas Turmas',
@@ -48,14 +48,14 @@ export const headerConfig: Record<string, HeaderConfig> = {
   },
   '/faq': {
     currentPage: 'FAQ',
-    backPage: '/main'
+    backPage: '/home'
   },
 
   // Rotas dinâmicas
   '/repertorio/[id]': {
     currentPage: (params: Record<string, string>, repertorioData?: any) =>
       repertorioData?.titulo || 'Repertório',
-    backPage: '/main',
+    backPage: '/home',
     dynamicData: true
   },
   '/repertorio/[id]/editar': {

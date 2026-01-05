@@ -181,7 +181,7 @@ export default function FeaturedRepertoires() {
           variants={fadeUpVariants}
         >
           <Link
-            href="/main"
+            href="/home"
             className="bg-[#075F70] hover:shadow-xl hover:bg-[#054c59] duration-300 text-white text-[24px] py-3 px-6 rounded-md transition-colors"
           >
               Ver todos os repertórios

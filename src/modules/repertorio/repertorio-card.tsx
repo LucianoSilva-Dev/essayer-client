@@ -202,7 +202,7 @@ export default function RepertorioCard({ repertorio }: RepertorioCardProps) {
                 e.stopPropagation()
                 handleViewDetails()
               }}
-              className="text-gray-400 hover:text-[#CA9C60] transition-colors opacity-0 group-hover:opacity-100 focus:opacity-100"
+              className="cursor-pointer text-gray-400 hover:text-[#CA9C60] transition-colors opacity-0 group-hover:opacity-100 focus:opacity-100"
               title="Ver detalhes"
             >
               <Eye size={16} />
@@ -212,7 +212,7 @@ export default function RepertorioCard({ repertorio }: RepertorioCardProps) {
                 e.stopPropagation()
                 handleToggleFavorito()
               }}
-              className={`transition-colors ${isFavorito ? "text-blue-500" : "text-gray-400 hover:text-blue-500"}`}
+              className={`cursor-pointer transition-colors ${isFavorito ? "text-blue-500" : "text-gray-400 hover:text-blue-500"}`}
               title={isFavorito ? "Remover dos favoritos" : "Adicionar aos favoritos"}
             >
               <Bookmark size={16} />
@@ -222,7 +222,7 @@ export default function RepertorioCard({ repertorio }: RepertorioCardProps) {
                 e.stopPropagation()
                 handleLike()
               }}
-              className={`flex items-center space-x-1 transition-colors ${isLiked ? "text-blue-500" : "text-gray-400 hover:text-blue-500"
+              className={`cursor-pointer flex items-center space-x-1 transition-colors ${isLiked ? "text-blue-500" : "text-gray-400 hover:text-blue-500"
                 }`}
               title="Curtir"
             >

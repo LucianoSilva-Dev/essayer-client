@@ -28,7 +28,7 @@ export const getIconForEixo = (nome: string) => {
   if (option) return `/${option.icon}`;
 
   // Fallback para o mapa manual
-  return EIXO_ICON_MAP[nome] || "/svgs/placeholder-logo.svg";
+  return EIXO_ICON_MAP[nome] || "/icons/favicon.ico";
 };
 
 /**

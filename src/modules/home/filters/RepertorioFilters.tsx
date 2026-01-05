@@ -104,11 +104,11 @@ export default function RepertorioFilters({
               <button
                 type="button"
                 onClick={() => setShowFilters(!showFilters)}
-                className="ml-3 font-bold text-gray-800 hover:text-gray-600 transition-colors relative"
+                className="cursor-pointer mr-5 font-bold text-gray-800 hover:text-gray-600 transition-colors relative"
               >
                 {showFilters ? "Fechar" : "Filtrar"}
                 {filtrosAtivosCount > 0 && (
-                  <span className="absolute -top-1 -right-3 bg-teal-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                  <span className="absolute -top-2 -right-5 bg-teal-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
                     {filtrosAtivosCount}
                   </span>
                 )}
@@ -133,7 +133,7 @@ export default function RepertorioFilters({
                         <button
                           key={modelo.id}
                           onClick={() => setModeloAtivo(modeloAtivo === modelo.id ? null : modelo.id)}
-                          className={`flex items-center px-3 py-2 text-md rounded-full transition-all duration-500 ${modeloAtivo === modelo.id
+                          className={`cursor-pointer flex items-center px-3 py-2 text-md rounded-full transition-all duration-500 ${modeloAtivo === modelo.id
                             ? `${modelo.cor} shadow-md scale-105`
                             : "bg-gray-200 text-gray-700 border-gray-200 hover:bg-gray-300"
                             }`}
@@ -153,7 +153,7 @@ export default function RepertorioFilters({
                         <button
                           key={eixo.nome}
                           onClick={() => handleEixoToggle(eixo.nome)}
-                          className={`flex items-center pl-0 pr-4 py-0 text-md rounded-full transition-all duration-300 font-medium ${eixosAtivos.includes(eixo.nome)
+                          className={`cursor-pointer flex items-center pl-0 pr-4 py-0 text-md rounded-full transition-all duration-300 font-medium ${eixosAtivos.includes(eixo.nome)
                             ? "bg-[#075F70] text-[#F1F1F1] shadow-sm"
                             : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                             }`}
@@ -208,7 +208,7 @@ export default function RepertorioFilters({
                     <div className="flex flex-wrap gap-2">
                       <button
                         onClick={() => setOrdenarPor("Newest")}
-                        className={`px-3 py-2 text-sm rounded-[15px] bg-gray-200 transition-colors ${ordenarPor === "Newest"
+                        className={`cursor-pointer px-3 py-2 text-sm rounded-[15px] bg-gray-200 transition-colors ${ordenarPor === "Newest"
                           ? "bg-blue-100 text-blue-700"
                           : "bg-gray-50 text-gray-700 hover:bg-gray-300"
                           }`}
@@ -217,7 +217,7 @@ export default function RepertorioFilters({
                       </button>
                       <button
                         onClick={() => setOrdenarPor("Oldest")}
-                        className={`px-3 py-2 text-sm rounded-[15px] bg-gray-200 transition-colors duration-300 ${ordenarPor === "Oldest"
+                        className={`cursor-pointer px-3 py-2 text-sm rounded-[15px] bg-gray-200 transition-colors duration-300 ${ordenarPor === "Oldest"
                           ? "bg-blue-100 text-blue-700 border-blue-200"
                           : "text-gray-700 border-gray-200 hover:bg-gray-300"
                           }`}
@@ -226,7 +226,7 @@ export default function RepertorioFilters({
                       </button>
                       <button
                         onClick={() => setOrdenarPor("MaxLikes")}
-                        className={`px-3 py-2 text-sm rounded-[15px] bg-gray-200 transition-colors ${ordenarPor === "MaxLikes"
+                        className={`cursor-pointer px-3 py-2 text-sm rounded-[15px] bg-gray-200 transition-colors ${ordenarPor === "MaxLikes"
                           ? "bg-blue-100 text-blue-700 border-blue-200"
                           : "bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-300"
                           }`}
@@ -235,7 +235,7 @@ export default function RepertorioFilters({
                       </button>
                       <button
                         onClick={() => setOrdenarPor("MinLikes")}
-                        className={`px-3 py-2 text-sm rounded-[15px] bg-gray-200 transition-colors ${ordenarPor === "MinLikes"
+                        className={`cursor-pointer px-3 py-2 text-sm rounded-[15px] bg-gray-200 transition-colors ${ordenarPor === "MinLikes"
                           ? "bg-blue-100 text-blue-700 border-blue-200"
                           : "bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-300"
                           }`}
@@ -255,7 +255,7 @@ export default function RepertorioFilters({
                     {filtrosAtivosCount > 0 && (
                       <button
                         onClick={handleClearFilters}
-                        className="text-sm text-teal-600 hover:text-teal-700 font-medium"
+                        className="cursor-pointer text-sm text-teal-600 hover:text-teal-700 font-medium pb-4"
                       >
                         Limpar filtros
                       </button>

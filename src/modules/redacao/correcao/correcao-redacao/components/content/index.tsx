@@ -1,16 +1,17 @@
 'use client'
 
 import { useEffect, useState, useCallback } from 'react'
-import { CorrecaoHeader } from './CorrecaoHeader'
-import { RedacaoOriginalCard } from './RedacaoOriginalCard'
-import { CompetenciasSection } from './CompetenciasSection'
-import { AnaliseFeedback } from './AnaliseFeedback'
+
 import { CorrecaoIA, RedacaoLivreDoc } from '@/lib/apiCalls/redacao-livre/types'
 import { getRedacaoLivre } from '@/lib/apiCalls/redacao-livre' 
 import { toast } from 'react-toastify'; 
 import { encaminharCorrecaoRedacao, listenCorrecaoRedacao } from '@/lib/apiCalls/redacao'; 
 import { CustomEventSourceMap } from '@/types/types'; 
 import { GetCorrecaoRedacaoResponse } from '@/lib/apiCalls/redacao/types'; 
+import { CorrecaoHeader } from '../correcao-header';
+import { RedacaoOriginalCard } from '../redacao-original-card';
+import { CompetenciasSection } from '../competencias-section';
+import { AnaliseFeedback } from '../analise-feedback';
 
 const competencias = ['c1', 'c2', 'c3', 'c4', 'c5']
 

@@ -19,7 +19,7 @@ export function TabsAssuntos<T extends string>({
         <button
           key={a}
           onClick={() => onSelect(a)}
-          className={`text-left text-base transition-colors duration-200 ${
+          className={`cursor-pointer text-left text-base transition-colors duration-200 ${
             // É aqui que a mágica acontece:
             ativo === a
               ? "text-teal-700 font-semibold" // Estado ATIVO: Cor teal + Bold

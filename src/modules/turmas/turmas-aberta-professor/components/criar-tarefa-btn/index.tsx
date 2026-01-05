@@ -15,7 +15,7 @@ const CriarTarefaButton: React.FC<CriarTarefaButtonProps> = ({ turmaId }) => {
       className="no-underline"
     >
       <button
-        className="flex items-center gap-2 px-6 py-2.5 rounded-full bg-[#075F70] hover:bg-[#064d5c] shadow-md hover:shadow-lg transition-all duration-300 group"
+        className="cursor-pointer flex items-center gap-2 px-6 py-2.5 rounded-full bg-[#075F70] hover:bg-[#064d5c] shadow-md hover:shadow-lg transition-all duration-300 group"
       >
         <Plus size={20} className="text-white group-hover:scale-110 transition-transform" />
         <span className="text-sm font-semibold text-white font-montserrat">

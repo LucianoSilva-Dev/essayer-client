@@ -192,7 +192,7 @@ export default function PersonalDataForm() {
               <button
                 type="button"
                 onClick={() => setIsEditing(true)}
-                className="flex-1 sm:flex-none px-6 sm:px-8 py-2 sm:py-3 text-sm sm:text-base lg:text-lg font-medium text-[#075F70] bg-white border border-[#075F70] rounded-full hover:bg-gray-50 transition-colors"
+                className="cursor-pointer flex-1 sm:flex-none px-6 sm:px-8 py-2 sm:py-3 text-sm sm:text-base lg:text-lg font-medium text-[#075F70] bg-white border border-[#075F70] rounded-full hover:bg-gray-50 transition-colors"
               >
                 Alterar dados
               </button>

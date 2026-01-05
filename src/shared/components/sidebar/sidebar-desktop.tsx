@@ -18,7 +18,7 @@ const navigationItems = [
   {
     icon: Home,
     label: "Início",
-    href: "/main",
+    href: "/home",
     roles: null,
   },
   {

@@ -9,7 +9,7 @@ export default function EntrarTurmaCard({ className }: { className?: string }) {
       <div className="absolute inset-0 z-0">
         <div className="relative w-full h-[85%] transform transition-transform duration-500 group-hover:scale-105 origin-bottom">
            <Image
-            src="/entrarTurmaStudents.png"
+            src="/images/entrarTurmaStudents.png"
             alt="Ilustração de estudantes"
             fill
             className="object-contain object-top p-6"

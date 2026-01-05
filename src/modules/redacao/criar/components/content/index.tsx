@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { CriarRedacaoForm } from '../form';
-import { RedacoesCriadasList } from '../../list';
+import { RedacoesCriadasList } from '../list';
 import { createRedacaoLivre, getAllRedacaoLivre } from '@/lib/apiCalls/redacao-livre';
 import { RedacaoLivreDoc } from '@/lib/apiCalls/redacao-livre/types';
 import { useRouter } from 'next/navigation';

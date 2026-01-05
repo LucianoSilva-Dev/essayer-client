@@ -3,13 +3,14 @@
 import { useEffect, useState, Suspense } from "react";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { toast } from "react-toastify";
-import RepertorioForm from "@/./components/repertorio/repertorio-form";
+
 import Loading from "../loading";
 import type { RepertorioFormData } from "@/types/repertorio";
 import { getArtigoById, getCitacaoById, getObraById, updateArtigo, updateCitacao, updateObra } from "@/lib/apiCalls/repertorio";
 import type { RepertorioDocument, UpdateArtigoBody, UpdateCitacaoBody, UpdateObraBody } from "@/lib/apiCalls/repertorio/types";
 import { mountRepertoire } from "@/shared/utils";
 import { useAuth } from "@/shared/contexts/auth-context";
+import RepertorioForm from "../../repertorio-form";
 
 function EditarRepertorioContent() {
   const router = useRouter();
@@ -35,7 +36,7 @@ function EditarRepertorioContent() {
         // CORREÇÃO: Verificação movida para dentro do 'try'
         if (!id || !type) {
           toast.error("Informações inválidas para editar o repertório.");
-          router.push("/main");
+          router.push("/home");
           return; // Este return não impede mais o finally
         }
 
@@ -79,11 +80,11 @@ function EditarRepertorioContent() {
           }
         } else {
           toast.error("Repertório não encontrado.");
-          router.push('/main');
+          router.push('/home');
         }
       } catch {
         toast.error("Erro ao carregar dados para edição.");
-        router.push('/main');
+        router.push('/home');
       } finally {
         // CORREÇÃO: Este bloco agora é sempre alcançado.
         setLoading(false);

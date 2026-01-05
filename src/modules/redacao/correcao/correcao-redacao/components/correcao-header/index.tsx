@@ -10,7 +10,7 @@ export function CorrecaoHeader() {
     <div className="flex items-center space-x-4 mb-6">
       <button
         onClick={() => router.back()}
-        className="text-gray-600 hover:text-gray-900"
+        className="cursor-pointer text-gray-600 hover:text-gray-900"
         aria-label="Voltar"
       >
         <ArrowLeft size={24} />

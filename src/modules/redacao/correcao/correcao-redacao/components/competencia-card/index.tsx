@@ -14,7 +14,7 @@ export function CompetenciaCard({
   return (
     <button
       onClick={onClick}
-      className={`flex-shrink-0 w-64 min-h-36 p-4 rounded-[48px] shadow-sm border transition-all duration-300
+      className={`cursor-pointer flex-shrink-0 w-64 min-h-36 p-4 rounded-[48px] shadow-sm border transition-all duration-300
       ${
         isActive
           ? 'bg-[#075F70] text-white border-transparent'

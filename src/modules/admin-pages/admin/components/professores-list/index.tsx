@@ -142,7 +142,7 @@ function ProfessorModal({ professor, onClose }: ProfessorModalProps) {
         <div className="p-6">
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-xl font-semibold text-gray-900">Detalhes do Professor</h2>
-            <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
+            <button onClick={onClose} className="cursor-pointer text-gray-400 hover:text-gray-600">
               ✕
             </button>
           </div>

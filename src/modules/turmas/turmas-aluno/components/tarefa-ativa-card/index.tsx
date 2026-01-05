@@ -134,7 +134,7 @@ export function TarefasAtivasList({ tarefas, loading, error }: TarefasAtivasList
                 {/* No mobile, opacidade reduzida ou atrás do texto. No desktop, lado direito. */}
                 <div className="absolute bottom-0 right-0 w-[80%] md:w-[60%] h-full pointer-events-none z-10 opacity-30 md:opacity-100">
                      <Image
-                        src="/ilustracao-tarefa-completa.png" 
+                        src="/images/ilustracao-tarefa-completa.png" 
                         alt="Ilustração da tarefa"
                         fill
                         className="object-contain object-bottom md:object-[bottom_right]"

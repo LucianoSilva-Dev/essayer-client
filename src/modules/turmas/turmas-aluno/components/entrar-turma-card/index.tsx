@@ -40,7 +40,7 @@ export default function EntrarTurmaCard() {
         {/* Mobile: Relative height. Desktop: Absolute positioning. */}
         <div className="relative md:absolute md:right-0 md:top-0 md:bottom-0 w-full h-40 md:w-[40%] md:h-full mt-4 md:mt-0">
             <Image
-                src="/entrarTurmaStudents.png" 
+                src="/images/entrarTurmaStudents.png" 
                 alt="Estudantes celebrando"
                 fill
                 className="object-contain object-center md:object-right-bottom md:scale-110 md:translate-y-2 group-hover:scale-105 md:group-hover:scale-115 transition-transform duration-500"

@@ -20,7 +20,7 @@ export default function AdminPage() {
   const [isLoading] = useState(false)
 
   if(userData?.cargo !== "admin"){
-    redirect('/main')
+    redirect('/home')
   }
 
   const getStatusCounts = () => {

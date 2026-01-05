@@ -123,8 +123,8 @@ export default function TurmaAbertaPage({ turmaId }: Props) {
                   onClick={() => setActiveTab('integrantes')}
                   className={`text-lg sm:text-xl font-semibold transition-colors ${
                     activeTab === 'integrantes'
-                      ? 'text-gray-800 border-b-2 border-teal-600'
-                      : 'text-gray-400 hover:text-gray-600'
+                      ? ' text-gray-800 border-b-2 border-teal-600'
+                      : 'cursor-pointer text-gray-400 hover:text-gray-600'
                   }`}
                 >
                   Integrantes
@@ -133,8 +133,8 @@ export default function TurmaAbertaPage({ turmaId }: Props) {
                   onClick={() => setActiveTab('solicitacoes')}
                   className={`text-lg sm:text-xl font-semibold transition-colors flex items-center gap-2 ${
                     activeTab === 'solicitacoes'
-                      ? 'text-gray-800 border-b-2 border-teal-600'
-                      : 'text-gray-400 hover:text-gray-600'
+                      ? ' text-gray-800 border-b-2 border-teal-600'
+                      : 'cursor-pointer text-gray-400 hover:text-gray-600'
                   }`}
                 >
                   Solicitações

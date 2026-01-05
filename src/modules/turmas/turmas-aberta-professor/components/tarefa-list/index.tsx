@@ -158,7 +158,7 @@ export default function TarefaList({
         onClick={handlePrev}
         disabled={!canGoPrev || loading}
         aria-label="Tarefa anterior"
-        className={`absolute left-0 top-1/2 -translate-y-1/2 z-10 p-2 bg-white rounded-full shadow-md border border-gray-200 hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed transition-opacity -ml-3`} // Posicionamento e estilo
+        className={`cursor-pointer absolute left-0 top-1/2 -translate-y-1/2 z-10 p-2 bg-white rounded-full shadow-md border border-gray-200 hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed transition-opacity -ml-3`} // Posicionamento e estilo
       >
         <ChevronLeft size={20} className="text-gray-600" />
       </button>
@@ -194,7 +194,7 @@ export default function TarefaList({
         onClick={handleNext}
         disabled={!canGoNext || loading}
         aria-label="Próxima tarefa"
-        className={`absolute right-0 top-1/2 -translate-y-1/2 z-10 p-2 bg-white rounded-full shadow-md border border-gray-200 hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed transition-opacity -mr-3`} // Posicionamento e estilo
+        className={`cursor-pointer absolute right-0 top-1/2 -translate-y-1/2 z-10 p-2 bg-white rounded-full shadow-md border border-gray-200 hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed transition-opacity -mr-3`} // Posicionamento e estilo
       >
         <ChevronRight size={20} className="text-gray-600" />
       </button>

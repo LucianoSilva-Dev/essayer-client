@@ -145,7 +145,7 @@ export function Header({ currentPage, description, backPage }: HeaderProps) {
                 <div className="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
                   <div className="p-4">
                     <div className="flex flex-col space-y-3 mb-3">
-                      <Link href="/main" className="text-gray-800 text-lg font-medium py-2 rounded-md hover:bg-gray-50 px-2">
+                      <Link href="/home" className="text-gray-800 text-lg font-medium py-2 rounded-md hover:bg-gray-50 px-2">
                         Repertórios
                       </Link>
                       <Link href="/praticar_redacao" className="text-gray-800 text-lg font-medium py-2 rounded-md hover:bg-gray-50 px-2">

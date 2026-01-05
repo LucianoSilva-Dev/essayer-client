@@ -37,7 +37,7 @@ export default function NovoEntrarTurmaCard({ className }: { className?: string 
         {/* ALTERAÇÃO AQUI: Mudado de -top-20 para -top-8 para descer a imagem */}
         <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 w-[90%] h-60 z-20 transition-transform duration-500 group-hover/card:scale-105 group-hover/card:-translate-y-2 pointer-events-none">
             <Image
-                src="/entrarTurmaStudents.png"
+                src="/images/entrarTurmaStudents.png"
                 alt="Ilustração de estudantes"
                 fill
                 className="object-contain object-bottom drop-shadow-lg"
