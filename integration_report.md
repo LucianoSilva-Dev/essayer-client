@@ -26,7 +26,7 @@ Estas páginas estão conectadas ao backend e consumindo dados reais via API.
 - `/turmas_professor` (Listagem de turmas criadas)  
 - `/turma_aberta_prof/[id]` (Gerenciamento da turma, alunos, correções)  
 - `/criar_turma` (Criação de nova turma)  
-- `/central-correcoes` (Visão geral de correções)
+- `/central_correcoes` (Visão geral de correções)
 
 ### **Redação:**
 - `/praticar_redacao` (Redação livre)

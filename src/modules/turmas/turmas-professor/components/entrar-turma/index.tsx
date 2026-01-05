@@ -26,7 +26,7 @@ export default function NovoEntrarTurmaCard({ className }: { className?: string 
   return (
     <Link
       href="/entrar_turma"
-      className={`group/card relative w-full h-full min-h-[18rem] flex flex-col justify-end mt-8 ${className}`} 
+      className={`group/card relative w-full h-full min-h-[18rem] flex flex-col justify-end mt-8 pb-2 ${className}`} 
     >
       <div 
         className="relative w-full flex-1 rounded-[2rem] border border-[#E5EFF0] flex flex-col items-center justify-end pb-8 px-4 pt-12 transition-all duration-300 group-hover/card:shadow-lg group-hover/card:border-[#075F70]/20 z-10"

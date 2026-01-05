@@ -23,11 +23,11 @@ async function proxy(request: NextRequest, { params }: { params: Promise<{ proxy
     });
 
     const responseHeaders = new Headers(response.headers);
-    
+
     // Handle Set-Cookie headers correctly
     // fetch API might merge them, but getSetCookie() retrieves them as an array
     const cookies = response.headers.getSetCookie();
-    
+
     const newResponse = new NextResponse(response.body, {
       status: response.status,
       statusText: response.statusText,
@@ -44,10 +44,9 @@ async function proxy(request: NextRequest, { params }: { params: Promise<{ proxy
         const sanitizedCookie = cookie
           .replace(/Domain=[^;]+;?/i, "")
           .replace(/Path=[^;]+;?/i, "");
-        
-        // Append Path=/ to ensure global access across the app
-        const finalCookie = sanitizedCookie + "; Path=/api";
 
+        // Append Path=/ to ensure global access across the app
+        const finalCookie = sanitizedCookie + "; Path=/";
         newResponse.headers.append("set-cookie", finalCookie);
       });
     }

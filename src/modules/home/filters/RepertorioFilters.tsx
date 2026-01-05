@@ -1,10 +1,11 @@
 'use client'
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Search } from "lucide-react";
 import { EixoOptions } from "@/shared/constants/eixos";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
+import { useDebounce } from "@/shared/hooks/useDebounce";
 
 const modelosOptions = [
   { id: "Obra", nome: "Obra", icone: "/icons/coloredObraIcon.svg", cor: "bg-yellow-100 text-yellow-700 border-yellow-200" },
@@ -36,6 +37,14 @@ export default function RepertorioFilters({
   tipoVisualizacao, onTipoVisualizacaoChange
 }: RepertorioFiltersProps) {
   const [showFilters, setShowFilters] = useState(false);
+const debouncedSearch = useDebounce(termoBusca, 1000); // 1 segundo de debounce para pesquisar uma redação :)
+const handleChangeRef = useRef<(value: string) => void>(() => {});
+
+
+useEffect(() => {
+  handleChangeRef.current(debouncedSearch);
+}, [debouncedSearch]);
+
 
   const handleEixoToggle = (eixo: string) => {
     setEixosAtivos(
@@ -45,6 +54,8 @@ export default function RepertorioFilters({
     );
   };
 
+  
+
   const handleClearFilters = () => {
     setTermoBusca("");
     setEixosAtivos([]);
@@ -53,6 +64,7 @@ export default function RepertorioFilters({
     setOrdenarPor('Newest');
     setShowFilters(false);
   };
+  
 
   return (
     <div className="text-center mb-8 lg:mb-12 mt-4">

@@ -107,7 +107,7 @@ export default function ListaTurmasAluno({
                     <button
                         onClick={() => mudarPagina(Math.max(1, paginaAtual - 1))}
                         disabled={paginaAtual === 1}
-                        className="text-[#075F70] hover:bg-gray-200 rounded-full p-0.5 disabled:opacity-30 transition-colors"
+                        className="cursor-pointer text-[#075F70] hover:bg-gray-200 rounded-full p-0.5 disabled:opacity-30 transition-colors"
                     >
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={3} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
                     </button>
@@ -119,7 +119,7 @@ export default function ListaTurmasAluno({
                     <button
                         onClick={() => mudarPagina(Math.min(totalPaginas, paginaAtual + 1))}
                         disabled={paginaAtual === totalPaginas}
-                        className="text-[#075F70] hover:bg-gray-200 rounded-full p-0.5 disabled:opacity-30 transition-colors"
+                        className="cursor-pointer text-[#075F70] hover:bg-gray-200 rounded-full p-0.5 disabled:opacity-30 transition-colors"
                     >
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={3} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
                     </button>

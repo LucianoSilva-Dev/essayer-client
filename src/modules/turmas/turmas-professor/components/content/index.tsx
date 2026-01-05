@@ -7,7 +7,7 @@ export default function TurmasProfessorPage() {
   return (
     // Grid responsivo: 1 coluna no mobile, 3 colunas no desktop (lg)
     // min-h-[calc(100vh-5rem)] substitui o valor fixo de 80px por 5rem
-    <main className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8 pt-6 w-full min-h-[calc(100vh-5rem)] pb-10 px-4 md:pr-12 md:pl-0">
+    <main className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8 pt-6 w-full min-h-[calc(100vh-5rem)] pb-2 px-4 md:pr-12 md:pl-0">
       {/* Coluna esquerda (Lista ocupa 100% no mobile e 1/3 no desktop) */}
       <ListaTurmas />
 

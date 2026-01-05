@@ -31,7 +31,7 @@ export default function ModernCorrecoesCard({ className }: { className?: string 
 
   return (
     <Link
-      href="/central-correcoes"
+      href="/central_correcoes"
       // Substituído min-h-[250px] por min-h-[16rem] (256px)
       className={`relative flex flex-col w-full h-full min-h-[16rem] bg-white rounded-[2rem] shadow-sm transition-all duration-300 overflow-hidden group border border-gray-100 hover:shadow-xl hover:border-[#075F70]/30 hover:-translate-y-1 ${className}`}
     >

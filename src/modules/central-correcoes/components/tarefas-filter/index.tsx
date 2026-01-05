@@ -22,7 +22,7 @@ export function TarefaFilters({ activeTab, onTabChange, onSearch }: Props) {
         <button
           onClick={() => onTabChange("ativa")}
           className={`
-            relative flex items-center gap-2.5 px-6 py-3 rounded-2xl text-sm font-bold transition-all duration-300 border
+            cursor-pointer relative flex items-center gap-2.5 px-6 py-3 rounded-2xl text-sm font-bold transition-all duration-300 border
             ${activeTab === "ativa"
               // Estado ATIVO: Cor sólida, sombra colorida, levemente maior
               ? "bg-[#075F70] text-white border-[#075F70] shadow-lg shadow-[#075F70]/25 scale-105 z-10"
@@ -38,7 +38,7 @@ export function TarefaFilters({ activeTab, onTabChange, onSearch }: Props) {
         <button
           onClick={() => onTabChange("encerrada")}
           className={`
-            relative flex items-center gap-2.5 px-6 py-3 rounded-2xl text-sm font-bold transition-all duration-300 border
+            cursor-pointer relative flex items-center gap-2.5 px-6 py-3 rounded-2xl text-sm font-bold transition-all duration-300 border
             ${activeTab === "encerrada"
               ? "bg-[#075F70] text-white border-[#075F70] shadow-lg shadow-[#075F70]/25 scale-105 z-10"
               : "bg-white text-gray-500 border-gray-200 hover:border-[#075F70]/30 hover:bg-gray-50 hover:text-[#075F70]"

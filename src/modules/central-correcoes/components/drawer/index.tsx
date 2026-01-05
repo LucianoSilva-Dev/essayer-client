@@ -66,7 +66,7 @@ export function StudentDrawer({ isOpen, onClose, tarefaId }: Props) {
           </div>
           <button
             onClick={handleClose}
-            className="p-2 hover:bg-gray-100 rounded-full transition-colors text-gray-400 hover:text-[#075F70]"
+            className="cursor-pointer p-2 hover:bg-gray-100 rounded-full transition-colors text-gray-400 hover:text-[#075F70]"
           >
             <X size={28} />
           </button>
@@ -99,7 +99,7 @@ export function StudentDrawer({ isOpen, onClose, tarefaId }: Props) {
                 <button
                   key={type}
                   onClick={() => setFilter(type)}
-                  className={`px-3 py-1.5 rounded-full text-xs font-bold capitalize transition-all duration-200 border ${filter === type
+                  className={`cursor-pointer px-3 py-1.5 rounded-full text-xs font-bold capitalize transition-all duration-200 border ${filter === type
                     ? 'bg-[#075F70] text-white border-[#075F70] shadow-sm'
                     : 'bg-white text-gray-500 border-gray-200 hover:border-[#075F70]/50 hover:text-[#075F70]'
                     }`}

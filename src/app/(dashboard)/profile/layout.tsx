@@ -1,35 +1,43 @@
-"use client"
+"use client";
 
-import React, { useState } from "react"
-import { useRouter } from "next/navigation"
-import { useAuth } from "@/shared/contexts/auth-context" 
-import { AnimatePresence } from "framer-motion"
-import SettingsSidebar from "@/modules/personal-data/profile/components/settings-side-bar" 
-import Loading from "./loading"
-import { Menu, X } from "lucide-react"
+import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/shared/contexts/auth-context";
+import { AnimatePresence } from "framer-motion";
+import SettingsSidebar from "@/modules/personal-data/profile/components/settings-side-bar";
+import Loading from "./loading";
+import { Menu, X } from "lucide-react";
 
-export default function ProfileSettingsLayout({ children }: { children: React.ReactNode }) {
-  const router = useRouter()
-  const { userData, isLoading: isAuthLoading } = useAuth()
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false)
+export default function ProfileSettingsLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const router = useRouter();
+  const { userData, isLoading: isAuthLoading } = useAuth();
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  // O layout precisa dos dados do usuário para o cabeçalho
+  // ✅ REDIRECIONAMENTO É EFEITO COLATERAL
+  useEffect(() => {
+    if (!isAuthLoading && !userData) {
+      router.push("/login");
+    }
+  }, [isAuthLoading, userData, router]);
+
+  // Loading enquanto verifica autenticação
   if (isAuthLoading) {
-    return <Loading /> // Usa o skeleton da própria página
+    return <Loading />;
   }
 
-  // Se não houver usuário, não mostra o layout de perfil
+  // Evita renderizar layout enquanto redireciona
   if (!userData) {
-    router.push("/login")
-    return null
+    return null;
   }
 
   return (
     <main className="min-h-[calc(100vh-80px)] bg-gray-50">
-      {/* Layout Desktop e Mobile */}
       <div className="flex flex-col lg:flex-row gap-0 lg:gap-8 h-full">
-        
-        {/* Header Mobile com Botão Menu */}
+        {/* Header Mobile */}
         <div className="lg:hidden bg-white border-b border-gray-200 px-4 py-4 flex items-center justify-between sticky top-0 z-30">
           <h1 className="text-2xl font-semibold text-[#3C3C3C]">Perfil</h1>
           <button
@@ -53,27 +61,34 @@ export default function ProfileSettingsLayout({ children }: { children: React.Re
           />
         )}
 
-        {/* Sidebar: Desktop Fixo, Mobile Drawer */}
-        <aside className={`
-          fixed lg:static inset-y-0 left-0 top-[80px] w-full sm:w-80 lg:w-[464px] 
-          bg-white z-20 transform transition-transform duration-300 lg:transform-none
-          lg:top-0 overflow-y-auto flex-shrink-0
-          ${isSidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
-        `}>
+        {/* Sidebar */}
+        <aside
+          className={`
+            fixed lg:static inset-y-0 left-0 top-[80px] w-full sm:w-80 lg:w-[464px]
+            bg-white z-20 transform transition-transform duration-300 lg:transform-none
+            lg:top-0 overflow-y-auto flex-shrink-0
+            ${
+              isSidebarOpen
+                ? "translate-x-0"
+                : "-translate-x-full lg:translate-x-0"
+            }
+          `}
+        >
           <div className="p-4 sm:p-6 lg:p-10">
-            <SettingsSidebar cargo={userData.cargo} onItemClick={() => setIsSidebarOpen(false)} />
+            <SettingsSidebar
+              cargo={userData.cargo}
+              onItemClick={() => setIsSidebarOpen(false)}
+            />
           </div>
         </aside>
 
-        {/* Conteúdo Principal */}
+        {/* Conteúdo */}
         <section className="flex-1 w-full overflow-y-auto">
           <div className="p-4 sm:p-6 lg:p-8 max-w-4xl mx-auto">
-            <AnimatePresence mode="wait">
-              {children}
-            </AnimatePresence>
+            <AnimatePresence mode="wait">{children}</AnimatePresence>
           </div>
         </section>
       </div>
     </main>
-  )
+  );
 }

@@ -20,7 +20,7 @@ export function TurmaHeaderSelector({ turmas, selected, onSelect }: Props) {
       <button 
         onClick={() => setIsOpen(!isOpen)}
         // Hover Text na cor principal
-        className="flex items-center gap-2 text-xl md:text-2xl font-bold text-gray-800 hover:text-[#075F70] transition-colors focus:outline-none group"
+        className="cursor-pointer flex items-center gap-2 text-xl md:text-2xl font-bold text-gray-800 hover:text-[#075F70] transition-colors focus:outline-none group"
       >
         <span className="border-b-2 border-transparent group-hover:border-[#075F70]/30 border-dashed pb-0.5 transition-all">
             {selected?.nome}
@@ -43,7 +43,7 @@ export function TurmaHeaderSelector({ turmas, selected, onSelect }: Props) {
                   onSelect(turma);
                   setIsOpen(false);
                 }}
-                className="w-full text-left px-4 py-3 hover:bg-[#075F70]/5 flex items-center justify-between group transition-colors"
+                className="cursor-pointer w-full text-left px-4 py-3 hover:bg-[#075F70]/5 flex items-center justify-between group transition-colors"
               >
                 <div>
                     {/* Item Hover Text */}

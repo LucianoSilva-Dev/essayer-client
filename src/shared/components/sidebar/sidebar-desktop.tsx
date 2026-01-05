@@ -79,7 +79,7 @@ export function SidebarDesktop({
 
   return (
     <motion.aside
-      className="fixed left-4 h-[calc(100vh-40px)] mt-4 mb-5 rounded-[20px] bg-[#FFF] z-50 hidden md:flex flex-col justify-between shadow-lg"
+      className="fixed left-4 h-[calc(100vh-40px)] mt-4 mb-5 rounded-[20px] bg-[#FFF] z-50 hidden md:flex flex-col justify-between shadow-lg select-none"
       initial={{ width: 70 }}
       animate={{ width: isExpanded ? 240 : 70 }}
       transition={{ duration: 0.3, ease: "easeInOut" }}

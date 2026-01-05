@@ -54,7 +54,7 @@ export function Header({ currentPage, description, backPage }: HeaderProps) {
   }
 
   return (
-    <header className="fixed top-0 px-20 mb-[-30px] w-full bg-transparent z-40 backdrop-blur-md">
+    <header className="fixed top-0 px-20 mb-[-30px] w-full bg-transparent z-40 backdrop-blur-md select-none">
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
         {/* Lado Esquerdo: Seta de voltar + Nome da página */}
         <div className="flex items-center gap-4">

@@ -301,7 +301,7 @@ function RepertorioDetalhesContent() {
                 {/* Pill Principal */}
                 <div className="bg-white rounded-full px-5 py-2 flex items-center shadow-sm">
                   <span className={`font-bold ${typeColorClass}`}>
-                    {getRepertorioTypeLabel()}
+                    {getRepertorioTypeLabel() === 'Citacao' ? 'Citação' : getRepertorioTypeLabel()}
                   </span>
 
                   {title && (
@@ -315,12 +315,12 @@ function RepertorioDetalhesContent() {
                 </div>
 
                 {/* Ações Rápidas */}
-                <button onClick={handleLike} className="p-2 rounded-full hover:bg-white/50 transition-colors text-gray-700 hover:text-blue-600 flex items-center gap-1" title="Curtir">
+                <button onClick={handleLike} className="cursor-pointer p-2 rounded-full hover:bg-white/50 transition-colors text-gray-700 hover:text-blue-600 flex items-center gap-1" title="Curtir">
                   <ThumbsUp size={22} className={isLiked ? "fill-blue-600 text-blue-600" : ""} />
                   {likes > 0 && <span className="text-sm font-medium">{likes}</span>}
                 </button>
 
-                <button onClick={handleToggleFavorito} className="p-2 rounded-full hover:bg-white/50 transition-colors text-gray-700 hover:text-blue-600" title="Salvar">
+                <button onClick={handleToggleFavorito} className="cursor-pointer p-2 rounded-full hover:bg-white/50 transition-colors text-gray-700 hover:text-blue-600" title="Salvar">
                   <Bookmark size={22} className={isFavorito ? "fill-blue-600 text-blue-600" : ""} />
                 </button>
               </div>

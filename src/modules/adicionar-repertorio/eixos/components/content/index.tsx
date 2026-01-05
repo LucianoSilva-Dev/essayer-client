@@ -172,7 +172,7 @@ export default function EixosRepertorioContent() {
           </div>
 
           <div className="text-gray-600">
-            Criando {tipoRepertorio} {tipoObra && `- ${tipoObra}`}
+            Criando {tipoRepertorio === "citacao" ? "Citação" : tipoRepertorio === "obra" ? "Obra" : "Artigo"} {tipoObra && `- ${tipoObra}`}
           </div>
 
         </div>
@@ -206,7 +206,7 @@ export default function EixosRepertorioContent() {
             onClick={avancarParaDetalhes}
             disabled={eixosSelecionados.length === 0 || recortesSelecionados.length === 0}
             className={`
-              px-8 py-4 rounded-2xl font-medium text-lg transition-all duration-300
+              cursor-pointer px-8 py-4 rounded-2xl font-medium text-lg transition-all duration-300
               ${eixosSelecionados.length > 0 && recortesSelecionados.length > 0
                 ? 'bg-[#075F70] text-white hover:bg-[#064c58] shadow-lg hover:shadow-xl'
                 : 'bg-gray-300 text-gray-500 cursor-not-allowed'
