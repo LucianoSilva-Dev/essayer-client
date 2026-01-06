@@ -1,5 +1,9 @@
 import LandingPage from "../../modules/landing/components/content"
 
+export const metadata = {
+  title: 'Bem-vindos',
+};
+
 export default async function Landing() {
   // await new Promise(resolve => setTimeout(resolve, 1000)); //Simula um delay de 1 segundo
   return (

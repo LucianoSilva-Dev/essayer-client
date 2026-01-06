@@ -38,8 +38,14 @@ const openSans = Open_Sans({
 });
 
 export const metadata = {
-  title: 'Incita',
+   title: {
+    default: 'Incita',
+    template: 'Incita | %s',
+  },
   description: 'Sua plataforma de repertórios para redação',
+   icons: {
+    icon: '/icons/favicon.ico',
+   }
 };
 
 export default function RootLayout({
