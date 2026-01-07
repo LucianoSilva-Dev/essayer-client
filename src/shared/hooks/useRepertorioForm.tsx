@@ -7,15 +7,16 @@ import type { RepertorioFormData, ModeloRepertorio } from "@/types/repertorio";
 import { AlertCircle } from "lucide-react";
 
 // Importando os componentes de UI que foram criados
-import { RepertorioTypeSelector } from "@/components/repertorio/form/RepertorioTypeSelector";
-import { EixoSelector } from "@/components/repertorio/form/EixoSelector";
-import { RecorteSelector } from "@/components/repertorio/form/RecorteSelector";
-import { FormActions } from "@/components/repertorio/form/FormActions";
+
 
 // Importando os formulários de campos específicos
 import ObraForm from "@/shared/components/forms/obra-form";
 import ArtigoForm from "@/shared/components/forms/artigo-form";
 import CitacaoForm from "@/shared/components/forms/citacao-form";
+import { EixoSelector } from "@/modules/repertorio/form/EixoSelector";
+import { FormActions } from "@/modules/repertorio/form/FormActions";
+import { RecorteSelector } from "@/modules/repertorio/form/RecorteSelector";
+import { RepertorioTypeSelector } from "@/modules/repertorio/form/RepertorioTypeSelector";
 
 // ------------------------------------------------------------------
 // HOOK CUSTOMIZADO PARA GERENCIAR TODA A LÓGICA DO FORMULÁRIO

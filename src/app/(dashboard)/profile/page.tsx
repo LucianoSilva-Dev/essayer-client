@@ -5,5 +5,5 @@ export const metadata = {
 };
 
 export default function PersonalDataPage() {
-  return <PersonalDataForm />;
+  return <PersonalDataForm/>;
 }

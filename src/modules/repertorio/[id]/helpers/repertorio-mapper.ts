@@ -25,7 +25,7 @@ export const EIXO_ICON_MAP: Record<string, string> = {
 export const getIconForEixo = (nome: string) => {
   // Tenta buscar no EixoOptions (fonte da verdade)
   const option = EixoOptions.find(o => o.nome === nome);
-  if (option) return `/${option.icon}`;
+  if (option) return `/icons/${option.icon}`;
 
   // Fallback para o mapa manual
   return EIXO_ICON_MAP[nome] || "/icons/favicon.ico";

@@ -222,6 +222,7 @@ export default function ResetPasswordForm() {
           src="/images/login.jpg"
           alt="Redefinir senha background"
           fill
+          sizes="(max-width: 768px) 0px, 60vw"
           style={{ objectFit: 'cover' }}
           priority
         />

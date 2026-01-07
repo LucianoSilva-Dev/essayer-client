@@ -38,6 +38,7 @@ export function middleware(request: NextRequest) {
   if (!token) {
     const redirectUrl = request.nextUrl.clone()
     redirectUrl.pathname = REDIRECT_UNAUTHORIZED
+    console.log('Redirecionando para o Login, Token ausente.');
     return NextResponse.redirect(redirectUrl)
   }
 
@@ -49,6 +50,7 @@ export function middleware(request: NextRequest) {
       if (!protectedRoutes[route].includes(userRole)) {
         const redirectUrl = request.nextUrl.clone()
         redirectUrl.pathname = REDIRECT_FORBIDDEN
+        console.log(`Redirecionando para home, cargo do usuário ${userRole} não autorizado para ${route}`);
         return NextResponse.redirect(redirectUrl)
       }
     }

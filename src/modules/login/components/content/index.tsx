@@ -1,45 +1,45 @@
-"use client"
-import React, { useState } from "react"
-import Image from "next/image"
-import Link from "next/link"
-import { EyeOff, Eye } from "lucide-react"
-import { toast } from "react-toastify"
-import { useRouter, useSearchParams } from "next/navigation"
-import { useAuth } from '@/shared/contexts/auth-context'
-import { login as apiLogin } from '../../../../lib/apiCalls/auth/index'
-import { createProfessorRequest } from "../../../../lib/apiCalls/usuario"
-import { motion } from "framer-motion"
+"use client";
+import React, { useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import { EyeOff, Eye } from "lucide-react";
+import { toast } from "react-toastify";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useAuth } from "@/shared/contexts/auth-context";
+import { login as apiLogin } from "../../../../lib/apiCalls/auth/index";
+import { createProfessorRequest } from "../../../../lib/apiCalls/usuario";
+import { motion } from "framer-motion";
 
 export default function LoginForm() {
-  const { login, isLoggedIn } = useAuth()
-  const [showPassword, setShowPassword] = useState(false)
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const router = useRouter()
-  const [alreadyLogged, setAlreadylogged] = useState(true)
+  const { login, isLoggedIn } = useAuth();
+  const [showPassword, setShowPassword] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const router = useRouter();
+  const [alreadyLogged, setAlreadylogged] = useState(true);
 
   // Redireciona se já estiver logado
   React.useEffect(() => {
     if (isLoggedIn && alreadyLogged) {
-      toast.info("Você já está logado.")
-      router.replace("/profile")
+      toast.info("Você já está logado.");
+      router.replace("/profile");
     }
-  }, [isLoggedIn, router, alreadyLogged])
+  }, [isLoggedIn, router, alreadyLogged]);
 
-  const searchParams = useSearchParams()
-  const lattes = searchParams.get('lattes')
+  const searchParams = useSearchParams();
+  const lattes = searchParams.get("lattes");
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
 
     try {
-      setAlreadylogged(false)
-      const response = await apiLogin({ email, senha: password })
-      login(response)
+      setAlreadylogged(false);
+      const response = await apiLogin({ email, senha: password });
+      login(response);
 
-      router.push("/home")
-    } catch { }
-  }
+      router.push("/home");
+    } catch {}
+  };
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -50,7 +50,7 @@ export default function LoginForm() {
         delayChildren: 0.06,
       },
     },
-  }
+  };
 
   const itemVariants = {
     hidden: { opacity: 0, y: -18 } as const,
@@ -62,7 +62,7 @@ export default function LoginForm() {
         ease: "easeOut",
       } as const,
     },
-  }
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col md:flex-row px-4 md:px-10 py-6 w-full overflow-x-hidden">
@@ -84,7 +84,6 @@ export default function LoginForm() {
           <div className="w-full h-0.5 bg-[#D3D3D3] mb-4"></div>
         </motion.div>
 
-        {/* Descrição */}
         <motion.p
           variants={itemVariants}
           className="text-base md:text-[25px] text-[#3C3C3C] mb-6 md:mb-8 max-w-full md:max-w-2xl leading-relaxed"
@@ -189,10 +188,11 @@ export default function LoginForm() {
           src="/images/login.jpg"
           alt="Login background"
           fill
-          style={{ objectFit: 'cover' }}
+          sizes="(max-width: 768px) 0px, 60vw"
+          style={{ objectFit: "cover" }}
           priority
         />
       </motion.div>
     </div>
-  )
+  );
 }

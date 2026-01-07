@@ -236,6 +236,7 @@ export default function VerifyCodeForm() {
             src="/images/login.jpg"
             alt="Redefinição de senha background"
             fill
+            sizes="(max-width: 768px) 0px, 60vw"
             style={{ objectFit: 'cover' }}
             priority
           />

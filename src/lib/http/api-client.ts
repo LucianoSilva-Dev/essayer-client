@@ -1,5 +1,5 @@
-import axios from 'axios';
 import { handleAxiosError } from '@/shared/utils';
+import axios from 'axios';
 import { setupCache } from 'axios-cache-interceptor';
 
 const apiClient = setupCache(axios.create({
@@ -31,6 +31,7 @@ const processQueue = (error: any, token: any = null) => {
 export const refreshTokenOrWait = async () => {
   if (isRefreshing) {
     return new Promise((resolve, reject) => {
+      console.log('Aguardando refresh de token em andamento...');
       failedQueue.push({ resolve, reject });
     });
   }

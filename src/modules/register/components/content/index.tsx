@@ -1,24 +1,24 @@
-"use client"
-import React, { useState } from "react"
-import Image from "next/image"
-import Link from "next/link"
-import { toast } from "react-toastify"
-import { useRouter } from "next/navigation"
-import { useAuth } from "@/shared/contexts/auth-context"
-import { motion, AnimatePresence } from "framer-motion"
+"use client";
+import React, { useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/shared/contexts/auth-context";
+import { motion, AnimatePresence } from "framer-motion";
 
 // 1. Importar os componentes das etapas
-import UserTypeCard from "../type-card"
-import { NameInputs } from "../inputs/name"
-import { EmailLattesInputs } from "../inputs/email-lattes"
-import { PasswordInputs } from "../inputs/password"
+import UserTypeCard from "../type-card";
+import { NameInputs } from "../inputs/name";
+import { EmailLattesInputs } from "../inputs/email-lattes";
+import { PasswordInputs } from "../inputs/password";
 // 2. Importar o novo componente da Etapa 5
-import { VerifyCodeInputs } from "../verifyCode"
-import { RegisterFormData } from "../../types/register-form-types"
-import { CreateUsuarioBody } from "@/lib/apiCalls/usuario/types"
-import { createProfessorRequest, createUser } from "@/lib/apiCalls/usuario"
+import { VerifyCodeInputs } from "../verifyCode";
+import { RegisterFormData } from "../../types/register-form-types";
+import { CreateUsuarioBody } from "@/lib/apiCalls/usuario/types";
+import { createProfessorRequest, createUser } from "@/lib/apiCalls/usuario";
 
-type CardType = "student" | "teacher"
+type CardType = "student" | "teacher";
 
 // Função simples de validação de email
 const validateEmail = (email: string) => {
@@ -30,15 +30,15 @@ const validateEmail = (email: string) => {
 };
 
 // Regex de senha (do reset-password.tsx)
-const passwordRegex = /^(?=.*[a-z])(?=.*\d).{8,24}$/
+const passwordRegex = /^(?=.*[a-z])(?=.*\d).{8,24}$/;
 
 export default function RegisterForm() {
-  const { isLoggedIn } = useAuth()
-  const router = useRouter()
+  const { isLoggedIn } = useAuth();
+  const router = useRouter();
 
   // --- Estado da Etapa e do Formulário ---
-  const [step, setStep] = useState(1)
-  const [isSubmitting, setIsSubmitting] = useState(false) // Para o envio final
+  const [step, setStep] = useState(1);
+  const [isSubmitting, setIsSubmitting] = useState(false); // Para o envio final
   const [formData, setFormData] = useState<RegisterFormData>({
     userType: "student",
     firstName: "",
@@ -48,127 +48,131 @@ export default function RegisterForm() {
     password: "",
     confirmPassword: "",
     registerRequestId: "",
-  })
+  });
   // Cálculo de validação
   const passwordsMatch =
-    formData.password === formData.confirmPassword && formData.password.length > 0
-  const isPasswordValid = passwordRegex.test(formData.password)
+    formData.password === formData.confirmPassword &&
+    formData.password.length > 0;
+  const isPasswordValid = passwordRegex.test(formData.password);
 
   // Redireciona se já estiver logado
   React.useEffect(() => {
     if (isLoggedIn) {
-      toast.info("Você já está logado.")
-      router.replace("/profile")
+      toast.info("Você já está logado.");
+      router.replace("/profile");
     }
-  }, [isLoggedIn, router])
+  }, [isLoggedIn, router]);
 
   // --- Funções de Callback para os componentes filhos ---
   const handleUserTypeChange = (type: CardType) => {
-    setFormData((prev) => ({ ...prev, userType: type }))
-  }
+    setFormData((prev) => ({ ...prev, userType: type }));
+  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
-    setFormData((prev) => ({ ...prev, [name]: value }))
-  }
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
 
   // --- Lógica de navegação das etapas ---
   const handleNextStep = async (e: React.MouseEvent) => {
-    e.preventDefault()
+    e.preventDefault();
 
     // Etapa 1 -> 2
     if (step === 1) {
-      setStep(2)
-      return
+      setStep(2);
+      return;
     }
 
     // Etapa 2 -> 3
     if (step === 2) {
       if (!formData.firstName || !formData.lastName) {
-        toast.warn("Por favor, preencha seu nome e sobrenome.")
-        return
+        toast.warn("Por favor, preencha seu nome e sobrenome.");
+        return;
       }
-      setStep(3)
-      return
+      setStep(3);
+      return;
     }
 
     // Etapa 3 -> 4
     if (step === 3) {
       if (!formData.email || !validateEmail(formData.email)) {
-        toast.warn("Por favor, insira um email válido.")
-        return
+        toast.warn("Por favor, insira um email válido.");
+        return;
       }
-      if (formData.userType === 'teacher' && !formData.lattes) {
-        toast.warn("Por favor, insira seu Lattes.")
-        return
+      if (formData.userType === "teacher" && !formData.lattes) {
+        toast.warn("Por favor, insira seu Lattes.");
+        return;
       }
-      setStep(4)
-      return
+      setStep(4);
+      return;
     }
 
     // Etapa 4 -> Envio da API e -> Etapa 5
     if (step === 4) {
       if (!isPasswordValid) {
-        toast.warn("Por favor, insira uma senha que siga as regras.")
-        return
+        toast.warn("Por favor, insira uma senha que siga as regras.");
+        return;
       }
       if (!passwordsMatch) {
-        toast.warn("As senhas não coincidem.")
-        return
+        toast.warn("As senhas não coincidem.");
+        return;
       }
 
-      setIsSubmitting(true)
-      console.log("ENVIANDO FORMULÁRIO:", formData)
+      setIsSubmitting(true);
+      console.log("ENVIANDO FORMULÁRIO:", formData);
 
       const formDataToUserCreateUsuarioBody: CreateUsuarioBody = {
         email: formData.email,
         nome: `${formData.firstName} ${formData.lastName}`,
         senha: formData.password,
-      }
+      };
       try {
-        const response = await createUser(formDataToUserCreateUsuarioBody)
-        formData.registerRequestId = response.id
-        toast.info("Enviamos um código de verificação para o seu email.")
-        setStep(5) // Avança para a etapa de verificação
+        const response = await createUser(formDataToUserCreateUsuarioBody);
+        formData.registerRequestId = response.id;
+        toast.info("Enviamos um código de verificação para o seu email.");
+        setStep(5); // Avança para a etapa de verificação
       } catch (e) {
-        console.error("Erro no registro:", e)
+        console.error("Erro no registro:", e);
       } finally {
-        setIsSubmitting(false)
+        setIsSubmitting(false);
       }
-
     }
 
     // A etapa 5 tem sua própria lógica de submissão
     // dentro do VerifyCodeInputs, então este
     // handleNextStep não fará nada na etapa 5.
-  }
+  };
 
   // Função para o botão "Voltar"
   const handlePrevStep = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault()
+    e.preventDefault();
     if (step > 1) {
-      setStep((prev) => prev - 1)
+      setStep((prev) => prev - 1);
     }
-  }
+  };
 
   // --- 3. Funções para a Etapa 5 ---
 
   // Chamado quando a verificação do código é bem-sucedida
   const handleVerifySuccess = async (id: string) => {
-    if (formData.userType === 'teacher') await createProfessorRequest(id, {lattes: formData.lattes})
-    router.push("/login?message=register-success")
-  }
+    if (formData.userType === "teacher")
+      await createProfessorRequest(id, { lattes: formData.lattes });
+    router.push("/login?message=register-success");
+  };
 
   // Chamado quando o usuário pede um novo código
-  const handleResendCode = async (email: string, nome: string, senha: string) => {
-    const createUsuarioBody: CreateUsuarioBody = { email, nome, senha }
-    console.log('userData para reenvio de código: ', createUsuarioBody)
+  const handleResendCode = async (
+    email: string,
+    nome: string,
+    senha: string
+  ) => {
+    const createUsuarioBody: CreateUsuarioBody = { email, nome, senha };
+    console.log("userData para reenvio de código: ", createUsuarioBody);
     // re-envia o codigo criando o usuario novamente (não duplicará o email)
-    await createUser(createUsuarioBody)
-    console.log("API de reenvio de código chamada para:", formData.email)
+    await createUser(createUsuarioBody);
+    console.log("API de reenvio de código chamada para:", formData.email);
     // A toast de sucesso é mostrada dentro do VerifyCodeInputs
-  }
-
+  };
 
   // (Variantes permanecem as mesmas)
   const containerVariants = {
@@ -180,7 +184,7 @@ export default function RegisterForm() {
         delayChildren: 0.06,
       },
     },
-  }
+  };
 
   const itemVariants = {
     hidden: { opacity: 0, y: -18 } as const,
@@ -192,13 +196,25 @@ export default function RegisterForm() {
         ease: "easeOut",
       } as const,
     },
-  }
+  };
 
   const stepVariants = {
-    hidden: { opacity: 0, x: 100, transition: { duration: 0.4, ease: "easeIn" } } as const,
-    visible: { opacity: 1, x: 0, transition: { duration: 0.4, ease: "easeOut" } } as const,
-    exit: { opacity: 0, x: -100, transition: { duration: 0.4, ease: "easeIn" } } as const,
-  }
+    hidden: {
+      opacity: 0,
+      x: 100,
+      transition: { duration: 0.4, ease: "easeIn" },
+    } as const,
+    visible: {
+      opacity: 1,
+      x: 0,
+      transition: { duration: 0.4, ease: "easeOut" },
+    } as const,
+    exit: {
+      opacity: 0,
+      x: -100,
+      transition: { duration: 0.4, ease: "easeIn" },
+    } as const,
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col md:flex-row px-4 md:px-10 py-6 w-full overflow-x-hidden">
@@ -222,7 +238,11 @@ export default function RegisterForm() {
 
         {/* --- Container das Etapas com Animação --- */}
         {/* A altura mínima ajuda a evitar "saltos" de layout */}
-        <div className={`${step === 5 ? "" : "mb-6"} min-h-[350px] transition-all duration-300`} >
+        <div
+          className={`${
+            step === 5 ? "" : "mb-6"
+          } min-h-[350px] transition-all duration-300`}
+        >
           <AnimatePresence mode="wait">
             {step === 1 && (
               <motion.div
@@ -259,7 +279,8 @@ export default function RegisterForm() {
                   variants={itemVariants}
                   className="text-base md:text-[25px] text-[#3C3C3C] mb-6 md:mb-8 max-w-full md:max-w-2xl leading-relaxed"
                 >
-                  Cadastro para {formData.userType === "student" ? "Estudante" : "Educador"}
+                  Cadastro para{" "}
+                  {formData.userType === "student" ? "Estudante" : "Educador"}
                 </motion.p>
                 <NameInputs
                   firstName={formData.firstName}
@@ -283,7 +304,8 @@ export default function RegisterForm() {
                   variants={itemVariants}
                   className="text-base md:text-[25px] text-[#3C3C3C] mb-6 md:mb-8 max-w-full md:max-w-2xl leading-relaxed"
                 >
-                  Cadastro para {formData.userType === "student" ? "Estudante" : "Educador"}
+                  Cadastro para{" "}
+                  {formData.userType === "student" ? "Estudante" : "Educador"}
                 </motion.p>
                 <EmailLattesInputs
                   email={formData.email}
@@ -308,7 +330,8 @@ export default function RegisterForm() {
                   variants={itemVariants}
                   className="text-base md:text-[25px] text-[#3C3C3C] mb-6 md:mb-8 max-w-full md:max-w-2xl leading-relaxed"
                 >
-                  Cadastro para {formData.userType === "student" ? "Estudante" : "Educador"}
+                  Cadastro para{" "}
+                  {formData.userType === "student" ? "Estudante" : "Educador"}
                 </motion.p>
                 <PasswordInputs
                   password={formData.password}
@@ -338,9 +361,13 @@ export default function RegisterForm() {
                   requestId={formData.registerRequestId}
                   itemVariants={itemVariants}
                   onVerifySuccess={handleVerifySuccess}
-                  onResendCode={() => handleResendCode(
-                    formData.email, `${formData.firstName} ${formData.lastName}`, formData.password
-                  )}
+                  onResendCode={() =>
+                    handleResendCode(
+                      formData.email,
+                      `${formData.firstName} ${formData.lastName}`,
+                      formData.password
+                    )
+                  }
                 />
               </motion.div>
             )}
@@ -351,7 +378,9 @@ export default function RegisterForm() {
         {step < 5 && (
           <motion.div
             variants={itemVariants}
-            className={`flex flex-col-reverse items-center gap-6 md:flex-row ${step === 1 ? "md:justify-end" : "md:justify-between"} `}
+            className={`flex flex-col-reverse items-center gap-6 md:flex-row ${
+              step === 1 ? "md:justify-end" : "md:justify-between"
+            } `}
             // Animação para os botões desaparecerem
             initial={{ opacity: 1, y: 0 }}
             animate={{ opacity: 1, y: 0 }}
@@ -395,8 +424,8 @@ export default function RegisterForm() {
               {isSubmitting
                 ? "Cadastrando..."
                 : step === 4
-                  ? "Cadastrar-se"
-                  : "Avançar"}
+                ? "Cadastrar-se"
+                : "Avançar"}
             </button>
           </motion.div>
         )}
@@ -429,10 +458,11 @@ export default function RegisterForm() {
           src="/images/login.jpg"
           alt="Login background"
           fill
-          style={{ objectFit: 'cover' }}
+          sizes="(max-width: 768px) 0px, 60vw"
+          style={{ objectFit: "cover" }}
           priority
         />
       </motion.div>
     </div>
-  )
+  );
 }

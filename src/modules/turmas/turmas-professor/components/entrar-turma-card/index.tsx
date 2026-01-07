@@ -3,15 +3,17 @@ import Image from "next/image";
 
 export default function EntrarTurmaCard({ className }: { className?: string }) {
   return (
-    <div className={`relative w-full h-full min-h-[20rem] bg-[#E5EFF0] rounded-[2.5rem] overflow-hidden cursor-pointer group transition-all duration-300 hover:shadow-lg hover:-translate-y-1 ${className}`}>
-      
+    <div
+      className={`relative w-full h-full min-h-[20rem] bg-[#E5EFF0] rounded-[2.5rem] overflow-hidden cursor-pointer group transition-all duration-300 hover:shadow-lg hover:-translate-y-1 ${className}`}
+    >
       {/* --- IMAGEM --- */}
       <div className="absolute inset-0 z-0">
         <div className="relative w-full h-[85%] transform transition-transform duration-500 group-hover:scale-105 origin-bottom">
-           <Image
+          <Image
             src="/images/entrarTurmaStudents.png"
             alt="Ilustração de estudantes"
             fill
+            sizes="100vw"
             className="object-contain object-top p-6"
             priority
           />
@@ -30,8 +32,8 @@ export default function EntrarTurmaCard({ className }: { className?: string }) {
       </div>
 
       {/* Link Overlay (Cobre todo o card) */}
-      <Link 
-        href="/entrar_turma" 
+      <Link
+        href="/entrar_turma"
         className="absolute inset-0 z-20"
         aria-label="Ir para página de entrar em turma"
       />

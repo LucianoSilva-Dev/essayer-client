@@ -1,12 +1,19 @@
-import Image from "next/image"
-import Link from "next/link"
+import Image from "next/image";
+import Link from "next/link";
 
 export function Logo() {
   return (
     <Link href="/home" className="flex items-center select-none">
       <div className="relative h-25 w-25">
-        <Image src="/icons/favicon_2d.png" alt="Logo" fill className="object-contain" priority />
+        <Image
+          src="/icons/favicon_2d.png"
+          alt="Logo"
+          fill
+          sizes="6.25rem"
+          className="object-contain"
+          priority
+        />
       </div>
     </Link>
-  )
+  );
 }

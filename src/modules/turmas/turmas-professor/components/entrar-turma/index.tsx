@@ -40,6 +40,7 @@ export default function NovoEntrarTurmaCard({ className }: { className?: string 
                 src="/images/entrarTurmaStudents.png"
                 alt="Ilustração de estudantes"
                 fill
+                sizes="90vw"
                 className="object-contain object-bottom drop-shadow-lg"
                 priority
             />
