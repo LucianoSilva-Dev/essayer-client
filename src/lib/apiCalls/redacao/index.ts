@@ -13,7 +13,7 @@ export async function encaminharCorrecaoRedacao(id: string, texto: string, tema:
     tema
   })
   return response.data
-}
+}                       
 
 export function listenCorrecaoRedacao(
     redacaoId: string, 

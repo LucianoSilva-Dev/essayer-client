@@ -36,33 +36,27 @@ export function createResilientEventSource(
     });
 
     eventSource.onerror = async () => {
-      // O EventSource nativo não fornece detalhes do erro (status code),
-      // mas erros de conexão ou auth (401) disparam este evento.
-      // Fechamos a conexão atual para evitar retentativas automáticas do browser sem refresh.
       eventSource?.close();
-
       if (isClosed) return;
 
+      // pequeno backoff evita loop violento
+      await new Promise(r => setTimeout(r, 500));
+
       try {
-        // Tenta fazer refresh do token usando a lógica centralizada
         await refreshTokenOrWait();
-        
-        // Se o refresh funcionar, reconectamos
         connect();
-      } catch (refreshError) {
-        console.error('Falha ao renovar token para SSE:', refreshError);
-        // Se o refresh falhar, a aplicação deve lidar com o logout via evento auth:sessionExpired
-        // Não tentamos reconectar
+      } catch {
+        // deixa morrer
       }
     };
   };
 
-  connect();
+    connect();
 
-  return {
-    close: () => {
-      isClosed = true;
-      eventSource?.close();
-    }
-  };
-}
+    return {
+      close: () => {
+        isClosed = true;
+        eventSource?.close();
+      }
+    };
+  }
