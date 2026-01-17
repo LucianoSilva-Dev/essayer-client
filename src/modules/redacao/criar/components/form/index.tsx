@@ -74,13 +74,13 @@ export function CriarRedacaoForm({ onRedacaoCreated, mockThemes }: CriarRedacaoF
     <>
       <form
         onSubmit={handleSubmit}
-        className="bg-white p-8 md:p-12 rounded-[48px] shadow-xl shadow-[#075F70]/5 border border-gray-100 font-montserrat w-full relative z-10"
+        className="bg-white p-8 md:p-12 rounded-[48px] shadow-xl shadow-brand-teal-dark/5 border border-gray-100 font-montserrat w-full relative z-10"
       >
         <div className="flex flex-col gap-10">
           
           {/* --- SEÇÃO DO TEMA --- */}
           <div className="w-full space-y-3">
-            <label htmlFor="tema" className="text-xl font-medium text-[#3C3C3C] ml-2 block">
+            <label htmlFor="tema" className="text-xl font-medium text-neutral-dark ml-2 block">
               Tema da redação
             </label>
 
@@ -101,8 +101,8 @@ export function CriarRedacaoForm({ onRedacaoCreated, mockThemes }: CriarRedacaoF
                 className={`
                   w-full ${ELEMENT_HEIGHT} pl-8 pr-8 md:pr-[13rem] 
                   bg-gray-50 border-2 
-                  ${isFocused ? 'border-[#075F70] bg-white' : 'border-transparent hover:bg-gray-100'}
-                  rounded-[28px] text-lg text-[#3C3C3C] font-medium
+                  ${isFocused ? 'border-brand-teal-dark bg-white' : 'border-transparent hover:bg-gray-100'}
+                  rounded-[28px] text-lg text-neutral-dark font-medium
                   placeholder:text-gray-400 placeholder:font-normal
                   focus:outline-none transition-all duration-200
                 `}
@@ -113,9 +113,9 @@ export function CriarRedacaoForm({ onRedacaoCreated, mockThemes }: CriarRedacaoF
                 onClick={() => setIsModalOpen(true)}
                 className={`cursor-pointer
                   hidden md:flex absolute right-3 top-3 bottom-3 px-6 
-                  bg-white text-[#075F70] border border-gray-200
+                  bg-white text-brand-teal-dark border border-gray-200
                   rounded-[20px] font-medium text-sm items-center gap-2
-                  hover:border-[#075F70] hover:bg-[#075F70]/5
+                  hover:border-brand-teal-dark hover:bg-brand-teal-dark/5
                   transition-all duration-200 active:scale-95
                 `}
               >
@@ -130,9 +130,9 @@ export function CriarRedacaoForm({ onRedacaoCreated, mockThemes }: CriarRedacaoF
               onClick={() => setIsModalOpen(true)}
               className={`cursor-pointer
                 md:hidden mt-2 w-full flex items-center justify-center gap-2 px-4 py-3
-                bg-white text-[#075F70] border border-gray-200
+                bg-white text-brand-teal-dark border border-gray-200
                 rounded-[20px] font-medium text-sm
-                hover:border-[#075F70] hover:bg-[#075F70]/5
+                hover:border-brand-teal-dark hover:bg-brand-teal-dark/5
                 transition-all duration-200 active:scale-95
               `}
             >
@@ -146,7 +146,7 @@ export function CriarRedacaoForm({ onRedacaoCreated, mockThemes }: CriarRedacaoF
             
             {/* Controle de Duração */}
             <div className="w-full lg:w-auto space-y-3">
-              <label className="text-xl font-medium text-[#3C3C3C] ml-2 block">
+              <label className="text-xl font-medium text-neutral-dark ml-2 block">
                 Duração estimada
               </label>
 
@@ -171,7 +171,7 @@ export function CriarRedacaoForm({ onRedacaoCreated, mockThemes }: CriarRedacaoF
                     disabled={duration <= 30}
                     className={`
                       cursor-pointer w-12 h-12 rounded-full flex items-center justify-center
-                      text-gray-400 hover:text-[#075F70] hover:bg-white hover:shadow-sm
+                      text-gray-400 hover:text-brand-teal-dark hover:bg-white hover:shadow-sm
                       disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-gray-400
                       transition-all duration-200 active:scale-90 select-none
                     `}
@@ -182,7 +182,7 @@ export function CriarRedacaoForm({ onRedacaoCreated, mockThemes }: CriarRedacaoF
                   <div className="flex flex-col items-center justify-center w-20">
                     <span
                       key={key}
-                      className="text-3xl font-semibold text-[#3C3C3C] leading-none tracking-tight select-none"
+                      className="text-3xl font-semibold text-neutral-dark leading-none tracking-tight select-none"
                       style={{ animation: `duration-change 0.3s ease-out forwards` }}
                     >
                       {formattedDuration}
@@ -201,7 +201,7 @@ export function CriarRedacaoForm({ onRedacaoCreated, mockThemes }: CriarRedacaoF
                     disabled={duration >= 180}
                     className={`
                       cursor-pointer w-12 h-12 rounded-full flex items-center justify-center
-                      text-gray-400 hover:text-[#075F70] hover:bg-white hover:shadow-sm
+                      text-gray-400 hover:text-brand-teal-dark hover:bg-white hover:shadow-sm
                       disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-gray-400
                       transition-all duration-200 active:scale-90 select-none
                     `}
@@ -210,7 +210,7 @@ export function CriarRedacaoForm({ onRedacaoCreated, mockThemes }: CriarRedacaoF
                   </button>
                 </div>
 
-                <div className="w-12 h-12 bg-[#075F70] rounded-full flex items-center justify-center shadow-sm ml-2">
+                <div className="w-12 h-12 bg-brand-teal-dark rounded-full flex items-center justify-center shadow-sm ml-2">
                    <Timer size={22} className="text-white" />
                 </div>
 
@@ -228,7 +228,7 @@ export function CriarRedacaoForm({ onRedacaoCreated, mockThemes }: CriarRedacaoF
                 transition-all duration-200 active:scale-[0.98]
                 ${isButtonDisabled
                   ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
-                  : 'bg-[#075F70] text-white hover:bg-[#064e5c] shadow-lg shadow-[#075F70]/20'
+                  : 'bg-brand-teal-dark text-white hover:bg-[#064e5c] shadow-lg shadow-brand-teal-dark/20'
                 }
               `}
             >

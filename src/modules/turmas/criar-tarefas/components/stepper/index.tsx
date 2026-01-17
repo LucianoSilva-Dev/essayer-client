@@ -26,8 +26,8 @@ export function Stepper() {
         </h2>
         
         <div className="flex items-center gap-2 bg-teal-50 border border-teal-100 px-4 py-1.5 rounded-full self-start md:self-auto transition-colors hover:bg-teal-100/80">
-          <MousePointerClick className="w-4 h-4 text-[#075F70]" />
-          <span className="text-xs font-medium text-[#075F70] uppercase tracking-wide">
+          <MousePointerClick className="w-4 h-4 text-brand-teal-dark" />
+          <span className="text-xs font-medium text-brand-teal-dark uppercase tracking-wide">
             Navegação interativa disponível
           </span>
         </div>
@@ -68,17 +68,17 @@ export function Stepper() {
                     
                     // ESTADO 1: ATIVO (Destaque total)
                     isActive 
-                      ? "bg-[#075F70] border-[#075F70] text-white ring-4 ring-[#075F70]/20 scale-110 z-20" 
+                      ? "bg-brand-teal-dark border-brand-teal-dark text-white ring-4 ring-brand-teal-dark/20 scale-110 z-20" 
                       : "",
 
                     // ESTADO 2: COMPLETADO (Verde sólido)
                     isCompleted 
-                      ? "bg-[#075F70] border-[#075F70] text-white hover:bg-[#064b57]" 
+                      ? "bg-brand-teal-dark border-brand-teal-dark text-white hover:bg-[#064b57]" 
                       : "",
 
                     // ESTADO 3: FUTURO ACESSÍVEL (Branco, mas interativo)
                     !isActive && !isCompleted && !isLocked
-                      ? "bg-white border-gray-300 text-gray-500 group-hover:border-[#075F70] group-hover:text-[#075F70] group-hover:bg-teal-50"
+                      ? "bg-white border-gray-300 text-gray-500 group-hover:border-brand-teal-dark group-hover:text-brand-teal-dark group-hover:bg-teal-50"
                       : "",
 
                     // ESTADO 4: BLOQUEADO (Cinza travado)
@@ -115,10 +115,10 @@ export function Stepper() {
                   className={cn(
                     "absolute top-[60px] text-center font-montserrat text-[13px] md:text-[14px] font-medium leading-tight w-[140px] transition-all duration-300",
                     isActive 
-                      ? "text-[#075F70] font-bold translate-y-1" 
+                      ? "text-brand-teal-dark font-bold translate-y-1" 
                       : isLocked 
                         ? "text-gray-300" // Texto bem apagado se bloqueado
-                        : "text-[#898787] group-hover:text-[#075F70]"
+                        : "text-[#898787] group-hover:text-brand-teal-dark"
                   )}
                   style={{ 
                     left: "50%", 
@@ -134,7 +134,7 @@ export function Stepper() {
                 <div className="flex-1 mx-2 md:mx-4 relative h-[2px] bg-gray-200 rounded-full overflow-hidden">
                     <div 
                         className={cn(
-                            "absolute top-0 left-0 h-full w-full transition-transform duration-500 origin-left bg-[#075F70]",
+                            "absolute top-0 left-0 h-full w-full transition-transform duration-500 origin-left bg-brand-teal-dark",
                             // A linha só preenche se o passo foi completado
                             step.id < currentStep ? "scale-x-100" : "scale-x-0"
                         )}

@@ -45,7 +45,7 @@ export default function NotificationBell() {
       <button
         onClick={() => setIsOpen(!isOpen)}
         className={`relative p-2 rounded-full transition-all duration-300 outline-none ${
-            isOpen ? 'bg-[#E5EFF0] text-[#075F70]' : 'hover:bg-gray-100 text-gray-600 hover:text-[#075F70]'
+            isOpen ? 'bg-[#E5EFF0] text-brand-teal-dark' : 'hover:bg-gray-100 text-gray-600 hover:text-brand-teal-dark'
         }`}
       >
         <BellIcon className="w-6 h-6" />
@@ -69,13 +69,13 @@ export default function NotificationBell() {
           >
             {/* Header */}
             <div className="flex items-center justify-between p-4 border-b border-gray-50 bg-gray-50/50">
-              <h3 className="font-montserrat font-bold text-[#3C3C3C] text-sm">
-                Notificações {unreadCount > 0 && <span className="text-[#075F70]">({unreadCount})</span>}
+              <h3 className="font-montserrat font-bold text-neutral-dark text-sm">
+                Notificações {unreadCount > 0 && <span className="text-brand-teal-dark">({unreadCount})</span>}
               </h3>
               {unreadCount > 0 && (
                 <button 
                   onClick={handleMarkAllAsRead}
-                  className="text-xs text-[#075F70] font-semibold cursor-pointer hover:underline"
+                  className="text-xs text-brand-teal-dark font-semibold cursor-pointer hover:underline"
                 >
                   Ler todas
                 </button>

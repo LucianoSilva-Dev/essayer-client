@@ -19,7 +19,7 @@ export function Step5_Revisao() {
     <div className="flex flex-col gap-8 max-w-6xl mx-auto pb-24 animate-in fade-in slide-in-from-right-8 duration-500">
       
       <div className="text-center space-y-2 mb-4">
-        <h2 className="font-montserrat font-bold text-[30px] text-[#3C3C3C]">
+        <h2 className="font-montserrat font-bold text-[30px] text-neutral-dark">
             Quase lá!
         </h2>
         <p className="text-gray-500 font-montserrat text-lg">
@@ -38,7 +38,7 @@ export function Step5_Revisao() {
                 
                 <div className="z-10 flex-1 space-y-4">
                     <div className="flex items-center gap-3 mb-2">
-                        <span className="bg-[#E5EFF0] text-[#075F70] px-3 py-1 rounded-full text-xs font-bold font-montserrat uppercase tracking-wider">
+                        <span className="bg-[#E5EFF0] text-brand-teal-dark px-3 py-1 rounded-full text-xs font-bold font-montserrat uppercase tracking-wider">
                             Eixo Temático
                         </span>
                         <div className="flex items-center gap-2 text-gray-600 font-medium font-montserrat text-sm">
@@ -58,14 +58,14 @@ export function Step5_Revisao() {
                     
                     <div>
                         <h3 className="text-gray-400 text-sm font-montserrat font-medium mb-1">Título da Tarefa</h3>
-                        <p className="text-[24px] font-bold text-[#3C3C3C] font-montserrat leading-tight">
+                        <p className="text-[24px] font-bold text-neutral-dark font-montserrat leading-tight">
                             {taskData.titulo || "Sem título definido"}
                         </p>
                     </div>
 
                     <div>
                         <h3 className="text-gray-400 text-sm font-montserrat font-medium mb-1">Tema da Redação</h3>
-                        <p className="text-[18px] text-[#3C3C3C] font-montserrat italic bg-gray-50 p-4 rounded-xl border-l-4 border-[#075F70]">
+                        <p className="text-[18px] text-neutral-dark font-montserrat italic bg-gray-50 p-4 rounded-xl border-l-4 border-brand-teal-dark">
                             "{taskData.tema || "Sem tema definido"}"
                         </p>
                     </div>
@@ -74,7 +74,7 @@ export function Step5_Revisao() {
 
             {/* Card Descrição */}
             <div className="bg-white p-8 rounded-[30px] shadow-sm border border-gray-100 space-y-4">
-                <div className="flex items-center gap-2 text-[#075F70] mb-2">
+                <div className="flex items-center gap-2 text-brand-teal-dark mb-2">
                     <FileText size={20} />
                     <h3 className="font-bold font-montserrat text-lg">Descrição da tarefa</h3>
                 </div>
@@ -85,7 +85,7 @@ export function Step5_Revisao() {
 
             {/* Lista de Repertórios */}
             <div className="space-y-4">
-                <div className="flex items-center gap-2 text-[#075F70] px-2">
+                <div className="flex items-center gap-2 text-brand-teal-dark px-2">
                     <Quote size={20} />
                     <h3 className="font-bold font-montserrat text-lg">
                         Textos Motivadores ({taskData.repertorios.length})
@@ -116,7 +116,7 @@ export function Step5_Revisao() {
         <div className="space-y-6">
             
             {/* Card de Prazo */}
-            <div className="bg-[#075F70] text-white p-8 rounded-[30px] shadow-lg relative overflow-hidden group">
+            <div className="bg-brand-teal-dark text-white p-8 rounded-[30px] shadow-lg relative overflow-hidden group">
                  <div className="absolute -right-10 -top-10 bg-white/10 w-40 h-40 rounded-full blur-2xl group-hover:bg-white/20 transition-all" />
                  
                  <h3 className="font-montserrat font-semibold text-lg opacity-80 mb-6 flex items-center gap-2">
@@ -147,14 +147,14 @@ export function Step5_Revisao() {
 
             {/* Card de Duração */}
             <div className="bg-white p-8 rounded-[30px] shadow-sm border border-gray-100 flex items-center gap-4">
-                <div className="w-14 h-14 bg-[#E5EFF0] rounded-full flex items-center justify-center text-[#075F70]">
+                <div className="w-14 h-14 bg-[#E5EFF0] rounded-full flex items-center justify-center text-brand-teal-dark">
                     <Timer size={28} />
                 </div>
                 <div>
                     <p className="text-gray-400 text-xs font-montserrat font-bold uppercase tracking-wide">
                         Tempo de Prova
                     </p>
-                    <p className="text-2xl font-bold text-[#3C3C3C] font-montserrat">
+                    <p className="text-2xl font-bold text-neutral-dark font-montserrat">
                         {taskData.duracao} min
                     </p>
                 </div>

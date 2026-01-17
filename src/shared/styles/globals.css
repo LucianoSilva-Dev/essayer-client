@@ -2,41 +2,46 @@
 @tailwind utilities;
 
 /* Variáveis de cor */
+@theme {
+  --color-brand-teal-dark: #075f70;
+  --color-brand-teal-light: #66d6e8;
+  --color-brand-teal-secondary: #024D4D;
+  --color-brand-teal-tertiary: brand-teal-tertiary;
+
+  --color-surface-light: #E8E8E8;
+
+  --color-neutral-dark: #3C3C3C;
+}
+
 :root {
   --background: 0 0% 100%;
   --foreground: 0 0% 10%;
-
   --primary: 220 60% 50%;
   --primary-foreground: 0 0% 100%;
-
   --muted: 0 0% 95%;
   --muted-foreground: 0 0% 40%;
-
   --border: 0 0% 80%;
 }
 
 .dark {
   --background: 0 0% 5%;
   --foreground: 0 0% 95%;
-
   --primary: 220 60% 50%;
   --primary-foreground: 0 0% 100%;
-
   --muted: 0 0% 15%;
   --muted-foreground: 0 0% 60%;
-
   --border: 0 0% 20%;
 }
 
 /* Base Tailwind */
 @layer base {
   * {
-    border: 'hsl(var(--border))';
+    border: "hsl(var(--border))";
   }
 
   body {
-    background: 'hsl(var(--background))';
-    foreground: 'hsl(var(--foreground))';
+    background: "hsl(var(--background))";
+    foreground: "hsl(var(--foreground))";
     font-family: Arial, Helvetica, sans-serif;
   }
 }
@@ -48,14 +53,14 @@
   }
 }
 
-@keyframes upDown{
-  0%{
+@keyframes upDown {
+  0% {
     transform: translateY(0px);
   }
-  50%{
+  50% {
     transform: translateY(20px);
   }
-  100%{
+  100% {
     transform: translateY(0px);
   }
 }
@@ -76,12 +81,14 @@
 /* Adicione ao seu globals.css existente */
 
 /* Fontes personalizadas */
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Onest:wght@500&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Onest:wght@500&display=swap");
+
+/* Variaveis de cor */
 
 /* Estilos específicos para a página de login */
 .login-container {
   min-height: 100vh;
-  background: #F1F1F2;
+  background: #f1f1f2;
 }
 
 .login-content {
@@ -96,22 +103,22 @@
 .login-visual {
   flex: 1;
   position: relative;
-  background: #E0E0E0;
+  background: #e0e0e0;
   border-radius: 25px 0 0 25px;
   overflow: hidden;
 }
 
 /* Garantir que as cores personalizadas funcionem */
 .text-custom-blue {
-  color: #075F70;
+  color: #075f70;
 }
 
 .bg-custom-blue {
-  background-color: #075F70;
+  background-color: #075f70;
 }
 
 .border-custom-blue {
-  border-color: #075F70;
+  border-color: #075f70;
 }
 
 /* Adicione isto ao seu globals.css */
@@ -119,6 +126,6 @@
   display: none;
 }
 .no-scrollbar {
-  -ms-overflow-style: none;  /* IE e Edge */
-  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none; /* IE e Edge */
+  scrollbar-width: none; /* Firefox */
 }

@@ -78,20 +78,20 @@ useEffect(() => {
         <button
           onClick={() => onTipoVisualizacaoChange("salvos")}
           className={`w-[330px] h-[54px] rounded-[40px] text-[22px] font-montserrat font-medium italic transition-all duration-500 origin-bottom cursor-pointer px-10 ${tipoVisualizacao === "salvos"
-            ? "bg-[#CDDEE2] text-[#075F70] opacity-100"
-            : "bg-white text-[#075F70] opacity-40 scale-97"
+            ? "bg-[#CDDEE2] text-brand-teal-dark opacity-100"
+            : "bg-white text-brand-teal-dark opacity-40 scale-97"
             }`}
-          style={{ boxShadow: "0px 3px 0px #075F70B2" }}
+          style={{ boxShadow: "0px 3px 0px brand-teal-darkB2" }}
         >
           Repertórios salvos
         </button>
         <button
           onClick={() => onTipoVisualizacaoChange("todos")}
           className={`w-[330px] h-[54px] rounded-[40px] text-[22px] font-montserrat font-medium italic transition-all duration-500 origin-bottom cursor-pointer px-10 ${tipoVisualizacao === "todos"
-            ? "bg-[#CDDEE2] text-[#075F70] opacity-100"
-            : "bg-white text-[#075F70] opacity-40 scale-97"
+            ? "bg-[#CDDEE2] text-brand-teal-dark opacity-100"
+            : "bg-white text-brand-teal-dark opacity-40 scale-97"
             }`}
-          style={{ boxShadow: "0px 3px 0px #075F70B2" }}
+          style={{ boxShadow: "0px 3px 0px brand-teal-darkB2" }}
         >
           Repertórios disponíveis
         </button>
@@ -166,11 +166,11 @@ useEffect(() => {
                           key={eixo.nome}
                           onClick={() => handleEixoToggle(eixo.nome)}
                           className={`cursor-pointer flex items-center pl-0 pr-4 py-0 text-md rounded-full transition-all duration-300 font-medium ${eixosAtivos.includes(eixo.nome)
-                            ? "bg-[#075F70] text-[#F1F1F1] shadow-sm"
+                            ? "bg-brand-teal-dark text-[#F1F1F1] shadow-sm"
                             : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                             }`}
                         >
-                          <div className={`flex items-center justify-center mr-2 w-10 h-10 rounded-full shadow-inner transition-all duration-300 ${eixosAtivos.includes(eixo.nome) ? "bg-[#075F70] border-1 border-[#E5EFF0]" : "bg-[#E5EFF0]"}`}>
+                          <div className={`flex items-center justify-center mr-2 w-10 h-10 rounded-full shadow-inner transition-all duration-300 ${eixosAtivos.includes(eixo.nome) ? "bg-brand-teal-dark border-1 border-[#E5EFF0]" : "bg-[#E5EFF0]"}`}>
                             <Image width={24} height={24} src={`/icons/${eixo.icon}`} alt={eixo.nome} className={`transition-all duration-300 scale-80 ${eixosAtivos.includes(eixo.nome) ? "filter brightness-0 invert" : ""}`} />
                           </div>
                           {eixo.nome}

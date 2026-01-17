@@ -37,7 +37,7 @@ export default function CarrosselImagens({ onIconSelect }: CarrosselImagensProps
 
   return (
     <div className="flex flex-col items-center space-y-6">
-      <h2 className="text-2xl font-semibold text-[#3C3C3C]">Foto da turma</h2>
+      <h2 className="text-2xl font-semibold text-neutral-dark">Foto da turma</h2>
 
       <div className="flex items-center justify-center w-full max-w-5xl relative">
         <button

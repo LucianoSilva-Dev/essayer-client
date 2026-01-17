@@ -20,7 +20,7 @@ export default function SettingsSidebar({ cargo, onItemClick }: {cargo: string; 
         <div onClick={onItemClick}>
           <SidebarItem
             href="/profile"
-            icon={<User className="text-[#075F70]" />} // Ícone com cor
+            icon={<User className="text-brand-teal-dark" />} // Ícone com cor
             text="Dados pessoais"
           />
         </div>

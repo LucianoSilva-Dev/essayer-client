@@ -88,7 +88,7 @@ export default function ResetPasswordForm() {
         {/* Descrição */}
         <motion.p
           variants={itemVariants}
-          className="text-base md:text-[25px] text-[#3C3C3C] mb-6 md:mb-8 max-w-full md:max-w-2xl leading-relaxed"
+          className="text-base md:text-[25px] text-neutral-dark mb-6 md:mb-8 max-w-full md:max-w-2xl leading-relaxed"
         >
           Insira e confirme a nova senha da sua conta
         </motion.p>
@@ -101,7 +101,7 @@ export default function ResetPasswordForm() {
         >
           {/* Campo Nova Senha */}
           <motion.div variants={itemVariants} className="mb-8 md:mb-12">
-            <label className="block text-xl md:text-2xl font-medium text-[#3C3C3C] pl-1 md:pl-3 mb-2">
+            <label className="block text-xl md:text-2xl font-medium text-neutral-dark pl-1 md:pl-3 mb-2">
               Nova senha
             </label>
             <div className="relative group">
@@ -110,7 +110,7 @@ export default function ResetPasswordForm() {
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
                 className="w-full px-4 py-3 md:px-6 md:py-4 bg-white rounded-2xl md:rounded-3xl 
-                focus:outline-none focus:ring-2 focus:ring-[#075F70] 
+                focus:outline-none focus:ring-2 focus:ring-brand-teal-dark 
                 focus:shadow-lg group-focus-within:-translate-y-[0.5em]
                 transition-all duration-300 text-base md:text-lg shadow-md"
                 placeholder="Digite sua nova senha"
@@ -121,7 +121,7 @@ export default function ResetPasswordForm() {
                 type="button"
                 className="absolute right-4 md:right-6 top-1/2 transform -translate-y-1/2 
                 text-gray-500 hover:text-gray-700
-                group-focus-within:-translate-y-[calc(50%+0.5em)] group-focus-within:text-[#075F70]
+                group-focus-within:-translate-y-[calc(50%+0.5em)] group-focus-within:text-brand-teal-dark
                 transition-all duration-300"
                 onClick={() => setShowNewPassword(!showNewPassword)}
                 aria-label="Alternar visibilidade da senha"
@@ -143,7 +143,7 @@ export default function ResetPasswordForm() {
 
           {/* Campo Confirmar Senha */}
           <motion.div variants={itemVariants} className="mb-10 md:mb-16">
-            <label className="block text-xl md:text-2xl font-medium text-[#3C3C3C] pl-1 md:pl-3 mb-2">
+            <label className="block text-xl md:text-2xl font-medium text-neutral-dark pl-1 md:pl-3 mb-2">
               Insira a senha novamente
             </label>
             <div className="relative group">
@@ -152,7 +152,7 @@ export default function ResetPasswordForm() {
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 className="w-full px-4 py-3 md:px-6 md:py-4 bg-white rounded-2xl md:rounded-3xl 
-                focus:outline-none focus:ring-2 focus:ring-[#075F70] 
+                focus:outline-none focus:ring-2 focus:ring-brand-teal-dark 
                 focus:shadow-lg group-focus-within:-translate-y-[0.5em]
                 transition-all duration-300 text-base md:text-lg shadow-md"
                 placeholder="Confirme sua nova senha"
@@ -162,7 +162,7 @@ export default function ResetPasswordForm() {
                 type="button"
                 className="absolute right-4 md:right-6 top-1/2 transform -translate-y-1/2 
                 text-gray-500 hover:text-gray-700
-                group-focus-within:-translate-y-[calc(50%+0.5em)] group-focus-within:text-[#075F70]
+                group-focus-within:-translate-y-[calc(50%+0.5em)] group-focus-within:text-brand-teal-dark
                 transition-all duration-300"
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                 aria-label="Alternar visibilidade da senha"
@@ -187,7 +187,7 @@ export default function ResetPasswordForm() {
             variants={itemVariants}
             type="submit"
             disabled={!isFormValid || isSubmitting}
-            className="w-full bg-[#075F70] hover:bg-[#064c5a] hover:shadow-xl hover:translate-y-[-0.2em] 
+            className="w-full bg-brand-teal-dark hover:bg-[#064c5a] hover:shadow-xl hover:translate-y-[-0.2em] 
             active:translate-y-0 disabled:bg-gray-400 disabled:cursor-not-allowed disabled:hover:translate-y-0
             disabled:hover:shadow-lg text-white py-3.5 md:py-5 px-6 rounded-2xl md:rounded-3xl 
             text-lg md:text-xl font-medium shadow-lg transition-all duration-300 mb-6 md:mb-8 
@@ -203,7 +203,7 @@ export default function ResetPasswordForm() {
           >
             <Link
               href="/forgot-password/verify-code"
-              className="text-md md:text-lg text-[#075F70] hover:text-[#064c5a] transition-colors hover:underline"
+              className="text-md md:text-lg text-brand-teal-dark hover:text-[#064c5a] transition-colors hover:underline"
             >
               Voltar
             </Link>

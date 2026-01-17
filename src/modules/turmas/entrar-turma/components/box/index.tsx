@@ -38,7 +38,7 @@ export default function JoinBox() {
           />
           <button
             type="submit"
-            className="w-full h-[80px] bg-[#075F70] hover:bg-[#064b57] text-white text-[30px] font-semibold rounded-xl flex items-center justify-center lg:w-[570px]"
+            className="w-full h-[80px] bg-brand-teal-dark hover:bg-[#064b57] text-white text-[30px] font-semibold rounded-xl flex items-center justify-center lg:w-[570px]"
           >
             Acessar Turma
             <span className="text-2xl">➜</span>

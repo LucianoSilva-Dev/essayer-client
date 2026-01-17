@@ -15,7 +15,7 @@ export function SearchBar({
 }: SearchBarProps) {
   return (
     <div className="relative w-full max-w-[250px]">
-      <Search className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-[#3C3C3C]" />
+      <Search className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-neutral-dark" />
       <input
         type="search"
         placeholder={placeholder}

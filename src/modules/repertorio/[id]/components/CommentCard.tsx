@@ -101,7 +101,7 @@ export function CommentCard({ comentario, isAuthorComment = false, preloadedPict
               </span>
             )}
             {comentario.fixado && (
-              <span className="flex items-center gap-1 text-xs text-[#024D4D] font-bold bg-[#024D4D]/10 px-2 py-0.5 rounded-full">
+              <span className="flex items-center gap-1 text-xs text-brand-teal-secondary font-bold bg-brand-teal-secondary/10 px-2 py-0.5 rounded-full">
                 <Pin size={12} className="fill-current" />
                 Fixado
               </span>
@@ -113,7 +113,7 @@ export function CommentCard({ comentario, isAuthorComment = false, preloadedPict
               <button 
                 onClick={handlePinClick}
                 disabled={isActionLoading}
-                className={`p-1.5 rounded-full transition-colors ${comentario.fixado ? 'text-[#024D4D] bg-[#024D4D]/10 hover:bg-[#024D4D]/20' : 'text-gray-400 hover:text-[#024D4D] hover:bg-gray-100'} ${isActionLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                className={`p-1.5 rounded-full transition-colors ${comentario.fixado ? 'text-brand-teal-secondary bg-brand-teal-secondary/10 hover:bg-brand-teal-secondary/20' : 'text-gray-400 hover:text-brand-teal-secondary hover:bg-gray-100'} ${isActionLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
                 title={comentario.fixado ? "Desafixar comentário" : "Fixar comentário"}
               >
                 <Pin size={16} className={comentario.fixado ? "fill-current" : ""} />

@@ -30,7 +30,7 @@ function StepContentManager() {
       
       {/* 1. Header Fixo: Título + Stepper */}
       <div className="pt-8 px-4 mb-0">
-        <h1 className="text-3xl font-bold text-[#3C3C3C] mb-4 font-montserrat pl-4">
+        <h1 className="text-3xl font-bold text-neutral-dark mb-4 font-montserrat pl-4">
           Criar nova tarefa
         </h1>
         <Stepper />

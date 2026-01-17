@@ -247,7 +247,7 @@ export function RedacaoPage({ id }: { id: string }) {
   if (loading) {
     return (
       <main className="flex flex-col items-center justify-center min-h-screen">
-        <p className="text-xl text-[#075F70] font-montserrat animate-pulse">Carregando tarefa...</p>
+        <p className="text-xl text-brand-teal-dark font-montserrat animate-pulse">Carregando tarefa...</p>
       </main>
     );
   }
@@ -256,7 +256,7 @@ export function RedacaoPage({ id }: { id: string }) {
     return (
       <main className="flex flex-col items-center justify-center min-h-screen">
         <p className="text-xl text-red-500">Tarefa não encontrada.</p>
-        <button onClick={() => router.back()} className="mt-4 text-[#075F70] underline">Voltar</button>
+        <button onClick={() => router.back()} className="mt-4 text-brand-teal-dark underline">Voltar</button>
       </main>
     );
   }
@@ -279,13 +279,13 @@ export function RedacaoPage({ id }: { id: string }) {
         confirmText="Sim, enviar"
       />
 
-      <h1 className="text-2xl md:text-3xl font-bold text-[#075F70] text-center mb-12 px-4">
+      <h1 className="text-2xl md:text-3xl font-bold text-brand-teal-dark text-center mb-12 px-4">
         {tarefa.tema}
       </h1>
 
       <div className="relative w-full max-w-6xl">
         <div
-          className="absolute w-full left-0 top-8 bottom-10 bg-gradient-to-b from-[#F9FAFB] from-[13.46%] to-[#075F70] to-[72.6%] opacity-65 rounded-[70px]"
+          className="absolute w-full left-0 top-8 bottom-10 bg-gradient-to-b from-[#F9FAFB] from-[13.46%] to-brand-teal-dark to-[72.6%] opacity-65 rounded-[70px]"
         />
 
         <div className="relative w-full max-w-5xl mx-auto mt-8">

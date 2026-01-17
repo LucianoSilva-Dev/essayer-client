@@ -15,8 +15,8 @@ export default function SidebarItem({ href, icon, text }: SidebarItemProps) {
   const pathname = usePathname()
   const isActive = pathname === href
 
-  const activeClasses = "text-[#075F70] font-semibold bg-[#075F70]/5"
-  const inactiveClasses = "text-[#898787] font-medium hover:text-[#3C3C3C] hover:bg-gray-50"
+  const activeClasses = "text-brand-teal-dark font-semibold bg-brand-teal-dark/5"
+  const inactiveClasses = "text-[#898787] font-medium hover:text-neutral-dark hover:bg-gray-50"
 
   let iconWithClassName = icon // Define um ícone padrão
 
@@ -25,7 +25,7 @@ export default function SidebarItem({ href, icon, text }: SidebarItemProps) {
     // Corrigido: O nome da variável agora é válido
     iconWithClassName = cloneElement(icon, {
       // Aplicamos as classes de tamanho e cor
-      className: `h-6 w-6 sm:h-7 sm:w-7 group-hover:text-[#3C3C3C] ${isActive ? "text-[#075F70]" : "text-[#898787]"}`,
+      className: `h-6 w-6 sm:h-7 sm:w-7 group-hover:text-neutral-dark ${isActive ? "text-brand-teal-dark" : "text-[#898787]"}`,
     })
   }
 

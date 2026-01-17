@@ -63,7 +63,7 @@ export function CalendarWidget({ selectedDate, onSelectDate, daysWithTasks = [] 
             <span className="text-sm font-bold text-gray-400 uppercase tracking-widest">
                 Mês de Referência
             </span>
-            <h2 className="text-3xl font-bold text-[#3C3C3C] capitalize font-montserrat">
+            <h2 className="text-3xl font-bold text-neutral-dark capitalize font-montserrat">
                 {format(viewDate, "MMMM yyyy", { locale: ptBR })}
             </h2>
         </div>
@@ -77,14 +77,14 @@ export function CalendarWidget({ selectedDate, onSelectDate, daysWithTasks = [] 
                     "p-3 rounded-full border border-gray-200 transition-all group",
                     isCurrentViewMonth 
                         ? "opacity-30 cursor-not-allowed bg-gray-50" 
-                        : "hover:bg-gray-50 hover:border-[#075F70] hover:text-[#075F70]"
+                        : "hover:bg-gray-50 hover:border-brand-teal-dark hover:text-brand-teal-dark"
                 )}
             >
-                <ChevronLeft size={24} className={isCurrentViewMonth ? "text-gray-300" : "text-gray-400 group-hover:text-[#075F70]"} />
+                <ChevronLeft size={24} className={isCurrentViewMonth ? "text-gray-300" : "text-gray-400 group-hover:text-brand-teal-dark"} />
             </button>
 
-            <button onClick={nextMonth} className="p-3 hover:bg-gray-50 rounded-full border border-gray-200 hover:border-[#075F70] hover:text-[#075F70] transition-all group">
-                <ChevronRight size={24} className="text-gray-400 group-hover:text-[#075F70]" />
+            <button onClick={nextMonth} className="p-3 hover:bg-gray-50 rounded-full border border-gray-200 hover:border-brand-teal-dark hover:text-brand-teal-dark transition-all group">
+                <ChevronRight size={24} className="text-gray-400 group-hover:text-brand-teal-dark" />
             </button>
         </div>
       </div>
@@ -119,10 +119,10 @@ export function CalendarWidget({ selectedDate, onSelectDate, daysWithTasks = [] 
                         !isCurrentMonth && !isPast && "text-gray-400 opacity-70 hover:opacity-100",
 
                         isSelected && !isPast
-                            ? "bg-[#075F70] text-white shadow-lg shadow-[#075F70]/30 scale-105 z-10 font-bold" 
-                            : !isPast && !isSelected && "hover:bg-gray-50 text-[#3C3C3C] font-medium",
+                            ? "bg-brand-teal-dark text-white shadow-lg shadow-brand-teal-dark/30 scale-105 z-10 font-bold" 
+                            : !isPast && !isSelected && "hover:bg-gray-50 text-neutral-dark font-medium",
 
-                        isDayToday && !isSelected && !isPast && "border-2 border-[#075F70]/30 text-[#075F70]"
+                        isDayToday && !isSelected && !isPast && "border-2 border-brand-teal-dark/30 text-brand-teal-dark"
                     )}
                 >
                     <span className="font-montserrat text-lg md:text-xl">
@@ -132,7 +132,7 @@ export function CalendarWidget({ selectedDate, onSelectDate, daysWithTasks = [] 
                     {hasTask && !isPast && (
                         <span className={cn(
                             "absolute bottom-2 md:bottom-3 w-1.5 h-1.5 rounded-full",
-                            isSelected ? "bg-white" : "bg-[#075F70]"
+                            isSelected ? "bg-white" : "bg-brand-teal-dark"
                         )} />
                     )}
                 </button>

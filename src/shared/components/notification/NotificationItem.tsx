@@ -140,7 +140,7 @@ export default function NotificationItem({ notification, onCloseDropdown, markAs
     >
       {/* Indicador Azul para não lidos */}
       {!notification.lido && (
-        <span className="absolute left-0 top-0 bottom-0 w-1 bg-[#075F70] rounded-l-md" />
+        <span className="absolute left-0 top-0 bottom-0 w-1 bg-brand-teal-dark rounded-l-md" />
       )}
 
       {/* Ícone */}
@@ -151,7 +151,7 @@ export default function NotificationItem({ notification, onCloseDropdown, markAs
       {/* Conteúdo de Texto */}
       <div className="flex flex-col gap-1 w-full">
         <div className="flex justify-between items-start">
-          <p className={`text-sm font-montserrat ${!notification.lido ? 'font-bold text-[#3C3C3C]' : 'font-medium text-gray-700'}`}>
+          <p className={`text-sm font-montserrat ${!notification.lido ? 'font-bold text-neutral-dark' : 'font-medium text-gray-700'}`}>
             {config.title}
           </p>
           {timeAgo && (

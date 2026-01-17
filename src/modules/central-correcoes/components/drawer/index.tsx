@@ -50,7 +50,7 @@ export function StudentDrawer({ isOpen, onClose, tarefaId }: Props) {
   return (
     <div>
       <div
-        className={`fixed inset-0 bg-[#075F70]/20 backdrop-blur-[2px] z-40 transition-opacity duration-300 ${isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
+        className={`fixed inset-0 bg-brand-teal-dark/20 backdrop-blur-[2px] z-40 transition-opacity duration-300 ${isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
           }`}
         onClick={handleClose}
       />
@@ -61,12 +61,12 @@ export function StudentDrawer({ isOpen, onClose, tarefaId }: Props) {
         {/* Header */}
         <div className="px-8 py-6 border-b border-gray-100 flex items-center justify-between bg-white shrink-0">
           <div>
-            <h2 className="text-2xl font-bold text-[#075F70]">Submissões</h2>
+            <h2 className="text-2xl font-bold text-brand-teal-dark">Submissões</h2>
             <p className="text-sm text-gray-500 font-medium">Gerencie as correções pendentes</p>
           </div>
           <button
             onClick={handleClose}
-            className="cursor-pointer p-2 hover:bg-gray-100 rounded-full transition-colors text-gray-400 hover:text-[#075F70]"
+            className="cursor-pointer p-2 hover:bg-gray-100 rounded-full transition-colors text-gray-400 hover:text-brand-teal-dark"
           >
             <X size={28} />
           </button>
@@ -82,9 +82,9 @@ export function StudentDrawer({ isOpen, onClose, tarefaId }: Props) {
               placeholder="Buscar aluno por nome..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:border-[#075F70] focus:ring-4 focus:ring-[#075F70]/5 text-sm bg-white transition-all font-medium"
+              className="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:border-brand-teal-dark focus:ring-4 focus:ring-brand-teal-dark/5 text-sm bg-white transition-all font-medium"
             />
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#075F70] transition-colors" size={20} />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-brand-teal-dark transition-colors" size={20} />
           </div>
 
           {/* Filtros de Status (Label Sutil) */}
@@ -100,8 +100,8 @@ export function StudentDrawer({ isOpen, onClose, tarefaId }: Props) {
                   key={type}
                   onClick={() => setFilter(type)}
                   className={`cursor-pointer px-3 py-1.5 rounded-full text-xs font-bold capitalize transition-all duration-200 border ${filter === type
-                    ? 'bg-[#075F70] text-white border-[#075F70] shadow-sm'
-                    : 'bg-white text-gray-500 border-gray-200 hover:border-[#075F70]/50 hover:text-[#075F70]'
+                    ? 'bg-brand-teal-dark text-white border-brand-teal-dark shadow-sm'
+                    : 'bg-white text-gray-500 border-gray-200 hover:border-brand-teal-dark/50 hover:text-brand-teal-dark'
                     }`}
                 >
                   {type}
@@ -121,13 +121,13 @@ export function StudentDrawer({ isOpen, onClose, tarefaId }: Props) {
             filteredRespostas.map((res) => (
               <div
                 key={res.id}
-                className="flex flex-col sm:flex-row items-center justify-between p-5 rounded-2xl bg-white border border-gray-100 shadow-sm hover:shadow-md hover:border-[#075F70]/20 transition-all group gap-4"
+                className="flex flex-col sm:flex-row items-center justify-between p-5 rounded-2xl bg-white border border-gray-100 shadow-sm hover:shadow-md hover:border-brand-teal-dark/20 transition-all group gap-4"
               >
                 {/* LADO ESQUERDO: Identificação */}
                 <div className="flex items-center gap-4 w-full sm:w-auto">
                   <div className={`relative w-12 h-12 rounded-full flex items-center justify-center font-bold text-sm border-2 shrink-0 overflow-hidden
                                 ${respostaStatus(res) === 'corrigido'
-                      ? 'bg-[#075F70]/10 text-[#075F70] border-[#075F70]/20'
+                      ? 'bg-brand-teal-dark/10 text-brand-teal-dark border-brand-teal-dark/20'
                       : 'bg-gray-100 text-gray-500 border-gray-200'
                     }`}
                   >
@@ -169,7 +169,7 @@ export function StudentDrawer({ isOpen, onClose, tarefaId }: Props) {
 
                   {respostaStatus(res) === 'pendente' ? (
                     <button 
-                      className="flex items-center gap-2 px-5 py-2.5 bg-[#075F70] hover:bg-[#054a57] text-white text-sm font-bold rounded-xl shadow-lg shadow-[#075F70]/20 hover:shadow-[#075F70]/40 hover:-translate-y-0.5 transition-all w-full sm:w-auto justify-center"
+                      className="flex items-center gap-2 px-5 py-2.5 bg-brand-teal-dark hover:bg-[#054a57] text-white text-sm font-bold rounded-xl shadow-lg shadow-brand-teal-dark/20 hover:shadow-brand-teal-dark/40 hover:-translate-y-0.5 transition-all w-full sm:w-auto justify-center"
                       onClick={() => router.push(`/fazer-tarefa/${tarefaId}/corrigir?alunoId=${res.aluno.id}`)}
                     >  
                       Corrigir <ChevronRight size={16} />
@@ -177,7 +177,7 @@ export function StudentDrawer({ isOpen, onClose, tarefaId }: Props) {
                   ) : (
                     <div className="flex flex-col items-end min-w-[100px]">
                       <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-0.5">Nota Final</span>
-                      <span className="text-2xl font-bold text-[#075F70] leading-none">
+                      <span className="text-2xl font-bold text-brand-teal-dark leading-none">
                         {notaTotal(res)}
                       </span>
                     </div>

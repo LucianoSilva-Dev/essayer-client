@@ -22,7 +22,7 @@ export function RedacaoHeader({ tempoRestante, isPaused, onPauseToggle }: Props)
       <span
         className="bg-[#DCDCDD] rounded-[15px] 
                    px-2 py-1 
-                   text-[#3C3C3C] font-semibold text-xl" // Fonte reduzida
+                   text-neutral-dark font-semibold text-xl" // Fonte reduzida
       >
         {formatarTempo(tempoRestante)}
       </span>
@@ -30,7 +30,7 @@ export function RedacaoHeader({ tempoRestante, isPaused, onPauseToggle }: Props)
       {/* Botão de Pausar/Play */}
       <button
         onClick={onPauseToggle}
-        className="w-11 h-11 bg-[#075F70] hover:bg-[#086f80] rounded-full 
+        className="w-11 h-11 bg-brand-teal-dark hover:bg-[#086f80] rounded-full 
                    flex items-center justify-center transition-colors"
       >
         {/* Ícones preenchidos de branco */}

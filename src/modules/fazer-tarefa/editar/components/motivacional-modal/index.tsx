@@ -67,7 +67,7 @@ export function MotivacionalModal({ isOpen, onClose, textos }: Props) {
       className={`
         fixed inset-0 z-50 flex items-center justify-center p-4
         transition-opacity duration-300 ease-in-out
-        ${isVisible ? 'bg-[#075F70]/60 backdrop-blur-sm opacity-100' : 'bg-transparent backdrop-blur-none opacity-0'}
+        ${isVisible ? 'bg-brand-teal-dark/60 backdrop-blur-sm opacity-100' : 'bg-transparent backdrop-blur-none opacity-0'}
       `}
       onClick={handleBackdropClick}
     >

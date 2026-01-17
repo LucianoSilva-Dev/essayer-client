@@ -68,17 +68,17 @@ export function Step1_Eixo() {
       {/* --- COLUNA DA ESQUERDA: Texto Informativo --- */}
       <div className="flex flex-col gap-6 order-2 lg:order-1">
         <div className="space-y-3">
-          <h3 className="text-3xl lg:text-4xl font-bold text-[#3C3C3C] leading-tight">
+          <h3 className="text-3xl lg:text-4xl font-bold text-neutral-dark leading-tight">
             Qual é o <br />
-            <span className="text-[#075F70]">Eixo Temático?</span>
+            <span className="text-brand-teal-dark">Eixo Temático?</span>
           </h3>
           <p className="text-gray-500 text-lg font-medium">
             Defina o contexto da sua proposta de redação.
           </p>
         </div>
 
-        <div className="bg-[#F8FAFC] border-l-4 border-[#075F70] p-6 rounded-r-xl shadow-sm space-y-3">
-          <div className="flex items-center gap-2 text-[#075F70] font-bold text-sm uppercase tracking-wider">
+        <div className="bg-[#F8FAFC] border-l-4 border-brand-teal-dark p-6 rounded-r-xl shadow-sm space-y-3">
+          <div className="flex items-center gap-2 text-brand-teal-dark font-bold text-sm uppercase tracking-wider">
             <Info className="w-4 h-4" />
             <span>Por que selecionar?</span>
           </div>
@@ -103,7 +103,7 @@ export function Step1_Eixo() {
           disabled={activeIndex === 0}
           className="absolute top-2 z-30 p-2 bg-white/80 backdrop-blur-sm rounded-full shadow-md hover:bg-white disabled:opacity-0 transition-all transform hover:-translate-y-1"
         >
-          <ChevronUp className="w-6 h-6 text-[#075F70]" />
+          <ChevronUp className="w-6 h-6 text-brand-teal-dark" />
         </button>
 
         {/* Area do Deck */}
@@ -139,7 +139,7 @@ export function Step1_Eixo() {
                   "bg-white shadow-[0px_8px_25px_rgba(0,0,0,0.1)] border-2",
                   "select-none transition-colors duration-300",
                   offset === 0
-                    ? "border-[#075F70] bg-white"
+                    ? "border-brand-teal-dark bg-white"
                     : "border-gray-100 bg-gray-50/80"
                 )}
               >
@@ -147,7 +147,7 @@ export function Step1_Eixo() {
                 <div
                   className={cn(
                     "w-16 h-16 rounded-xl flex-shrink-0 flex items-center justify-center transition-colors duration-300",
-                    offset === 0 ? "bg-[#075F70]/10" : "bg-gray-100"
+                    offset === 0 ? "bg-brand-teal-dark/10" : "bg-gray-100"
                   )}
                 >
                   <div className="relative w-9 h-9">
@@ -174,7 +174,7 @@ export function Step1_Eixo() {
                   <span
                     className={cn(
                       "font-montserrat font-bold text-lg leading-tight truncate transition-colors",
-                      offset === 0 ? "text-[#075F70]" : "text-gray-400"
+                      offset === 0 ? "text-brand-teal-dark" : "text-gray-400"
                     )}
                   >
                     {eixo.nome}
@@ -195,7 +195,7 @@ export function Step1_Eixo() {
                 {/* Check Flutuante */}
                 {offset === 0 && (
                   <div className="absolute top-3 right-3 animate-in zoom-in duration-300">
-                    <div className="w-5 h-5 bg-[#075F70] rounded-full flex items-center justify-center">
+                    <div className="w-5 h-5 bg-brand-teal-dark rounded-full flex items-center justify-center">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 24 24"
@@ -222,7 +222,7 @@ export function Step1_Eixo() {
           disabled={activeIndex === EixoOptions.length - 1}
           className="absolute bottom-2 z-30 p-2 bg-white/80 backdrop-blur-sm rounded-full shadow-md hover:bg-white disabled:opacity-0 transition-all transform hover:translate-y-1"
         >
-          <ChevronDown className="w-6 h-6 text-[#075F70]" />
+          <ChevronDown className="w-6 h-6 text-brand-teal-dark" />
         </button>
       </div>
     </div>

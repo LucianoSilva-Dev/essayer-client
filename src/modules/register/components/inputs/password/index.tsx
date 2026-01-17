@@ -46,7 +46,7 @@ export const PasswordInputs: React.FC<PasswordInputsProps> = ({
         <label
           htmlFor="password"
           // Estilos do Figma
-          className="block text-2xl md:text-[35px] font-medium text-[#3C3C3C] pl-3 mb-2"
+          className="block text-2xl md:text-[35px] font-medium text-neutral-dark pl-3 mb-2"
         >
           Insira uma senha
         </label>
@@ -62,7 +62,7 @@ export const PasswordInputs: React.FC<PasswordInputsProps> = ({
                bg-white rounded-[32px]
               text-lg md:text-xl
               shadow-[0px_0px_15px_-6px_rgba(0,0,0,0.25)]
-              focus:outline-none focus:ring-2 focus:ring-[#075F70]
+              focus:outline-none focus:ring-2 focus:ring-brand-teal-dark
               transition-all duration-300"
             required
             minLength={8}
@@ -75,7 +75,7 @@ export const PasswordInputs: React.FC<PasswordInputsProps> = ({
             className="
               cursor-pointer absolute right-4 md:right-6 top-1/2
               -translate-y-1/2
-             text-gray-500 hover:text-[#075F70]
+             text-gray-500 hover:text-brand-teal-dark
               transition-colors duration-200"
           >
             {showPassword ? <EyeOff size={22} /> : <Eye size={22} />}
@@ -102,7 +102,7 @@ export const PasswordInputs: React.FC<PasswordInputsProps> = ({
         <label
           htmlFor="confirmPassword"
           // Estilos do Figma
-          className="block text-2xl md:text-[35px] font-medium text-[#3C3C3C] pl-3 mb-2"
+          className="block text-2xl md:text-[35px] font-medium text-neutral-dark pl-3 mb-2"
         >
           Confirme a senha
         </label>
@@ -118,7 +118,7 @@ export const PasswordInputs: React.FC<PasswordInputsProps> = ({
            bg-white rounded-[32px]
            text-lg md:text-xl
            shadow-[0px_0px_15px_-6px_rgba(0,0,0,0.25)]
-           focus:outline-none focus:ring-2 focus:ring-[#075F70]
+           focus:outline-none focus:ring-2 focus:ring-brand-teal-dark
            transition-all duration-300"
             required
           />
@@ -131,7 +131,7 @@ export const PasswordInputs: React.FC<PasswordInputsProps> = ({
             cursor-pointer
             absolute right-4 md:right-6 top-1/2
             -translate-y-1/2
-           text-gray-500 hover:text-[#075F70]
+           text-gray-500 hover:text-brand-teal-dark
             transition-colors duration-200"
           >
             {showConfirmPassword ? <EyeOff size={22} /> : <Eye size={22} />}

@@ -68,7 +68,7 @@ export function CompetenciasProfessorSection({
                  `}
                  style={{
                     background: correcao.status === 'pendente'
-                        ? 'repeating-linear-gradient(45deg, #075F70cc, #075F70cc 30px, #054a57cc 30px, #054a57cc 60px)'
+                        ? 'repeating-linear-gradient(45deg, brand-teal-darkcc, brand-teal-darkcc 30px, #054a57cc 30px, #054a57cc 60px)'
                         : 'repeating-linear-gradient(45deg, #dc2626cc, #dc2626cc 30px, #991b1bcc 30px, #991b1bcc 60px)',
                     boxShadow: '0 4px 15px rgba(0,0,0,0.2)'
                  }}

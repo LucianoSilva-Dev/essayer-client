@@ -25,9 +25,9 @@ export function TarefaFilters({ activeTab, onTabChange, onSearch }: Props) {
             cursor-pointer relative flex items-center gap-2.5 px-6 py-3 rounded-2xl text-sm font-bold transition-all duration-300 border
             ${activeTab === "ativa"
               // Estado ATIVO: Cor sólida, sombra colorida, levemente maior
-              ? "bg-[#075F70] text-white border-[#075F70] shadow-lg shadow-[#075F70]/25 scale-105 z-10"
+              ? "bg-brand-teal-dark text-white border-brand-teal-dark shadow-lg shadow-brand-teal-dark/25 scale-105 z-10"
               // Estado INATIVO: Branco, borda cinza, texto cinza
-              : "bg-white text-gray-500 border-gray-200 hover:border-[#075F70]/30 hover:bg-gray-50 hover:text-[#075F70]"
+              : "bg-white text-gray-500 border-gray-200 hover:border-brand-teal-dark/30 hover:bg-gray-50 hover:text-brand-teal-dark"
             }
           `}
         >
@@ -40,8 +40,8 @@ export function TarefaFilters({ activeTab, onTabChange, onSearch }: Props) {
           className={`
             cursor-pointer relative flex items-center gap-2.5 px-6 py-3 rounded-2xl text-sm font-bold transition-all duration-300 border
             ${activeTab === "encerrada"
-              ? "bg-[#075F70] text-white border-[#075F70] shadow-lg shadow-[#075F70]/25 scale-105 z-10"
-              : "bg-white text-gray-500 border-gray-200 hover:border-[#075F70]/30 hover:bg-gray-50 hover:text-[#075F70]"
+              ? "bg-brand-teal-dark text-white border-brand-teal-dark shadow-lg shadow-brand-teal-dark/25 scale-105 z-10"
+              : "bg-white text-gray-500 border-gray-200 hover:border-brand-teal-dark/30 hover:bg-gray-50 hover:text-brand-teal-dark"
             }
           `}
         >
@@ -57,10 +57,10 @@ export function TarefaFilters({ activeTab, onTabChange, onSearch }: Props) {
           placeholder="Pesquise por título..."
           onChange={(e) => onSearch(e.target.value)}
           className="w-full pl-11 pr-4 py-3 rounded-full border-2 border-transparent bg-white text-sm transition-all outline-none font-medium text-gray-700 placeholder:text-gray-400
-            focus:border-[#075F70] focus:shadow-lg focus:shadow-[#075F70]/10"
+            focus:border-brand-teal-dark focus:shadow-lg focus:shadow-brand-teal-dark/10"
         />
         <Search
-          className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 transition-colors group-focus-within:text-[#075F70]"
+          className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 transition-colors group-focus-within:text-brand-teal-dark"
           size={20}
         />
       </div>

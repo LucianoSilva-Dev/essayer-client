@@ -165,7 +165,7 @@ export function EditorCorrecaoProfessorPage({ id, alunoId, initialData }: Editor
         <button 
             onClick={handleSalvar}
             disabled={saving}
-            className="bg-[#075F70] hover:bg-[#064e5c] text-white px-6 py-2.5 rounded-full font-bold transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+            className="bg-brand-teal-dark hover:bg-[#064e5c] text-white px-6 py-2.5 rounded-full font-bold transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
         >
             {saving && <Loader2 size={16} className="animate-spin" />}
             Enviar correção
@@ -198,14 +198,14 @@ export function EditorCorrecaoProfessorPage({ id, alunoId, initialData }: Editor
             value={feedbackAtual}
             onChange={(e) => handleUpdateFeedback(e.target.value)}
             placeholder={`Insira a análise sobre a competência ${activeCompetenciaId.replace('c', '')} aqui...`}
-            className="w-full min-h-[150px] p-4 rounded-2xl bg-gray-50 border border-gray-200 focus:border-[#075F70] focus:ring-2 focus:ring-[#075F70]/20 outline-none resize-y text-gray-700 leading-relaxed"
+            className="w-full min-h-[150px] p-4 rounded-2xl bg-gray-50 border border-gray-200 focus:border-brand-teal-dark focus:ring-2 focus:ring-brand-teal-dark/20 outline-none resize-y text-gray-700 leading-relaxed"
         />
 
         <div className="absolute bottom-8 right-8">
             <button 
                 onClick={handleSalvar}
                 disabled={saving}
-                className="bg-[#075F70] text-white p-3 rounded-full hover:bg-[#064e5c] transition-colors shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                className="bg-brand-teal-dark text-white p-3 rounded-full hover:bg-[#064e5c] transition-colors shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
                 title="Salvar comentário"
             >
                 {saving ? <Loader2 size={20} className="animate-spin" /> : <ArrowUp size={20} />}

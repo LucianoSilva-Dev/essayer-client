@@ -33,8 +33,8 @@ export const EixoSelector: React.FC<EixoSelectorProps> = ({ selectedEixos, onEix
               className={`
                 relative cursor-pointer group flex items-center justify-center text-center p-3 rounded-xl border-2 transition-all duration-200 select-none h-14
                 ${isSelected 
-                  /* AQUI ESTÁ A MUDANÇA: bg-gray-800 -> bg-[#075F70] */
-                  ? "bg-[#075F70] border-[#075F70] text-white shadow-md shadow-teal-900/10" 
+                  /* AQUI ESTÁ A MUDANÇA: bg-gray-800 -> bg-brand-teal-dark */
+                  ? "bg-brand-teal-dark border-brand-teal-dark text-white shadow-md shadow-teal-900/10" 
                   : "bg-white border-gray-100 text-gray-600 hover:border-gray-300 hover:bg-gray-50"
                 }
               `}

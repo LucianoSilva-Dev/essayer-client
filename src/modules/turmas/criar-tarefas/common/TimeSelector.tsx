@@ -44,7 +44,7 @@ export function TimeSelector({ value, onChange, className, hasError }: TimeSelec
             "bg-white rounded-[30px] p-6 shadow-lg border flex flex-col items-center gap-4 relative overflow-hidden transition-all duration-300 group",
             hasError 
                 ? "border-red-300 shadow-red-100" 
-                : "border-gray-100 hover:border-[#075F70]/30 group-focus-within:border-[#075F70] group-focus-within:ring-4 group-focus-within:ring-[#075F70]/10 group-focus-within:shadow-xl"
+                : "border-gray-100 hover:border-brand-teal-dark/30 group-focus-within:border-brand-teal-dark group-focus-within:ring-4 group-focus-within:ring-brand-teal-dark/10 group-focus-within:shadow-xl"
         )}
       >
           {/* Header */}
@@ -52,7 +52,7 @@ export function TimeSelector({ value, onChange, className, hasError }: TimeSelec
               "flex items-center gap-2 mb-1 transition-colors", 
               hasError 
                 ? "text-red-500" 
-                : "text-gray-400 group-focus-within:text-[#075F70]"
+                : "text-gray-400 group-focus-within:text-brand-teal-dark"
           )}>
              {hasError ? <AlertCircle size={18} /> : <Clock size={18} />}
              <span className="font-montserrat font-bold text-xs uppercase tracking-widest">
@@ -67,7 +67,7 @@ export function TimeSelector({ value, onChange, className, hasError }: TimeSelec
             <div className="flex flex-col items-center gap-1">
                 <button 
                     onClick={(e) => { e.stopPropagation(); adjustHour(1); }} 
-                    className="p-1 text-gray-300 hover:text-[#075F70] hover:bg-gray-50 rounded-full transition-colors focus:outline-none focus:text-[#075F70]"
+                    className="p-1 text-gray-300 hover:text-brand-teal-dark hover:bg-gray-50 rounded-full transition-colors focus:outline-none focus:text-brand-teal-dark"
                 >
                     <ChevronUp size={24} />
                 </button>
@@ -76,14 +76,14 @@ export function TimeSelector({ value, onChange, className, hasError }: TimeSelec
                     "w-20 h-20 flex items-center justify-center rounded-2xl border-2 transition-all",
                     hasError 
                         ? "border-red-100 bg-red-50 text-red-600" 
-                        : "border-gray-100 bg-[#F5F7F8] text-[#3C3C3C] group-focus-within:border-[#075F70] group-focus-within:bg-[#075F70]/5 group-focus-within:text-[#075F70]"
+                        : "border-gray-100 bg-[#F5F7F8] text-neutral-dark group-focus-within:border-brand-teal-dark group-focus-within:bg-brand-teal-dark/5 group-focus-within:text-brand-teal-dark"
                 )}>
                     <span className="font-montserrat font-bold text-4xl">{hourStr}</span>
                 </div>
 
                 <button 
                     onClick={(e) => { e.stopPropagation(); adjustHour(-1); }} 
-                    className="p-1 text-gray-300 hover:text-[#075F70] hover:bg-gray-50 rounded-full transition-colors focus:outline-none focus:text-[#075F70]"
+                    className="p-1 text-gray-300 hover:text-brand-teal-dark hover:bg-gray-50 rounded-full transition-colors focus:outline-none focus:text-brand-teal-dark"
                 >
                     <ChevronDown size={24} />
                 </button>
@@ -91,14 +91,14 @@ export function TimeSelector({ value, onChange, className, hasError }: TimeSelec
 
             <span className={cn(
                 "text-2xl font-bold pb-8 transition-colors", 
-                hasError ? "text-red-300" : "text-gray-300 group-focus-within:text-[#075F70]"
+                hasError ? "text-red-300" : "text-gray-300 group-focus-within:text-brand-teal-dark"
             )}>:</span>
 
             {/* Coluna MINUTO */}
             <div className="flex flex-col items-center gap-1">
                 <button 
                     onClick={(e) => { e.stopPropagation(); adjustMinute(5); }} 
-                    className="p-1 text-gray-300 hover:text-[#075F70] hover:bg-gray-50 rounded-full transition-colors focus:outline-none focus:text-[#075F70]"
+                    className="p-1 text-gray-300 hover:text-brand-teal-dark hover:bg-gray-50 rounded-full transition-colors focus:outline-none focus:text-brand-teal-dark"
                 >
                     <ChevronUp size={24} />
                 </button>
@@ -107,14 +107,14 @@ export function TimeSelector({ value, onChange, className, hasError }: TimeSelec
                     "w-20 h-20 flex items-center justify-center rounded-2xl border-2 transition-all",
                     hasError 
                         ? "border-red-100 bg-red-50 text-red-600" 
-                        : "border-gray-100 bg-[#F5F7F8] text-[#3C3C3C] group-focus-within:border-[#075F70] group-focus-within:bg-[#075F70]/5 group-focus-within:text-[#075F70]"
+                        : "border-gray-100 bg-[#F5F7F8] text-neutral-dark group-focus-within:border-brand-teal-dark group-focus-within:bg-brand-teal-dark/5 group-focus-within:text-brand-teal-dark"
                 )}>
                     <span className="font-montserrat font-bold text-4xl">{minuteStr}</span>
                 </div>
 
                 <button 
                     onClick={(e) => { e.stopPropagation(); adjustMinute(-5); }} 
-                    className="p-1 text-gray-300 hover:text-[#075F70] hover:bg-gray-50 rounded-full transition-colors focus:outline-none focus:text-[#075F70]"
+                    className="p-1 text-gray-300 hover:text-brand-teal-dark hover:bg-gray-50 rounded-full transition-colors focus:outline-none focus:text-brand-teal-dark"
                 >
                     <ChevronDown size={24} />
                 </button>
@@ -125,7 +125,7 @@ export function TimeSelector({ value, onChange, className, hasError }: TimeSelec
           {/* Mensagem de Ajuda */}
           <p className={cn(
               "text-center text-xs font-medium max-w-[200px] mt-2 transition-colors", 
-              hasError ? "text-red-400" : "text-gray-400 group-focus-within:text-[#075F70]"
+              hasError ? "text-red-400" : "text-gray-400 group-focus-within:text-brand-teal-dark"
           )}>
              {hasError 
                 ? "O horário não pode ser anterior ao atual." 

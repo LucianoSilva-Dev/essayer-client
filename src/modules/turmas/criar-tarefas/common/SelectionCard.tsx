@@ -25,14 +25,14 @@ export function SelectionCard({
       className={cn(
         "relative cursor-pointer transition-all duration-300 group w-full border rounded-[22px] overflow-hidden",
         isSelected 
-            ? "bg-white shadow-xl border-[#075F70] ring-1 ring-[#075F70] scale-[1.02]" 
+            ? "bg-white shadow-xl border-brand-teal-dark ring-1 ring-brand-teal-dark scale-[1.02]" 
             : "bg-white/60 hover:bg-white hover:shadow-md border-transparent hover:border-gray-200",
         className
       )}
     >
       {/* Indicador de Seleção no Topo */}
       {isSelected && (
-          <div className="absolute top-0 right-0 bg-[#075F70] text-white px-3 py-1 rounded-bl-xl text-xs font-bold font-montserrat flex items-center gap-1 z-10">
+          <div className="absolute top-0 right-0 bg-brand-teal-dark text-white px-3 py-1 rounded-bl-xl text-xs font-bold font-montserrat flex items-center gap-1 z-10">
               <CheckCircle2 size={12} /> Selecionado
           </div>
       )}
@@ -42,7 +42,7 @@ export function SelectionCard({
         {icon && (
             <div className={cn(
                 "w-12 h-12 rounded-full flex items-center justify-center shrink-0 transition-colors",
-                isSelected ? "bg-[#E5EFF0] text-[#075F70]" : "bg-gray-100 text-gray-400 group-hover:bg-[#E5EFF0] group-hover:text-[#075F70]"
+                isSelected ? "bg-[#E5EFF0] text-brand-teal-dark" : "bg-gray-100 text-gray-400 group-hover:bg-[#E5EFF0] group-hover:text-brand-teal-dark"
             )}>
                 {icon}
             </div>
@@ -52,7 +52,7 @@ export function SelectionCard({
         <div className="flex flex-col gap-1">
           <span className={cn(
               "text-lg font-medium font-montserrat transition-colors",
-              isSelected ? "text-[#075F70]" : "text-[#3C3C3C]"
+              isSelected ? "text-brand-teal-dark" : "text-neutral-dark"
           )}>
             {title}
           </span>
@@ -68,7 +68,7 @@ export function SelectionCard({
       {/* Barra Inferior Decorativa */}
       <div className={cn(
           "h-1.5 w-full absolute bottom-0 left-0 transition-all duration-300",
-          isSelected ? "bg-[#075F70]" : "bg-transparent group-hover:bg-gray-200"
+          isSelected ? "bg-brand-teal-dark" : "bg-transparent group-hover:bg-gray-200"
       )} />
     </div>
   );

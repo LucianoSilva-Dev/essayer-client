@@ -46,7 +46,7 @@ export function StepNavigation() {
         disabled={isSubmitting}
         className={cn(
             "group relative overflow-hidden h-[56px] rounded-full px-8 shadow-md hover:shadow-xl transition-all duration-300",
-            "bg-[#075F70] hover:bg-[#054a57] text-white min-w-[160px]",
+            "bg-brand-teal-dark hover:bg-[#054a57] text-white min-w-[160px]",
             "font-montserrat font-bold text-lg tracking-wide"
         )}
       >

@@ -23,10 +23,10 @@ export default function EntrarTurmaCard({ className }: { className?: string }) {
       {/* --- CONTEÚDO DE TEXTO --- */}
       {/* O gradiente cria o efeito de fade suave sobre a imagem se ela descer muito */}
       <div className="absolute bottom-0 left-0 right-0 flex flex-col justify-end items-center pb-8 pt-16 px-4 z-10 bg-gradient-to-t from-[#E5EFF0] via-[#E5EFF0] to-transparent">
-        <h2 className="font-montserrat font-semibold text-2xl leading-tight text-[#075F70] text-center transition-colors duration-300 group-hover:text-[#054551]">
+        <h2 className="font-montserrat font-semibold text-2xl leading-tight text-brand-teal-dark text-center transition-colors duration-300 group-hover:text-[#054551]">
           Entre para uma turma
         </h2>
-        <p className="font-montserrat font-medium text-lg leading-snug text-[#075F70]/80 text-center mt-1 transition-colors duration-300 group-hover:text-[#054551]">
+        <p className="font-montserrat font-medium text-lg leading-snug text-brand-teal-dark/80 text-center mt-1 transition-colors duration-300 group-hover:text-[#054551]">
           Clique aqui para entrar em uma nova turma!
         </p>
       </div>

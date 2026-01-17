@@ -19,7 +19,7 @@ export const EixosSelecionados: React.FC<EixosSelecionadosProps> = ({
   }
 
   return (
-    <div className="bg-[#E8E8E8] rounded-[52px] p-6 md:p-12 space-y-6 md:space-y-8">
+    <div className="bg-surface-light rounded-[52px] p-6 md:p-12 space-y-6 md:space-y-8">
       {/* Seção de Eixos */}
       <div>
         <h3 className="text-sm md:text-base font-bold uppercase tracking-wider text-gray-600 mb-3 md:mb-4 ml-2">
@@ -31,7 +31,7 @@ export const EixosSelecionados: React.FC<EixosSelecionadosProps> = ({
               key={i} 
               className="bg-white pl-1.5 md:pl-2 pr-3 md:pr-4 py-1.5 md:py-2 rounded-full flex items-center gap-2 shadow-sm border border-gray-100 flex-shrink-0"
             >
-              <div className="bg-[#024D4D] w-6 h-6 md:w-7 md:h-7 rounded-full flex items-center justify-center flex-shrink-0">
+              <div className="bg-brand-teal-secondary w-6 h-6 md:w-7 md:h-7 rounded-full flex items-center justify-center flex-shrink-0">
                 <Image
                   src={getIconForEixo(eixo.nome)}
                   alt={eixo.nome}

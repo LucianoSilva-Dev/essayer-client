@@ -32,7 +32,7 @@ export default async function PraticarRedacaoIdPage({
           className="absolute w-full max-w-6xl
                      top-12
                      bottom-20 
-                     bg-gradient-to-b from-[#F9FAFB] via-[#075F70]/20 to-[#075F70] 
+                     bg-gradient-to-b from-[#F9FAFB] via-brand-teal-dark/20 to-brand-teal-dark 
                      opacity-60 rounded-[70px] -z-0"
         />
 

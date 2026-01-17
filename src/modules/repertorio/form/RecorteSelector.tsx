@@ -54,7 +54,7 @@ export const RecorteSelector: React.FC<RecorteSelectorProps> = ({
               className={`
                 cursor-pointer inline-flex items-center px-3 py-2 rounded-lg text-xs font-semibold transition-all duration-200 select-none border
                 ${isSelected 
-                  ? "bg-[#075F70] border-[#075F70] text-white shadow-sm" 
+                  ? "bg-brand-teal-dark border-brand-teal-dark text-white shadow-sm" 
                   : "bg-white border-gray-200 text-gray-600 hover:border-gray-400 hover:bg-gray-50"
                 }
               `}

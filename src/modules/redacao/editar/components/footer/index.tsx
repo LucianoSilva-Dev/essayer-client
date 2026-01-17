@@ -53,8 +53,8 @@ export function RedacaoFooter({
   if (isLoading) {
     return (
       // Usamos h-14 e mt-9 para manter exatamente a mesma altura do footer normal, evitando pulos no layout
-      <div className="w-full flex justify-center items-center mt-9 h-14 bg-[#075F70]/10 rounded-full px-4 transition-all">
-        <div className="flex items-center gap-3 text-[#075F70]">
+      <div className="w-full flex justify-center items-center mt-9 h-14 bg-brand-teal-dark/10 rounded-full px-4 transition-all">
+        <div className="flex items-center gap-3 text-brand-teal-dark">
           {/* Ícone de IA girando e pulsando */}
           <div className="relative">
              {/* Um loader circular girando atrás */}
@@ -77,7 +77,7 @@ export function RedacaoFooter({
     <div className="w-full flex justify-between items-center mt-9 h-14 transition-all">
       
       {/* Esquerda: Contador */}
-      <span className="text-[#3C3C3C] font-semibold text-lg">
+      <span className="text-neutral-dark font-semibold text-lg">
         {contagemPalavras}/{maxPalavras} palavras
       </span>
       
@@ -87,8 +87,8 @@ export function RedacaoFooter({
         {/* Botão Finalizar */}
         <button
           onClick={onFinalizar}
-          className="border-2 border-[#075F70] text-[#075F70]
-                     bg-transparent hover:bg-[#075F70]/10 
+          className="border-2 border-brand-teal-dark text-brand-teal-dark
+                     bg-transparent hover:bg-brand-teal-dark/10 
                      rounded-full 
                      px-6 py-3 
                      text-lg font-bold
@@ -101,7 +101,7 @@ export function RedacaoFooter({
         {/* Botão Corrigir */}
         <button
           onClick={onCorrigir}
-          className="bg-[#075F70] hover:bg-[#086f80] 
+          className="bg-brand-teal-dark hover:bg-[#086f80] 
                      text-white 
                      rounded-full 
                      px-8 py-3 

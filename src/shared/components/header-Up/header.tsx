@@ -72,7 +72,7 @@ export function Header({ currentPage, description, backPage }: HeaderProps) {
                 <div className="w-11 h-8 flex items-center justify-center">
                   <Redo2 
                     size={32} 
-                    className="text-[#3C3C3C] transform rotate-180 group-hover:scale-110 transition-transform duration-200" 
+                    className="text-neutral-dark transform rotate-180 group-hover:scale-110 transition-transform duration-200" 
                   />
                 </div>
               </button>
@@ -85,7 +85,7 @@ export function Header({ currentPage, description, backPage }: HeaderProps) {
                 <div className="w-11 h-8 flex items-center justify-center" title="Voltar">
                   <Redo2 
                     size={32} 
-                    className="text-[#3C3C3C] transform rotate-180 group-hover:scale-110 transition-transform duration-200" 
+                    className="text-neutral-dark transform rotate-180 group-hover:scale-110 transition-transform duration-200" 
                   />
                 </div>
               </Link>
@@ -96,7 +96,7 @@ export function Header({ currentPage, description, backPage }: HeaderProps) {
           {(currentPage || description) && (
             <div className="flex flex-col">
               {currentPage && (
-                <h1 className="text-[#3C3C3C] text-2xl font-medium">
+                <h1 className="text-neutral-dark text-2xl font-medium">
                   {currentPage}
                 </h1>
               )}

@@ -60,7 +60,7 @@ export function EmailVerificationModal({
 
   return (
     <div
-      className={`fixed inset-0 z-[999] flex items-center justify-center p-4 font-montserrat transition-opacity duration-300 ease-in-out ${isVisible ? 'bg-[#075F70]/60 backdrop-blur-sm opacity-100' : 'bg-transparent backdrop-blur-none opacity-0'}`}
+      className={`fixed inset-0 z-[999] flex items-center justify-center p-4 font-montserrat transition-opacity duration-300 ease-in-out ${isVisible ? 'bg-brand-teal-dark/60 backdrop-blur-sm opacity-100' : 'bg-transparent backdrop-blur-none opacity-0'}`}
       onClick={onClose}
     >
       <div
@@ -73,12 +73,12 @@ export function EmailVerificationModal({
 
         <div className="flex flex-col items-center">
           {/* Icon */}
-          <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full flex items-center justify-center border shadow-inner bg-[#075F70]/10 border-[#075F70]/20 mb-4 sm:mb-6">
-             <AlertTriangle size={28} className="sm:w-8 sm:h-8 text-[#075F70]" />
+          <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full flex items-center justify-center border shadow-inner bg-brand-teal-dark/10 border-brand-teal-dark/20 mb-4 sm:mb-6">
+             <AlertTriangle size={28} className="sm:w-8 sm:h-8 text-brand-teal-dark" />
           </div>
 
           {/* Title */}
-          <h3 className="text-lg sm:text-xl lg:text-2xl font-semibold text-[#3C3C3C] mb-2 text-center">Confirme que esse e-mail é seu</h3>
+          <h3 className="text-lg sm:text-xl lg:text-2xl font-semibold text-neutral-dark mb-2 text-center">Confirme que esse e-mail é seu</h3>
 
           {/* Description */}
           <p className="text-xs sm:text-sm text-gray-500 text-center mb-6 sm:mb-8 leading-relaxed px-2">

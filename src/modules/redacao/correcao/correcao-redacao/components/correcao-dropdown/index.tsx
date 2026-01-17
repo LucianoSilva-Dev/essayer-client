@@ -80,16 +80,16 @@ export function CorrectionsTimelineDropdown({
           group relative bg-white pl-3 pr-2 py-1.5 rounded-[32px] shadow-sm border 
           flex items-center gap-3 transition-all duration-300 outline-none cursor-pointer
           ${isDropdownOpen 
-              ? 'border-[#075F70] ring-2 ring-[#075F70]/10' 
-              : 'border-gray-200 hover:border-[#075F70]/50 hover:shadow-md'}
+              ? 'border-brand-teal-dark ring-2 ring-brand-teal-dark/10' 
+              : 'border-gray-200 hover:border-brand-teal-dark/50 hover:shadow-md'}
         `}
       >
         <div className="flex items-center gap-2 pl-1">
-          <History size={16} className="text-gray-400 group-hover:text-[#075F70] transition-colors" />
+          <History size={16} className="text-gray-400 group-hover:text-brand-teal-dark transition-colors" />
           <span className="text-sm font-medium text-gray-600 hidden sm:inline-block">Histórico</span>
         </div>
 
-        <div className="flex items-center gap-1 bg-white border border-[#075F70]/30 text-[#075F70] px-3 py-1.5 rounded-full">
+        <div className="flex items-center gap-1 bg-white border border-brand-teal-dark/30 text-brand-teal-dark px-3 py-1.5 rounded-full">
           <span className="text-xs font-bold whitespace-nowrap">Correção {numeroVersaoAtual}</span>
           <ChevronDown size={14} className={`transition-transform duration-300 ${isDropdownOpen ? 'rotate-180' : ''}`} />
         </div>
@@ -116,24 +116,24 @@ export function CorrectionsTimelineDropdown({
                 return (
                   <div key={item.id} className={`relative mb-1 ${isLast ? 'mb-0' : ''}`}>
                       <div
-                          className={`relative z-10 w-full flex items-start gap-2 p-2 rounded-xl text-left transition-all duration-200 group/item cursor-pointer ${isActive ? 'bg-[#075F70]/5' : 'hover:bg-gray-50'}`}
+                          className={`relative z-10 w-full flex items-start gap-2 p-2 rounded-xl text-left transition-all duration-200 group/item cursor-pointer ${isActive ? 'bg-brand-teal-dark/5' : 'hover:bg-gray-50'}`}
                           onClick={() => {
                               onTrocarCorrecao(item)
                               setIsDropdownOpen(false)
                           }}
                       >
                           <div className="w-12 flex justify-center pt-1.5 flex-shrink-0">
-                              <div className={`relative z-20 rounded-full border-2 transition-all duration-300 flex items-center justify-center ${isActive ? 'w-5 h-5 bg-[#075F70] border-[#075F70] shadow-[0_0_0_4px_rgba(7,95,112,0.1)]' : 'w-3.5 h-3.5 bg-white border-gray-300 group-hover/item:border-[#075F70] group-hover/item:scale-110'}`}>
+                              <div className={`relative z-20 rounded-full border-2 transition-all duration-300 flex items-center justify-center ${isActive ? 'w-5 h-5 bg-brand-teal-dark border-brand-teal-dark shadow-[0_0_0_4px_rgba(7,95,112,0.1)]' : 'w-3.5 h-3.5 bg-white border-gray-300 group-hover/item:border-brand-teal-dark group-hover/item:scale-110'}`}>
                                   {isActive && <div className="w-1.5 h-1.5 bg-white rounded-full" />}
                               </div>
                           </div>
                           <div className="flex-1 min-w-0 py-0.5">
                               <div className="flex justify-between items-center mb-0.5">
-                                  <span className={`text-sm font-bold ${isActive ? 'text-[#075F70]' : 'text-gray-700'}`}>Correção {numeroCorrecao}</span>
+                                  <span className={`text-sm font-bold ${isActive ? 'text-brand-teal-dark' : 'text-gray-700'}`}>Correção {numeroCorrecao}</span>
                                   <div className="flex items-center gap-2">
                                     {status === 'error' && <AlertCircle size={14} className="text-red-500" />}
                                     {status === 'pending' && <Loader2 size={14} className="text-amber-500 animate-spin" />}
-                                    {status === 'success' && isActive && <CheckCircle2 size={14} className="text-[#075F70]" />}
+                                    {status === 'success' && isActive && <CheckCircle2 size={14} className="text-brand-teal-dark" />}
                                     
                                     <button
                                       onClick={(e) => handleDeleteClick(e, item.id)}
@@ -144,7 +144,7 @@ export function CorrectionsTimelineDropdown({
                                     </button>
                                   </div>
                               </div>
-                              <p className={`text-xs truncate ${isActive ? 'text-[#075F70]/70' : 'text-gray-400'}`}>
+                              <p className={`text-xs truncate ${isActive ? 'text-brand-teal-dark/70' : 'text-gray-400'}`}>
                                   {status === 'success' ? 'Processamento concluído' : (status === 'pending' ? 'Em processamento...' : 'Erro no processamento')}
                               </p>
                           </div>

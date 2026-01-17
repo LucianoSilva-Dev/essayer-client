@@ -28,7 +28,7 @@ export function AuthButtons() {
       {/* Exibe o conteúdo do usuário apenas se estiver logado E o carregamento estiver concluído */}
       {isLoggedIn && !isLoading ? (
         <>
-          <span className="text-[#3c3c3c] text-[20px] font-bold">
+          <span className="text-neutral-dark text-[20px] font-bold">
             {/* Verificação segura para exibir o nome */}
             Olá, {userData?.nome ? userData.nome.split(" ")[0] : ""}
           </span>
@@ -61,13 +61,13 @@ export function AuthButtons() {
         <>
           <Link
             href="/login"
-            className="px-6 py-1 rounded-[40px] text-[#075F70] text-[20px] border-2 border-transparent hover:border-[#075F70] duration-300 transition-colors active:scale-95"
+            className="px-6 py-1 rounded-[40px] text-brand-teal-dark text-[20px] border-2 border-transparent hover:border-brand-teal-dark duration-300 transition-colors active:scale-95"
           >
             Entrar
           </Link>
           <Link
             href="/register"
-            className="px-6 py-1 rounded-[40px] bg-transparent border-2 border-[#075F70] text-[#075F70] text-[20px] hover:bg-[#075F70] hover:text-white duration-300 transition-colors active:scale-95"
+            className="px-6 py-1 rounded-[40px] bg-transparent border-2 border-brand-teal-dark text-brand-teal-dark text-[20px] hover:bg-brand-teal-dark hover:text-white duration-300 transition-colors active:scale-95"
           >
             Cadastrar-se
           </Link>

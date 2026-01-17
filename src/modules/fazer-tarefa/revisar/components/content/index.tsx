@@ -130,8 +130,8 @@ export function RevisaoRedacaoPage({ id }: RevisaoRedacaoPageProps) {
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4 animate-in fade-in duration-500">
-        <Loader2 className="w-10 h-10 text-[#075F70] animate-spin" />
-        <p className="text-[#075F70] font-montserrat font-medium">Carregando detalhes da atividade...</p>
+        <Loader2 className="w-10 h-10 text-brand-teal-dark animate-spin" />
+        <p className="text-brand-teal-dark font-montserrat font-medium">Carregando detalhes da atividade...</p>
       </div>
     );
   }
@@ -143,11 +143,11 @@ export function RevisaoRedacaoPage({ id }: RevisaoRedacaoPageProps) {
         <div className="bg-red-50 p-4 rounded-full text-red-500">
             <AlertCircle size={40} />
         </div>
-        <h2 className="text-xl font-bold text-[#3C3C3C] font-montserrat">Atividade não encontrada</h2>
+        <h2 className="text-xl font-bold text-neutral-dark font-montserrat">Atividade não encontrada</h2>
         <p className="text-gray-500 max-w-md font-montserrat">
             Não foi possível carregar os dados desta tarefa. Verifique se o link está correto ou tente novamente mais tarde.
         </p>
-        <Link href="/turmas_aluno" className="text-[#075F70] font-bold hover:underline mt-2">
+        <Link href="/turmas_aluno" className="text-brand-teal-dark font-bold hover:underline mt-2">
             Voltar para minhas turmas
         </Link>
       </div>
@@ -177,7 +177,7 @@ export function RevisaoRedacaoPage({ id }: RevisaoRedacaoPageProps) {
                 
                 <div className="z-10 flex-1 space-y-4">
                     <div className="flex items-center gap-3 mb-2">
-                        <span className="bg-[#E5EFF0] text-[#075F70] px-3 py-1 rounded-full text-xs font-bold font-montserrat uppercase tracking-wider">
+                        <span className="bg-[#E5EFF0] text-brand-teal-dark px-3 py-1 rounded-full text-xs font-bold font-montserrat uppercase tracking-wider">
                             Eixo Temático
                         </span>
                         <div className="flex items-center gap-2 text-gray-600 font-medium font-montserrat text-sm">
@@ -199,14 +199,14 @@ export function RevisaoRedacaoPage({ id }: RevisaoRedacaoPageProps) {
                     
                     <div>
                         <h3 className="text-gray-400 text-sm font-montserrat font-medium mb-1">Título da Atividade</h3>
-                        <p className="text-[24px] font-bold text-[#3C3C3C] font-montserrat leading-tight">
+                        <p className="text-[24px] font-bold text-neutral-dark font-montserrat leading-tight">
                             {tarefa.titulo}
                         </p>
                     </div>
 
                     <div>
                         <h3 className="text-gray-400 text-sm font-montserrat font-medium mb-1">Tema da Redação</h3>
-                        <p className="text-[18px] text-[#3C3C3C] font-montserrat italic bg-gray-50 p-4 rounded-xl border-l-4 border-[#075F70]">
+                        <p className="text-[18px] text-neutral-dark font-montserrat italic bg-gray-50 p-4 rounded-xl border-l-4 border-brand-teal-dark">
                             "{tarefa.tema}"
                         </p>
                     </div>
@@ -215,7 +215,7 @@ export function RevisaoRedacaoPage({ id }: RevisaoRedacaoPageProps) {
 
             {/* Card Instruções */}
             <div className="bg-white p-8 rounded-[30px] shadow-sm border border-gray-100 space-y-4">
-                <div className="flex items-center gap-2 text-[#075F70] mb-2">
+                <div className="flex items-center gap-2 text-brand-teal-dark mb-2">
                     <FileText size={20} />
                     <h3 className="font-bold font-montserrat text-lg">Instruções</h3>
                 </div>
@@ -226,7 +226,7 @@ export function RevisaoRedacaoPage({ id }: RevisaoRedacaoPageProps) {
 
             {/* Card Repertórios */}
             <div className="space-y-4">
-                <div className="flex items-center gap-2 text-[#075F70] px-2">
+                <div className="flex items-center gap-2 text-brand-teal-dark px-2">
                     <Quote size={20} />
                     <h3 className="font-bold font-montserrat text-lg">
                         Textos de Apoio ({tarefa.repertoriosApoio?.length || 0})
@@ -268,7 +268,7 @@ export function RevisaoRedacaoPage({ id }: RevisaoRedacaoPageProps) {
         <div className="space-y-6">
             
             {/* Prazo */}
-            <div className="bg-[#075F70] text-white p-8 rounded-[30px] shadow-lg relative overflow-hidden group">
+            <div className="bg-brand-teal-dark text-white p-8 rounded-[30px] shadow-lg relative overflow-hidden group">
                  <div className="absolute -right-10 -top-10 bg-white/10 w-40 h-40 rounded-full blur-2xl group-hover:bg-white/20 transition-all duration-700" />
                  
                  <h3 className="font-montserrat font-semibold text-lg opacity-80 mb-6 flex items-center gap-2 relative z-10">
@@ -297,27 +297,27 @@ export function RevisaoRedacaoPage({ id }: RevisaoRedacaoPageProps) {
 
             {/* Timer */}
             <div className="bg-white p-8 rounded-[30px] shadow-sm border border-gray-100 flex items-center gap-4">
-                <div className="w-14 h-14 bg-[#E5EFF0] rounded-full flex items-center justify-center text-[#075F70]">
+                <div className="w-14 h-14 bg-[#E5EFF0] rounded-full flex items-center justify-center text-brand-teal-dark">
                     <Timer size={28} />
                 </div>
                 <div>
                     <p className="text-gray-400 text-xs font-montserrat font-bold uppercase tracking-wide">
                         Tempo Sugerido
                     </p>
-                    <p className="text-2xl font-bold text-[#3C3C3C] font-montserrat">
+                    <p className="text-2xl font-bold text-neutral-dark font-montserrat">
                         {tarefa.tempoLimiteEmMinutos ? `${tarefa.tempoLimiteEmMinutos} min` : "Livre"}
                     </p>
                 </div>
             </div>
 
             {/* BOTÃO DE AÇÃO: Leva para o EDITOR */}
-            <div className="bg-white p-6 rounded-[30px] shadow-xl border border-gray-100 flex flex-col gap-4 transform transition-all hover:border-[#075F70]/30">
+            <div className="bg-white p-6 rounded-[30px] shadow-xl border border-gray-100 flex flex-col gap-4 transform transition-all hover:border-brand-teal-dark/30">
                 <div className="flex gap-3 items-start">
-                    <div className="bg-blue-50 p-2 rounded-full text-[#075F70] mt-1">
+                    <div className="bg-blue-50 p-2 rounded-full text-brand-teal-dark mt-1">
                         <AlertCircle size={20} />
                     </div>
                     <div>
-                        <h4 className="text-[#3C3C3C] font-bold font-montserrat text-sm mb-1">
+                        <h4 className="text-neutral-dark font-bold font-montserrat text-sm mb-1">
                             Pronto para começar?
                         </h4>
                         <p className="text-gray-500 text-xs font-montserrat leading-relaxed">
@@ -330,7 +330,7 @@ export function RevisaoRedacaoPage({ id }: RevisaoRedacaoPageProps) {
                 <Link 
                     href={`/fazer-tarefa/${id}/editor`} 
                     className="
-                        group w-full bg-[#075F70] hover:bg-[#054a57] 
+                        group w-full bg-brand-teal-dark hover:bg-[#054a57] 
                         text-white font-bold py-4 rounded-2xl 
                         transition-all duration-300 
                         flex items-center justify-center gap-3 

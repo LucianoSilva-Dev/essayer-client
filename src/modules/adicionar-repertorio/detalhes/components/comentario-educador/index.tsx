@@ -16,7 +16,7 @@ export const ComentarioEducador: React.FC<ComentarioEducadorProps> = ({
   onFixarChange
 }) => {
   return (
-    <div className="bg-[#E8E8E8] rounded-[52px] p-12">
+    <div className="bg-surface-light rounded-[52px] p-12">
       <div className="space-y-7">
         {/* Label */}
         <h3 
@@ -51,7 +51,7 @@ export const ComentarioEducador: React.FC<ComentarioEducadorProps> = ({
             <button
               onClick={() => onFixarChange(!fixarComentario)}
               className={`flex items-center justify-center  py-2 rounded-[32px] transition-colors ${
-                fixarComentario ? 'bg-[#075F70] text-white px-2' : 'bg-white text-[#075F70] px-4'
+                fixarComentario ? 'bg-brand-teal-dark text-white px-2' : 'bg-white text-brand-teal-dark px-4'
               }`}
             >
               <span 

@@ -34,7 +34,7 @@ export default function NovoCriarTurmaCard() {
     >
       <div className="absolute inset-0 bg-gradient-to-br from-white via-[#F0F7F8] to-[#E5EFF0] z-0" />
       {/* Background blobs com opacidade - mantido medidas relativas ou ajustadas */}
-      <div className="absolute top-[-20%] right-[-10%] w-full h-full max-w-lg max-h-[30rem] bg-[#075F70] opacity-[0.08] rounded-full blur-3xl transition-all duration-500 group-hover/card:scale-110 group-hover/card:opacity-[0.12] z-0" />
+      <div className="absolute top-[-20%] right-[-10%] w-full h-full max-w-lg max-h-[30rem] bg-brand-teal-dark opacity-[0.08] rounded-full blur-3xl transition-all duration-500 group-hover/card:scale-110 group-hover/card:opacity-[0.12] z-0" />
       
       <div className="relative z-10 h-full grid grid-cols-1 md:grid-cols-5 px-6 md:px-8 pb-4 items-center gap-4">
         
@@ -42,15 +42,15 @@ export default function NovoCriarTurmaCard() {
         <div className="col-span-1 md:col-span-3 flex flex-col justify-center items-start gap-6 md:gap-8 pl-2 h-full py-6 md:py-0">
           <div className="space-y-2 md:space-y-4">
             {/* Responsividade no texto: text-3xl mobile -> text-4xl desktop */}
-            <h2 className="font-montserrat font-bold text-3xl md:text-4xl leading-[1.1] text-[#075F70] transition-colors group-hover/card:text-[#054551]">
+            <h2 className="font-montserrat font-bold text-3xl md:text-4xl leading-[1.1] text-brand-teal-dark transition-colors group-hover/card:text-[#054551]">
               Criar Turma
             </h2>
-            <p className="font-montserrat font-medium text-lg md:text-xl leading-[1.3] text-[#3C3C3C]/80 max-w-[95%]">
+            <p className="font-montserrat font-medium text-lg md:text-xl leading-[1.3] text-neutral-dark/80 max-w-[95%]">
               Está pronto para aproveitar do que o turmas tem de melhor?
             </p>
           </div>
 
-          <div className="relative inline-flex items-center justify-center w-56 h-14 bg-[#075F70] text-white rounded-full font-montserrat font-semibold text-lg shadow-lg transition-all duration-300 group-hover/card:bg-[#054551] group-hover/card:scale-105 overflow-hidden">
+          <div className="relative inline-flex items-center justify-center w-56 h-14 bg-brand-teal-dark text-white rounded-full font-montserrat font-semibold text-lg shadow-lg transition-all duration-300 group-hover/card:bg-[#054551] group-hover/card:scale-105 overflow-hidden">
             <span className="relative z-10 transition-transform duration-300 group-hover/card:-translate-x-3">
               Criar turma
             </span>

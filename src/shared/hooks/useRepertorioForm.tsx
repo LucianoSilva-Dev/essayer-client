@@ -169,7 +169,7 @@ export default function RepertorioForm({ onSubmit, onCancel, initialData, isEdit
     // 3. O componente se concentra apenas em renderizar a UI
     return (
         <div className="bg-white rounded-lg shadow-md overflow-hidden">
-            <div className="bg-[#075F70] text-white p-4 flex justify-between items-center">
+            <div className="bg-brand-teal-dark text-white p-4 flex justify-between items-center">
                 <h2 className="text-xl font-semibold">{isEditing ? "Editando Repertório" : "Novo Repertório"}</h2>
             </div>
 

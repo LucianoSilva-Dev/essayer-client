@@ -11,56 +11,56 @@ const eixos: Eixo[] = [
     id: 'ambiente1',
     nome: 'Meio ambiente',
     descricao: 'Questões ambientais e seus impactos na sociedade, no planeta e nas futuras gerações.',
-    icone: '<Leaf className="h-6 w-6 text-[#2a9d8f]" />',
+    icone: '<Leaf className="h-6 w-6 text-brand-teal-tertiary" />',
     recortes: ['Desmatamento', 'Queimadas', 'Crise Hídrica', 'Poluição Marinha', 'Preservação ambiental', 'Arquitetura Sustentável', 'Urbanização', 'Ecoturismo'],
   },
   {
     id: 'social1',
     nome: 'Questões sociais',
     descricao: 'Desafios sociais como desigualdade, violência, inclusão e discriminação nas relações humanas.',
-    icone: '<Brain className="h-6 w-6 text-[#2a9d8f]" />',
+    icone: '<Brain className="h-6 w-6 text-brand-teal-tertiary" />',
     recortes: ['Racismo', 'Abandono', 'Violência', 'Trabalho infantil', 'População de rua', 'Acesso à Cultura', 'Moradia Periférica'],
   },
   {
     id: 'ciencia1',
     nome: 'Saúde e ciência',
     descricao: 'Temas relacionados à saúde pública, avanços científicos e bem-estar físico e mental.',
-    icone: '<HeartPulse className="h-6 w-6 text-[#2a9d8f]" />',
+    icone: '<HeartPulse className="h-6 w-6 text-brand-teal-tertiary" />',
     recortes: ['Negacionismo', 'SUS', 'Saúde mental', 'Pandemias', 'Drogas', 'Gravidez na adolescência', 'Ética Científica'],
   },
   {
     id: 'cultura1',
     nome: 'Arte e cultura',
     descricao: 'Exploração da diversidade cultural, identidade, expressões artísticas e patrimônio histórico.',
-    icone: '<Palette className="h-6 w-6 text-[#2a9d8f]" />',
+    icone: '<Palette className="h-6 w-6 text-brand-teal-tertiary" />',
     recortes: ['Cultura periférica', 'Liberdade artística', 'Festivais Culturais', 'Linguas Indigenas', 'Arte na Educação', 'Arte nas redes'],
   },
   {
     id: 'cidadania1',
     nome: 'Direitos e cidadania',
     descricao: 'Participação social, direitos fundamentais, democracia e políticas públicas para o bem-estar coletivo.',
-    icone: '<Scale className="h-6 w-6 text-[#2a9d8f]" />',
+    icone: '<Scale className="h-6 w-6 text-brand-teal-tertiary" />',
     recortes: ['Discurso de Ódio', 'Intolerância Religiosa', 'Igualdade de gênero', 'Criminalização da pobreza', 'Minorias', 'Direito ao voto', 'PCD', 'Igualdade de Gênero'],
   },
   {
     id: 'educacao1',
     nome: 'Educação',
     descricao: 'Discussões sobre acesso à educação, qualidade do ensino, inclusão e papel da escola na sociedade.',
-    icone: '<BookOpen className="h-6 w-6 text-[#2a9d8f]" />',
+    icone: '<BookOpen className="h-6 w-6 text-brand-teal-tertiary" />',
     recortes: ['Cotas', 'Inclusão Escolar', 'Alfabetização Infantil', 'Valorização do Professor', 'Ensino Técnico', 'Desigualdade na Educação'],
   },
   {
     id: 'tecnologia1',
     nome: 'Tecnologia',
     descricao: 'Impactos da tecnologia na vida cotidiana, educação, trabalho, privacidade e relações sociais.',
-    icone: '<Cpu className="h-6 w-6 text-[#2a9d8f]" />',
+    icone: '<Cpu className="h-6 w-6 text-brand-teal-tertiary" />',
     recortes: ['Privacidade na internet', 'Dependência Tecnológica', 'Fake News', 'Deep Fake', 'Cibersegurança', 'I.A.', 'Inclusão Digital', 'Streaming'],
   },
   {
     id: 'economia1',
     nome: 'Economia',
     descricao: 'Dinâmicas econômicas, consumo, globalização, desigualdade de renda e seus reflexos sociais.',
-    icone: '<BarChart3 className="h-6 w-6 text-[#2a9d8f]" />',
+    icone: '<BarChart3 className="h-6 w-6 text-brand-teal-tertiary" />',
     recortes: ['Empreendedorismo', 'Desemprego', 'Inflação', 'Desigualdade de renda', 'Justiça Fiscal', 'Investimentos', 'Economia Criativa', 'Distribuição de Renda'],
   },
 ];
@@ -208,7 +208,7 @@ export default function EixosRepertorioContent() {
             className={`
               cursor-pointer px-8 py-4 rounded-2xl font-medium text-lg transition-all duration-300
               ${eixosSelecionados.length > 0 && recortesSelecionados.length > 0
-                ? 'bg-[#075F70] text-white hover:bg-[#064c58] shadow-lg hover:shadow-xl'
+                ? 'bg-brand-teal-dark text-white hover:bg-[#064c58] shadow-lg hover:shadow-xl'
                 : 'bg-gray-300 text-gray-500 cursor-not-allowed'
               }
             `}

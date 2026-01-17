@@ -133,7 +133,7 @@ export default function NotificationBell() {
       <button
         onClick={() => setIsOpen(!isOpen)}
         className={`relative p-2 rounded-full transition-all duration-300 ${
-            isOpen ? 'bg-[#E5EFF0] text-[#075F70]' : 'hover:bg-gray-100 text-gray-600 hover:text-[#075F70]'
+            isOpen ? 'bg-[#E5EFF0] text-brand-teal-dark' : 'hover:bg-gray-100 text-gray-600 hover:text-brand-teal-dark'
         }`}
       >
         <BellIcon className="w-6 h-6" />
@@ -154,11 +154,11 @@ export default function NotificationBell() {
             className="absolute right-0 top-full mt-3 w-80 sm:w-96 bg-white rounded-2xl shadow-xl border border-gray-100 z-[100] overflow-hidden origin-top-right"
           >
             <div className="flex items-center justify-between p-4 border-b border-gray-50 bg-gray-50/50">
-              <h3 className="font-montserrat font-bold text-[#3C3C3C] text-sm">
+              <h3 className="font-montserrat font-bold text-neutral-dark text-sm">
                 Notificações {unreadCount > 0 && `(${unreadCount})`}
               </h3>
               {unreadCount > 0 && (
-                <button onClick={handleMarkAllAsRead} className="flex items-center gap-1 text-xs text-[#075F70] font-semibold cursor-pointer hover:underline transition-all">
+                <button onClick={handleMarkAllAsRead} className="flex items-center gap-1 text-xs text-brand-teal-dark font-semibold cursor-pointer hover:underline transition-all">
                     <DoubleCheckIcon /> Marcar todas
                 </button>
               )}
@@ -179,10 +179,10 @@ export default function NotificationBell() {
                         <div className="shrink-0 mt-1">{NotificationIcon}</div>
                         <div className="flex flex-col gap-1 w-full">
                             <div className="flex justify-between items-start">
-                                <p className={`text-sm font-montserrat ${!notif.lido ? 'font-bold text-[#3C3C3C]' : 'font-semibold text-gray-700'}`}>
+                                <p className={`text-sm font-montserrat ${!notif.lido ? 'font-bold text-neutral-dark' : 'font-semibold text-gray-700'}`}>
                                     {config.title}
                                 </p>
-                                {!notif.lido && <div className="w-2 h-2 rounded-full bg-[#075F70] shrink-0 mt-1.5" />}
+                                {!notif.lido && <div className="w-2 h-2 rounded-full bg-brand-teal-dark shrink-0 mt-1.5" />}
                             </div>
                             <p className="text-xs text-gray-500 font-montserrat leading-relaxed">
                                 {config.message}

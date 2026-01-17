@@ -130,7 +130,7 @@ export default function DetalhesRepertorioContent() {
       <div className="container mx-auto px-4">
         {/* Container principal */}
         <div className="max-w-[1208px] mx-auto space-y-6 md:space-y-8 animate-in fade-in duration-500">
-          <div className='bg-[#E8E8E8] rounded-[48px] md:rounded-[88px] p-6 md:p-12 space-y-6 md:space-y-8'>
+          <div className='bg-surface-light rounded-[48px] md:rounded-[88px] p-6 md:p-12 space-y-6 md:space-y-8'>
             {/* Header do repertório */}
             <HeaderDetalhes
               tipoRepertorio={dados.tipoRepertorio || 'artigo'}
@@ -170,8 +170,8 @@ export default function DetalhesRepertorioContent() {
               disabled={isDisabled}
               className={`px-6 md:px-12 py-3 md:py-4 w-full md:w-[580px] rounded-2xl md:rounded-[34px] font-semibold text-lg md:text-2xl transition-colors duration-300 ${
                 isDisabled
-                  ? "bg-[#898787] cursor-not-allowed text-[#3C3C3C]"
-                  : "bg-[#075F70] text-[#E5EFF0] hover:bg-[#019DA3] cursor-pointer delay-200"
+                  ? "bg-[#898787] cursor-not-allowed text-neutral-dark"
+                  : "bg-brand-teal-dark text-[#E5EFF0] hover:bg-[#019DA3] cursor-pointer delay-200"
               }`}
               style={{ fontFamily: 'Montserrat' }}
             >

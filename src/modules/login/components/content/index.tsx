@@ -78,7 +78,7 @@ export default function LoginForm() {
           <h1 className="text-3xl md:text-4xl font-semibold text-[#282133]">
             Bem-vindo ao Incita
           </h1>
-          <p className="text-lg md:text-2xl text-[#075F70] font-medium mt-2 mb-4">
+          <p className="text-lg md:text-2xl text-brand-teal-dark font-medium mt-2 mb-4">
             Sua plataforma de repertórios
           </p>
           <div className="w-full h-0.5 bg-[#D3D3D3] mb-4"></div>
@@ -86,7 +86,7 @@ export default function LoginForm() {
 
         <motion.p
           variants={itemVariants}
-          className="text-base md:text-[25px] text-[#3C3C3C] mb-6 md:mb-8 max-w-full md:max-w-2xl leading-relaxed"
+          className="text-base md:text-[25px] text-neutral-dark mb-6 md:mb-8 max-w-full md:max-w-2xl leading-relaxed"
         >
           Preencha os campos para entrar na plataforma.
         </motion.p>
@@ -99,7 +99,7 @@ export default function LoginForm() {
         >
           {/* Campo Email */}
           <motion.div variants={itemVariants} className="mb-8 md:mb-12">
-            <label className="block text-xl md:text-2xl font-medium text-[#3C3C3C] pl-1 md:pl-3 mb-2">
+            <label className="block text-xl md:text-2xl font-medium text-neutral-dark pl-1 md:pl-3 mb-2">
               Email
             </label>
             <input
@@ -107,7 +107,7 @@ export default function LoginForm() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="w-full px-4 py-3 md:px-6 md:py-4 bg-white rounded-2xl md:rounded-3xl 
-              focus:outline-none focus:ring-2 focus:ring-[#075F70] 
+              focus:outline-none focus:ring-2 focus:ring-brand-teal-dark 
               focus:shadow-lg focus:-translate-y-[0.5em]
               transition-all duration-300 text-base md:text-lg shadow-md"
               required
@@ -116,7 +116,7 @@ export default function LoginForm() {
 
           {/* Campo Senha */}
           <motion.div variants={itemVariants} className="mb-10 md:mb-16">
-            <label className="block text-xl md:text-2xl font-medium text-[#3C3C3C] pl-1 md:pl-3 mb-2">
+            <label className="block text-xl md:text-2xl font-medium text-neutral-dark pl-1 md:pl-3 mb-2">
               Insira uma senha
             </label>
             <div className="relative group">
@@ -125,7 +125,7 @@ export default function LoginForm() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="w-full px-4 py-3 md:px-6 md:py-4 bg-white rounded-2xl md:rounded-3xl 
-                focus:outline-none focus:ring-2 focus:ring-[#075F70] 
+                focus:outline-none focus:ring-2 focus:ring-brand-teal-dark 
                 focus:shadow-lg group-focus-within:-translate-y-[0.5em]
                 transition-all duration-300 text-base md:text-lg shadow-md"
               />
@@ -133,7 +133,7 @@ export default function LoginForm() {
                 type="button"
                 className="cursor-pointer absolute right-4 md:right-6 top-1/2 transform -translate-y-1/2 
                 text-gray-500 hover:text-gray-700
-                group-focus-within:-translate-y-[calc(50%+0.5em)] group-focus-within:text-[#075F70]
+                group-focus-within:-translate-y-[calc(50%+0.5em)] group-focus-within:text-brand-teal-dark
                 transition-all duration-300"
                 onClick={() => setShowPassword(!showPassword)}
                 aria-label="Alternar visibilidade da senha"
@@ -147,7 +147,7 @@ export default function LoginForm() {
           <motion.button
             variants={itemVariants}
             type="submit"
-            className="cursor-pointer w-full bg-[#075F70] hover:bg-[#064c5a] hover:shadow-xl hover:translate-y-[-0.2em] active:translate-y-0 text-white py-3.5 md:py-5 px-6 rounded-2xl md:rounded-3xl text-lg md:text-xl font-medium shadow-lg transition-all duration-300 mb-6 md:mb-8 focus:shadow-xl focus:translate-y-[-0.2em]"
+            className="cursor-pointer w-full bg-brand-teal-dark hover:bg-[#064c5a] hover:shadow-xl hover:translate-y-[-0.2em] active:translate-y-0 text-white py-3.5 md:py-5 px-6 rounded-2xl md:rounded-3xl text-lg md:text-xl font-medium shadow-lg transition-all duration-300 mb-6 md:mb-8 focus:shadow-xl focus:translate-y-[-0.2em]"
           >
             Entrar
           </motion.button>
@@ -159,7 +159,7 @@ export default function LoginForm() {
           >
             <Link
               href="/forgot-password"
-              className="text-md md:text-lg text-[#075F70] hover:text-[#064c5a] transition-colors hover:underline"
+              className="text-md md:text-lg text-brand-teal-dark hover:text-[#064c5a] transition-colors hover:underline"
             >
               Esqueceu a senha?
             </Link>
@@ -168,7 +168,7 @@ export default function LoginForm() {
               <span className="text-gray-600">Não tem uma conta?</span>
               <Link
                 href="/register"
-                className="text-[#075F70] hover:text-[#064c5a] font-medium transition-colors group-hover:underline"
+                className="text-brand-teal-dark hover:text-[#064c5a] font-medium transition-colors group-hover:underline"
               >
                 Cadastre-se
               </Link>

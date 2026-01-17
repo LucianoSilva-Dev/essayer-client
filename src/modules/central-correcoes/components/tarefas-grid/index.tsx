@@ -50,7 +50,7 @@ export function TarefaGrid({ tarefas, onSelectTarefa }: Props) {
                   "bg-gray-100 border-gray-200 grayscale opacity-75 hover:grayscale-0 hover:opacity-100 hover:bg-white hover:shadow-md"
                 : // ESTILO ATIVA (Padrão):
                   // - Efeitos de sombra colorida e levitação (-translate-y-1)
-                  "bg-[#F8F9FA] border-transparent hover:border-[#075F70]/30 hover:shadow-xl hover:shadow-[#075F70]/10 hover:-translate-y-1"
+                  "bg-[#F8F9FA] border-transparent hover:border-brand-teal-dark/30 hover:shadow-xl hover:shadow-brand-teal-dark/10 hover:-translate-y-1"
             }
           `}
           >
@@ -62,7 +62,7 @@ export function TarefaGrid({ tarefas, onSelectTarefa }: Props) {
                   className={`text-sm font-medium block mt-1 transition-colors ${
                     isEncerrada
                       ? "text-gray-500"
-                      : "text-gray-500 group-hover:text-[#075F70]"
+                      : "text-gray-500 group-hover:text-brand-teal-dark"
                   }`}
                 >
                   {tarefa.tipoAtividade === "Redacao" ? "Redação" : "Material"}
@@ -72,7 +72,7 @@ export function TarefaGrid({ tarefas, onSelectTarefa }: Props) {
                 <div
                   className={`
                     w-10 h-10 rounded-full text-white flex items-center justify-center shadow-md transform opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300
-                    ${isEncerrada ? "bg-gray-500" : "bg-[#075F70]"}
+                    ${isEncerrada ? "bg-gray-500" : "bg-brand-teal-dark"}
                 `}
                 >
                   {/* Se estiver encerrada, mostra um ícone de 'Olho' (Visualizar), senão Seta (Acessar) */}
@@ -134,7 +134,7 @@ export function TarefaGrid({ tarefas, onSelectTarefa }: Props) {
                                 ${
                                   isEncerrada
                                     ? "text-gray-500"
-                                    : "text-[#075F70]"
+                                    : "text-brand-teal-dark"
                                 }
                             `}
                     >
@@ -149,7 +149,7 @@ export function TarefaGrid({ tarefas, onSelectTarefa }: Props) {
               <div className="text-right flex flex-col items-end justify-between h-full">
                 <span
                   className={`text-xl font-bold leading-none mt-1 transition-transform origin-right group-hover:scale-105
-                    ${isEncerrada ? "text-gray-600" : "text-[#075F70]"}
+                    ${isEncerrada ? "text-gray-600" : "text-brand-teal-dark"}
                 `}
                 >
                   {tarefa.usuariosResponderam.length}

@@ -16,7 +16,7 @@ interface ListaTurmasAlunoProps {
 }
 
 const ArrowRightIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5 text-[#075F70]">
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5 text-brand-teal-dark">
     <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
   </svg>
 );
@@ -49,7 +49,7 @@ export default function ListaTurmasAluno({
       return (
           <div className="w-full h-32 flex flex-col items-center justify-center text-gray-400 font-montserrat bg-gray-50 rounded-[20px] border border-dashed border-gray-200 p-4 text-center">
               <p className="text-sm mb-2">Você não participa de nenhuma turma.</p>
-              <Link href="/entrar_turma" className="text-xs text-[#075F70] font-bold hover:underline">
+              <Link href="/entrar_turma" className="text-xs text-brand-teal-dark font-bold hover:underline">
                 Entrar em uma turma
               </Link>
           </div>
@@ -62,7 +62,7 @@ export default function ListaTurmasAluno({
         href={`${baseUrl}/${turma.id}`}
         className="block mb-3 group w-full"
       >
-        <div className="p-3 bg-white border border-gray-100 rounded-[20px] shadow-sm transition-all duration-300 group-hover:shadow-md group-hover:border-[#075F70]/30 flex items-center gap-3 relative overflow-hidden w-full">
+        <div className="p-3 bg-white border border-gray-100 rounded-[20px] shadow-sm transition-all duration-300 group-hover:shadow-md group-hover:border-brand-teal-dark/30 flex items-center gap-3 relative overflow-hidden w-full">
           <div className="h-14 w-14 bg-[#F0F7F8] rounded-xl flex items-center justify-center shrink-0 group-hover:bg-[#E5EFF0] transition-colors">
             <Image
               width={32}
@@ -74,7 +74,7 @@ export default function ListaTurmasAluno({
           </div>
 
           <div className="flex flex-col flex-1 min-w-0 gap-0.5">
-            <h3 className="font-montserrat font-bold text-base leading-tight text-[#3C3C3C] group-hover:text-[#075F70] transition-colors truncate">
+            <h3 className="font-montserrat font-bold text-base leading-tight text-neutral-dark group-hover:text-brand-teal-dark transition-colors truncate">
               {turma.nome}
             </h3>
             <p className="font-montserrat font-medium text-xs text-gray-500 truncate">
@@ -107,19 +107,19 @@ export default function ListaTurmasAluno({
                     <button
                         onClick={() => mudarPagina(Math.max(1, paginaAtual - 1))}
                         disabled={paginaAtual === 1}
-                        className="cursor-pointer text-[#075F70] hover:bg-gray-200 rounded-full p-0.5 disabled:opacity-30 transition-colors"
+                        className="cursor-pointer text-brand-teal-dark hover:bg-gray-200 rounded-full p-0.5 disabled:opacity-30 transition-colors"
                     >
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={3} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
                     </button>
                     
-                    <span className="text-xs font-bold text-[#075F70] w-6 text-center">
+                    <span className="text-xs font-bold text-brand-teal-dark w-6 text-center">
                         {paginaAtual}/{totalPaginas}
                     </span>
                     
                     <button
                         onClick={() => mudarPagina(Math.min(totalPaginas, paginaAtual + 1))}
                         disabled={paginaAtual === totalPaginas}
-                        className="cursor-pointer text-[#075F70] hover:bg-gray-200 rounded-full p-0.5 disabled:opacity-30 transition-colors"
+                        className="cursor-pointer text-brand-teal-dark hover:bg-gray-200 rounded-full p-0.5 disabled:opacity-30 transition-colors"
                     >
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={3} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
                     </button>

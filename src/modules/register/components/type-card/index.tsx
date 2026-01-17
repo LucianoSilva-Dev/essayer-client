@@ -77,7 +77,7 @@ export default function UserTypeCard({
             onTypeChange('student')
           }}
           className={` flex items-center justify-center
-            ${selectedType === 'student' ? 'w-[63px] bg-[#075F70]' : 'w-6 bg-[#D9D9D9]'}
+            ${selectedType === 'student' ? 'w-[63px] bg-brand-teal-dark' : 'w-6 bg-[#D9D9D9]'}
             h-6 rounded-full transition-all duration-300 ease-out cursor-pointer
           `}
           aria-label="Selecionar Estudante"
@@ -92,7 +92,7 @@ export default function UserTypeCard({
             onTypeChange('teacher')
           }}
           className={` flex items-center justify-center
-            ${selectedType === 'teacher' ? 'w-[63px] bg-[#075F70]' : 'w-6 bg-[#D9D9D9]'}
+            ${selectedType === 'teacher' ? 'w-[63px] bg-brand-teal-dark' : 'w-6 bg-[#D9D9D9]'}
             h-6 rounded-full transition-all duration-300 ease-out cursor-pointer
           `}
           aria-label="Selecionar Educador"
@@ -118,7 +118,7 @@ export default function UserTypeCard({
           exit="exit"
         >
           {/* Título */}
-          <h2 className="font-montserrat font-medium text-[32px] md:text-[44px] leading-[54px] text-[#3C3C3C] z-0">
+          <h2 className="font-montserrat font-medium text-[32px] md:text-[44px] leading-[54px] text-neutral-dark z-0">
             {data.title}
           </h2>
 

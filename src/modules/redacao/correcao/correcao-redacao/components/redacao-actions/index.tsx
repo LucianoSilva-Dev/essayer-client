@@ -13,12 +13,12 @@ interface RedacaoActionsProps {
 export function RedacaoActions({ onDelete, onRewrite, onCorrect, hasCorrection, isCorrecting }: RedacaoActionsProps) {
   return (
     <div className="flex flex-wrap items-center justify-end gap-3 w-full xl:w-auto">
-        <button onClick={onDelete} className="group flex items-center rounded-full bg-white border border-[#075F70] text-[#075F70] hover:bg-red-50 hover:border-red-200 hover:text-red-600 transition-all duration-300 ease-in-out overflow-hidden w-[42px] hover:w-[110px] h-[42px] cursor-pointer" title="Excluir">
+        <button onClick={onDelete} className="group flex items-center rounded-full bg-white border border-brand-teal-dark text-brand-teal-dark hover:bg-red-50 hover:border-red-200 hover:text-red-600 transition-all duration-300 ease-in-out overflow-hidden w-[42px] hover:w-[110px] h-[42px] cursor-pointer" title="Excluir">
             <div className="min-w-[40px] h-full flex items-center justify-center"><Trash2 size={18} /></div>
             <span className="whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300 font-bold text-sm pr-4">Excluir</span>
         </button>
 
-        <button className="px-5 py-2.5 rounded-[40px] bg-[#075F70] text-white text-sm font-bold hover:opacity-90 transition-opacity cursor-pointer shadow-sm" onClick={onRewrite}>
+        <button className="px-5 py-2.5 rounded-[40px] bg-brand-teal-dark text-white text-sm font-bold hover:opacity-90 transition-opacity cursor-pointer shadow-sm" onClick={onRewrite}>
             Reescrever
         </button>
 
@@ -28,7 +28,7 @@ export function RedacaoActions({ onDelete, onRewrite, onCorrect, hasCorrection, 
             className={`px-5 py-2.5 rounded-[40px] text-white text-sm font-bold transition-opacity flex items-center gap-2 shadow-sm ${
                 isCorrecting 
                     ? 'bg-gray-400 opacity-80 cursor-not-allowed' // Estilo de loading
-                    : 'bg-[#075F70] hover:opacity-90 cursor-pointer' // Estilo normal
+                    : 'bg-brand-teal-dark hover:opacity-90 cursor-pointer' // Estilo normal
             }`}
         >
             {isCorrecting ? (

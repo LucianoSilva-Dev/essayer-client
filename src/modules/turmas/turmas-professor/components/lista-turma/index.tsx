@@ -16,7 +16,7 @@ const ArrowRightIcon = () => (
     viewBox="0 0 24 24"
     strokeWidth={2.5}
     stroke="currentColor"
-    className="w-5 h-5 text-[#075F70]"
+    className="w-5 h-5 text-brand-teal-dark"
   >
     <path
       strokeLinecap="round"
@@ -75,7 +75,7 @@ export default function ListaTurmas() {
         href={`/turma_aberta_prof/${turma.id}`}
         className="block mb-3 group"
       >
-        <div className="p-3 bg-white border border-gray-100 rounded-2xl shadow-sm transition-all duration-300 group-hover:shadow-md group-hover:border-[#075F70]/30 flex items-center gap-3 relative overflow-hidden">
+        <div className="p-3 bg-white border border-gray-100 rounded-2xl shadow-sm transition-all duration-300 group-hover:shadow-md group-hover:border-brand-teal-dark/30 flex items-center gap-3 relative overflow-hidden">
           <div className="h-14 w-14 bg-[#F0F7F8] rounded-xl flex items-center justify-center shrink-0 group-hover:bg-[#E5EFF0] transition-colors">
             <Image
               width={32}
@@ -86,7 +86,7 @@ export default function ListaTurmas() {
             />
           </div>
           <div className="flex flex-col flex-1 min-w-0 gap-0.5">
-            <h3 className="font-montserrat font-bold text-base leading-tight text-[#3C3C3C] group-hover:text-[#075F70] transition-colors truncate">
+            <h3 className="font-montserrat font-bold text-base leading-tight text-neutral-dark group-hover:text-brand-teal-dark transition-colors truncate">
               {turma.nome}
             </h3>
             <p className="font-montserrat font-medium text-xs text-gray-500 truncate">
@@ -114,7 +114,7 @@ export default function ListaTurmas() {
               <button
                 onClick={() => mudarPagina(Math.max(1, paginaAtual - 1))}
                 disabled={paginaAtual === 1}
-                className="cursor-pointer text-[#075F70] hover:bg-gray-200 rounded-full p-0.5 disabled:opacity-30 transition-colors"
+                className="cursor-pointer text-brand-teal-dark hover:bg-gray-200 rounded-full p-0.5 disabled:opacity-30 transition-colors"
               >
                 <svg
                   className="w-4 h-4"
@@ -130,7 +130,7 @@ export default function ListaTurmas() {
                   />
                 </svg>
               </button>
-              <span className="text-xs font-bold text-[#075F70] w-6 text-center">
+              <span className="text-xs font-bold text-brand-teal-dark w-6 text-center">
                 {paginaAtual}/{totalPaginas}
               </span>
               <button
@@ -138,7 +138,7 @@ export default function ListaTurmas() {
                   mudarPagina(Math.min(totalPaginas, paginaAtual + 1))
                 }
                 disabled={paginaAtual === totalPaginas}
-                className="cursor-pointer  text-[#075F70] hover:bg-gray-200 rounded-full p-0.5 disabled:opacity-30 transition-colors"
+                className="cursor-pointer  text-brand-teal-dark hover:bg-gray-200 rounded-full p-0.5 disabled:opacity-30 transition-colors"
               >
                 <svg
                   className="w-4 h-4"

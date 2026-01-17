@@ -26,7 +26,7 @@ export function RedacaoTema({ id }: { id: string }) {
   }
 
   return (
-    <h1 className="text-3xl md:text-4xl font-bold text-[#075F70] text-center mb-8 px-4">
+    <h1 className="text-3xl md:text-4xl font-bold text-brand-teal-dark text-center mb-8 px-4">
       {tema}
     </h1>
   );

@@ -26,7 +26,7 @@ export function RedacaoHeader({ tempoRestante, isPaused, onPauseToggle, onOpenMo
       {/* --- BOTÃO TEXTOS MOTIVADORES --- */}
       <button 
         onClick={onOpenMotivacional}
-        className="flex items-center gap-2 text-[#3C3C3C] font-semibold text-lg hover:text-[#075F70] transition-colors duration-200"
+        className="flex items-center gap-2 text-neutral-dark font-semibold text-lg hover:text-brand-teal-dark transition-colors duration-200"
       >
         {/* REMOVIDO: Classes de cor daqui. O ícone agora herda a cor do botão pai. */}
         <BookOpen size={24} />
@@ -39,7 +39,7 @@ export function RedacaoHeader({ tempoRestante, isPaused, onPauseToggle, onOpenMo
           className={`rounded-[15px] 
                      px-2 py-1 
                      font-semibold text-xl
-                     ${isLate ? 'bg-red-100 text-red-600' : 'bg-[#DCDCDD] text-[#3C3C3C]'}`}
+                     ${isLate ? 'bg-red-100 text-red-600' : 'bg-[#DCDCDD] text-neutral-dark'}`}
         >
           {formatarTempo(tempoRestante)}
         </span>
@@ -47,7 +47,7 @@ export function RedacaoHeader({ tempoRestante, isPaused, onPauseToggle, onOpenMo
         <button
           onClick={onPauseToggle}
           // Ajustei o hover aqui também conforme seu pedido anterior (#064e5c)
-          className="w-11 h-11 bg-[#075F70] hover:bg-[#064e5c] rounded-full 
+          className="w-11 h-11 bg-brand-teal-dark hover:bg-[#064e5c] rounded-full 
                      flex items-center justify-center transition-colors shadow-sm"
         >
           {isPaused ? (

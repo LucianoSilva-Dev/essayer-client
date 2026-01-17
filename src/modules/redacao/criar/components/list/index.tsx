@@ -112,7 +112,7 @@ export function RedacoesCriadasList({
     <section ref={ref} className="space-y-8 font-montserrat">
       {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-center gap-6">
-        <h2 className="text-2xl font-semibold text-[#3C3C3C]">
+        <h2 className="text-2xl font-semibold text-neutral-dark">
           Redações criadas
         </h2>
 
@@ -133,7 +133,7 @@ export function RedacoesCriadasList({
           </button>
 
           <div className="w-full md:w-[28rem] h-12 flex items-center gap-3 p-1.5 bg-white rounded-full shadow-sm border border-gray-200">
-            <button className="w-9 h-9 bg-[#075F70] rounded-full flex items-center justify-center">
+            <button className="w-9 h-9 bg-brand-teal-dark rounded-full flex items-center justify-center">
               <Search size={18} className="text-white" />
             </button>
 
@@ -188,7 +188,7 @@ export function RedacoesCriadasList({
       {shouldRender && (
         <div
           className={`fixed inset-0 z-[999] flex items-center justify-center p-4 transition-opacity
-            ${isVisible ? "bg-[#075F70]/60 backdrop-blur-sm" : "opacity-0"}
+            ${isVisible ? "bg-brand-teal-dark/60 backdrop-blur-sm" : "opacity-0"}
           `}
           onClick={() => setRedacaoToDelete(null)}
         >

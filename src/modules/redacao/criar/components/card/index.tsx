@@ -29,7 +29,7 @@ export function RedacaoCard({ href, tema, status, finalizada, isDeleteMode = fal
         <p className="text-sm uppercase tracking-wide font-semibold text-[#898787]">
           Tema
         </p>
-        <h3 className="text-2xl font-semibold text-[#3C3C3C] line-clamp-3 leading-snug min-h-[4.5rem] group-hover:text-[#075F70]">
+        <h3 className="text-2xl font-semibold text-neutral-dark line-clamp-3 leading-snug min-h-[4.5rem] group-hover:text-brand-teal-dark">
           {tema}
         </h3>
       </div>
@@ -38,7 +38,7 @@ export function RedacaoCard({ href, tema, status, finalizada, isDeleteMode = fal
         <span className={`px-4 py-2 text-sm font-medium rounded-full ${config.className}`}>
           {config.text}
         </span>
-        <span className={`text-sm font-semibold ${finalizada ? 'text-[#3C3C3C]' : 'text-[#CA9C60]'}`}>
+        <span className={`text-sm font-semibold ${finalizada ? 'text-neutral-dark' : 'text-[#CA9C60]'}`}>
           {finalizada ? 'Finalizada' : 'Em andamento'}
         </span>
       </div>

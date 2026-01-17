@@ -31,7 +31,7 @@ export default function SolicitacoesPage() {
                 transition={pageTransition}
                 className="bg-white rounded-2xl shadow-sm p-10 mb-4"
             >
-                <h2 className="text-4xl font-medium text-[#3C3C3C]">Solicitar Mudança de cargo</h2>
+                <h2 className="text-4xl font-medium text-neutral-dark">Solicitar Mudança de cargo</h2>
                 <p className="mt-4 text-gray-600">Esta seção está em construção.</p>
             </motion.div>
             )}
@@ -44,7 +44,7 @@ export default function SolicitacoesPage() {
                 transition={pageTransition}
                 className="bg-white rounded-2xl shadow-sm p-10"
             >
-                <h1 className="text-4xl font-medium text-[#3C3C3C]">Solicitar desativação da conta</h1>
+                <h1 className="text-4xl font-medium text-neutral-dark">Solicitar desativação da conta</h1>
                 <p className="mt-4 text-gray-600">
                     Esta seção está em construção.
                 </p>

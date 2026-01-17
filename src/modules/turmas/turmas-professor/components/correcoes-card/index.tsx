@@ -33,7 +33,7 @@ export default function ModernCorrecoesCard({ className }: { className?: string 
     <Link
       href="/central_correcoes"
       // Substituído min-h-[250px] por min-h-[16rem] (256px)
-      className={`relative flex flex-col w-full h-full min-h-[16rem] bg-white rounded-[2rem] shadow-sm transition-all duration-300 overflow-hidden group border border-gray-100 hover:shadow-xl hover:border-[#075F70]/30 hover:-translate-y-1 ${className}`}
+      className={`relative flex flex-col w-full h-full min-h-[16rem] bg-white rounded-[2rem] shadow-sm transition-all duration-300 overflow-hidden group border border-gray-100 hover:shadow-xl hover:border-brand-teal-dark/30 hover:-translate-y-1 ${className}`}
     >
       <div className="flex items-center gap-3 p-5 pb-3 border-b border-gray-50 bg-gray-50/30">
         {isLoading ? (
@@ -43,11 +43,11 @@ export default function ModernCorrecoesCard({ className }: { className?: string 
             </div>
         ) : (
             <>
-                <div className="p-2 bg-[#E5EFF0] text-[#075F70] rounded-xl scale-90 transition-colors duration-300 group-hover:bg-[#075F70] group-hover:text-white group-hover:scale-100">
+                <div className="p-2 bg-[#E5EFF0] text-brand-teal-dark rounded-xl scale-90 transition-colors duration-300 group-hover:bg-brand-teal-dark group-hover:text-white group-hover:scale-100">
                     <ClipboardIcon className="w-5 h-5" />
                 </div>
                 {/* Substituído text-[20px] por text-xl */}
-                <h2 className="font-montserrat font-bold text-xl text-[#3C3C3C] group-hover:text-[#075F70] transition-colors">
+                <h2 className="font-montserrat font-bold text-xl text-neutral-dark group-hover:text-brand-teal-dark transition-colors">
                     Central de Correções
                 </h2>
             </>
@@ -70,12 +70,12 @@ export default function ModernCorrecoesCard({ className }: { className?: string 
         ) : (
             atividadesRecentes.length > 0 ? (
                 atividadesRecentes.map((atividade) => (
-                <div key={atividade.id} className="p-3 border-b border-gray-100 last:border-0 hover:bg-[#F0F7F8] hover:border-[#075F70]/20 hover:rounded-xl hover:translate-x-1 transition-all duration-200 cursor-pointer flex flex-col gap-2">
+                <div key={atividade.id} className="p-3 border-b border-gray-100 last:border-0 hover:bg-[#F0F7F8] hover:border-brand-teal-dark/20 hover:rounded-xl hover:translate-x-1 transition-all duration-200 cursor-pointer flex flex-col gap-2">
                     <div className="flex justify-between items-center gap-4">
                     {/* Substituído text-[15px] por text-sm */}
-                    <h3 className="font-montserrat font-semibold text-sm text-[#3C3C3C] line-clamp-1 flex-1">{atividade.titulo}</h3>
+                    <h3 className="font-montserrat font-semibold text-sm text-neutral-dark line-clamp-1 flex-1">{atividade.titulo}</h3>
                     <div className="flex items-center gap-1 bg-[#F0F7F8] group-hover/item:bg-white px-2 py-1 rounded-md border border-[#E5EFF0] shrink-0 transition-colors">
-                        <span className="font-montserrat font-bold text-xs text-[#075F70]">{String(atividade.respostas)}</span>
+                        <span className="font-montserrat font-bold text-xs text-brand-teal-dark">{String(atividade.respostas)}</span>
                         <span className="font-montserrat text-xs text-gray-400">/</span>
                         <span className="font-montserrat font-medium text-xs text-gray-500">{String(atividade.totalAlunos)}</span>
                     </div>
@@ -95,7 +95,7 @@ export default function ModernCorrecoesCard({ className }: { className?: string 
          {isLoading ? (
              <div className="h-4 w-32 bg-gray-200 rounded animate-pulse" />
          ) : (
-             <div className="flex items-center font-montserrat font-semibold text-sm text-[#075F70] transition-transform duration-300 group-hover:translate-x-2">
+             <div className="flex items-center font-montserrat font-semibold text-sm text-brand-teal-dark transition-transform duration-300 group-hover:translate-x-2">
                 Todas as Correções
                 <div className="transition-transform duration-300 group-hover:translate-x-1">
                     <ArrowRightIcon />

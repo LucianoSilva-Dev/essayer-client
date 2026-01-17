@@ -143,7 +143,7 @@ export function CommentSection({
             <button
               type="submit"
               disabled={isSubmittingComment || !newComment.trim()}
-              className="px-6 py-2 bg-white text-[#024D4D] font-bold font-montserrat rounded-full text-sm hover:bg-gray-50 transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-6 py-2 bg-white text-brand-teal-secondary font-bold font-montserrat rounded-full text-sm hover:bg-gray-50 transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Enviar
             </button>

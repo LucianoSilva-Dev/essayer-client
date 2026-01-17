@@ -20,13 +20,13 @@ export function TurmaHeaderSelector({ turmas, selected, onSelect }: Props) {
       <button 
         onClick={() => setIsOpen(!isOpen)}
         // Hover Text na cor principal
-        className="cursor-pointer flex items-center gap-2 text-xl md:text-2xl font-bold text-gray-800 hover:text-[#075F70] transition-colors focus:outline-none group"
+        className="cursor-pointer flex items-center gap-2 text-xl md:text-2xl font-bold text-gray-800 hover:text-brand-teal-dark transition-colors focus:outline-none group"
       >
-        <span className="border-b-2 border-transparent group-hover:border-[#075F70]/30 border-dashed pb-0.5 transition-all">
+        <span className="border-b-2 border-transparent group-hover:border-brand-teal-dark/30 border-dashed pb-0.5 transition-all">
             {selected?.nome}
         </span>
         {/* Ícone na cor principal */}
-        <ChevronDown size={20} className={`text-[#075F70] transition-transform duration-200 mt-1 ${isOpen ? 'rotate-180' : ''}`} />
+        <ChevronDown size={20} className={`text-brand-teal-dark transition-transform duration-200 mt-1 ${isOpen ? 'rotate-180' : ''}`} />
       </button>
 
       {isOpen && (
@@ -43,14 +43,14 @@ export function TurmaHeaderSelector({ turmas, selected, onSelect }: Props) {
                   onSelect(turma);
                   setIsOpen(false);
                 }}
-                className="cursor-pointer w-full text-left px-4 py-3 hover:bg-[#075F70]/5 flex items-center justify-between group transition-colors"
+                className="cursor-pointer w-full text-left px-4 py-3 hover:bg-brand-teal-dark/5 flex items-center justify-between group transition-colors"
               >
                 <div>
                     {/* Item Hover Text */}
-                    <p className="font-semibold text-gray-700 group-hover:text-[#075F70] text-sm">{turma.nome}</p>
+                    <p className="font-semibold text-gray-700 group-hover:text-brand-teal-dark text-sm">{turma.nome}</p>
                     <p className="text-xs text-gray-400">{turma.escola}</p>
                 </div>
-                {selected?.id === turma.id && <Check size={16} className="text-[#075F70]" />}
+                {selected?.id === turma.id && <Check size={16} className="text-brand-teal-dark" />}
               </button>
             ))}
           </div>

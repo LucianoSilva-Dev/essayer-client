@@ -35,7 +35,7 @@ export const SinteseSection: React.FC<SinteseSectionProps> = ({
   const placeholder = getPlaceholderSintese(tipoRepertorio);
 
   return (
-    <div className="bg-[#E8E8E8] rounded-[88px] px-12 py-4">
+    <div className="bg-surface-light rounded-[88px] px-12 py-4">
       <div className="space-y-7">
         {/* Label */}
         <h3 

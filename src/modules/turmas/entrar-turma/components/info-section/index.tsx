@@ -9,7 +9,7 @@ export function InfoSection() {
       {/* Título Principal ("Como funciona") */}
       {/* Tamanho: text-[30px] (mobile) | lg:text-[40px] (desktop) */}
       {/* Alinhamento: text-center (mobile) | lg:text-left (desktop) */}
-      <h2 className="text-[30px] lg:text-[40px] font-semibold leading-[49px] text-[#075F70] text-center lg:text-left">
+      <h2 className="text-[30px] lg:text-[40px] font-semibold leading-[49px] text-brand-teal-dark text-center lg:text-left">
         Como funciona
       </h2>
 

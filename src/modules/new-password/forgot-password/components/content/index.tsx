@@ -71,7 +71,7 @@ export default function ForgotPasswordForm() {
         {/* Descrição */}
         <motion.p
           variants={itemVariants}
-          className="text-base md:text-[25px] text-[#3C3C3C] mb-6 md:mb-8 max-w-full md:max-w-2xl leading-relaxed"
+          className="text-base md:text-[25px] text-neutral-dark mb-6 md:mb-8 max-w-full md:max-w-2xl leading-relaxed"
         >
           Insira o endereço do e-mail para receber o código de verificação e prosseguir na redefinição de senha
         </motion.p>
@@ -84,7 +84,7 @@ export default function ForgotPasswordForm() {
         >
           {/* Campo Email */}
           <motion.div variants={itemVariants} className="mb-10 md:mb-16">
-            <label className="block text-xl md:text-2xl font-medium text-[#3C3C3C] pl-1 md:pl-3 mb-2">
+            <label className="block text-xl md:text-2xl font-medium text-neutral-dark pl-1 md:pl-3 mb-2">
               Email
             </label>
             <div className="relative group">
@@ -93,7 +93,7 @@ export default function ForgotPasswordForm() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="w-full px-4 py-3 md:px-6 md:py-4 bg-white rounded-2xl md:rounded-3xl 
-                  focus:outline-none focus:ring-2 focus:ring-[#075F70] 
+                  focus:outline-none focus:ring-2 focus:ring-brand-teal-dark 
                   focus:shadow-lg group-focus-within:-translate-y-0.5 
                   transition-all duration-300 text-base md:text-lg shadow-md"
                 placeholder="Digite seu email"
@@ -106,7 +106,7 @@ export default function ForgotPasswordForm() {
           <motion.button
             variants={itemVariants}
             type="submit"
-            className="w-full bg-[#075F70] hover:bg-[#064c5a] hover:shadow-xl hover:translate-y-[-0.2em] active:translate-y-0 text-white py-3.5 md:py-5 px-6 rounded-2xl md:rounded-3xl text-lg md:text-xl font-medium shadow-lg transition-all duration-300 mb-6 md:mb-8 focus:shadow-xl focus:translate-y-[-0.2em]"
+            className="w-full bg-brand-teal-dark hover:bg-[#064c5a] hover:shadow-xl hover:translate-y-[-0.2em] active:translate-y-0 text-white py-3.5 md:py-5 px-6 rounded-2xl md:rounded-3xl text-lg md:text-xl font-medium shadow-lg transition-all duration-300 mb-6 md:mb-8 focus:shadow-xl focus:translate-y-[-0.2em]"
           >
             Enviar e-mail
           </motion.button>
@@ -119,7 +119,7 @@ export default function ForgotPasswordForm() {
             {!isLoggedIn && (
               <Link
                 href="/login"
-                className="text-md md:text-lg text-[#075F70] hover:text-[#064c5a] transition-colors hover:underline"
+                className="text-md md:text-lg text-brand-teal-dark hover:text-[#064c5a] transition-colors hover:underline"
               >
                 Voltar ao login
               </Link>
@@ -129,7 +129,7 @@ export default function ForgotPasswordForm() {
               <span className="text-gray-600">Não tem uma conta?</span>
               <Link
                 href="/register"
-                className="text-[#075F70] hover:text-[#064c5a] font-medium transition-colors group-hover:underline"
+                className="text-brand-teal-dark hover:text-[#064c5a] font-medium transition-colors group-hover:underline"
               >
                 Cadastre-se
               </Link>

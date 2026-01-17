@@ -68,7 +68,7 @@ export function CompetenciasProfessorEditorSection({
                   className={`flex-shrink-0 w-64 min-h-36 p-4 rounded-[48px] shadow-sm border transition-all duration-300 cursor-pointer flex flex-col justify-between
                   ${
                     comp.id === activeCompetenciaId
-                      ? 'bg-[#075F70] text-white border-transparent'
+                      ? 'bg-brand-teal-dark text-white border-transparent'
                       : 'bg-white text-gray-700 border-gray-200 hover:shadow-md'
                   }`}
                 >

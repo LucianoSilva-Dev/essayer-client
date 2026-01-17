@@ -230,7 +230,7 @@ export default function RegisterForm() {
           <h1 className="text-3xl md:text-4xl font-semibold text-[#282133]">
             Bem-vindo ao Incita
           </h1>
-          <p className="text-lg md:text-2xl text-[#075F70] font-medium mt-2 mb-4">
+          <p className="text-lg md:text-2xl text-brand-teal-dark font-medium mt-2 mb-4">
             Sua plataforma de repertórios
           </p>
           <div className="w-full h-0.5 bg-[#D3D3D3] mb-4"></div>
@@ -255,7 +255,7 @@ export default function RegisterForm() {
                 {/* Descrição da etapa 1 */}
                 <motion.p
                   variants={itemVariants}
-                  className="text-base md:text-[25px] text-[#3C3C3C] mb-6 md:mb-8 max-w-full md:max-w-2xl leading-relaxed"
+                  className="text-base md:text-[25px] text-neutral-dark mb-6 md:mb-8 max-w-full md:max-w-2xl leading-relaxed"
                 >
                   Selecione o valor que se encaixa com você
                 </motion.p>
@@ -277,7 +277,7 @@ export default function RegisterForm() {
                 {/* Descrição da etapa 2 */}
                 <motion.p
                   variants={itemVariants}
-                  className="text-base md:text-[25px] text-[#3C3C3C] mb-6 md:mb-8 max-w-full md:max-w-2xl leading-relaxed"
+                  className="text-base md:text-[25px] text-neutral-dark mb-6 md:mb-8 max-w-full md:max-w-2xl leading-relaxed"
                 >
                   Cadastro para{" "}
                   {formData.userType === "student" ? "Estudante" : "Educador"}
@@ -302,7 +302,7 @@ export default function RegisterForm() {
                 {/* Descrição da etapa 3 */}
                 <motion.p
                   variants={itemVariants}
-                  className="text-base md:text-[25px] text-[#3C3C3C] mb-6 md:mb-8 max-w-full md:max-w-2xl leading-relaxed"
+                  className="text-base md:text-[25px] text-neutral-dark mb-6 md:mb-8 max-w-full md:max-w-2xl leading-relaxed"
                 >
                   Cadastro para{" "}
                   {formData.userType === "student" ? "Estudante" : "Educador"}
@@ -328,7 +328,7 @@ export default function RegisterForm() {
                 {/* Descrição da etapa 4 */}
                 <motion.p
                   variants={itemVariants}
-                  className="text-base md:text-[25px] text-[#3C3C3C] mb-6 md:mb-8 max-w-full md:max-w-2xl leading-relaxed"
+                  className="text-base md:text-[25px] text-neutral-dark mb-6 md:mb-8 max-w-full md:max-w-2xl leading-relaxed"
                 >
                   Cadastro para{" "}
                   {formData.userType === "student" ? "Estudante" : "Educador"}
@@ -399,9 +399,9 @@ export default function RegisterForm() {
                   className="cursor-pointer w-full md:w-auto md:max-w-[280px] h-[60px] bg-white 
              shadow-[0px_0px_15px_-6px_rgba(0,0,0,0.25)] rounded-[32px]
              flex justify-center items-center
-             font-montserrat font-medium text-xl md:text-[28px] text-[#075F70]
+             font-montserrat font-medium text-xl md:text-[28px] text-brand-teal-dark
              hover:shadow-lg hover:-translate-y-1 transition-all duration-300
-             focus:outline-none focus:ring-2 focus:ring-[#075F70] px-6
+             focus:outline-none focus:ring-2 focus:ring-brand-teal-dark px-6
              disabled:opacity-50 disabled:hover:-translate-y-0"
                 >
                   Voltar
@@ -416,9 +416,9 @@ export default function RegisterForm() {
               className="cursor-pointer w-full md:w-auto md:max-w-[280px] h-[60px] bg-white 
              shadow-[0px_0px_15px_-6px_rgba(0,0,0,0.25)] rounded-[32px]
              flex justify-center items-center
-             font-montserrat font-medium text-xl md:text-[28px] text-[#075F70]
+             font-montserrat font-medium text-xl md:text-[28px] text-brand-teal-dark
              hover:shadow-lg hover:-translate-y-1 transition-all duration-300
-             focus:outline-none focus:ring-2 focus:ring-[#075F70] px-6
+             focus:outline-none focus:ring-2 focus:ring-brand-teal-dark px-6
              disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isSubmitting
@@ -439,7 +439,7 @@ export default function RegisterForm() {
             <span className="text-gray-600">Já tem uma conta?</span>
             <Link
               href="/login"
-              className="text-[#075F70] hover:text-[#064c5a] font-medium transition-colors group-hover:underline"
+              className="text-brand-teal-dark hover:text-[#064c5a] font-medium transition-colors group-hover:underline"
             >
               Entrar
             </Link>

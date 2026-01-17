@@ -75,7 +75,7 @@
 .mySwiper .swiper-button-prev {
   top: 50% !important;
   transform: translateY(-50%);
-  color: #2a9d8f;
+  color: brand-teal-tertiary;
   transition: all 0.3s ease;
   opacity: 0.7;
 }

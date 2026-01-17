@@ -154,10 +154,10 @@ export const VerifyCodeInputs: React.FC<VerifyCodeInputsProps> = ({
     >
       {/* Descrição */}
       <motion.p
-        className="text-base md:text-[25px] text-[#3C3C3C] mb-6 md:mb-8 max-w-full md:max-w-2xl leading-relaxed"
+        className="text-base md:text-[25px] text-neutral-dark mb-6 md:mb-8 max-w-full md:max-w-2xl leading-relaxed"
       >
         Insira o código de verificação que enviamos para <br />
-        <span className="font-medium text-[#075F70]">{email}</span>
+        <span className="font-medium text-brand-teal-dark">{email}</span>
         <br />
         <span className="font-normal text-sm text-red-500">
           (verifique a caixa de spam)
@@ -166,11 +166,11 @@ export const VerifyCodeInputs: React.FC<VerifyCodeInputsProps> = ({
 
       {/* Campo Código de Verificação */}
       <motion.div className="mb-10 md:mb-16">
-        <label className="block text-xl md:text-2xl font-medium text-[#3C3C3C] pl-1 md:pl-3 mb-2">
+        <label className="block text-xl md:text-2xl font-medium text-neutral-dark pl-1 md:pl-3 mb-2">
           Código de verificação
         </label>
         <div className="flex justify-center group md:justify-start">
-          <div className="bg-white rounded-2xl md:rounded-3xl p-6 md:p-8 shadow-lg focus-within:shadow-2xl focus-within:shadow-[#075F70]/50 w-full max-w-2xl transition-shadow duration-300">
+          <div className="bg-white rounded-2xl md:rounded-3xl p-6 md:p-8 shadow-lg focus-within:shadow-2xl focus-within:shadow-brand-teal-dark/50 w-full max-w-2xl transition-shadow duration-300">
             <div className="flex justify-between items-center gap-2 md:gap-4">
               {code.map((digit, index) => (
                 <div key={index} className="flex-1 relative">
@@ -183,7 +183,7 @@ export const VerifyCodeInputs: React.FC<VerifyCodeInputsProps> = ({
                     onChange={(e) => handleCodeChange(index, e.target.value)}
                     onKeyDown={(e) => handleKeyDown(index, e)}
                     onPaste={handlePaste}
-                    className="w-full text-center text-3xl md:text-5xl font-medium text-black bg-transparent border-b-2 border-black focus:outline-none focus:border-[#075F70] py-2 transition-colors duration-200"
+                    className="w-full text-center text-3xl md:text-5xl font-medium text-black bg-transparent border-b-2 border-black focus:outline-none focus:border-brand-teal-dark py-2 transition-colors duration-200"
                     maxLength={1}
                     inputMode="text"
                   />
@@ -203,11 +203,11 @@ export const VerifyCodeInputs: React.FC<VerifyCodeInputsProps> = ({
       <motion.button
         type="submit"
         disabled={!isCodeComplete || isSubmitting}
-        className="w-full bg-white text-[#075F70] py-4 px-6 rounded-3xl text-lg md:text-xl font-medium shadow-lg transition-all duration-300 mb-6 border-2 border-transparent
+        className="w-full bg-white text-brand-teal-dark py-4 px-6 rounded-3xl text-lg md:text-xl font-medium shadow-lg transition-all duration-300 mb-6 border-2 border-transparent
               enabled:hover:bg-gray-50 
               enabled:hover:shadow-xl 
               enabled:hover:translate-y-[-0.1em] 
-              enabled:hover:border-[#075F70]
+              enabled:hover:border-brand-teal-dark
               enabled:focus:translate-y-[-0.2em]
               enabled:focus:shadow-xl
               active:translate-y-0
@@ -224,7 +224,7 @@ export const VerifyCodeInputs: React.FC<VerifyCodeInputsProps> = ({
           type="button"
           onClick={handleResendCode}
           disabled={isResending}
-          className="text-lg md:text-xl text-[#3C3C3C] hover:text-[#075F70] transition-colors disabled:opacity-50 disabled:cursor-not-allowed enabled:hover:underline"
+          className="text-lg md:text-xl text-neutral-dark hover:text-brand-teal-dark transition-colors disabled:opacity-50 disabled:cursor-not-allowed enabled:hover:underline"
         >
           {isResending ? "Reenviando..." : "Não recebeu o código? Reenviar"}
         </button>

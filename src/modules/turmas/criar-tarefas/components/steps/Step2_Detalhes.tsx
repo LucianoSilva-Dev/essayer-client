@@ -158,7 +158,7 @@ function RepertoireSelectorModal({ isOpen, onClose, eixoFilter, selectedIds, onT
     <div 
       className={cn(
         "fixed inset-0 z-[9999] flex items-center justify-center p-4 transition-all duration-300",
-        isVisible ? "bg-[#075F70]/60 backdrop-blur-md opacity-100" : "bg-transparent opacity-0"
+        isVisible ? "bg-brand-teal-dark/60 backdrop-blur-md opacity-100" : "bg-transparent opacity-0"
       )}
       onClick={onClose}
     >
@@ -172,15 +172,15 @@ function RepertoireSelectorModal({ isOpen, onClose, eixoFilter, selectedIds, onT
       >
         <div className="px-8 py-6 border-b border-gray-100 bg-white flex flex-col md:flex-row justify-between items-center gap-6">
           <div className="flex items-center gap-4 w-full md:w-auto">
-            <div className="w-12 h-12 bg-teal-50 rounded-2xl flex items-center justify-center text-[#075F70]">
+            <div className="w-12 h-12 bg-teal-50 rounded-2xl flex items-center justify-center text-brand-teal-dark">
                <BookOpen size={24} />
             </div>
             <div>
-               <h3 className="text-2xl font-bold font-montserrat text-[#3C3C3C]">Biblioteca de Repertórios</h3>
+               <h3 className="text-2xl font-bold font-montserrat text-neutral-dark">Biblioteca de Repertórios</h3>
                <div className="flex items-center gap-2">
                  <p className="text-sm text-gray-400 font-medium">Selecione textos para apoiar sua tarefa</p>
                  {eixoFilter && (
-                    <span className="text-xs font-bold text-[#075F70] bg-teal-50 px-2 py-0.5 rounded-full border border-teal-100">
+                    <span className="text-xs font-bold text-brand-teal-dark bg-teal-50 px-2 py-0.5 rounded-full border border-teal-100">
                         {eixoFilter}
                     </span>
                  )}
@@ -192,7 +192,7 @@ function RepertoireSelectorModal({ isOpen, onClose, eixoFilter, selectedIds, onT
                 <Search size={20} />
              </div>
              <input 
-                className="w-full h-[56px] bg-gray-50/80 hover:bg-gray-100 focus:bg-white rounded-full pl-12 pr-4 outline-none border-2 border-transparent focus:border-[#075F70]/30 transition-all font-montserrat text-[#3C3C3C] placeholder:text-gray-400"
+                className="w-full h-[56px] bg-gray-50/80 hover:bg-gray-100 focus:bg-white rounded-full pl-12 pr-4 outline-none border-2 border-transparent focus:border-brand-teal-dark/30 transition-all font-montserrat text-neutral-dark placeholder:text-gray-400"
                 placeholder="Pesquisar nos itens carregados..." 
                 value={searchTerm} onChange={e => setSearchTerm(e.target.value)}
              />
@@ -208,7 +208,7 @@ function RepertoireSelectorModal({ isOpen, onClose, eixoFilter, selectedIds, onT
 
         <div className="flex-1 overflow-y-auto p-8 bg-[#F8F9FA] scrollbar-thin scrollbar-thumb-gray-300">
             {loading ? (
-                <div className="flex flex-col justify-center h-full items-center text-[#075F70] gap-4">
+                <div className="flex flex-col justify-center h-full items-center text-brand-teal-dark gap-4">
                     <Loader2 className="animate-spin" size={48} />
                     <p className="font-montserrat font-medium opacity-70">
                         {eixoFilter ? `Buscando repertórios sobre ${eixoFilter}...` : "Carregando acervo..."}
@@ -227,7 +227,7 @@ function RepertoireSelectorModal({ isOpen, onClose, eixoFilter, selectedIds, onT
                                         className={cn(
                                             "cursor-pointer relative transition-all duration-300 group rounded-[24px]",
                                             isSelected 
-                                                ? "ring-4 ring-[#075F70] shadow-[0px_10px_30px_rgba(7,95,112,0.2)] scale-[1.02] bg-white z-10" 
+                                                ? "ring-4 ring-brand-teal-dark shadow-[0px_10px_30px_rgba(7,95,112,0.2)] scale-[1.02] bg-white z-10" 
                                                 : "hover:scale-[1.01] hover:shadow-xl border border-transparent hover:border-gray-200"
                                         )}
                                     >
@@ -237,8 +237,8 @@ function RepertoireSelectorModal({ isOpen, onClose, eixoFilter, selectedIds, onT
                                             </div>
                                         </div>
                                         {isSelected && (
-                                            <div className="absolute inset-0 bg-[#075F70]/5 rounded-[24px] pointer-events-none border-4 border-[#075F70] flex items-start justify-end p-4">
-                                                <div className="bg-[#075F70] text-white p-2 rounded-full shadow-lg animate-in zoom-in duration-300">
+                                            <div className="absolute inset-0 bg-brand-teal-dark/5 rounded-[24px] pointer-events-none border-4 border-brand-teal-dark flex items-start justify-end p-4">
+                                                <div className="bg-brand-teal-dark text-white p-2 rounded-full shadow-lg animate-in zoom-in duration-300">
                                                     <Check size={20} strokeWidth={3} />
                                                 </div>
                                             </div>
@@ -259,7 +259,7 @@ function RepertoireSelectorModal({ isOpen, onClose, eixoFilter, selectedIds, onT
                             <button
                                 onClick={handleLoadMore}
                                 disabled={loadingMore}
-                                className="flex items-center gap-2 px-6 py-3 bg-white border border-gray-200 rounded-full text-gray-600 hover:bg-gray-50 hover:border-[#075F70] hover:text-[#075F70] transition-all shadow-sm disabled:opacity-50 font-montserrat font-medium"
+                                className="flex items-center gap-2 px-6 py-3 bg-white border border-gray-200 rounded-full text-gray-600 hover:bg-gray-50 hover:border-brand-teal-dark hover:text-brand-teal-dark transition-all shadow-sm disabled:opacity-50 font-montserrat font-medium"
                             >
                                 {loadingMore ? <Loader2 className="animate-spin" size={18} /> : <ChevronDown size={18} />}
                                 {loadingMore ? "Carregando mais..." : "Carregar mais repertórios"}
@@ -271,14 +271,14 @@ function RepertoireSelectorModal({ isOpen, onClose, eixoFilter, selectedIds, onT
         </div>
         <div className="p-6 border-t border-gray-100 bg-white flex justify-between items-center">
             <div className="flex items-center gap-2 text-gray-500 font-medium">
-                <span className="bg-teal-50 text-[#075F70] px-3 py-1 rounded-full text-sm font-bold">
+                <span className="bg-teal-50 text-brand-teal-dark px-3 py-1 rounded-full text-sm font-bold">
                     {selectedIds.length}
                 </span>
                 <span>selecionados</span>
             </div>
             <button 
                 onClick={onClose} 
-                className="bg-[#075F70] text-white px-10 py-4 rounded-full font-bold text-lg hover:bg-[#064d5c] hover:shadow-lg hover:-translate-y-1 transition-all active:translate-y-0"
+                className="bg-brand-teal-dark text-white px-10 py-4 rounded-full font-bold text-lg hover:bg-[#064d5c] hover:shadow-lg hover:-translate-y-1 transition-all active:translate-y-0"
             >
                 Confirmar Seleção
             </button>
@@ -319,22 +319,22 @@ const DecorativeCard = ({
       }}
     >
       <div className="flex items-center gap-2 self-start bg-teal-50 px-2.5 py-1 rounded-lg border border-teal-100">
-        {type === 'artigo' && <FileText size={14} className="text-[#075F70]" />}
-        {type === 'obra' && <BookOpen size={14} className="text-[#075F70]" />}
-        {type === 'citacao' && <Quote size={14} className="text-[#075F70]" />}
-        <span className="font-montserrat font-semibold italic text-[11px] text-[#075F70] capitalize tracking-wide">
+        {type === 'artigo' && <FileText size={14} className="text-brand-teal-dark" />}
+        {type === 'obra' && <BookOpen size={14} className="text-brand-teal-dark" />}
+        {type === 'citacao' && <Quote size={14} className="text-brand-teal-dark" />}
+        <span className="font-montserrat font-semibold italic text-[11px] text-brand-teal-dark capitalize tracking-wide">
           {content.tipo}
         </span>
       </div>
       <div className="flex flex-col gap-2">
-        <h4 className="font-montserrat font-bold text-[16px] text-[#3C3C3C] leading-tight">
+        <h4 className="font-montserrat font-bold text-[16px] text-neutral-dark leading-tight">
           {content.titulo}
         </h4>
         <div className="relative">
           <p className="font-open-sans font-normal text-[13px] text-gray-600 leading-[1.5] line-clamp-4">
-            {type === 'citacao' && <span className="text-[#075F70] font-bold mr-1">“</span>}
+            {type === 'citacao' && <span className="text-brand-teal-dark font-bold mr-1">“</span>}
             {content.texto}
-            {type === 'citacao' && <span className="text-[#075F70] font-bold ml-1">”</span>}
+            {type === 'citacao' && <span className="text-brand-teal-dark font-bold ml-1">”</span>}
           </p>
         </div>
       </div>
@@ -371,7 +371,7 @@ export function Step2_Detalhes() {
       {/* 1. Título e Tema */}
       <div className="grid grid-cols-1 gap-8">
         <div className="relative group w-full">
-          <div className="absolute left-6 top-1/2 -translate-y-1/2 text-gray-300 group-focus-within:text-[#075F70] transition-colors duration-300">
+          <div className="absolute left-6 top-1/2 -translate-y-1/2 text-gray-300 group-focus-within:text-brand-teal-dark transition-colors duration-300">
             <Type size={24} />
           </div>
           <input
@@ -379,19 +379,19 @@ export function Step2_Detalhes() {
             type="text"
             value={taskData.titulo}
             onChange={(e) => updateTaskData({ titulo: e.target.value })}
-            className="peer w-full h-[80px] bg-white rounded-[24px] border-2 border-gray-100 pl-16 pr-6 pt-6 pb-2 font-montserrat font-bold text-[22px] text-[#3C3C3C] placeholder-transparent focus:border-[#075F70]/20 focus:ring-4 focus:ring-[#075F70]/5 outline-none shadow-sm hover:shadow-md transition-all duration-300"
+            className="peer w-full h-[80px] bg-white rounded-[24px] border-2 border-gray-100 pl-16 pr-6 pt-6 pb-2 font-montserrat font-bold text-[22px] text-neutral-dark placeholder-transparent focus:border-brand-teal-dark/20 focus:ring-4 focus:ring-brand-teal-dark/5 outline-none shadow-sm hover:shadow-md transition-all duration-300"
             placeholder="Titulo"
           />
           <label
             htmlFor="titulo"
-            className="absolute left-16 top-3 text-xs font-bold text-[#075F70] uppercase tracking-wider transition-all peer-placeholder-shown:top-7 peer-placeholder-shown:text-[18px] peer-placeholder-shown:text-gray-400 peer-placeholder-shown:font-medium peer-placeholder-shown:normal-case peer-focus:top-3 peer-focus:text-xs peer-focus:text-[#075F70] peer-focus:font-bold peer-focus:uppercase cursor-text"
+            className="absolute left-16 top-3 text-xs font-bold text-brand-teal-dark uppercase tracking-wider transition-all peer-placeholder-shown:top-7 peer-placeholder-shown:text-[18px] peer-placeholder-shown:text-gray-400 peer-placeholder-shown:font-medium peer-placeholder-shown:normal-case peer-focus:top-3 peer-focus:text-xs peer-focus:text-brand-teal-dark peer-focus:font-bold peer-focus:uppercase cursor-text"
           >
             Título da Tarefa
           </label>
         </div>
 
         <div className="relative group w-full">
-          <div className="absolute left-6 top-6 text-gray-300 group-focus-within:text-[#075F70] transition-colors duration-300">
+          <div className="absolute left-6 top-6 text-gray-300 group-focus-within:text-brand-teal-dark transition-colors duration-300">
             <AlignLeft size={24} />
           </div>
           <textarea
@@ -399,12 +399,12 @@ export function Step2_Detalhes() {
             value={taskData.tema}
             onChange={(e) => updateTaskData({ tema: e.target.value })}
             rows={4}
-            className="peer w-full min-h-[160px] bg-white rounded-[24px] border-2 border-gray-100 pl-16 pr-6 pt-10 pb-16 font-montserrat font-medium text-[18px] text-[#3C3C3C] leading-relaxed placeholder-transparent focus:border-[#075F70]/20 focus:ring-4 focus:ring-[#075F70]/5 outline-none shadow-sm hover:shadow-md resize-none transition-all duration-300 scrollbar-thin scrollbar-thumb-gray-200"
+            className="peer w-full min-h-[160px] bg-white rounded-[24px] border-2 border-gray-100 pl-16 pr-6 pt-10 pb-16 font-montserrat font-medium text-[18px] text-neutral-dark leading-relaxed placeholder-transparent focus:border-brand-teal-dark/20 focus:ring-4 focus:ring-brand-teal-dark/5 outline-none shadow-sm hover:shadow-md resize-none transition-all duration-300 scrollbar-thin scrollbar-thumb-gray-200"
             placeholder="Tema"
           />
           <label
             htmlFor="tema"
-            className="absolute left-16 top-4 text-xs font-bold text-[#075F70] uppercase tracking-wider transition-all peer-placeholder-shown:top-8 peer-placeholder-shown:text-[18px] peer-placeholder-shown:text-gray-400 peer-placeholder-shown:font-medium peer-placeholder-shown:normal-case peer-focus:top-4 peer-focus:text-xs peer-focus:text-[#075F70] peer-focus:font-bold peer-focus:uppercase cursor-text"
+            className="absolute left-16 top-4 text-xs font-bold text-brand-teal-dark uppercase tracking-wider transition-all peer-placeholder-shown:top-8 peer-placeholder-shown:text-[18px] peer-placeholder-shown:text-gray-400 peer-placeholder-shown:font-medium peer-placeholder-shown:normal-case peer-focus:top-4 peer-focus:text-xs peer-focus:text-brand-teal-dark peer-focus:font-bold peer-focus:uppercase cursor-text"
           >
             Tema da Redação
           </label>
@@ -417,9 +417,9 @@ export function Step2_Detalhes() {
              <button
                 type="button"
                 onClick={() => setIsTemasModalOpen(true)}
-                className="cursor-pointer flex items-center gap-2 bg-gray-50 border border-gray-200 text-gray-600 px-4 py-2 rounded-full transition-all hover:bg-[#075F70] hover:text-white hover:border-[#075F70] hover:shadow-lg group/btn active:scale-95"
+                className="cursor-pointer flex items-center gap-2 bg-gray-50 border border-gray-200 text-gray-600 px-4 py-2 rounded-full transition-all hover:bg-brand-teal-dark hover:text-white hover:border-brand-teal-dark hover:shadow-lg group/btn active:scale-95"
              >
-                <Sparkles size={16} className="text-[#075F70] group-hover/btn:text-white transition-colors" />
+                <Sparkles size={16} className="text-brand-teal-dark group-hover/btn:text-white transition-colors" />
                 <span className="text-sm font-bold">Temas Prontos</span>
              </button>
           </div>
@@ -432,7 +432,7 @@ export function Step2_Detalhes() {
         
         {/* Lado Esquerdo */}
         <div className="relative z-20 flex flex-col justify-center">
-          <h2 className="font-montserrat font-bold text-[32px] leading-tight text-[#3C3C3C] mb-4">
+          <h2 className="font-montserrat font-bold text-[32px] leading-tight text-neutral-dark mb-4">
             Textos de Apoio
           </h2>
           <p className="font-montserrat text-lg text-gray-500 mb-8 leading-relaxed">
@@ -441,7 +441,7 @@ export function Step2_Detalhes() {
 
           <button
             onClick={() => setIsRepertorioModalOpen(true)}
-            className="flex items-center justify-center gap-3 px-8 py-4 bg-[#075F70] text-white rounded-full shadow-xl hover:bg-[#064d5c] hover:scale-105 active:scale-95 transition-all group w-fit"
+            className="flex items-center justify-center gap-3 px-8 py-4 bg-brand-teal-dark text-white rounded-full shadow-xl hover:bg-[#064d5c] hover:scale-105 active:scale-95 transition-all group w-fit"
           >
             <Search className="w-5 h-5 group-hover:rotate-90 transition-transform duration-500" />
             <span className="font-montserrat font-bold text-lg">

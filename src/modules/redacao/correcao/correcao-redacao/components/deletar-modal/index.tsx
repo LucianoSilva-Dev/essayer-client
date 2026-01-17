@@ -25,7 +25,7 @@ export function DeleteCorrectionModal({ isOpen, onClose, onConfirm, temaTitle }:
 
   return (
     <div 
-      className={`fixed inset-0 z-[999] flex items-center justify-center p-4 font-montserrat transition-opacity duration-300 ease-in-out ${isVisible ? 'bg-[#075F70]/60 backdrop-blur-sm opacity-100' : 'bg-transparent backdrop-blur-none opacity-0'}`}
+      className={`fixed inset-0 z-[999] flex items-center justify-center p-4 font-montserrat transition-opacity duration-300 ease-in-out ${isVisible ? 'bg-brand-teal-dark/60 backdrop-blur-sm opacity-100' : 'bg-transparent backdrop-blur-none opacity-0'}`}
       onClick={onClose}
     >
       <div 
@@ -43,11 +43,11 @@ export function DeleteCorrectionModal({ isOpen, onClose, onConfirm, temaTitle }:
 
           <div className="flex-1 w-full flex flex-col justify-between min-h-[5rem]">
             <div className="space-y-4 mb-8">
-              <h3 className="text-2xl font-semibold text-[#3C3C3C]">Tem certeza que deseja excluir?</h3>
+              <h3 className="text-2xl font-semibold text-neutral-dark">Tem certeza que deseja excluir?</h3>
               <p className="text-gray-500 text-lg leading-relaxed">
                 Você está prestes a remover permanentemente a redação:<br />
                 {temaTitle && (
-                  <span className="font-medium text-[#3C3C3C] italic text-xl block mt-2 border-l-4 border-red-200 pl-4 py-1">"{temaTitle}"</span>
+                  <span className="font-medium text-neutral-dark italic text-xl block mt-2 border-l-4 border-red-200 pl-4 py-1">"{temaTitle}"</span>
                 )}
               </p>
             </div>

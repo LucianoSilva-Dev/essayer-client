@@ -19,13 +19,13 @@ export function InfoItem({ icon, title, description }: InfoItemProps) {
         
         {/* Subtítulo (Ex: "Para professores") */}
         {/* Tamanho: text-xl (mobile) | lg:text-[30px] (desktop) */}
-        <h3 className="text-xl lg:text-[30px] font-medium leading-tight lg:leading-[37px] text-[#3C3C3C]">
+        <h3 className="text-xl lg:text-[30px] font-medium leading-tight lg:leading-[37px] text-neutral-dark">
           {title}
         </h3>
         
         {/* Descrição */}
         {/* Tamanho: text-base (mobile) | lg:text-[25px] (desktop) */}
-        <p className="text-base lg:text-[25px] font-normal leading-normal lg:leading-[30px] text-[#3C3C3C]">
+        <p className="text-base lg:text-[25px] font-normal leading-normal lg:leading-[30px] text-neutral-dark">
           {description}
         </p>
       </div>

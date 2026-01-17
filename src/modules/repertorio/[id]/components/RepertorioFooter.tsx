@@ -15,7 +15,7 @@ export function RepertorioFooter({ dados }: RepertorioFooterProps) {
           
           {/* --- EIXO (Pill Branca) --- */}
           <div className="bg-white pl-1.5 pr-4 py-1.5 rounded-full flex items-center gap-2 shadow-sm border border-gray-100">
-            <div className="bg-[#024D4D] w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0">
+            <div className="bg-brand-teal-secondary w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0">
                <Image 
                  src={getIconForEixo(grupo.nome)} 
                  alt={grupo.nome} 

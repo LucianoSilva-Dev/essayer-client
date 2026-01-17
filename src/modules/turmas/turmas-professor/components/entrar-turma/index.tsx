@@ -29,7 +29,7 @@ export default function NovoEntrarTurmaCard({ className }: { className?: string 
       className={`group/card relative w-full h-full min-h-[18rem] flex flex-col justify-end mt-8 pb-2 ${className}`} 
     >
       <div 
-        className="relative w-full flex-1 rounded-[2rem] border border-[#E5EFF0] flex flex-col items-center justify-end pb-8 px-4 pt-12 transition-all duration-300 group-hover/card:shadow-lg group-hover/card:border-[#075F70]/20 z-10"
+        className="relative w-full flex-1 rounded-[2rem] border border-[#E5EFF0] flex flex-col items-center justify-end pb-8 px-4 pt-12 transition-all duration-300 group-hover/card:shadow-lg group-hover/card:border-brand-teal-dark/20 z-10"
         style={{
             background: "linear-gradient(180deg, #F2F8F9 0%, #E5EFF0 100%)"
         }}
@@ -49,10 +49,10 @@ export default function NovoEntrarTurmaCard({ className }: { className?: string 
         <div className="absolute inset-0 bg-white opacity-0 group-hover/card:opacity-30 rounded-[2rem] transition-opacity duration-300 pointer-events-none z-0" />
 
         <div className="relative z-30 flex flex-col gap-2 text-center max-w-[95%]">
-            <h2 className="font-montserrat font-bold text-2xl leading-tight text-[#075F70]">
+            <h2 className="font-montserrat font-bold text-2xl leading-tight text-brand-teal-dark">
                 Entre para uma turma
             </h2>
-            <p className="font-montserrat font-medium text-base leading-[1.4] text-[#3C3C3C]/80">
+            <p className="font-montserrat font-medium text-base leading-[1.4] text-neutral-dark/80">
                 Clique aqui para entrar em uma nova turma!
             </p>
         </div>

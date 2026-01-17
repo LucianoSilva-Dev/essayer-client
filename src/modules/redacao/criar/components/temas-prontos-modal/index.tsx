@@ -35,7 +35,7 @@ export function TemasProntosModal({ isOpen, onClose, onSelect, themes }: TemasPr
       className={`
         fixed inset-0 z-[9999] h-[100dvh] w-screen flex items-center justify-center p-4 font-montserrat
         transition-opacity duration-300 ease-in-out
-        ${isVisible ? 'bg-[#075F70]/60 backdrop-blur-md opacity-100' : 'bg-transparent backdrop-blur-none opacity-0'}
+        ${isVisible ? 'bg-brand-teal-dark/60 backdrop-blur-md opacity-100' : 'bg-transparent backdrop-blur-none opacity-0'}
       `}
       onClick={onClose}
     >
@@ -50,11 +50,11 @@ export function TemasProntosModal({ isOpen, onClose, onSelect, themes }: TemasPr
         {/* Header */}
         <div className="flex justify-between items-center p-8 pb-6 border-b border-gray-100 flex-shrink-0">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 bg-teal-50 rounded-full flex items-center justify-center text-[#075F70]">
+            <div className="w-12 h-12 bg-teal-50 rounded-full flex items-center justify-center text-brand-teal-dark">
               <Sparkles size={24} />
             </div>
             <div>
-              <h2 className="text-2xl font-bold text-[#3C3C3C]">Sugestões de Temas</h2>
+              <h2 className="text-2xl font-bold text-neutral-dark">Sugestões de Temas</h2>
               <p className="text-sm text-gray-400">Selecione um tema para começar</p>
             </div>
           </div>
@@ -83,16 +83,16 @@ export function TemasProntosModal({ isOpen, onClose, onSelect, themes }: TemasPr
                   `}
                 >
                   <div className="flex items-center gap-4 flex-1 pr-4">
-                    <div className="text-gray-300 group-hover:text-[#075F70] transition-colors duration-300">
+                    <div className="text-gray-300 group-hover:text-brand-teal-dark transition-colors duration-300">
                       <PenTool size={20} className="group-hover:scale-110 transition-transform" />
                     </div>
 
-                    <span className="text-lg font-medium text-[#3C3C3C] group-hover:text-[#075F70] transition-colors line-clamp-2">
+                    <span className="text-lg font-medium text-neutral-dark group-hover:text-brand-teal-dark transition-colors line-clamp-2">
                       {theme}
                     </span>
                   </div>
 
-                  <div className="opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 text-[#075F70]">
+                  <div className="opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 text-brand-teal-dark">
                     <ChevronRight size={24} />
                   </div>
                 </button>

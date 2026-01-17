@@ -73,7 +73,7 @@ export default function ProfileImageUpload() {
 
   return (
     <div className="text-center flex flex-col items-center gap-4 sm:gap-6">
-      <h2 className="text-lg sm:text-xl lg:text-2xl font-semibold text-[#3C3C3C] w-full text-left">
+      <h2 className="text-lg sm:text-xl lg:text-2xl font-semibold text-neutral-dark w-full text-left">
         Alterar imagem
       </h2>
 

@@ -44,7 +44,7 @@ interface SidebarMobileProps {
 //   })
 
 //   return (
-//     <nav className="fixed bottom-0 left-0 right-0 bg-[#075F70] z-50 md:hidden border-t border-white/10">
+//     <nav className="fixed bottom-0 left-0 right-0 bg-brand-teal-dark z-50 md:hidden border-t border-white/10">
 //       <div className="flex justify-around items-center py-2">
 //         {filteredNavItems.slice(0, 3).map((item) => {
 //           const Icon = item.icon

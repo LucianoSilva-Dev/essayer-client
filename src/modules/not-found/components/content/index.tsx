@@ -16,7 +16,7 @@ export function NotFoundData() {
         className="
           mt-6
           rounded-lg
-          bg-[#075F70]
+          bg-brand-teal-dark
           px-6
           py-3
           text-sm

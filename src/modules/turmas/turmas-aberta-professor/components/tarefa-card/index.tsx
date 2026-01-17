@@ -46,19 +46,19 @@ const TarefaCard: React.FC<TarefaCardProps> = ({
   const selectedClasses = "w-[268px] min-h-[311px] bg-white rounded-[21px] p-[21px] gap-[15.75px] shadow-lg scale-105"; // Use min-h for flexibility
   const unselectedClasses = "w-[254px] min-h-[296px] bg-[#E0E0E0] rounded-[20px] p-[20px] gap-[15px] opacity-80 scale-95"; // Use min-h
 
-  const baseTitleClasses = "font-montserrat font-medium text-[#3C3C3C]";
+  const baseTitleClasses = "font-montserrat font-medium text-neutral-dark";
   const selectedTitleClasses = "text-[18.9px] leading-[23px]";
   const unselectedTitleClasses = "text-[18px] leading-[22px]";
 
-  const baseTemaTextClasses = "font-montserrat font-normal text-[#3C3C3C]";
+  const baseTemaTextClasses = "font-montserrat font-normal text-neutral-dark";
   const selectedTemaTextClasses = "text-[21px] leading-[26px] h-auto"; // Use h-auto and line-clamp
   const unselectedTemaTextClasses = "text-[20px] leading-[24px] h-auto"; // Use h-auto and line-clamp
 
-  const baseEnviosTitleClasses = "font-montserrat font-medium text-[#3C3C3C]";
+  const baseEnviosTitleClasses = "font-montserrat font-medium text-neutral-dark";
   const selectedEnviosTitleClasses = "text-[18.9px] leading-[23px]";
   const unselectedEnviosTitleClasses = "text-[18px] leading-[22px]";
 
-  const baseDateClasses = "font-montserrat text-[#3C3C3C]";
+  const baseDateClasses = "font-montserrat text-neutral-dark";
   const selectedDateClasses = "text-[14.7px] leading-[18px]";
   const unselectedDateClasses = "text-[14px] leading-[17px]";
 
@@ -96,7 +96,7 @@ const TarefaCard: React.FC<TarefaCardProps> = ({
                     <div className="sm:inline-block h-8 w-8 rounded-full ring-2 ring-white bg-gray-400 flex items-center justify-center text-xs text-white">A3</div>
                 </div>
                  {alunosExtras > 0 && (
-                    <div className="flex justify-center items-center h-8 px-3 bg-[#F1F1F2] rounded-full text-xs font-medium text-[#3C3C3C] ring-2 ring-white">
+                    <div className="flex justify-center items-center h-8 px-3 bg-[#F1F1F2] rounded-full text-xs font-medium text-neutral-dark ring-2 ring-white">
                         +{alunosExtras} alunos
                     </div>
                 )}

@@ -39,16 +39,16 @@ export default function ProfileSettingsLayout({
       <div className="flex flex-col lg:flex-row gap-0 lg:gap-8 h-full">
         {/* Header Mobile */}
         <div className="lg:hidden bg-white border-b border-gray-200 px-4 py-4 flex items-center justify-between sticky top-0 z-30">
-          <h1 className="text-2xl font-semibold text-[#3C3C3C]">Perfil</h1>
+          <h1 className="text-2xl font-semibold text-neutral-dark">Perfil</h1>
           <button
             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
             className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
             aria-label="Abrir menu"
           >
             {isSidebarOpen ? (
-              <X className="w-6 h-6 text-[#3C3C3C]" />
+              <X className="w-6 h-6 text-neutral-dark" />
             ) : (
-              <Menu className="w-6 h-6 text-[#3C3C3C]" />
+              <Menu className="w-6 h-6 text-neutral-dark" />
             )}
           </button>
         </div>

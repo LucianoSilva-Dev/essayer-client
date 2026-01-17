@@ -89,7 +89,7 @@ export function RedacaoOriginalCard({
         <div className="flex flex-col xl:flex-row justify-between items-center mt-6 gap-4 xl:gap-0">
           <div className="w-full xl:w-auto flex justify-start">
             {isOverflowing ? (
-              <button onClick={() => setIsExpanded(!isExpanded)} className="text-sm font-medium text-[#075F70] hover:underline focus:outline-none cursor-pointer">
+              <button onClick={() => setIsExpanded(!isExpanded)} className="text-sm font-medium text-brand-teal-dark hover:underline focus:outline-none cursor-pointer">
                 {isExpanded ? 'Ver menos' : 'Ver tudo'}
               </button>
             ) : <div />}

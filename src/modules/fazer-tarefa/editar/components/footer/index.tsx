@@ -13,7 +13,7 @@ export function RedacaoFooter({ contagemPalavras, maxPalavras, onFinalizar }: Pr
       
       {/* Coluna 1: Contador (Alinhado à esquerda) */}
       <div className="flex justify-start">
-        <span className="text-[#3C3C3C] font-semibold text-lg">
+        <span className="text-neutral-dark font-semibold text-lg">
           {contagemPalavras}/{maxPalavras} palavras
         </span>
       </div>
@@ -22,7 +22,7 @@ export function RedacaoFooter({ contagemPalavras, maxPalavras, onFinalizar }: Pr
       <div className="flex justify-center">
         <button
           onClick={onFinalizar}
-          className="cursor-pointer bg-[#075F70] hover:bg-[#086f80] rounded-full 
+          className="cursor-pointer bg-brand-teal-dark hover:bg-[#086f80] rounded-full 
                      px-8 py-3 
                      text-white text-lg font-bold
                      transition-colors shadow-md whitespace-nowrap"

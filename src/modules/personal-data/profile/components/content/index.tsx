@@ -176,7 +176,7 @@ export default function PersonalDataForm() {
     "w-full px-4 sm:px-6 py-2 sm:py-3 text-base sm:text-lg lg:text-2xl text-[#898787] rounded-lg sm:rounded-2xl transition-colors h-12 sm:h-16";
   const readOnlyStyle = "bg-white border border-transparent cursor-not-allowed";
   const editStyle =
-    "bg-white border border-gray-300 text-[#3C3C3C] focus:outline-none focus:ring-2 focus:ring-[#075F70]";
+    "bg-white border border-gray-300 text-neutral-dark focus:outline-none focus:ring-2 focus:ring-brand-teal-dark";
   const errorStyle = "border-red-500 focus:ring-red-500";
 
   return (
@@ -193,7 +193,7 @@ export default function PersonalDataForm() {
         <form onSubmit={handleSubmit} className="w-full">
           {/* Cabeçalho da Aba */}
           <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 sm:mb-10 gap-4 sm:gap-0">
-            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-medium text-[#3C3C3C]">
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-medium text-neutral-dark">
               Dados pessoais
             </h1>
 
@@ -204,14 +204,14 @@ export default function PersonalDataForm() {
                     type="button"
                     onClick={handleCancel}
                     disabled={isSubmitting}
-                    className="flex-1 sm:flex-none px-6 sm:px-9 py-2 sm:py-3 text-sm sm:text-base lg:text-lg font-medium text-[#075F70] bg-white border border-[#075F70] rounded-full hover:bg-gray-50 transition-colors disabled:opacity-70"
+                    className="flex-1 sm:flex-none px-6 sm:px-9 py-2 sm:py-3 text-sm sm:text-base lg:text-lg font-medium text-brand-teal-dark bg-white border border-brand-teal-dark rounded-full hover:bg-gray-50 transition-colors disabled:opacity-70"
                   >
                     Cancelar
                   </button>
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="flex-1 sm:flex-none px-6 sm:px-9 py-2 sm:py-3 text-sm sm:text-base lg:text-lg font-medium text-white bg-[#075F70] rounded-full hover:bg-[#064e5a] flex items-center justify-center gap-2 transition-colors disabled:opacity-70 disabled:cursor-not-allowed min-w-[100px] sm:min-w-[140px]"
+                    className="flex-1 sm:flex-none px-6 sm:px-9 py-2 sm:py-3 text-sm sm:text-base lg:text-lg font-medium text-white bg-brand-teal-dark rounded-full hover:bg-[#064e5a] flex items-center justify-center gap-2 transition-colors disabled:opacity-70 disabled:cursor-not-allowed min-w-[100px] sm:min-w-[140px]"
                   >
                     {isSubmitting ? (
                       <Loader2 className="w-4 h-4 sm:w-5 sm:h-5 animate-spin" />
@@ -224,7 +224,7 @@ export default function PersonalDataForm() {
                 <button
                   type="button"
                   onClick={() => setIsEditing(true)}
-                  className="cursor-pointer flex-1 sm:flex-none px-6 sm:px-8 py-2 sm:py-3 text-sm sm:text-base lg:text-lg font-medium text-[#075F70] bg-white border border-[#075F70] rounded-full hover:bg-gray-50 transition-colors"
+                  className="cursor-pointer flex-1 sm:flex-none px-6 sm:px-8 py-2 sm:py-3 text-sm sm:text-base lg:text-lg font-medium text-brand-teal-dark bg-white border border-brand-teal-dark rounded-full hover:bg-gray-50 transition-colors"
                 >
                   Alterar dados
                 </button>
@@ -239,7 +239,7 @@ export default function PersonalDataForm() {
               <div className="space-y-1.5 sm:space-y-2">
                 <label
                   htmlFor="nome"
-                  className="text-base sm:text-lg lg:text-2xl font-medium text-[#3C3C3C] px-2 block"
+                  className="text-base sm:text-lg lg:text-2xl font-medium text-neutral-dark px-2 block"
                 >
                   Nome
                 </label>
@@ -262,7 +262,7 @@ export default function PersonalDataForm() {
               <div className="space-y-1.5 sm:space-y-2">
                 <label
                   htmlFor="sobrenome"
-                  className="text-base sm:text-lg lg:text-2xl font-medium text-[#3C3C3C] px-2 block"
+                  className="text-base sm:text-lg lg:text-2xl font-medium text-neutral-dark px-2 block"
                 >
                   Sobrenome
                 </label>
@@ -283,7 +283,7 @@ export default function PersonalDataForm() {
             <div className="space-y-1.5 sm:space-y-2">
               <label
                 htmlFor="email"
-                className="text-base sm:text-lg lg:text-2xl font-medium text-[#3C3C3C] px-2 block"
+                className="text-base sm:text-lg lg:text-2xl font-medium text-neutral-dark px-2 block"
               >
                 Email
               </label>
@@ -306,12 +306,12 @@ export default function PersonalDataForm() {
 
             {/* Linha Senha */}
             <div className="space-y-1.5 sm:space-y-2 flex flex-col justify-center">
-              <label className="text-base sm:text-lg lg:text-2xl font-medium text-[#3C3C3C] px-2 block mb-1 sm:mb-2">
+              <label className="text-base sm:text-lg lg:text-2xl font-medium text-neutral-dark px-2 block mb-1 sm:mb-2">
                 Senha
               </label>
               <Link
                 href="/forgot-password"
-                className="text-base sm:text-lg lg:text-xl text-[#075F70] hover:text-[#064e5a] hover:underline px-2 transition-colors"
+                className="text-base sm:text-lg lg:text-xl text-brand-teal-dark hover:text-[#064e5a] hover:underline px-2 transition-colors"
               >
                 Esqueci minha senha
               </Link>

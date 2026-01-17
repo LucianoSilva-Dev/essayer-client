@@ -27,7 +27,7 @@ export function SidebarNavigation({ items, isExpanded, pathname }: SidebarNaviga
               href={item.href}
               className={`relative flex items-center p-3 rounded-lg transition-colors duration-200 ${
                 isActive
-                  ? "text-[#075F70]"
+                  ? "text-brand-teal-dark"
                   : "text-[#898787] hover:bg-gray-400/40 hover:text-gray-500"
               }`}
             >
@@ -35,7 +35,7 @@ export function SidebarNavigation({ items, isExpanded, pathname }: SidebarNaviga
               {isActive && (
                 <motion.div
                   layoutId="activeIndicator"
-                  className="absolute left-0 top-0 bottom-0 w-1 bg-[#075F70] rounded-r-full"
+                  className="absolute left-0 top-0 bottom-0 w-1 bg-brand-teal-dark rounded-r-full"
                   transition={{ type: "spring", stiffness: 500, damping: 40 }}
                 />
               )}

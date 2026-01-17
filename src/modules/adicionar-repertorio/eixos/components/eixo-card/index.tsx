@@ -123,12 +123,12 @@ export const EixoCard: React.FC<EixoCardProps> = ({
             <div className="flex items-center justify-between w-full gap-3">
               <div className="flex flex-row items-center gap-3">
               <div className="flex items-center justify-center w-15 h-15 bg-white rounded-[40px]">
-                <IconeComponente className="h-7 w-7" style={{ color: '#075F70' }} />
+                <IconeComponente className="h-7 w-7" style={{ color: 'brand-teal-dark' }} />
               </div>
               <div>
                 <h2 
                   className="font-medium text-2xl mb-2 transition-colors duration-200"
-                  style={{ color: selecionado ? '#075F70' : '#2F2F2F', fontFamily: 'Montserrat', lineHeight: '29px' }}
+                  style={{ color: selecionado ? 'brand-teal-dark' : '#2F2F2F', fontFamily: 'Montserrat', lineHeight: '29px' }}
                 >
                   {eixo.nome}
                 </h2>
@@ -143,7 +143,7 @@ export const EixoCard: React.FC<EixoCardProps> = ({
               <div className="ml-auto -mt-3 justify-self-end">
                 {selecionado && (<X
                   className="h-7 w-7 cursor-pointer"
-                  style={{ color: '#075F70' }}
+                  style={{ color: 'brand-teal-dark' }}
                   onClick={onDesselecionar} 
                 />)}
               </div>
@@ -162,8 +162,8 @@ export const EixoCard: React.FC<EixoCardProps> = ({
                     className={`
                       cursor-pointer flex items-center px-4 py-3 rounded-[40px] transition-all duration-200
                       ${recorteSelecionado
-                        ? 'bg-[#075F70] text-white shadow-md'
-                        : 'bg-white text-[#3C3C3C] hover:bg-gray-50'
+                        ? 'bg-brand-teal-dark text-white shadow-md'
+                        : 'bg-white text-neutral-dark hover:bg-gray-50'
                       }
                     `}
                     style={{
@@ -192,13 +192,13 @@ export const EixoCard: React.FC<EixoCardProps> = ({
               <div className="flex items-center justify-center w-12 h-12 md:w-15 md:h-15 bg-white rounded-[40px] p-2 flex-shrink-0">
                 <IconeComponente 
                   className="h-6 w-6 md:h-7 md:w-7" 
-                  style={{ color: '#075F70' }}
+                  style={{ color: 'brand-teal-dark' }}
                 />
               </div>
               <h3 
                 className="font-medium text-lg md:text-2xl break-words"
                 style={{
-                  color: selecionado ? '#075F70' : '#2F2F2F',
+                  color: selecionado ? 'brand-teal-dark' : '#2F2F2F',
                   fontFamily: 'Montserrat',
                   lineHeight: '29px'
                 }}
@@ -210,7 +210,7 @@ export const EixoCard: React.FC<EixoCardProps> = ({
             {selecionado && (
               <X 
                 className="h-6 w-6 md:h-7 md:w-7 cursor-pointer flex-shrink-0"
-                style={{ color: '#075F70' }}
+                style={{ color: 'brand-teal-dark' }}
                 onClick={(e) => {
                   e.stopPropagation();
                   onDesselecionar();
@@ -244,13 +244,13 @@ export const EixoCard: React.FC<EixoCardProps> = ({
                   key={recorteIndex}
                   className={`
                     flex items-center px-3 py-2 rounded-[40px] shadow-md whitespace-normal break-words max-w-full
-                    ${isPrimeiroSelecionado || isSegundoSelecionado ? 'bg-[#075F70]' : 'bg-white'}
+                    ${isPrimeiroSelecionado || isSegundoSelecionado ? 'bg-brand-teal-dark' : 'bg-white'}
                   `}
                 >
                   <span 
                     className={`
                       font-medium text-sm md:text-lg
-                      ${isPrimeiroSelecionado || isSegundoSelecionado ? 'text-white font-semibold' : 'text-[#3C3C3C] font-medium'}
+                      ${isPrimeiroSelecionado || isSegundoSelecionado ? 'text-white font-semibold' : 'text-neutral-dark font-medium'}
                     `}
                     style={{
                       fontFamily: 'Montserrat',

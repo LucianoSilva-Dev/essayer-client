@@ -35,7 +35,7 @@ export function MotivacionalCard({ data }: Props) {
       
       {/* Cabeçalho */}
       <div className="flex flex-col md:flex-row justify-between items-start gap-4 mb-6 border-b border-gray-100 pb-4">
-        <h3 className="font-bold text-[#3C3C3C] text-xl md:text-2xl leading-tight">
+        <h3 className="font-bold text-neutral-dark text-xl md:text-2xl leading-tight">
           {data.titulo}
         </h3>
         

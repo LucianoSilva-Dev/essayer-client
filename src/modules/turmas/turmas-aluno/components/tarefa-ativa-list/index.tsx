@@ -9,13 +9,13 @@ import { motion, AnimatePresence, Variants } from "framer-motion";
 
 // --- Ícones ---
 const ChevronLeft = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={3} stroke="currentColor" className="w-8 h-8 text-[#075F70]">
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={3} stroke="currentColor" className="w-8 h-8 text-brand-teal-dark">
     <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
   </svg>
 );
 
 const ChevronRight = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={3} stroke="currentColor" className="w-8 h-8 text-[#075F70]">
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={3} stroke="currentColor" className="w-8 h-8 text-brand-teal-dark">
     <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
   </svg>
 );
@@ -23,17 +23,17 @@ const ChevronRight = () => (
 // --- Arte Visual CSS ---
 const CreativeEssayVisual = () => (
   <div className="relative w-full h-full pointer-events-none select-none">
-    <div className="absolute bottom-0 right-0 w-[55%] h-full bg-gradient-to-tl from-[#075F70] via-[#5daab5] to-transparent opacity-90 rounded-tl-[100px] rounded-br-[40px]" />
+    <div className="absolute bottom-0 right-0 w-[55%] h-full bg-gradient-to-tl from-brand-teal-dark via-[#5daab5] to-transparent opacity-90 rounded-tl-[100px] rounded-br-[40px]" />
     <div className="absolute bottom-[-10px] right-[-10px] w-56 h-56 bg-white/10 backdrop-blur-sm rounded-full border border-white/20" />
     <div className="absolute bottom-8 right-12 w-32 h-44 bg-white rounded-xl shadow-[0_20px_40px_-10px_rgba(0,0,0,0.3)] transform rotate-[-6deg] transition-transform duration-500 group-hover:rotate-0 group-hover:scale-105 border border-gray-50 flex flex-col p-4 gap-2.5 z-10">
-        <div className="w-1/2 h-2 bg-[#075F70]/20 rounded-full mb-1"></div>
+        <div className="w-1/2 h-2 bg-brand-teal-dark/20 rounded-full mb-1"></div>
         <div className="w-full h-1.5 bg-gray-100 rounded-full"></div>
         <div className="w-full h-1.5 bg-gray-100 rounded-full"></div>
         <div className="w-5/6 h-1.5 bg-gray-100 rounded-full"></div>
         <div className="w-full h-1.5 bg-gray-100 rounded-full"></div>
         <div className="w-4/6 h-1.5 bg-gray-100 rounded-full"></div>
-        <div className="mt-auto self-end transform rotate-[-15deg] border-2 border-[#075F70]/30 rounded-full w-10 h-10 flex items-center justify-center">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="#075F70" className="w-5 h-5 opacity-50">
+        <div className="mt-auto self-end transform rotate-[-15deg] border-2 border-brand-teal-dark/30 rounded-full w-10 h-10 flex items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="brand-teal-dark" className="w-5 h-5 opacity-50">
                <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
             </svg>
         </div>
@@ -159,10 +159,10 @@ export function TarefasAtivasList({ tarefas, loading, error }: TarefasAtivasList
                                 {tarefaAtual.turma.nome}
                             </h2>
                             <div className="mt-3 flex flex-col gap-1">
-                                <span className="font-montserrat font-bold text-[#3C3C3C] text-[12px] uppercase tracking-wider opacity-70">
+                                <span className="font-montserrat font-bold text-neutral-dark text-[12px] uppercase tracking-wider opacity-70">
                                     {tarefaAtual.tipoAtividade}
                                 </span>
-                                <h1 className="font-montserrat font-medium text-[#3C3C3C] text-[22px] leading-tight line-clamp-3">
+                                <h1 className="font-montserrat font-medium text-neutral-dark text-[22px] leading-tight line-clamp-3">
                                     {tarefaAtual.titulo}
                                 </h1>
                             </div>
@@ -170,12 +170,12 @@ export function TarefasAtivasList({ tarefas, loading, error }: TarefasAtivasList
 
                         <div className="flex flex-col gap-3 mt-4">
                             <p className="font-montserrat font-medium text-[#666] text-sm">
-                                Fecha em <span className="font-bold text-[#3C3C3C]">{formatDate(tarefaAtual.dataLimite)}</span>
+                                Fecha em <span className="font-bold text-neutral-dark">{formatDate(tarefaAtual.dataLimite)}</span>
                             </p>
                             
                             <Link 
                                 href={`/fazer-tarefa/${tarefaAtual.id}`}
-                                className="w-fit bg-[#E5EFF0] hover:bg-[#d6e6e8] text-[#075F70] font-bold py-2.5 px-8 rounded-full transition-all duration-300 text-sm flex items-center gap-2 transform hover:scale-105 shadow-sm border border-[#075F70]/10"
+                                className="w-fit bg-[#E5EFF0] hover:bg-[#d6e6e8] text-brand-teal-dark font-bold py-2.5 px-8 rounded-full transition-all duration-300 text-sm flex items-center gap-2 transform hover:scale-105 shadow-sm border border-brand-teal-dark/10"
                             >
                                 Iniciar tarefa
                             </Link>

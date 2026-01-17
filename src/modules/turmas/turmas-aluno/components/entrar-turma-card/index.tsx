@@ -20,10 +20,10 @@ export function EntrarTurmaSkeleton() {
 export default function EntrarTurmaCard() {
   return (
     <Link href="/entrar_turma" className="block w-full group cursor-pointer">
-      <div className="relative w-full min-h-[220px] bg-white rounded-[40px] shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden flex flex-col md:flex-row items-center p-6 md:p-8 border border-transparent hover:border-[#075F70]/10 gap-4 md:gap-0">
+      <div className="relative w-full min-h-[220px] bg-white rounded-[40px] shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden flex flex-col md:flex-row items-center p-6 md:p-8 border border-transparent hover:border-brand-teal-dark/10 gap-4 md:gap-0">
         {/* Conteúdo Texto */}
         <div className="flex-1 z-10 flex flex-col gap-2 md:gap-4 w-full md:max-w-[60%] text-center md:text-left">
-          <h2 className="font-montserrat font-bold text-2xl md:text-[28px] leading-tight text-[#075F70]">
+          <h2 className="font-montserrat font-bold text-2xl md:text-[28px] leading-tight text-brand-teal-dark">
             Entre para uma turma
           </h2>
 

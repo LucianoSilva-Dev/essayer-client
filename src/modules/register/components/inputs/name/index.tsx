@@ -35,7 +35,7 @@ export const NameInputs: React.FC<NameInputsProps> = ({
         <label
           htmlFor="firstName"
           // Estilos do Figma: font-size: 35px, font-weight: 500, color: #3C3C3C
-          className="block text-2xl md:text-[35px] font-medium text-[#3C3C3C] pl-3 mb-2"
+          className="block text-2xl md:text-[35px] font-medium text-neutral-dark pl-3 mb-2"
         >
           Nome
         </label>
@@ -50,7 +50,7 @@ export const NameInputs: React.FC<NameInputsProps> = ({
           className="w-full max-w-[640px] px-6 py-4 bg-white rounded-[32px] 
             text-lg md:text-xl
             shadow-[0px_0px_15px_-6px_rgba(0,0,0,0.25)]
-            focus:outline-none focus:ring-2 focus:ring-[#075F70] 
+            focus:outline-none focus:ring-2 focus:ring-brand-teal-dark 
             focus:shadow-lg focus:-translate-y-[0.5em]
             transition-all duration-300"
           required
@@ -62,7 +62,7 @@ export const NameInputs: React.FC<NameInputsProps> = ({
         <label
           htmlFor="lastName"
           // Estilos do Figma: font-size: 35px, font-weight: 500, color: #3C3C3C
-          className="block text-2xl md:text-[35px] font-medium text-[#3C3C3C] pl-3 mb-2"
+          className="block text-2xl md:text-[35px] font-medium text-neutral-dark pl-3 mb-2"
         >
           Sobrenome
         </label>
@@ -77,7 +77,7 @@ export const NameInputs: React.FC<NameInputsProps> = ({
           className="w-full max-w-[640px] px-6 py-4 bg-white rounded-[32px] 
             text-lg md:text-xl
             shadow-[0px_0px_15px_-6px_rgba(0,0,0,0.25)]
-            focus:outline-none focus:ring-2 focus:ring-[#075F70] 
+            focus:outline-none focus:ring-2 focus:ring-brand-teal-dark 
             focus:shadow-lg focus:-translate-y-[0.5em]
             transition-all duration-300"
           required

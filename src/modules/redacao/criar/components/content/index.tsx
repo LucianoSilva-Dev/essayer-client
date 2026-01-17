@@ -44,7 +44,7 @@ export default function PraticarRedacaoPage() {
     <div className="flex-1 p-6 md:p-12 bg-gray-50 font-montserrat min-h-screen"> 
       
       <div className="max-w-[1400px] mx-auto space-y-8">
-        <h1 className="text-2xl md:text-2xl font-semibold text-[#3C3C3C]">
+        <h1 className="text-2xl md:text-2xl font-semibold text-neutral-dark">
           Praticar Redação
         </h1>
 

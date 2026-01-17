@@ -59,7 +59,7 @@ export function Step3_Prazo() {
     <div className="w-full max-w-6xl mx-auto pb-20 relative animate-in fade-in slide-in-from-right-8 duration-500">
       
       <div className="flex flex-col gap-4 mb-8 text-center lg:text-left">
-         <h2 className="font-montserrat font-bold text-[35px] text-[#3C3C3C] leading-tight">
+         <h2 className="font-montserrat font-bold text-[35px] text-neutral-dark leading-tight">
             Quando deve ser entregue?
          </h2>
          <p className="text-gray-500 text-lg">
@@ -92,16 +92,16 @@ export function Step3_Prazo() {
                 "rounded-[30px] p-6 border transition-colors duration-300",
                 isTimeInvalid 
                     ? "bg-red-50 border-red-100" 
-                    : "bg-[#E5EFF0] border-[#075F70]/10"
+                    : "bg-[#E5EFF0] border-brand-teal-dark/10"
             )}>
                 <h4 className={cn(
                     "font-montserrat font-bold text-sm uppercase mb-2",
-                    isTimeInvalid ? "text-red-500" : "text-[#075F70]"
+                    isTimeInvalid ? "text-red-500" : "text-brand-teal-dark"
                 )}>
                     {isTimeInvalid ? "Horário Inválido" : "Resumo do Prazo"}
                 </h4>
                 
-                <div className="text-[#3C3C3C] font-medium text-lg">
+                <div className="text-neutral-dark font-medium text-lg">
                     {isTimeInvalid ? (
                         <span className="text-red-600 leading-tight block text-sm">
                             Você não pode definir um prazo no passado. Por favor, escolha um horário futuro.

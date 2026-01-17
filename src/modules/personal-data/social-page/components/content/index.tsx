@@ -25,7 +25,7 @@ export default function SocialPage() {
       transition={pageTransition}
       className="bg-white rounded-2xl shadow-sm p-10"
     >
-      <h1 className="text-4xl font-medium text-[#3C3C3C]">Perfil Social</h1>
+      <h1 className="text-4xl font-medium text-neutral-dark">Perfil Social</h1>
       <p className="mt-4 text-gray-600">
         Esta seção está em construção.
       </p>
