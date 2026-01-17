@@ -1,5 +1,9 @@
 import  { RedacaoPage }  from '@/modules/fazer-tarefa/editar/components/content';
 
+export const metadata = {
+  title: 'Editar Redação',
+};
+
 interface PageProps {
   params: Promise<{
     id: string;

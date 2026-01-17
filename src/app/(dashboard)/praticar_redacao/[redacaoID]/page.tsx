@@ -2,6 +2,10 @@
 import { RedacaoPage } from '@/modules/redacao/editar/components/content';
 import { RedacaoTema } from '@/modules/redacao/editar/components/tema';
 
+export const metadata = {
+  title: 'Correção',
+};
+
 export default async function PraticarRedacaoIdPage({
   params,
 }: {

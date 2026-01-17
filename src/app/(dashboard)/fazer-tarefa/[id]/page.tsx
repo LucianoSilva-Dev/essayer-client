@@ -1,6 +1,10 @@
 import React from "react";
 import { RevisaoRedacaoPage }  from "@/modules/fazer-tarefa/revisar/components/content";
 
+export const metadata = {
+  title: 'Revisar Redação',
+};
+
 interface PageProps {
   params: Promise<{
     id: string;

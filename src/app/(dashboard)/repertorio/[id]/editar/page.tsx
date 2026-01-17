@@ -1,5 +1,9 @@
+import RepertorioForm from '@/modules/repertorio/repertorio-form';
 import React from 'react';
-import RepertorioForm from '@/components/repertorio/repertorio-form';
+
+export const metadata = {
+  title: 'Editar Repertório',
+};
 
 interface PageProps {
   params: Promise<{

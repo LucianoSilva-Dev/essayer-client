@@ -1,5 +1,9 @@
 import { EditorCorrecaoProfessorPage } from '@/modules/redacao/correcao/editar-correcao-professor/components/content/EditorCorrecaoProfessorPage'
 
+export const metadata = {
+  title: 'Corrigir Redação',
+};
+
 export default async function Page({
   params,
   searchParams,
