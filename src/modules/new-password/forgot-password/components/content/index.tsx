@@ -1,32 +1,14 @@
 "use client"
 import type React from "react"
-import { useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { useRouter } from "next/navigation"
-import { createRequisicaoSenha } from "../../../../../lib/apiCalls/requisicao-senha"
-import { useAuth } from "../../../../../shared/contexts/auth-context"
 import { motion } from "framer-motion"
+import { useAuth } from "@/shared/contexts/auth-context"
+import { useContentForgotPassword } from "../../hooks/useContentForgotPassword"
 
-export default function ForgotPasswordForm() {
-  const [email, setEmail] = useState("")
-  const router = useRouter()
+export default function ForgotPasswordContent() {
   const { isLoggedIn } = useAuth()
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-
-    try {
-      const { id } = await createRequisicaoSenha({ email })
-
-      const query = new URLSearchParams({
-        id,
-        email
-      })
-
-      router.push(`/forgot-password/verify-code?${query}`)
-    } catch { }
-  }
+  const { email, setEmail, handleSubmit, isSubmitting } = useContentForgotPassword()
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -73,7 +55,8 @@ export default function ForgotPasswordForm() {
           variants={itemVariants}
           className="text-base md:text-[25px] text-neutral-dark mb-6 md:mb-8 max-w-full md:max-w-2xl leading-relaxed"
         >
-          Insira o endereço do e-mail para receber o código de verificação e prosseguir na redefinição de senha
+          Insira o endereço do e-mail para receber o código de verificação e
+          prosseguir na redefinição de senha
         </motion.p>
 
         {/* Formulário */}
@@ -106,9 +89,12 @@ export default function ForgotPasswordForm() {
           <motion.button
             variants={itemVariants}
             type="submit"
-            className="w-full bg-brand-teal-dark hover:bg-[#064c5a] hover:shadow-xl hover:translate-y-[-0.2em] active:translate-y-0 text-white py-3.5 md:py-5 px-6 rounded-2xl md:rounded-3xl text-lg md:text-xl font-medium shadow-lg transition-all duration-300 mb-6 md:mb-8 focus:shadow-xl focus:translate-y-[-0.2em]"
+            disabled={isSubmitting}
+            className="w-full bg-brand-teal-dark hover:bg-[#064c5a] hover:shadow-xl hover:translate-y-[-0.2em] active:translate-y-0 
+            disabled:opacity-70 disabled:cursor-not-allowed
+            text-white py-3.5 md:py-5 px-6 rounded-2xl md:rounded-3xl text-lg md:text-xl font-medium shadow-lg transition-all duration-300 mb-6 md:mb-8 focus:shadow-xl focus:translate-y-[-0.2em]"
           >
-            Enviar e-mail
+            {isSubmitting ? "Enviando..." : "Enviar e-mail"}
           </motion.button>
 
           {/* Links Adicionais */}
@@ -138,7 +124,7 @@ export default function ForgotPasswordForm() {
         </motion.form>
       </motion.div>
 
-      {/* Lado Direito - Imagem/Visual (oculta em telas pequenas) */}
+      {/* Lado Direito - Imagem */}
       <motion.div
         initial={{ opacity: 0, x: 70 }}
         animate={{ opacity: 1, x: 0 }}
@@ -150,7 +136,7 @@ export default function ForgotPasswordForm() {
           alt="Redefinição de senha background"
           fill
           sizes="(max-width: 768px) 0px, 60vw"
-          style={{ objectFit: 'cover' }}
+          style={{ objectFit: "cover" }}
           priority
         />
       </motion.div>

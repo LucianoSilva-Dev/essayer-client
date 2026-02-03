@@ -198,7 +198,7 @@ export function EditorCorrecaoProfessorPage({ id, alunoId, initialData }: Editor
             value={feedbackAtual}
             onChange={(e) => handleUpdateFeedback(e.target.value)}
             placeholder={`Insira a análise sobre a competência ${activeCompetenciaId.replace('c', '')} aqui...`}
-            className="w-full min-h-[150px] p-4 rounded-2xl bg-gray-50 border border-gray-200 focus:border-brand-teal-dark focus:ring-2 focus:ring-brand-teal-dark/20 outline-none resize-y text-gray-700 leading-relaxed"
+            className="w-full min-h-37.5 p-4 rounded-2xl bg-gray-50 border border-gray-200 focus:border-brand-teal-dark focus:ring-2 focus:ring-brand-teal-dark/20 outline-none resize-y text-gray-700 leading-relaxed"
         />
 
         <div className="absolute bottom-8 right-8">

@@ -3,7 +3,7 @@
 import RepertorioFilters from "../../filters/RepertorioFilters";
 import RepertorioGrid from "../repertorio-grid";
 import Pagination from "../pagination";
-import { useHomeRepertorios } from "../../hooks/useHomeRepertorios";
+import { useHomeRepertorios } from "../../hooks/useContentHomeRepertorios";
 
 export default function HomeContent() {
   const { repertorio, filters, tipoVisualizacao, setTipoVisualizacao } =

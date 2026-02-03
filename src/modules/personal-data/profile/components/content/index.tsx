@@ -1,19 +1,11 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useState, useEffect } from "react";
 import Link from "next/link";
-import { useAuth } from "@/shared/contexts/auth-context";
-import { useProfile } from "@/shared/contexts/profile-context"; // Caminho correto
-import { toast } from "react-toastify";
-import { Save, Loader2, EyeOff } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { EmailVerificationModal } from "../email-verification-modal";
-import {
-  createRequisicaoEmail,
-  validateRequisicaoEmail,
-} from "@/lib/apiCalls/requisicao-email";
+import { usePersonalDataForm } from "../../hooks/UseProfileFormContent";
 
-// Configurações de animação do Framer Motion
 const pageVariants = {
   initial: { opacity: 0, y: 20 },
   in: { opacity: 1, y: 0 },
@@ -27,151 +19,43 @@ const pageTransition = {
 };
 
 export default function PersonalDataForm() {
-  const { profile, updateProfile, isLoading: isProfileLoading } = useProfile();
+  const {
+    profile,
+    isProfileLoading,
 
-  const [isEditing, setIsEditing] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [errors, setErrors] = useState<Record<string, string>>({});
-  const [nome, setNome] = useState("");
-  const [sobrenome, setSobrenome] = useState("");
-  const [email, setEmail] = useState("");
-  const [isVerificationModalOpen, setIsVerificationModalOpen] = useState(false);
-  const [verificationId, setVerificationId] = useState<string | null>(null);
-  const [pendingEmail, setPendingEmail] = useState<string | null>(null);
-  const [isVerifying, setIsVerifying] = useState(false);
+    nome,
+    sobrenome,
+    email,
+    errors,
 
-  // Popula o formulário quando o perfil é carregado
-  useEffect(() => {
-    if (profile) {
-      // Divide o nome vindo da API em nome e sobrenome
-      const [firstName, ...lastName] = profile.nome.split(" ");
-      setNome(firstName || "");
-      setSobrenome(lastName.join(" ") || "");
-      setEmail(profile.email || "");
-    }
-  }, [profile]);
+    isEditing,
+    isSubmitting,
+    isVerifying,
 
-  const validateForm = (): boolean => {
-    const newErrors: Record<string, string> = {};
-    if (!nome.trim()) newErrors.nome = "Nome é obrigatório";
-    if (!email.trim()) {
-      newErrors.email = "E-mail é obrigatório";
-    } else if (!/\S+@\S+\.\S+/.test(email)) {
-      newErrors.email = "E-mail inválido";
-    }
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
+    isVerificationModalOpen,
+    pendingEmail,
 
-  const handleCancel = () => {
-    setIsEditing(false);
-    setErrors({});
-    // Reseta para os valores originais do perfil
-    if (profile) {
-      const [firstName, ...lastName] = profile.nome.split(" ");
-      setNome(firstName || "");
-      setSobrenome(lastName.join(" ") || "");
-      setEmail(profile.email || "");
-    }
-  };
+    setNome,
+    setSobrenome,
+    setEmail,
+    setIsEditing,
+    setIsVerificationModalOpen,
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!validateForm() || !profile) return;
-
-    setIsSubmitting(true);
-
-    // Junta nome e sobrenome para enviar à API (PUT /usuario/{id})
-    const fullName = `${nome.trim()} ${sobrenome.trim()}`.trim();
-
-    try {
-      // Verifica se o email mudou
-      if (email !== profile.email) {
-        // Inicia o fluxo de verificação
-        const response = await createRequisicaoEmail(email);
-        setVerificationId(response.id);
-        setPendingEmail(email);
-        setIsVerificationModalOpen(true);
-        setIsSubmitting(false); // Para o loading do botão salvar
-        return; // Interrompe o fluxo normal
-      }
-
-      // Se o email não mudou, segue o fluxo normal
-      await updateProfile({
-        nome: fullName,
-        email: email,
-        // Mantém o lattes se for professor, pois o updateProfile espera um Partial<UserProfile>
-        ...(profile.tipo === "professor" &&
-          "curriculoLattes" in profile && { lattes: profile.curriculoLattes }),
-      });
-
-      toast.success("Perfil atualizado com sucesso!");
-      setIsEditing(false);
-    } catch (error) {
-      console.error("Erro ao atualizar perfil:", error);
-      toast.error("Ocorreu um erro ao atualizar o perfil.");
-      setIsSubmitting(false);
-      handleCancel();
-    } finally {
-      // Só desativa o loading se não abriu o modal (se abriu, já desativou antes)
-      if (email === profile.email) {
-        setIsSubmitting(false);
-      }
-    }
-  };
-
-  const handleVerifyCode = async (code: string) => {
-    if (!verificationId || !pendingEmail || !profile) return;
-
-    setIsVerifying(true);
-    try {
-      await validateRequisicaoEmail(verificationId, code);
-
-      // Se validou com sucesso, atualiza o perfil com o novo email
-      const fullName = `${nome.trim()} ${sobrenome.trim()}`.trim();
-
-      await updateProfile({
-        nome: fullName,
-        email: pendingEmail,
-        ...(profile.tipo === "professor" &&
-          "curriculoLattes" in profile && { lattes: profile.curriculoLattes }),
-      });
-
-      toast.success("Email verificado e perfil atualizado com sucesso!");
-      setIsVerificationModalOpen(false);
-      setIsEditing(false);
-      setVerificationId(null);
-      setPendingEmail(null);
-    } catch (error) {
-      console.error("Erro ao verificar código:", error);
-      toast.error("Código inválido ou expirado.");
-    } finally {
-      setIsVerifying(false);
-    }
-  };
-
-  const handleResendCode = async () => {
-    if (!pendingEmail) return;
-    try {
-      const response = await createRequisicaoEmail(pendingEmail);
-      setVerificationId(response.id);
-      toast.success("Novo código enviado!");
-    } catch (error) {
-      console.error("Erro ao reenviar código:", error);
-      toast.error("Erro ao reenviar código.");
-      setIsEditing(false);
-    }
-  };
+    handleSubmit,
+    handleCancel,
+    handleVerifyCode,
+    handleResendCode,
+  } = usePersonalDataForm();
 
   if (isProfileLoading || !profile) {
     return (
-      <div className="flex justify-center items-center min-h-[300px]">
+      <div className="flex justify-center items-center min-h-75">
         <Loader2 className="w-8 h-8 animate-spin text-gray-400" />
       </div>
     );
   }
 
-  // Estilos dos Inputs
+  // estilos (inalterados)
   const inputBaseStyle =
     "w-full px-4 sm:px-6 py-2 sm:py-3 text-base sm:text-lg lg:text-2xl text-[#898787] rounded-lg sm:rounded-2xl transition-colors h-12 sm:h-16";
   const readOnlyStyle = "bg-white border border-transparent cursor-not-allowed";
@@ -182,13 +66,13 @@ export default function PersonalDataForm() {
   return (
     <>
       <motion.div
-        key="personal-data" // Chave única para AnimatePresence
+        key="personal-data"
         initial="initial"
         animate="in"
         exit="out"
         variants={pageVariants}
         transition={pageTransition}
-        className="bg-transparent" //rounded-2xl shadow-sm p-10
+        className="bg-transparent"
       >
         <form onSubmit={handleSubmit} className="w-full">
           {/* Cabeçalho da Aba */}
@@ -211,7 +95,7 @@ export default function PersonalDataForm() {
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="flex-1 sm:flex-none px-6 sm:px-9 py-2 sm:py-3 text-sm sm:text-base lg:text-lg font-medium text-white bg-brand-teal-dark rounded-full hover:bg-[#064e5a] flex items-center justify-center gap-2 transition-colors disabled:opacity-70 disabled:cursor-not-allowed min-w-[100px] sm:min-w-[140px]"
+                    className="flex-1 sm:flex-none px-6 sm:px-9 py-2 sm:py-3 text-sm sm:text-base lg:text-lg font-medium text-white bg-brand-teal-dark rounded-full hover:bg-[#064e5a] flex items-center justify-center gap-2 transition-colors disabled:opacity-70 disabled:cursor-not-allowed min-w-25 sm:min-w-35"
                   >
                     {isSubmitting ? (
                       <Loader2 className="w-4 h-4 sm:w-5 sm:h-5 animate-spin" />

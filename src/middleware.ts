@@ -1,8 +1,10 @@
 import { type MiddlewareConfig, type NextRequest, NextResponse } from 'next/server'
 
 const publicRoutes = [
+  '/',
   '/login',
   '/register',
+  '/forgot-password',
   '/landing',
 ]
 
