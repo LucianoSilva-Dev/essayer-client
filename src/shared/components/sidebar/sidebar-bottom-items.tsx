@@ -25,7 +25,7 @@ export function SidebarBottomItems({ items, isExpanded }: SidebarBottomItemsProp
               href={item.href}
               className="flex items-center p-3 rounded-lg text-[#898787] hover:bg-gray-400/30 hover:text-gray-500 transition-colors duration-200"
             >
-              <Icon size={20} className="flex-shrink-0" />
+              <Icon size={20} className="shrink-0" />
               <motion.span
                 className="ml-3 text-sm whitespace-nowrap overflow-hidden"
                 initial={{ opacity: 0, width: 0 }}

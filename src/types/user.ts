@@ -22,3 +22,4 @@ export interface Professor extends BaseUser {
 export type UserRegistration = Aluno | Professor
 
 export type UserType = "aluno" | "professor"
+

@@ -1,36 +1,33 @@
-import { useAuth } from '@/shared/contexts/auth-context'
-import { useRouter } from 'next/navigation'
-import Image from "next/image"
-import Link from "next/link"
-import { useEffect, useState } from "react"
-import { getProfilePictureLink } from "../../../lib/apiCalls/usuario"
+"use client";
+
+import { useAuth } from "@/shared/contexts/auth-context";
+import { useRouter } from "next/navigation";
+import Image from "next/image";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+// import { getProfilePictureLink } from "../../../lib/apiCalls/usuario";
 
 export function AuthButtons() {
-  const router = useRouter()
-  const { isLoggedIn, userData, isLoading } = useAuth() // Adicione o isLoading
-  const [profilePic, setProfilePic] = useState<string | null>(null)
+  const router = useRouter();
+  const { isLoggedIn, userData, isLoading } = useAuth();
+  const [profilePic, setProfilePic] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchProfilePic = async () => {
-      // Garante que só busca a foto se o usuário estiver logado e os dados carregados
-      if (isLoggedIn && userData?.id) {
-        const url = await getProfilePictureLink(userData.id)
-        setProfilePic(url)
-      } else {
-        setProfilePic(null)
-      }
+    if (isLoading || !isLoggedIn || !userData?.id) {
+      setProfilePic(null);
+      return;
     }
-    fetchProfilePic()
-  }, [isLoggedIn, userData])
 
+    // getProfilePictureLink(userData.id).then(setProfilePic);
+  }, [isLoading, isLoggedIn, userData?.id]);
+  if (!userData) return null;
+  console.log("userData:", userData);
   return (
     <div className="flex items-center space-x-4">
-      {/* Exibe o conteúdo do usuário apenas se estiver logado E o carregamento estiver concluído */}
       {isLoggedIn && !isLoading ? (
         <>
           <span className="text-neutral-dark text-[20px] font-bold">
-            {/* Verificação segura para exibir o nome */}
-            Olá, {userData?.nome ? userData.nome.split(" ")[0] : ""}
+            Olá, {userData.name ? userData.name.split(" ")[0] : "Usuário"}!
           </span>
           <button
             onClick={() => router.push("/profile")}
@@ -39,7 +36,7 @@ export function AuthButtons() {
             type="button"
           >
             {profilePic ? (
-              <span className="w-9 h-9 scale-150 cursor-pointer rounded-full overflow-hidden border-1 hover:scale-147 border-[#CA9C60] flex items-center justify-center">
+              <span className="w-9 h-9 scale-150 cursor-pointer rounded-full overflow-hidden border hover:scale-147 border-[#CA9C60] flex items-center justify-center">
                 <Image
                   src={profilePic}
                   alt="Foto de perfil"
@@ -51,13 +48,13 @@ export function AuthButtons() {
             ) : (
               <div className="w-9 h-9 rounded-full bg-gray-300 flex items-center justify-center text-gray-600 font-bold cursor-pointer">
                 {/* Fallback seguro para a inicial do nome */}
-                {userData?.nome?.[0] || ""}
+                {userData?.name?.[0] || ""}
               </div>
             )}
           </button>
         </>
-        // Exibe os botões de login/cadastro se NÃO estiver logado E o carregamento estiver concluído
-      ) : !isLoggedIn && !isLoading ? (
+      ) : // Exibe os botões de login/cadastro se NÃO estiver logado E o carregamento estiver concluído
+      !isLoggedIn && !isLoading ? (
         <>
           <Link
             href="/login"
@@ -77,5 +74,5 @@ export function AuthButtons() {
         <div className="w-48 h-9 animate-pulse bg-white/10 rounded-md"></div>
       )}
     </div>
-  )
+  );
 }

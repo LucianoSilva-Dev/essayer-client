@@ -6,7 +6,6 @@ import { useEffect, useState } from 'react'
 import { Header } from '../../header-Up/header'
 import { headerConfig } from '@/shared/header/header-config'
 import { getTurmaById } from '@/lib/apiCalls/turma'
-import { getRepertoriosIds } from '@/lib/apiCalls/repertorio'
 import { ResolvedHeaderProps } from '@/shared/header/header-types'
 
 export function HeaderWrapper() {
@@ -91,7 +90,7 @@ export function HeaderWrapper() {
       if (currentPathname.includes('/turma_aberta_')) {
         data = await getTurmaById(currentParams.turmaId)
       } else if (currentPathname.includes('/repertorio/')) {
-        data = await getRepertoriosIds(currentParams.id)
+        // data = await getRepertoriosIds(currentParams.id)
       }
       
       setDynamicData(data)

@@ -9,7 +9,7 @@ import { useAuth } from "@/shared/contexts/auth-context";
 import type { Repertorio } from "@/types/repertorio";
 import type { RepertorioDocument } from "@/lib/apiCalls/repertorio/types";
 import { addComentario, addFavorito, addLike, deleteRepertorio, getArtigoById, getCitacaoById, getObraById, removeFavorito, removeLike } from "@/lib/apiCalls/repertorio";
-import { getProfilePictureLink } from "@/lib/apiCalls/usuario";
+// import { getProfilePictureLink } from "@/lib/apiCalls/usuario";
 import { mountRepertoire } from "@/shared/utils";
 
 // Helpers e Mappers
@@ -61,8 +61,8 @@ function RepertorioDetalhesContent() {
   const type = searchParams.get('type');
 
   // Permissões
-  const canEditRepertory = isLoggedIn && (repertorio?.criador.id === userData?.id || userData?.cargo === 'admin');
-  const canDeleteRepertory = isLoggedIn && (repertorio?.criador.id === userData?.id || userData?.cargo === 'admin');
+  const canEditRepertory = isLoggedIn && (repertorio?.criador.id === userData?.id || userData?.role === 'admin');
+  const canDeleteRepertory = isLoggedIn && (repertorio?.criador.id === userData?.id || userData?.role === 'admin');
 
   // --- BUSCA DE DADOS ---
   const fetchRepertorio = useCallback(async (isBackgroundUpdate = false) => {
@@ -95,7 +95,7 @@ function RepertorioDetalhesContent() {
         setIsLiked(mounted.likeDoUsuario);
         setIsFavorito(mounted.favoritadoPeloUsuario);
         if (mounted.criador?.id) {
-          getProfilePictureLink(mounted.criador.id).then(setAuthorProfilePictureLink);
+          // getProfilePictureLink(mounted.criador.id).then(setAuthorProfilePictureLink);
         }
       } else {
         setError("Falha ao processar os dados do repertório.");
@@ -291,7 +291,7 @@ function RepertorioDetalhesContent() {
           </div>
 
           {/* Card Principal */}
-          <div className="bg-[#EAEAEA] rounded-[2rem] p-6 md:p-10 shadow-sm">
+          <div className="bg-[#EAEAEA] rounded-4xl p-6 md:p-10 shadow-sm">
 
             {/* Header Interno */}
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
@@ -307,7 +307,7 @@ function RepertorioDetalhesContent() {
                   {title && (
                     <>
                       <span className="mx-2 text-gray-300">|</span>
-                      <span className={`font-bold ${typeColorClass} truncate max-w-[150px] sm:max-w-[250px]`}>
+                      <span className={`font-bold ${typeColorClass} truncate max-w-37.5 sm:max-w-62.5`}>
                         {title}
                       </span>
                     </>
@@ -341,7 +341,7 @@ function RepertorioDetalhesContent() {
               comments={repertorio.comentarios || []}
               repertorioId={repertorio.id}
               isLoggedIn={isLoggedIn}
-              userRole={userData?.cargo}
+              userRole={userData?.role}
               newComment={newComment}
               setNewComment={setNewComment}
               isSubmittingComment={isSubmittingComment}

@@ -1,88 +1,54 @@
-import apiClient from '../../http/api-client';
+'use client';
+
+import apiClient from '../../http/api-client'; 
 import { GenericSuccessResponse } from '../../../types/types';
-import type {
-  Usuario,
-  UpdateUsuarioBody,
-  UpdateSenhaBody,
-  ProfessorCreateBody,
-  CreateUsuarioBody,
-  CreateUsuarioResponse
-} from './types';
+import { UpdateUsuarioBody } from './types';
+import { authClient } from '@/lib/betterAuth/auth-client';
 
-export const getUserById = async (id: string): Promise<Usuario> => {
-  const response = await apiClient.get<Usuario>(`/usuario/${id}`);
-  return response.data;
-};
+// --- LEITURA ---
+// O useSession do contexto já fará isso.
 
-
-export const createUser = async (data: CreateUsuarioBody): Promise<CreateUsuarioResponse> => {
-  const response = await apiClient.post<CreateUsuarioResponse>('/usuario', data);
-  return response.data;
-};
-
-
-export const createProfessorRequest = async (id: string, data: ProfessorCreateBody): Promise<GenericSuccessResponse> => {
-  const response = await apiClient.post<GenericSuccessResponse>(`/usuario/${id}/professor`, data);
-  return response.data;
-};
-
+// --- ESCRITA ---
 
 export const updateUser = async (id: string, data: UpdateUsuarioBody): Promise<GenericSuccessResponse> => {
-  const response = await apiClient.put<GenericSuccessResponse>(`/usuario/${id}`, data);
-  return response.data;
+  // CORREÇÃO 1: O método é direto na raiz 'authClient.updateUser'
+  // CORREÇÃO 2: Arrumamos a desestruturação (data e error separados)
+  const { data: updatedData, error } = await authClient.updateUser({
+    name: data.nome,
+    // Se você configurou 'image' no schema padrão, pode passar aqui também se vier no body
+    // image: data.fotoUrl 
+  });
+
+  if (error) {
+    throw new Error(error.message || "Erro ao atualizar perfil");
+  }
+
+  // Se precisar atualizar campos extras (Lattes) que não estão no schema do Better Auth:
+  // (Mantendo sua lógica de fallback para o backend antigo se necessário)
+
+  return { message: "Perfil atualizado" };
 };
 
-
-export const updatePassword = async (id: string, data: UpdateSenhaBody): Promise<GenericSuccessResponse> => {
-  const response = await apiClient.put<GenericSuccessResponse>(`/usuario/${id}/senha`, data);
-  return response.data;
-};
-
-
-export const deleteUser = async (id: string): Promise<GenericSuccessResponse> => {
-  const response = await apiClient.delete<GenericSuccessResponse>(`/usuario/${id}`);
-  return response.data;
-};
-
-// --- Serviços de Foto de Perfil ---
-
-export const getProfilePictureLink = async (id: string | null | undefined): Promise<string | null> => {
-  if (!id) return null
-  const foto = await apiClient.get(`/usuario/foto/${id}`, {
-    cache: { ttl: 900_000 }, // 15 minutes
-    validateStatus: (status) => (status >= 200 && status < 300) || status === 404
-  })
-  if (foto.status === 404 || !foto.data) return null
-  return foto.data.fotoUrl
-}
-
+// --- FOTO ---
 export const uploadProfilePicture = async (id: string, file: File): Promise<GenericSuccessResponse> => {
   const formData = new FormData();
   formData.append('file', file);
 
-  const response = await apiClient.post<GenericSuccessResponse>(`/usuario/foto/${id}`, formData, {
-    headers: {
-      'Content-Type': 'multipart/form-data',
-    },
+  // 1. Upload físico do arquivo (mantido no seu backend/bucket)
+  const response = await apiClient.post<{ fotoUrl: string }>(`/usuario/foto/${id}`, formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
   });
-  return response.data;
-};
 
-
-export const updateProfilePicture = async (id: string, file: File): Promise<GenericSuccessResponse> => {
-  const formData = new FormData();
-  formData.append('file', file);
-
-  const response = await apiClient.put<GenericSuccessResponse>(`/usuario/foto/${id}`, formData, {
-    headers: {
-      'Content-Type': 'multipart/form-data',
-    },
+  // 2. Atualiza a URL no Better Auth
+  // CORREÇÃO: authClient.updateUser direto na raiz
+  const { error } = await authClient.updateUser({
+    image: response.data.fotoUrl
   });
-  return response.data;
-};
 
+  if (error) {
+      console.error("Erro ao sincronizar imagem com Auth:", error);
+      // Opcional: throw new Error...
+  }
 
-export const deleteProfilePicture = async (id: string): Promise<GenericSuccessResponse> => {
-  const response = await apiClient.delete<GenericSuccessResponse>(`/usuario/foto/${id}`);
-  return response.data;
+  return { message: "Foto atualizada" };
 };

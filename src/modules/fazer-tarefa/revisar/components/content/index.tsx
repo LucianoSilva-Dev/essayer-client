@@ -173,7 +173,7 @@ export function RevisaoRedacaoPage({ id }: RevisaoRedacaoPageProps) {
             
             {/* Card Título */}
             <div className="bg-white p-8 rounded-[30px] shadow-sm border border-gray-100 flex items-start gap-6 relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-[#E5EFF0] rounded-bl-[100px] -z-0 opacity-50 pointer-events-none" />
+                <div className="absolute top-0 right-0 w-32 h-32 bg-[#E5EFF0] rounded-bl-[100px] z-0 opacity-50 pointer-events-none" />
                 
                 <div className="z-10 flex-1 space-y-4">
                     <div className="flex items-center gap-3 mb-2">

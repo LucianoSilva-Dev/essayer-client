@@ -17,19 +17,16 @@ export default function ProfileSettingsLayout({
   const { userData, isLoading: isAuthLoading } = useAuth();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  // ✅ REDIRECIONAMENTO É EFEITO COLATERAL
   useEffect(() => {
     if (!isAuthLoading && !userData) {
       router.push("/login");
     }
   }, [isAuthLoading, userData, router]);
 
-  // Loading enquanto verifica autenticação
   if (isAuthLoading) {
     return <Loading />;
   }
 
-  // Evita renderizar layout enquanto redireciona
   if (!userData) {
     return null;
   }
@@ -64,9 +61,9 @@ export default function ProfileSettingsLayout({
         {/* Sidebar */}
         <aside
           className={`
-            fixed lg:static inset-y-0 left-0 top-[80px] w-full sm:w-80 lg:w-[464px]
+            fixed lg:static inset-y-0 left-0 top-20 w-full sm:w-80 lg:w-116
             bg-white z-20 transform transition-transform duration-300 lg:transform-none
-            lg:top-0 overflow-y-auto flex-shrink-0
+            lg:top-0 overflow-y-auto shrink-0
             ${
               isSidebarOpen
                 ? "translate-x-0"
@@ -76,7 +73,7 @@ export default function ProfileSettingsLayout({
         >
           <div className="p-4 sm:p-6 lg:p-10">
             <SettingsSidebar
-              cargo={userData.cargo}
+              cargo={userData.role}
               onItemClick={() => setIsSidebarOpen(false)}
             />
           </div>

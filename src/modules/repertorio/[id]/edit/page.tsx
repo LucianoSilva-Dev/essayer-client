@@ -57,11 +57,10 @@ function EditarRepertorioContent() {
           default:
             throw new Error("Tipo de repertório inválido");
         }
-
         if (repertorioDoc) {
           const mounted = mountRepertoire(repertorioDoc);
           if (mounted) {
-            if (mounted.criador.id !== userData?.id && userData?.cargo !== 'admin') {
+            if (mounted.criador.id !== userData?.id && userData?.role !== 'admin') {
               toast.error("Você não tem permissão para editar este repertório.");
               router.push(`/repertorio/${id}?type=${mounted.modelo}`);
               return;

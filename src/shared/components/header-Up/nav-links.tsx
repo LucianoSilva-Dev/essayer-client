@@ -17,7 +17,7 @@ export function NavLinks() {
   const filteredLinks = allLinks.filter(link => {
     if (link.roles) {
       // Se o link tem roles, o usuário precisa estar logado e ter um cargo compatível
-      return isLoggedIn && userData && link.roles.includes(userData.cargo)
+      return isLoggedIn && userData && link.roles.includes(userData.role)
     }
     // Se o link não tem roles, ele é público
     return true

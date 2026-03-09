@@ -1,6 +1,3 @@
-import { API_BASE_URL } from "@/shared/constants";
-import { refreshTokenOrWait } from "../http/api-client";
-
 type EventListeners = Record<string, (event: MessageEvent) => void>;
 
 /**
@@ -38,25 +35,16 @@ export function createResilientEventSource(
     eventSource.onerror = async () => {
       eventSource?.close();
       if (isClosed) return;
-
-      // pequeno backoff evita loop violento
-      await new Promise(r => setTimeout(r, 500));
-
-      try {
-        await refreshTokenOrWait();
-        connect();
-      } catch {
-        // deixa morrer
-      }
+      window.dispatchEvent(new Event('auth:sessionExpired'));
     };
   };
 
-    connect();
+  connect();
 
-    return {
-      close: () => {
-        isClosed = true;
-        eventSource?.close();
-      }
-    };
-  }
+  return {
+    close: () => {
+      isClosed = true;
+      eventSource?.close();
+    }
+  };
+}

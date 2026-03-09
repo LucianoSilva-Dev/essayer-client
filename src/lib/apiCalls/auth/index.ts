@@ -1,46 +1,92 @@
-import apiClient from '../../http/api-client';
-import type {
-  UserLoginBody,
-  UserLoginResponse,
-  UserRegisterBody,
-  UserRegisterResponse,
-} from './types';
+import { authClient } from "@/lib/betterAuth/auth-client";
+import { UserLoginBody, UserRegisterBody, UserLoginResponse } from "./types";
+import { User } from "better-auth";
+import { toast } from "react-toastify";
 
-/**
- * Realiza o login do usuário.
- * O backend irá setar os cookies HttpOnly (accessToken e refreshToken).
- * @param data - Credenciais do usuário (email e senha).
- * @returns Os dados do usuário logado.
- */
+interface CustomSessionUser extends User {
+  role?: string;
+  banned?: boolean;
+  lattes?: string;
+}
+
 export const login = async (data: UserLoginBody): Promise<UserLoginResponse> => {
-  const response = await apiClient.post<UserLoginResponse>('/auth/login', data);
-  return response.data;
+  const { data: session, error } = await authClient.signIn.email({
+    email: data.email,
+    password: data.password,
+  });
+
+  if (error) {
+    toast.error(error.message || 'Erro ao fazer login');
+    throw new Error(error.message || 'Erro ao fazer login');
+  }
+
+  if (!session?.user) {
+    toast.error("Erro inesperado: Usuário não retornado.");
+    throw new Error("Erro inesperado: Usuário não retornado.");
+  }
+
+  const user = session.user as unknown as CustomSessionUser;
+
+  const userAdapted: UserLoginResponse = {
+    id: user.id,
+    name: user.name,
+    email: user.email,
+    image: user.image,
+    emailVerified: user.emailVerified,
+    role: user.role ?? 'user',
+    banned: user.banned ?? false,
+  };
+
+  return userAdapted;
 };
 
-/**
- * Registra um novo usuário.
- * @param data - Dados de registro do usuário.
- * @returns Mensagem de sucesso.
- */
-export const register = async (data: UserRegisterBody): Promise<UserRegisterResponse> => {
-  const response = await apiClient.post<UserRegisterResponse>('/auth/register', data);
-  return response.data;
+export const register = async (data: UserRegisterBody) => {
+  const { data: session, error } = await authClient.signUp.email({
+    email: data.email,
+    password: data.password,
+    name: data.name,
+    callbackURL: `http://localhost:3000/login`,  // ou /login em produção
+  });
+
+  if (error) {
+    throw new Error(error.message || 'Erro ao registrar');
+  }
+
+  return { message: 'Cadastrado com sucesso!' };
 };
 
-/**
- * Realiza o logout do usuário.
- * Chama o backend para invalidar os cookies de autenticação.
- */
-export const logout = async (): Promise<void> => {
-  await apiClient.post('/auth/logout');
+
+export const getMe = async () => {
+  const { data: session } = await authClient.getSession();
+
+  if (!session) return null;
+
+  const user = session.user as unknown as CustomSessionUser;
+
+  const userAdapted: UserLoginResponse = {
+    id: user.id,
+    name: user.name,
+    email: user.email,
+    image: user.image,
+    emailVerified: user.emailVerified,
+    role: user.role ?? 'user',
+    banned: user.banned ?? false,
+  };
+
+  return {
+    user: userAdapted,
+    token: '',
+    redirect: true
+  };
 };
 
-/**
- * Busca os dados do usuário logado (verifica a sessão).
- * Usa os cookies de autenticação enviados automaticamente.
- * @returns Os dados do usuário.
- */
-export const getMe = async (): Promise<UserLoginResponse> => {
-  const response = await apiClient.get<UserLoginResponse>('/auth/me'); 
-  return response.data;
+export const handleResendEmail = async (email: string) => {
+  const { data, error } = await authClient.sendVerificationEmail({
+    email: email,
+  });
+  if (error) {
+    toast.error("Erro ao reenviar email.");
+  } else {
+    toast.success("Email reenviado com sucesso!");
+  }
 };

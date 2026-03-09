@@ -50,7 +50,7 @@ export const PasswordInputs: React.FC<PasswordInputsProps> = ({
         >
           Insira uma senha
         </label>
-        <div className="relative w-full max-w-[640px]">
+        <div className="relative w-full max-w-160">
           <input
             type={showPassword ? "text" : "password"}
             id="password"
@@ -59,7 +59,7 @@ export const PasswordInputs: React.FC<PasswordInputsProps> = ({
             onChange={onFormChange}
             className="
               w-full px-6 py-4 pr-14 md:pr-16
-               bg-white rounded-[32px]
+               bg-white rounded-4xl
               text-lg md:text-xl
               shadow-[0px_0px_15px_-6px_rgba(0,0,0,0.25)]
               focus:outline-none focus:ring-2 focus:ring-brand-teal-dark
@@ -106,7 +106,7 @@ export const PasswordInputs: React.FC<PasswordInputsProps> = ({
         >
           Confirme a senha
         </label>
-        <div className="relative w-full max-w-[640px]">
+        <div className="relative w-full max-w-160">
           <input
             type={showConfirmPassword ? "text" : "password"}
             id="confirmPassword"
@@ -115,7 +115,7 @@ export const PasswordInputs: React.FC<PasswordInputsProps> = ({
             onChange={onFormChange}
             className="
            w-full px-6 py-4 pr-14 md:pr-16
-           bg-white rounded-[32px]
+           bg-white rounded-4xl
            text-lg md:text-xl
            shadow-[0px_0px_15px_-6px_rgba(0,0,0,0.25)]
            focus:outline-none focus:ring-2 focus:ring-brand-teal-dark

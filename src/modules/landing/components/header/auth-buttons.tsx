@@ -10,7 +10,7 @@ export function AuthButtons() {
 
   const handleLogout = () => {
     logout()
-    router.push('/login')
+    router.push('/')
   }
 
   const isActive = (path: string) => pathname === path
@@ -21,7 +21,7 @@ export function AuthButtons() {
           <>
           <Link
             href="/home"
-            className={`px-6 py-3 rounded-[20px] bg-[transparent] border-solid border-2 border-[#CA9C60] flex items-center ${isActive("/home") ? "text-black" : "text-[#CA9C60] text-[20px] hover:text-white hover:bg-[#CA9C60] transition-colors duration-300 cursor-pointer"}`}
+            className={`px-6 py-3 rounded-[20px] bg-transparent border-solid border-2 border-[#CA9C60] flex items-center ${isActive("/home") ? "text-black" : "text-[#CA9C60] text-[20px] hover:text-white hover:bg-[#CA9C60] transition-colors duration-300 cursor-pointer"}`}
           >
             Acessar
           </Link>
@@ -38,7 +38,7 @@ export function AuthButtons() {
             <>
               <Link
                 href="/login"
-                className="px-6 py-3 rounded-[10px] bg-[transparent] border-solid border-2 border-[#CA9C60] text-[#CA9C60] text-[20px] hover:bg-[#CA9C60] hover:text-white duration-200 cursor-pointer"
+                className="px-6 py-3 rounded-[10px] bg-transparent border-solid border-2 border-[#CA9C60] text-[#CA9C60] text-[20px] hover:bg-[#CA9C60] hover:text-white duration-200 cursor-pointer"
               >
                 Entrar
               </Link>

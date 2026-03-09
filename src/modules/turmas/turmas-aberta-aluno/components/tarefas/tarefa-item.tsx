@@ -75,7 +75,7 @@ export default function TarefaItem({ tarefa, compact = false, isTimelineItem = f
       return (
         <div className="relative">
              {/* O Ponto (Nó) da Timeline */}
-            <div className={`absolute -left-[38px] top-1/2 -translate-y-1/2 w-8 h-8 rounded-full ${timelineColor} ring-4 flex items-center justify-center z-10 shadow-sm`}>
+            <div className={`absolute -left-9.5 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full ${timelineColor} ring-4 flex items-center justify-center z-10 shadow-sm`}>
                 {timelineIcon}
             </div>
 
@@ -145,7 +145,7 @@ export default function TarefaItem({ tarefa, compact = false, isTimelineItem = f
         </div>
 
         {isAtiva && (
-            <div className="flex-shrink-0 pt-2 sm:pt-0">
+            <div className="shrink-0 pt-2 sm:pt-0">
                 <button className="w-full sm:w-auto flex items-center justify-center gap-2 text-xs font-bold text-white bg-custom-blue hover:bg-custom-blue/90 px-6 py-3 rounded-xl transition-all shadow-lg shadow-custom-blue/20 transform group-hover:scale-105">
                     Fazer Agora
                     <ArrowRight className="w-3 h-3" />

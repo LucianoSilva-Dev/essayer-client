@@ -8,7 +8,7 @@ import { User, Users, FileText, Delete } from "lucide-react"
 export default function SettingsSidebar({ cargo, onItemClick }: {cargo: string; onItemClick?: () => void}) {
   return (
     // O container branco já é definido no layout, este é o conteúdo
-    <div className="w-full bg-white rounded-2xl shadow-sm p-4 sm:p-6 lg:p-10 flex flex-col gap-6 sm:gap-8 min-h-auto lg:min-h-[700px]">
+    <div className="w-full bg-white rounded-2xl shadow-sm p-4 sm:p-6 lg:p-10 flex flex-col gap-6 sm:gap-8 min-h-auto lg:min-h-175">
       {/* Seção de Alterar Imagem */}
       <ProfileImageUpload />
       
@@ -51,7 +51,7 @@ export default function SettingsSidebar({ cargo, onItemClick }: {cargo: string; 
       </nav>
 
       {/* Espaçador */}
-      <div className="flex-grow hidden lg:block"></div>
+      <div className="grow hidden lg:block"></div>
 
       {/* Botão de Sair */}
       <LogoutButton />

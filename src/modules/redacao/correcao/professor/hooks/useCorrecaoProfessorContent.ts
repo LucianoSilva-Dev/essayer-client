@@ -68,7 +68,7 @@ export function useCorrecaoProfessorContent({
 
     const fetchData = async () => {
       try {
-        const targetAlunoId = alunoId || userData?.user.id
+        const targetAlunoId = alunoId || userData?.id
 
         if (!targetAlunoId) {
           console.error('Aluno ID não encontrado')

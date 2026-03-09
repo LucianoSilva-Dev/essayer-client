@@ -38,7 +38,7 @@ interface SidebarMobileProps {
 // export function SidebarMobile({ isLoggedIn, userData, pathname }: SidebarMobileProps) {
 //   const filteredNavItems = navigationItems.filter((item) => {
 //     if (item.roles) {
-//       return isLoggedIn && userData && item.roles.includes(userData.cargo)
+//       return isLoggedIn && userData && item.roles.includes(userData.role)
 //     }
 //     return true
 //   })

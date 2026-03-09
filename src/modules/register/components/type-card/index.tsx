@@ -4,6 +4,7 @@
 import React from 'react'
 import { motion, AnimatePresence, PanInfo } from 'framer-motion'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { CardType } from '../../types/register-form-types'
 
 const cardData = {
   student: {
@@ -17,8 +18,6 @@ const cardData = {
       'Ideal para educadores que vão criar conteúdos, gerenciar turmas, avaliar atividades e interagir com alunos.',
   },
 }
-
-type CardType = 'student' | 'teacher'
 
 // --- Props Atualizadas ---
 interface UserTypeCardProps {
@@ -63,7 +62,7 @@ export default function UserTypeCard({
 
   return (
     <motion.div
-      className="relative flex flex-col justify-center items-start p-8 gap-4 bg-white shadow-[0px_0px_15.7px_-7px_#3C3C3C] rounded-[30px] isolate w-full max-w-[672px] min-h-[292px] overflow-hidden cursor-grab active:cursor-grabbing z-3"
+      className="relative flex flex-col justify-center items-start p-8 gap-4 bg-white shadow-[0px_0px_15.7px_-7px_#3C3C3C] rounded-[30px] isolate w-full max-w-2xl min-h-73 overflow-hidden cursor-grab active:cursor-grabbing z-3"
       drag="x"
       dragConstraints={{ left: 0, right: 0 }}
       dragElastic={0.1}
@@ -77,7 +76,7 @@ export default function UserTypeCard({
             onTypeChange('student')
           }}
           className={` flex items-center justify-center
-            ${selectedType === 'student' ? 'w-[63px] bg-brand-teal-dark' : 'w-6 bg-[#D9D9D9]'}
+            ${selectedType === 'student' ? 'w-15.75 bg-brand-teal-dark' : 'w-6 bg-[#D9D9D9]'}
             h-6 rounded-full transition-all duration-300 ease-out cursor-pointer
           `}
           aria-label="Selecionar Estudante"
@@ -92,7 +91,7 @@ export default function UserTypeCard({
             onTypeChange('teacher')
           }}
           className={` flex items-center justify-center
-            ${selectedType === 'teacher' ? 'w-[63px] bg-brand-teal-dark' : 'w-6 bg-[#D9D9D9]'}
+            ${selectedType === 'teacher' ? 'w-15.75 bg-brand-teal-dark' : 'w-6 bg-[#D9D9D9]'}
             h-6 rounded-full transition-all duration-300 ease-out cursor-pointer
           `}
           aria-label="Selecionar Educador"
@@ -118,12 +117,12 @@ export default function UserTypeCard({
           exit="exit"
         >
           {/* Título */}
-          <h2 className="font-montserrat font-medium text-[32px] md:text-[44px] leading-[54px] text-neutral-dark z-0">
+          <h2 className="font-montserrat font-medium text-[32px] md:text-[44px] leading-13.5 text-neutral-dark z-0">
             {data.title}
           </h2>
 
           {/* Descrição */}
-          <p className="font-montserrat font-normal text-[18px] md:text-[32px] leading-[39px] text-[#898787] z-20 self-stretch">
+          <p className="font-montserrat font-normal text-[18px] md:text-[32px] leading-9.75 text-[#898787] z-20 self-stretch">
             {data.description}
           </p>
         </motion.div>

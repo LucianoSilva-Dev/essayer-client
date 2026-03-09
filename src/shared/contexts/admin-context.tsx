@@ -57,13 +57,12 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
 
       setProfessoresPendentes(professores)
     } catch (e) {
-      console.log(e);
     }
   }, [])
 
   // Carregar dados iniciais
   useEffect(() => {
-    if (userData?.cargo === "admin") {
+    if (userData?.role === "admin") {
       getProfessores()
     }
   }, [getProfessores, userData])
@@ -110,7 +109,6 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
     try{
       await updateStatus(id, {status: "aprovado"})
     } catch(e) {
-      console.log(e);
     }
     getProfessores()
   }
@@ -119,7 +117,6 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
     try{
       await updateStatus(id, {status: "recusado", motivo: feedback})
     } catch(e) {
-      console.log(e);
     }
     getProfessores()
   }

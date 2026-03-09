@@ -285,7 +285,7 @@ export function RedacaoPage({ id }: { id: string }) {
 
       <div className="relative w-full max-w-6xl">
         <div
-          className="absolute w-full left-0 top-8 bottom-10 bg-gradient-to-b from-[#F9FAFB] from-[13.46%] to-brand-teal-dark to-[72.6%] opacity-65 rounded-[70px]"
+          className="absolute w-full left-0 top-8 bottom-10 bg-linear-to-b from-[#F9FAFB] from-[13.46%] to-brand-teal-dark to-[72.6%] opacity-65 rounded-[70px]"
         />
 
         <div className="relative w-full max-w-5xl mx-auto mt-8">

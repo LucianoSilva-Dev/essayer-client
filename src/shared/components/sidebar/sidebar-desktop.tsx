@@ -1,67 +1,18 @@
 import { motion } from "framer-motion"
-import Link from "next/link"
-import Image from "next/image"
-import { Home, PenTool, Users, UsersRound, Info, Settings, MessageCircleQuestion, SquarePlus } from "lucide-react"
 import { SidebarLogo } from "./sidebar-logo"
 import { SidebarNavigation } from "./sidebar-navigation"
 import { SidebarBottomItems } from "./sidebar-bottom-items"
+import { navigationItems } from "./constants/navigationItems"
+import { bottomItems } from "./constants/bottomItems"
+import { UserLoginResponse } from "@/lib/apiCalls/auth/types"
 
 interface SidebarDesktopProps {
   isExpanded: boolean
   setIsExpanded: (expanded: boolean) => void
   isLoggedIn: boolean
-  userData: any
+  userData: UserLoginResponse | null
   pathname: string
 }
-
-const navigationItems = [
-  {
-    icon: Home,
-    label: "Início",
-    href: "/home",
-    roles: null,
-  },
-  {
-    icon: PenTool,
-    label: "Praticar redação",
-    href: "/praticar_redacao",
-    roles: null,
-  },
-  {
-    icon: SquarePlus,
-    label: "Adicionar repertório",
-    href: "/adicionar",
-    roles: ["professor", "admin"],
-  },
-  {
-    icon: UsersRound,
-    label: "Turmas membro",
-    href: "/turmas_aluno",
-    roles: ["aluno", "professor", "admin"],
-  },
-  {
-    icon: Users,
-    label: "Turmas criadas",
-    href: "/turmas_professor",
-    roles: ["professor", "admin"],
-  },
-  {
-    icon: Settings,
-    label: "Admin",
-    href: "/admin",
-    roles: ["admin"],
-  },
-]
-
-const bottomItems = [
-
-  {
-    icon: MessageCircleQuestion,
-    label: "FAQ",
-    href: "/faq",
-    roles: null,
-  }
-]
 
 export function SidebarDesktop({
   isExpanded,
@@ -70,9 +21,9 @@ export function SidebarDesktop({
   userData,
   pathname
 }: SidebarDesktopProps) {
-  const filteredNavItems = navigationItems.filter((item) => {
+  const filteredNavItems = navigationItems.filter(( item) => {
     if (item.roles) {
-      return isLoggedIn && userData && item.roles.includes(userData.cargo)
+      return isLoggedIn && userData && item.roles.includes(userData.role)
     }
     return true
   })

@@ -37,7 +37,7 @@ export default function RepertorioGrid({ isLoading, repertorios, tipoVisualizaca
                 : "Nenhum repertório disponível."}
           </p>
           
-          {(userData?.cargo === 'professor' || userData?.cargo === 'admin') && (
+          {(userData?.role === 'professor' || userData?.role === 'admin') && (
             <Link
               href="/adicionar"
               className="inline-flex items-center px-4 py-2 bg-teal-600 text-white rounded-md hover:bg-teal-700 transition-colors"

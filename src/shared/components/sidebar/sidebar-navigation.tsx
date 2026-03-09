@@ -41,7 +41,7 @@ export function SidebarNavigation({ items, isExpanded, pathname }: SidebarNaviga
               )}
 
               {/* ícone sempre fixo */}
-              <Icon size={24} className="flex-shrink-0" />
+              <Icon size={24} className="shrink-0" />
 
               {/* texto com AnimatePresence */}
               <AnimatePresence initial={false}>

@@ -40,9 +40,9 @@ export function CommentSection({
   );
 
   const canPin =
-    isLoggedIn && (userData?.id === authorId || userData?.cargo === "admin");
+    isLoggedIn && (userData?.id === authorId || userData?.role === "admin");
   const canDelete =
-    isLoggedIn && (userData?.id === authorId || userData?.cargo === "admin");
+    isLoggedIn && (userData?.id === authorId || userData?.role === "admin");
 
   const handlePin = async (commentId: string, currentStatus: boolean) => {
     try {
@@ -86,7 +86,7 @@ export function CommentSection({
 
   return (
     // Card Container Cinza
-    <div className="bg-[#EAEAEA] rounded-[2rem] p-6 md:p-8 shadow-sm">
+    <div className="bg-[#EAEAEA] rounded-4xl p-6 md:p-8 shadow-sm">
       {/* HEADER: Título */}
       <div className="mb-6 pb-4 border-b border-gray-300/50">
         <h3 className="text-lg md:text-xl font-bold text-gray-800 font-montserrat">
@@ -95,7 +95,7 @@ export function CommentSection({
       </div>
 
       {/* LISTA DE COMENTÁRIOS */}
-      <div className="min-h-[100px] mb-6">
+      <div className="min-h-25 mb-6">
         <div className="animate-fadeIn space-y-2">
           {sortedComments.length > 0 ? (
             sortedComments.map((comment) => (
@@ -125,7 +125,7 @@ export function CommentSection({
       {isLoggedIn && userRole !== "aluno" && (
         <div className="flex items-center gap-3 pt-4 border-t border-gray-300/50 mt-2">
           {/* Avatar Placeholder (ou foto do user logado se quiser implementar) */}
-          <div className="w-10 h-10 bg-white rounded-full flex-shrink-0 flex items-center justify-center overflow-hidden">
+          <div className="w-10 h-10 bg-white rounded-full shrink-0 flex items-center justify-center overflow-hidden">
             <User size={20} className="text-gray-300" />
           </div>
 

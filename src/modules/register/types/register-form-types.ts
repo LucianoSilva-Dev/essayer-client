@@ -1,4 +1,4 @@
-type CardType = "student" | "teacher"
+export type CardType = "student" | "teacher"
 
 export type RegisterFormData = {
     userType: CardType,

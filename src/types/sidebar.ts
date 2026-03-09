@@ -1,3 +1,5 @@
+import { UserLoginResponse } from "@/lib/apiCalls/auth/types"
+
 export interface NavigationItem {
   icon: any
   label: string
@@ -9,6 +11,6 @@ export interface SidebarProps {
   isExpanded?: boolean
   setIsExpanded?: (expanded: boolean) => void
   isLoggedIn: boolean
-  userData: any
+  userData: UserLoginResponse | null
   pathname: string
 }

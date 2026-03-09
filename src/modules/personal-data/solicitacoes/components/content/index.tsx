@@ -21,7 +21,7 @@ export default function SolicitacoesPage() {
     const {userData} = useAuth()
     return (
         <div>
-            {userData?.cargo === "professor" ? '' : (
+            {userData?.role === "professor" ? '' : (
             <motion.div
             key="desativar"
                 initial="initial"

@@ -19,7 +19,7 @@ export default function AdminPage() {
   const { getRepertoriosPorStatus, getProfessoresPorStatus } = useAdmin()
   const [isLoading] = useState(false)
 
-  if(userData?.cargo !== "admin"){
+  if(userData?.role !== "admin"){
     redirect('/home')
   }
 

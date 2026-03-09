@@ -1,114 +1,61 @@
 "use client"
 
 import type React from "react"
-import { createContext, useContext, useState, useEffect, useCallback } from "react"
+import { createContext, useContext, useMemo } from "react"
 import type { UserProfile } from "@/types/profile"
-import { useAuth } from "./auth-context"
-import { getUserById, updateUser } from "../../lib/apiCalls/usuario"
+import { updateUser } from "@/lib/apiCalls/usuario"
+import { authClient } from "@/lib/betterAuth/auth-client"
 
 interface ProfileContextType {
   profile: UserProfile | null
-  updateProfile: (data: Partial<UserProfile>) => Promise<void>
-  uploadAvatar: (file: File) => Promise<string>
   isLoading: boolean
+  updateProfile: (data: Partial<UserProfile>) => Promise<void>
 }
 
 const ProfileContext = createContext<ProfileContextType | undefined>(undefined)
 
-
 export function ProfileProvider({ children }: { children: React.ReactNode }) {
-  const { isLoggedIn, userData } = useAuth()
-  const [profile, setProfile] = useState<UserProfile | null>(null)
-  const [isLoading, setIsLoading] = useState(false)
+  // O Better Auth gerencia todo o estado para você
+  const { data: session, isPending, error } = authClient.useSession();
 
-  const getUser = useCallback(async (id: string) => {
+  // Adaptamos o objeto do Better Auth para o seu formato UserProfile
+  const profile: UserProfile | null = useMemo(() => {
+    if (!session?.user) return null;
+    
+    return {
+      id: session.user.id,
+      nome: session.user.name,
+      email: session.user.email,
+      // Campos extras precisam estar configurados no schema do Better Auth
+      // O TypeScript pode reclamar aqui se não tivermos tipado, então usamos 'as any' temporariamente
+      tipo: (session.user as any).role || 'user', 
+      curriculoLattes: (session.user as any).lattes || '',
+    };
+  }, [session]);
+
+  const updateProfileHandler = async (data: Partial<UserProfile>) => {
+    if (!profile) return;
+
     try {
-
-      console.log("getting user:");
-
-      const user = await getUserById(id)
-
-      console.log(user);
-
-      setProfile({
-        id: user.id,
-        nome: user.nome,
-        tipo: user.cargo,
-        email: user.email,
-        curriculoLattes: user.lattes
-      })
-
-    } catch (e) {
-      console.log(e);
+      // Chamamos a apiCall refatorada
+      await updateUser(profile.id, {
+        nome: data.nome,
+      });
+      
+      // O Better Auth atualiza a sessão local automaticamente após o update,
+      // mas se precisar forçar, existe o session.refetch() no hook original.
+    } catch (err) {
+      console.error("Erro ao atualizar perfil:", err);
+      throw err;
     }
-  }, [])
-
-  // Carregar perfil do localStorage
-  useEffect(() => {
-    if (isLoggedIn) {
-      const storedProfile = localStorage.getItem("userProfile")
-      if (storedProfile) {
-        setProfile(JSON.parse(storedProfile))
-      }
-      if (userData) {
-        getUser(userData?.id)
-      }
-    }
-  }, [getUser, userData, isLoggedIn])
-
-  // Salvar perfil no localStorage
-  useEffect(() => {
-    if (profile) {
-      localStorage.setItem("userProfile", JSON.stringify(profile))
-    }
-  }, [profile])
-
-  const updateProfile = async (data: Partial<UserProfile>) => {
-    setIsLoading(true)
-    try {
-      if (profile) {
-        await updateUser(profile?.id, data)
-      }
-    } catch (error) {
-      console.error("Erro ao atualizar perfil:", error)
-      throw error
-    } finally {
-      setIsLoading(false)
-      if (profile) {
-        getUser(profile.id)
-      }
-    }
-  }
-
-  const uploadAvatar = async (file: File): Promise<string> => {
-    setIsLoading(true)
-    try {
-      // Simular upload de avatar
-      await new Promise((resolve) => setTimeout(resolve, 2000))
-
-      // Simular URL do avatar
-      const avatarUrl = URL.createObjectURL(file)
-
-      if (profile) {
-        setProfile({ ...profile, avatar: avatarUrl })
-      }
-
-      return avatarUrl
-    } catch (error) {
-      console.error("Erro ao fazer upload do avatar:", error)
-      throw error
-    } finally {
-      setIsLoading(false)
-    }
-  }
+  };
 
   return (
     <ProfileContext.Provider
       value={{
         profile,
-        updateProfile,
-        uploadAvatar,
-        isLoading,
+        isLoading: isPending,
+        updateProfile: updateProfileHandler,
       }}
     >
       {children}
@@ -118,8 +65,8 @@ export function ProfileProvider({ children }: { children: React.ReactNode }) {
 
 export function useProfile() {
   const context = useContext(ProfileContext)
-  if (context === undefined) {
-    throw new Error("useProfile deve ser usado dentro de um ProfileProvider")
+  if (!context) {
+    throw new Error("useProfile deve ser usado dentro de ProfileProvider")
   }
   return context
 }

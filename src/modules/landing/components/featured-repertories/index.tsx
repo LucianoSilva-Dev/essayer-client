@@ -3,7 +3,7 @@
 import React, { useEffect, useState, useRef } from "react"
 import { motion, useInView } from "framer-motion"
 import { RepertorioDocument } from "../../../../lib/apiCalls/repertorio/types"
-import { getAllRepertorios } from "../../../../lib/apiCalls/repertorio"
+// import { getAllRepertorios } from "../../../../lib/apiCalls/repertorio"
 import { isGetAllArtigoDoc, isGetAllCitacaoDoc, isGetAllObraDoc } from "../../../../lib/apiCalls/repertorio/helpers"
 import Link from "next/link"
 import type { Repertorio } from "@/types/repertorio"
@@ -88,18 +88,18 @@ const fadeUpVariants = {
 export default function FeaturedRepertoires() {
   const [featuredRepertoires, setFeaturedRepertoires] = useState<Repertorio[]>([])
   
-  useEffect(() => {
-    async function fetchData() {
-      const response = await getAllRepertorios('?ordenarPor=MaxLikes&limit=6')
-      if (response) {
-        const mapped = response.documentos
-            .map(doc => mountFrontendRepertoire(doc))
-            .filter((rep): rep is Repertorio => rep !== null)
-        setFeaturedRepertoires(mapped)
-      }
-    }
-    fetchData()
-  }, [])
+  // useEffect(() => {
+  //   async function fetchData() {
+  //     const response = await getAllRepertorios('?ordenarPor=MaxLikes&limit=6')
+  //     if (response) {
+  //       const mapped = response.documentos
+  //           .map(doc => mountFrontendRepertoire(doc))
+  //           .filter((rep): rep is Repertorio => rep !== null)
+  //       setFeaturedRepertoires(mapped)
+  //     }
+  //   }
+  //   fetchData()
+  // }, [])
 
   const [isMobile, setIsMobile] = useState(false);
 
