@@ -2,68 +2,89 @@
 
 import React, { useEffect, useState, useRef } from "react"
 import { motion, useInView } from "framer-motion"
-import { RepertorioDocument } from "../../../../lib/apiCalls/repertorio/types"
-// import { getAllRepertorios } from "../../../../lib/apiCalls/repertorio"
-import { isGetAllArtigoDoc, isGetAllCitacaoDoc, isGetAllObraDoc } from "../../../../lib/apiCalls/repertorio/helpers"
+import { RepertoireDocument } from "../../../../lib/apiCalls/repertorio/types"
+import { getAllRepertoires } from "../../../../lib/apiCalls/repertorio"
+import { isArticleDoc, isCitationDoc, isWorkDoc } from "../../../../lib/apiCalls/repertorio/helpers"
 import Link from "next/link"
 import type { Repertorio } from "@/types/repertorio"
 import RepertorioCard from "@/modules/repertorio/repertorio-card"
 
-const mountFrontendRepertoire = (repertorio: RepertorioDocument): Repertorio | null => {
-  if (isGetAllCitacaoDoc(repertorio)) {
+// Mapeador seguro para os tipos de obra do Prisma -> Frontend
+const mapTipoObra = (workType: string): "livro" | "filme" | "música" | "teatro" => {
+  const map: Record<string, "livro" | "filme" | "música" | "teatro"> = {
+    'BOOK': 'livro',
+    'MOVIE': 'filme',
+    'MUSIC': 'música',
+    'THEATER': 'teatro',
+    'livro': 'livro',
+    'filme': 'filme',
+    'musica': 'música',
+    'música': 'música',
+    'teatro': 'teatro'
+  };
+  return map[workType] || map[workType.toUpperCase()] || 'livro';
+}
+
+const mountFrontendRepertoire = (repertoire: RepertoireDocument): Repertorio | null => {
+  const criadorFormatado = {
+    ...repertoire.creator,
+    nome: repertoire.creator.name
+  }
+
+  if (isCitationDoc(repertoire)) {
     return {
-      id: repertorio.id,
+      id: repertoire.id,
       modelo: "citacao",
-      autoria: repertorio.autor,
-      citacao: repertorio.frase,
-      fonte: repertorio.fonte,
-      eixos: repertorio.topicos,
-      recortes: repertorio.subtopicos,
+      autoria: repertoire.author,
+      citacao: repertoire.quote,
+      fonte: repertoire.source ?? undefined,
+      eixos: repertoire.topics,
+      recortes: repertoire.subtopics,
       isPublico: true,
-      totalLikes: repertorio.totalLikes,
-      favoritadoPeloUsuario: repertorio.favoritadoPeloUsuario,
-      likeDoUsuario: repertorio.likeDoUsuario,
-      criador: repertorio.criador,
-      totalComentarios: repertorio.totalComentarios ?? 0,
-      comentarios: repertorio.comentarios ?? []
+      totalLikes: repertoire.totalLikes,
+      favoritadoPeloUsuario: repertoire.favourited,
+      likeDoUsuario: repertoire.liked,
+      criador: criadorFormatado,
+      totalComentarios: repertoire.totalComments ?? 0,
+      comentarios: repertoire.comments as any ?? []
     }
   }
-  if (isGetAllObraDoc(repertorio)) {
+  if (isWorkDoc(repertoire)) {
     return {
-      id: repertorio.id,
+      id: repertoire.id,
       modelo: 'obra',
-      titulo: repertorio.titulo,
-      autoria: repertorio.autor,
-      sinopse: repertorio.sinopse,
-      eixos: repertorio.topicos,
-      tipoObra: repertorio.tipoObra,
-      recortes: repertorio.subtopicos,
+      titulo: repertoire.title,
+      autoria: repertoire.author,
+      sinopse: repertoire.synopsis,
+      eixos: repertoire.topics,
+      tipoObra: mapTipoObra(repertoire.workType),
+      recortes: repertoire.subtopics,
       isPublico: true,
-      totalLikes: repertorio.totalLikes,
-      favoritadoPeloUsuario: repertorio.favoritadoPeloUsuario,
-      likeDoUsuario: repertorio.likeDoUsuario,
-      criador: repertorio.criador,
-      totalComentarios: repertorio.totalComentarios ?? 0,
-      comentarios: repertorio.comentarios ?? []
+      totalLikes: repertoire.totalLikes,
+      favoritadoPeloUsuario: repertoire.favourited,
+      likeDoUsuario: repertoire.liked,
+      criador: criadorFormatado,
+      totalComentarios: repertoire.totalComments ?? 0,
+      comentarios: repertoire.comments as any ?? []
     }
   }
-  if (isGetAllArtigoDoc(repertorio)) {
+  if (isArticleDoc(repertoire)) {
     return {
-      id: repertorio.id,
+      id: repertoire.id,
       modelo: "artigo",
-      titulo: repertorio.titulo,
-      autoria: repertorio.autor,
-      sintese: repertorio.resumo,
-      fonte: repertorio.fonte,
-      eixos: repertorio.topicos,
-      recortes: repertorio.subtopicos,
+      titulo: repertoire.title,
+      autoria: repertoire.author,
+      sintese: repertoire.abstract,
+      fonte: repertoire.source ?? "",
+      eixos: repertoire.topics,
+      recortes: repertoire.subtopics,
       isPublico: true,
-      totalLikes: repertorio.totalLikes,
-      favoritadoPeloUsuario: repertorio.favoritadoPeloUsuario,
-      likeDoUsuario: repertorio.likeDoUsuario,
-      criador: repertorio.criador,
-      totalComentarios: repertorio.totalComentarios ?? 0,
-      comentarios: repertorio.comentarios ?? []
+      totalLikes: repertoire.totalLikes,
+      favoritadoPeloUsuario: repertoire.favourited,
+      likeDoUsuario: repertoire.liked,
+      criador: criadorFormatado,
+      totalComentarios: repertoire.totalComments ?? 0,
+      comentarios: repertoire.comments as any ?? []
     }
   }
 
@@ -87,19 +108,20 @@ const fadeUpVariants = {
 
 export default function FeaturedRepertoires() {
   const [featuredRepertoires, setFeaturedRepertoires] = useState<Repertorio[]>([])
-  
-  // useEffect(() => {
-  //   async function fetchData() {
-  //     const response = await getAllRepertorios('?ordenarPor=MaxLikes&limit=6')
-  //     if (response) {
-  //       const mapped = response.documentos
-  //           .map(doc => mountFrontendRepertoire(doc))
-  //           .filter((rep): rep is Repertorio => rep !== null)
-  //       setFeaturedRepertoires(mapped)
-  //     }
-  //   }
-  //   fetchData()
-  // }, [])
+
+  useEffect(() => {
+    async function fetchData() {
+      const response = await getAllRepertoires('?orderBy=MaxLikes&limit=6')
+      if (response) {
+        // Ajustado para response.documents
+        const mapped = response.documents
+          .map(doc => mountFrontendRepertoire(doc))
+          .filter((rep): rep is Repertorio => rep !== null)
+        setFeaturedRepertoires(mapped)
+      }
+    }
+    fetchData()
+  }, [])
 
   const [isMobile, setIsMobile] = useState(false);
 
@@ -118,7 +140,7 @@ export default function FeaturedRepertoires() {
   const isInView = useInView(ref, { once: false, margin: "-100px" })
 
   return (
-    <section className="py-12 px-4 bg-[#F3F4F6] scroll-mt-25" id="repertorios" ref={ref}>  
+    <section className="py-12 px-4 bg-[#F3F4F6] scroll-mt-25" id="repertorios" ref={ref}>
       <motion.div
         className="max-w-6xl mx-auto"
         variants={containerVariants}
@@ -150,22 +172,22 @@ export default function FeaturedRepertoires() {
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
           variants={containerVariants}
         >
-          {displayedRepertoires.length > 0 ? 
+          {displayedRepertoires.length > 0 ?
             displayedRepertoires.map((repertorio, idx) => (
               <motion.div
-              key={repertorio.id}
-              // @ts-expect-error: Framer Motion variants não são tipadas corretamente
-              variants={fadeUpVariants}
+                key={repertorio.id}
+                // @ts-expect-error: Framer Motion variants não são tipadas corretamente
+                variants={fadeUpVariants}
                 transition={{ duration: 0.6, delay: idx * 0.15 }}
                 whileHover={{ scale: 1.03, boxShadow: "0 8px 32px rgba(7,95,112,0.10)" }}
                 className="h-full w-full flex"
               >
-                <div className="w-full h-full flex"> 
-          <RepertorioCard repertorio={repertorio} />
+                <div className="w-full h-full flex">
+                  <RepertorioCard repertorio={repertorio} />
                 </div>
               </motion.div>
             ))
-          : <motion.p
+            : <motion.p
               className="text-[30px] text-gray-600 justify-self-center"
               // @ts-expect-error: Framer Motion variants não são tipadas corretamente
               variants={fadeUpVariants}
@@ -184,7 +206,7 @@ export default function FeaturedRepertoires() {
             href="/home"
             className="bg-brand-teal-dark hover:shadow-xl hover:bg-[#054c59] duration-300 text-white text-[24px] py-3 px-6 rounded-md transition-colors"
           >
-              Ver todos os repertórios
+            Ver todos os repertórios
           </Link>
         </motion.div>
       </motion.div>

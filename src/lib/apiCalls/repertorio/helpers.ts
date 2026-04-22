@@ -1,13 +1,13 @@
-import { ArtigoDocument, CitacaoDocument, ObraDocument, RepertorioDocument } from "./types";
+import { ArticleDocument, CitationDocument, RepertoireDocument, WorkDocument } from "./types";
 
-export function isGetAllObraDoc(repertorio: RepertorioDocument): repertorio is ObraDocument {
-    return repertorio.tipoRepertorio === "Obra";
+export function isWorkDoc(repertoire: RepertoireDocument): repertoire is WorkDocument {
+    return repertoire.repertoireType === "WORK";
 }
 
-export function isGetAllArtigoDoc(repertorio: RepertorioDocument): repertorio is ArtigoDocument {
-    return repertorio.tipoRepertorio === "Artigo";
+export function isArticleDoc(repertoire: RepertoireDocument): repertoire is ArticleDocument {
+    return repertoire.repertoireType === "ARTICLE";
 }
 
-export function isGetAllCitacaoDoc(repertorio: RepertorioDocument): repertorio is CitacaoDocument {
-    return repertorio.tipoRepertorio === "Citacao";
+export function isCitationDoc(repertoire: RepertoireDocument): repertoire is CitationDocument {
+    return repertoire.repertoireType === "CITATION";
 }

@@ -108,3 +108,61 @@ export interface CreateRepertorioResponse {
 }
 
 export type UpdateObraBody = Partial<CreateObraBody>;
+
+// --- Tipos Baseados na Resposta do NestJS ---
+
+export interface PerfilUsuarioSimplificado {
+  id: string;
+  name: string;
+  image?: string | null;
+}
+
+export interface RepertoireBase {
+  id: string;
+  author: string;
+  creator: PerfilUsuarioSimplificado;
+  totalLikes: number;
+  comments: PerfilUsuarioSimplificado[]; // O backend retorna um array com os usuários dos comentários
+  totalComments: number;
+  subtopics: string[];
+  topics: string[];
+  favourited: boolean;
+  liked: boolean;
+}
+
+export interface WorkDocument extends RepertoireBase {
+  repertoireType: 'WORK';
+  workType: string; // Tipo vindo do Prisma (ex: 'LIVRO', 'FILME', etc)
+  title: string;
+  synopsis: string;
+}
+
+export interface ArticleDocument extends RepertoireBase {
+  repertoireType: 'ARTICLE';
+  title: string;
+  abstract: string;
+  source: string | null;
+}
+
+export interface CitationDocument extends RepertoireBase {
+  repertoireType: 'CITATION';
+  quote: string;
+  source: string | null;
+}
+
+export type RepertoireDocument = WorkDocument | ArticleDocument | CitationDocument;
+
+// --- Respostas de API ---
+
+export interface PaginationInfo {
+  offset: number;
+  limit: number;
+  nextPageUrl: string | null;
+  previousPageUrl: string | null;
+  totalDocuments: number;
+}
+
+export interface GetAllRepertoiresResponse {
+  documents: RepertoireDocument[];
+  pagination: PaginationInfo;
+}

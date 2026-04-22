@@ -3,77 +3,100 @@
 import type React from "react"
 import { createContext, useContext, useState, useCallback, useEffect } from "react"
 import type { Repertorio, RepertorioFormData } from "@/types/repertorio"
-import { RepertorioDocument } from "../../lib/apiCalls/repertorio/types"
+import { RepertoireDocument } from "../../lib/apiCalls/repertorio/types"
 import {
-  isGetAllArtigoDoc,
-  isGetAllCitacaoDoc,
-  isGetAllObraDoc
+  isArticleDoc,
+  isCitationDoc,
+  isWorkDoc
 } from "../../lib/apiCalls/repertorio/helpers"
 import {
   addFavorito,
-  getAllRepertorios,
+  getAllRepertoires,
   removeFavorito
 } from "../../lib/apiCalls/repertorio"
 import { useAuth } from "./auth-context"
 import { toast } from "react-toastify"
 
-const mountRepertoire = (repertorio: RepertorioDocument): Repertorio | null => {
-  if (isGetAllCitacaoDoc(repertorio)) {
+// Mapeador seguro para os tipos de obra do Prisma -> Frontend
+const mapTipoObra = (workType: string): "livro" | "filme" | "música" | "teatro" => {
+  const map: Record<string, "livro" | "filme" | "música" | "teatro"> = {
+    'BOOK': 'livro',
+    'MOVIE': 'filme',
+    'MUSIC': 'música',
+    'THEATER': 'teatro',
+    'livro': 'livro',
+    'filme': 'filme',
+    'musica': 'música',
+    'música': 'música',
+    'teatro': 'teatro'
+  };
+
+  // Retorna o valor mapeado ou 'livro' como fallback de segurança
+  return map[workType] || map[workType.toUpperCase()] || 'livro';
+}
+
+const mountRepertoire = (repertoire: RepertoireDocument): Repertorio | null => {
+  const criadorFormatado = {
+    ...repertoire.creator,
+    nome: repertoire.creator.name
+  }
+
+  if (isCitationDoc(repertoire)) {
     return {
-      id: repertorio.id,
+      id: repertoire.id,
       modelo: "citacao",
-      autoria: repertorio.autor,
-      citacao: repertorio.frase,
-      fonte: repertorio.fonte,
-      eixos: repertorio.topicos,
-      recortes: repertorio.subtopicos,
+      autoria: repertoire.author,
+      citacao: repertoire.quote,
+      fonte: repertoire.source ?? undefined,
+      eixos: repertoire.topics,
+      recortes: repertoire.subtopics,
       isPublico: true,
-      totalLikes: repertorio.totalLikes,
-      favoritadoPeloUsuario: repertorio.favoritadoPeloUsuario,
-      likeDoUsuario: repertorio.likeDoUsuario,
-      criador: repertorio.criador,
-      totalComentarios: repertorio.totalComentarios ?? 0,
-      comentarios: repertorio.comentarios ?? []
+      totalLikes: repertoire.totalLikes,
+      favoritadoPeloUsuario: repertoire.favourited,
+      likeDoUsuario: repertoire.liked,
+      criador: criadorFormatado,
+      totalComentarios: repertoire.totalComments ?? 0,
+      comentarios: repertoire.comments as any ?? []
     }
   }
 
-  if (isGetAllObraDoc(repertorio)) {
+  if (isWorkDoc(repertoire)) {
     return {
-      id: repertorio.id,
+      id: repertoire.id,
       modelo: "obra",
-      titulo: repertorio.titulo,
-      autoria: repertorio.autor,
-      sinopse: repertorio.sinopse,
-      eixos: repertorio.topicos,
-      tipoObra: repertorio.tipoObra,
-      recortes: repertorio.subtopicos,
+      titulo: repertoire.title,
+      autoria: repertoire.author,
+      sinopse: repertoire.synopsis,
+      eixos: repertoire.topics,
+      tipoObra: mapTipoObra(repertoire.workType),
+      recortes: repertoire.subtopics,
       isPublico: true,
-      totalLikes: repertorio.totalLikes,
-      favoritadoPeloUsuario: repertorio.favoritadoPeloUsuario,
-      likeDoUsuario: repertorio.likeDoUsuario,
-      criador: repertorio.criador,
-      totalComentarios: repertorio.totalComentarios ?? 0,
-      comentarios: repertorio.comentarios ?? []
+      totalLikes: repertoire.totalLikes,
+      favoritadoPeloUsuario: repertoire.favourited,
+      likeDoUsuario: repertoire.liked,
+      criador: criadorFormatado,
+      totalComentarios: repertoire.totalComments ?? 0,
+      comentarios: repertoire.comments as any ?? []
     }
   }
 
-  if (isGetAllArtigoDoc(repertorio)) {
+  if (isArticleDoc(repertoire)) {
     return {
-      id: repertorio.id,
+      id: repertoire.id,
       modelo: "artigo",
-      titulo: repertorio.titulo,
-      autoria: repertorio.autor,
-      sintese: repertorio.resumo,
-      fonte: repertorio.fonte,
-      eixos: repertorio.topicos,
-      recortes: repertorio.subtopicos,
+      titulo: repertoire.title,
+      autoria: repertoire.author,
+      sintese: repertoire.abstract,
+      fonte: repertoire.source ?? "",
+      eixos: repertoire.topics,
+      recortes: repertoire.subtopics,
       isPublico: true,
-      totalLikes: repertorio.totalLikes,
-      favoritadoPeloUsuario: repertorio.favoritadoPeloUsuario,
-      likeDoUsuario: repertorio.likeDoUsuario,
-      criador: repertorio.criador,
-      totalComentarios: repertorio.totalComentarios ?? 0,
-      comentarios: repertorio.comentarios ?? []
+      totalLikes: repertoire.totalLikes,
+      favoritadoPeloUsuario: repertoire.favourited,
+      likeDoUsuario: repertoire.liked,
+      criador: criadorFormatado,
+      totalComentarios: repertoire.totalComments ?? 0,
+      comentarios: repertoire.comments as any ?? []
     }
   }
 
@@ -114,26 +137,37 @@ export function RepertorioProvider({ children }: { children: React.ReactNode }) 
   const construirQueryString = useCallback((filters: any) => {
     const params = new URLSearchParams()
 
-    if (filters.search) params.append("conteudo", filters.search)
+    // Mapeamento para os DTOs do NestJS
+    if (filters.search) params.append("content", filters.search)
+
     if (filters.eixos?.length)
-      filters.eixos.forEach((e: string) => params.append("topicos", e))
+      filters.eixos.forEach((e: string) => params.append("topics", e))
+
     if (filters.subtopicos?.length)
-      filters.subtopicos.forEach((s: string) => params.append("subtopicos", s))
-    if (filters.modelo?.length)
+      filters.subtopicos.forEach((s: string) => params.append("subtopics", s))
+
+    if (filters.modelo?.length) {
+      // Traduz os modelos do front para os Enums do backend
+      const typeMap: Record<string, string> = {
+        obra: 'WORK',
+        artigo: 'ARTICLE',
+        citacao: 'CITATION'
+      }
       filters.modelo.forEach((m: string) =>
-        params.append("tipoRepertorio", m)
+        params.append("reperoireType", typeMap[m] || m)
       )
+    }
 
     if (filters.favoritedByCurrentUser !== undefined)
       params.append(
-        "favoritadoPeloUsuario",
+        "favourited",
         String(filters.favoritedByCurrentUser)
       )
 
     if (filters.likedByCurrentUser !== undefined)
-      params.append("likeDoUsuario", String(filters.likedByCurrentUser))
+      params.append("liked", String(filters.likedByCurrentUser))
 
-    if (filters.orderBy) params.append("ordenarPor", filters.orderBy)
+    if (filters.orderBy) params.append("orderBy", filters.orderBy)
 
     params.append("offset", String(filters.offset ?? 0))
     params.append("limit", String(filters.limit ?? 15))
@@ -147,7 +181,7 @@ export function RepertorioProvider({ children }: { children: React.ReactNode }) 
 
       try {
         const queryString = construirQueryString(filters)
-        const response = await getAllRepertorios(`?${queryString}`)
+        const response = await getAllRepertoires(`?${queryString}`)
 
         if (!response) {
           setRepertorios([])
@@ -156,21 +190,22 @@ export function RepertorioProvider({ children }: { children: React.ReactNode }) 
           return
         }
 
-        const mapped = response.documentos
+        const mapped = response.documents
           .map(mountRepertoire)
-          .filter((r): r is Repertorio => r !== null)
+          .filter((r: Repertorio | null): r is Repertorio => r !== null)
 
         setRepertorios(mapped)
-        setTotalRepertorios(response.paginacao.totalDocuments)
+        setTotalRepertorios(response.pagination.totalDocuments)
 
         const limit = filters.limit ?? 15
         setTotalPages(
-          Math.ceil(response.paginacao.totalDocuments / limit)
+          Math.ceil(response.pagination.totalDocuments / limit)
         )
 
         if (isLoggedIn) {
           setFavoritos(
-            mapped.filter(r => r.favoritadoPeloUsuario).map(r => r.id)
+            // Adicionado o tipo (r: Repertorio) aqui também por garantia
+            mapped.filter((r: Repertorio) => r.favoritadoPeloUsuario).map((r: Repertorio) => r.id)
           )
         } else {
           setFavoritos([])

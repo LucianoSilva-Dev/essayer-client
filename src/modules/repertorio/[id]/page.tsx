@@ -7,10 +7,8 @@ import { useAuth } from "@/shared/contexts/auth-context";
 
 // Tipos e API
 import type { Repertorio } from "@/types/repertorio";
-import type { RepertorioDocument } from "@/lib/apiCalls/repertorio/types";
-import { addComentario, addFavorito, addLike, deleteRepertorio, getArtigoById, getCitacaoById, getObraById, removeFavorito, removeLike } from "@/lib/apiCalls/repertorio";
+import { addComentario, addFavorito, addLike, deleteRepertorio, getArtigoById, getCitacaoById, getObraById, getRepertoriosBulk, removeFavorito, removeLike } from "@/lib/apiCalls/repertorio";
 // import { getProfilePictureLink } from "@/lib/apiCalls/usuario";
-import { mountRepertoire } from "@/shared/utils";
 
 // Helpers e Mappers
 import { getEixosComRecortes } from "./helpers/repertorio-mapper";
@@ -28,6 +26,84 @@ import { ObraContent } from "./components/content/ObraContent";
 import { ArtigoContent } from "./components/content/ArtigoContent";
 import { CitacaoContent } from "./components/content/CitacaoContent";
 import { toast } from "react-toastify";
+import { RepertoireDocument } from "@/lib/apiCalls/repertorio/types";
+
+// Mapeador seguro para os tipos de obra do Prisma -> Frontend
+const mapTipoObra = (workType: string): "livro" | "filme" | "música" | "teatro" => {
+  const map: Record<string, "livro" | "filme" | "música" | "teatro"> = {
+    'BOOK': 'livro', 'FILM': 'filme', 'MUSIC': 'música', 'PLAY': 'teatro',
+    'livro': 'livro', 'filme': 'filme', 'música': 'música', 'teatro': 'teatro'
+  };
+  return map[workType] || map[workType.toUpperCase()] || 'livro';
+}
+
+const mountFrontendRepertoire = (repertoire: RepertoireDocument): Repertorio | null => {
+  const criadorFormatado = {
+    ...repertoire.creator,
+    nome: repertoire.creator.name
+  }
+
+  if (repertoire.repertoireType === "CITATION") {
+    return {
+      id: repertoire.id,
+      modelo: "citacao",
+      autoria: repertoire.author,
+      citacao: repertoire.quote,
+      fonte: repertoire.source ?? undefined,
+      eixos: repertoire.topics,
+      recortes: repertoire.subtopics,
+      isPublico: true,
+      totalLikes: repertoire.totalLikes,
+      favoritadoPeloUsuario: repertoire.favourited,
+      likeDoUsuario: repertoire.liked,
+      criador: criadorFormatado,
+      totalComentarios: repertoire.totalComments ?? 0,
+      comentarios: repertoire.comments as any ?? []
+    }
+  }
+
+  if (repertoire.repertoireType === "WORK") {
+    return {
+      id: repertoire.id,
+      modelo: 'obra',
+      titulo: repertoire.title,
+      autoria: repertoire.author,
+      sinopse: repertoire.synopsis,
+      eixos: repertoire.topics,
+      tipoObra: mapTipoObra(repertoire.workType),
+      recortes: repertoire.subtopics,
+      isPublico: true,
+      totalLikes: repertoire.totalLikes,
+      favoritadoPeloUsuario: repertoire.favourited,
+      likeDoUsuario: repertoire.liked,
+      criador: criadorFormatado,
+      totalComentarios: repertoire.totalComments ?? 0,
+      comentarios: repertoire.comments as any ?? []
+    }
+  }
+
+  if (repertoire.repertoireType === "ARTICLE") {
+    return {
+      id: repertoire.id,
+      modelo: "artigo",
+      titulo: repertoire.title,
+      autoria: repertoire.author,
+      sintese: repertoire.abstract,
+      fonte: repertoire.source ?? "",
+      eixos: repertoire.topics,
+      recortes: repertoire.subtopics,
+      isPublico: true,
+      totalLikes: repertoire.totalLikes,
+      favoritadoPeloUsuario: repertoire.favourited,
+      likeDoUsuario: repertoire.liked,
+      criador: criadorFormatado,
+      totalComentarios: repertoire.totalComments ?? 0,
+      comentarios: repertoire.comments as any ?? []
+    }
+  }
+
+  return null;
+}
 
 function RepertorioDetalhesContent() {
   const router = useRouter();
@@ -61,34 +137,28 @@ function RepertorioDetalhesContent() {
   const type = searchParams.get('type');
 
   // Permissões
-  const canEditRepertory = isLoggedIn && (repertorio?.criador.id === userData?.id || userData?.role === 'admin');
-  const canDeleteRepertory = isLoggedIn && (repertorio?.criador.id === userData?.id || userData?.role === 'admin');
+  const canEditRepertory = isLoggedIn && (repertorio?.criador?.id === userData?.id || userData?.role === 'admin');
+  const canDeleteRepertory = isLoggedIn && (repertorio?.criador?.id === userData?.id || userData?.role === 'admin');
 
   // --- BUSCA DE DADOS ---
   const fetchRepertorio = useCallback(async (isBackgroundUpdate = false) => {
-    if (!id || !type) return;
+    if (!id) return; // Agora não dependemos mais estritamente do 'type' da URL para fazer a requisição
 
     if (!isBackgroundUpdate) setLoading(true);
     setError(null);
 
     try {
-      let repertorioDoc: RepertorioDocument | null = null;
+      // Usamos a rota de bulk-search que busca pelo ID do Repertório!
+      const resultados = await getRepertoriosBulk([id]);
 
-      switch (type) {
-        case 'obra':
-          repertorioDoc = { ...(await getObraById(id)), tipoRepertorio: 'Obra' };
-          break;
-        case 'artigo':
-          repertorioDoc = { ...(await getArtigoById(id)), tipoRepertorio: 'Artigo' };
-          break;
-        case 'citacao':
-          repertorioDoc = { ...(await getCitacaoById(id)), tipoRepertorio: 'Citacao' };
-          break;
-        default:
-          throw new Error("Tipo de repertório inválido");
+      const repertorioDoc = resultados && resultados.length > 0 ? resultados[0] : null;
+
+      if (!repertorioDoc) {
+        throw new Error("Repertório não encontrado no banco de dados.");
       }
 
-      const mounted = mountRepertoire(repertorioDoc);
+      const mounted = mountFrontendRepertoire(repertorioDoc);
+
       if (mounted) {
         setRepertorio(mounted);
         setLikes(mounted.totalLikes);
@@ -107,7 +177,7 @@ function RepertorioDetalhesContent() {
     } finally {
       if (!isBackgroundUpdate) setLoading(false);
     }
-  }, [id, type]);
+  }, [id]);
 
   useEffect(() => {
     fetchRepertorio();
@@ -350,7 +420,7 @@ function RepertorioDetalhesContent() {
               openModal={openConfirmationModal}
 
               // Props para o Mock e Correção do Toast
-              authorId={repertorio.criador.id}
+              authorId={repertorio.criador?.id}
             />
           </div>
 

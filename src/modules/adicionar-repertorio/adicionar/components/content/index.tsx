@@ -45,7 +45,7 @@ export default function AdicionarRepertorioContent() {
       <div className="container mx-auto px-4 flex flex-col items-center">
 
         {/* Título */}
-        <h1 
+        <h1
           className={`
             text-3xl font-medium text-gray-800 text-center pt-8 mb-12 transition-all duration-500
             ${bandejaAberta ? 'opacity-0 -translate-y-4 pointer-events-none' : 'opacity-100'}
@@ -54,16 +54,16 @@ export default function AdicionarRepertorioContent() {
           Selecione um tipo de repertório que queira criar
         </h1>
 
-        <div className="flex justify-center items-center h-auto md:h-[600px] w-full relative">
-          
+        <div className="flex justify-center items-center h-auto md:h-150 w-full relative">
+
           <div className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-10 transition-all duration-700 w-full">
-            
+
             {cardOrder.map((tipo, index) => {
               const isObra = tipo === 'obra';
               const shouldHide = bandejaAberta && !isObra;
 
               return (
-                <div 
+                <div
                   key={tipo}
                   className={`
                     relative transition-all duration-500 ease-in-out flex justify-center w-full md:w-auto
@@ -72,11 +72,11 @@ export default function AdicionarRepertorioContent() {
                   `}
                 >
                   {isObra && (
-                     <BandejaTiposObra
+                    <BandejaTiposObra
                       isOpen={bandejaAberta}
                       onSelect={selecionarTipoObra}
                       onClose={fecharBandeja}
-                     />
+                    />
                   )}
 
                   <TipoRepertorioCard
@@ -84,7 +84,7 @@ export default function AdicionarRepertorioContent() {
                     selecionado={tipoSelecionado === tipo}
                     onClick={selecionarTipo}
                     /* Card Obra deve ser maior que a Bandeja (10), então 20 está ótimo */
-                    zIndex={isObra ? 20 : (cardOrder.length - index)} 
+                    zIndex={isObra ? 20 : (cardOrder.length - index)}
                     showBackButton={bandejaAberta && isObra}
                     onBack={fecharBandeja}
                   />

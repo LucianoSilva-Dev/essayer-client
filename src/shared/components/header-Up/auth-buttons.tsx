@@ -5,12 +5,17 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-// import { getProfilePictureLink } from "../../../lib/apiCalls/usuario";
 
 export function AuthButtons() {
   const router = useRouter();
   const { isLoggedIn, userData, isLoading } = useAuth();
+
   const [profilePic, setProfilePic] = useState<string | null>(null);
+  const [mounted, setMounted] = useState(false); // 🔥 ESSENCIAL
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     if (isLoading || !isLoggedIn || !userData?.id) {
@@ -20,15 +25,21 @@ export function AuthButtons() {
 
     // getProfilePictureLink(userData.id).then(setProfilePic);
   }, [isLoading, isLoggedIn, userData?.id]);
-  if (!userData) return null;
-  console.log("userData:", userData);
+
+  if (!mounted) {
+    return (
+      <div className="w-48 h-9 animate-pulse bg-white/10 rounded-md"></div>
+    );
+  }
+
   return (
     <div className="flex items-center space-x-4">
       {isLoggedIn && !isLoading ? (
         <>
           <span className="text-neutral-dark text-[20px] font-bold">
-            Olá, {userData.name ? userData.name.split(" ")[0] : "Usuário"}!
+            Olá, {userData?.name ? userData.name.split(" ")[0] : "Usuário"}!
           </span>
+
           <button
             onClick={() => router.push("/profile")}
             className="flex items-center focus:outline-none"
@@ -47,14 +58,12 @@ export function AuthButtons() {
               </span>
             ) : (
               <div className="w-9 h-9 rounded-full bg-gray-300 flex items-center justify-center text-gray-600 font-bold cursor-pointer">
-                {/* Fallback seguro para a inicial do nome */}
                 {userData?.name?.[0] || ""}
               </div>
             )}
           </button>
         </>
-      ) : // Exibe os botões de login/cadastro se NÃO estiver logado E o carregamento estiver concluído
-      !isLoggedIn && !isLoading ? (
+      ) : !isLoggedIn && !isLoading ? (
         <>
           <Link
             href="/login"
@@ -62,6 +71,7 @@ export function AuthButtons() {
           >
             Entrar
           </Link>
+
           <Link
             href="/register"
             className="px-6 py-1 rounded-[40px] bg-transparent border-2 border-brand-teal-dark text-brand-teal-dark text-[20px] hover:bg-brand-teal-dark hover:text-white duration-300 transition-colors active:scale-95"
@@ -70,7 +80,6 @@ export function AuthButtons() {
           </Link>
         </>
       ) : (
-        // Opcional: Renderiza um placeholder enquanto isLoading é true
         <div className="w-48 h-9 animate-pulse bg-white/10 rounded-md"></div>
       )}
     </div>

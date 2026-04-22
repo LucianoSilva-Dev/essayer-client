@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { User, ThumbsUp, ThumbsDown, Pin, Trash2 } from 'lucide-react';
+import { User, Pin, Trash2 } from 'lucide-react';
 import type { Comentario } from '@/types/types';
-import { useAuth } from '@/shared/contexts/auth-context';
 import { getProfilePictureLink } from '@/lib/apiCalls/usuario';
 
 interface CommentCardProps {
@@ -18,7 +17,7 @@ interface CommentCardProps {
 export function CommentCard({ comentario, isAuthorComment = false, preloadedPicture, canPin, onPin, canDelete, onDelete }: CommentCardProps) {
   // Se vier preloadedPicture, usamos ela direto no estado inicial
   const [authorProfilePictureLink, setAuthorProfilePictureLink] = useState<string | null>(preloadedPicture || null);
-  
+
   const [liked, setLiked] = useState(false);
   const [disliked, setDisliked] = useState(false);
   const [isActionLoading, setIsActionLoading] = useState(false);
@@ -79,12 +78,12 @@ export function CommentCard({ comentario, isAuthorComment = false, preloadedPict
 
   return (
     <div className={`flex gap-3 md:gap-4 py-4 border-b border-gray-200/50 last:border-0 ${comentario.fixado ? 'bg-gray-50/50 -mx-4 px-4 rounded-lg' : ''}`}>
-      <div className="w-10 h-10 md:w-12 md:h-12 bg-white rounded-full flex-shrink-0 overflow-hidden border border-gray-100 shadow-sm">
+      <div className="w-10 h-10 md:w-12 md:h-12 bg-white rounded-full shrink-0 overflow-hidden border border-gray-100 shadow-sm">
         {authorProfilePictureLink ? (
           <Image width={48} height={48} src={authorProfilePictureLink} alt={comentario.usuario.nome} className="w-full h-full object-cover" />
         ) : (
           <div className="w-full h-full flex items-center justify-center bg-gray-50">
-             <User size={20} className="text-gray-300" />
+            <User size={20} className="text-gray-300" />
           </div>
         )}
       </div>
@@ -110,7 +109,7 @@ export function CommentCard({ comentario, isAuthorComment = false, preloadedPict
 
           <div className="flex items-center gap-2">
             {canPin && onPin && (
-              <button 
+              <button
                 onClick={handlePinClick}
                 disabled={isActionLoading}
                 className={`p-1.5 rounded-full transition-colors ${comentario.fixado ? 'text-brand-teal-secondary bg-brand-teal-secondary/10 hover:bg-brand-teal-secondary/20' : 'text-gray-400 hover:text-brand-teal-secondary hover:bg-gray-100'} ${isActionLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
@@ -121,7 +120,7 @@ export function CommentCard({ comentario, isAuthorComment = false, preloadedPict
             )}
 
             {canDelete && onDelete && (
-              <button 
+              <button
                 onClick={() => onDelete(comentario.id)}
                 disabled={isActionLoading}
                 className="p-1.5 rounded-full transition-colors text-gray-400 hover:text-red-600 hover:bg-red-50"

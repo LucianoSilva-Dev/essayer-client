@@ -22,7 +22,7 @@ const getTipoConfig = (tipo: string, tipoObra?: string) => {
     obra: {
       label: tipoObra ? `Obra - ${tipoObra}` : 'Obra',
       placeholderTitulo: 'Insira o título da obra aqui',
-      placeholderAutoria: 'Autoria da obra aqui', 
+      placeholderAutoria: 'Autoria da obra aqui',
       cor: '#CA9C60'
     },
     citacao: {
@@ -51,9 +51,9 @@ export const HeaderDetalhes: React.FC<HeaderDetalhesProps> = ({
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 md:gap-4 mb-6 md:mb-8">
         {/* Campo Tipo + Título */}
         <div className="flex items-center bg-white rounded-[40px] px-4 md:px-7 py-2 md:py-3 gap-3 md:gap-6 flex-1 w-full md:w-auto">
-          <span 
-            className="font-medium text-sm md:text-xl whitespace-nowrap flex-shrink-0"
-            style={{ 
+          <span
+            className="font-medium text-sm md:text-xl whitespace-nowrap shrink-0"
+            style={{
               color: config.cor,
               fontFamily: 'Montserrat'
             }}
@@ -78,9 +78,9 @@ export const HeaderDetalhes: React.FC<HeaderDetalhesProps> = ({
 
         {/* Campo Autoria */}
         <div className="flex items-center bg-white rounded-[40px] px-4 md:px-7 py-2 md:py-3 gap-3 md:gap-6 flex-1 w-full md:w-auto">
-          <span 
-            className="font-medium text-sm md:text-xl whitespace-nowrap flex-shrink-0"
-            style={{ 
+          <span
+            className="font-medium text-sm md:text-xl whitespace-nowrap shrink-0"
+            style={{
               color: '#3C3C3C',
               fontFamily: 'Montserrat'
             }}

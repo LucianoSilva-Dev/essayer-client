@@ -30,11 +30,11 @@ export default function DetalhesRepertorioContent() {
     tipoObra: tipoObra || undefined,
     eixosSelecionados: eixosSalvos,
     recortesSelecionados: recortes,
-    titulo,
-    autoria,
-    sintese,
-    comentarioEducador,
-    fixarComentario
+    titulo: titulo || '',
+    autoria: autoria || '',
+    sintese: sintese || '',
+    comentarioEducador: comentarioEducador || '',
+    fixarComentario: fixarComentario || false
   });
 
   const atualizarDados = (novosDados: Partial<DetalhesRepertorioData>) => {
@@ -42,20 +42,24 @@ export default function DetalhesRepertorioContent() {
   };
 
   const validarDados = () => {
+    // Adicionado fallback de segurança caso tipoRepertorio seja perdido
+    if (!dados.tipoRepertorio) return { valido: false, mensagem: 'Tipo de repertório inválido' };
+
     switch (dados.tipoRepertorio) {
       case 'artigo':
-        if (!((dados.titulo || '').trim())) return { valido: false, mensagem: 'Título é obrigatório para artigos' };
-        if (!((dados.autoria || '').trim())) return { valido: false, mensagem: 'Autoria é obrigatória para artigos' };
-        if (!((dados.sintese || '').trim())) return { valido: false, mensagem: 'Síntese é obrigatória para artigos' };
+        if (!dados.titulo?.trim()) return { valido: false, mensagem: 'Título é obrigatório para artigos' };
+        if (!dados.autoria?.trim()) return { valido: false, mensagem: 'Autoria é obrigatória para artigos' };
+        if (!dados.sintese?.trim()) return { valido: false, mensagem: 'Síntese é obrigatória para artigos' };
         break;
       case 'obra':
-        if (!((dados.titulo || '').trim())) return { valido: false, mensagem: 'Título é obrigatório para obras' };
-        if (!((dados.autoria || '').trim())) return { valido: false, mensagem: 'Autoria é obrigatória para obras' };
-        if (!((dados.sintese || '').trim())) return { valido: false, mensagem: 'Sinopse é obrigatória para obras' };
+        if (!dados.titulo?.trim()) return { valido: false, mensagem: 'Título é obrigatório para obras' };
+        if (!dados.autoria?.trim()) return { valido: false, mensagem: 'Autoria é obrigatória para obras' };
+        if (!dados.sintese?.trim()) return { valido: false, mensagem: 'Sinopse é obrigatória para obras' };
         break;
       case 'citacao':
-        if (!((dados.autoria || '').trim())) return { valido: false, mensagem: 'Autoria é obrigatória para citações' };
-        if (!((dados.sintese || '').trim())) return { valido: false, mensagem: 'Citação é obrigatória' };
+        if (!dados.autoria?.trim()) return { valido: false, mensagem: 'Autoria é obrigatória para citações' };
+        if (!dados.sintese?.trim()) return { valido: false, mensagem: 'Citação é obrigatória' };
+        // Nota: A fonte (que usa dados.titulo) não é obrigatória no Backend, então não validamos aqui. Correto!
         break;
     }
     return { valido: true, mensagem: '' };
@@ -64,6 +68,7 @@ export default function DetalhesRepertorioContent() {
   const isDisabled = !validarDados().valido;
 
   const publicarRepertorio = async () => {
+    console.log('Publicando repertório com os seguintes dados:', dados);
     try {
       const validacao = validarDados();
       if (!validacao.valido) {
@@ -73,63 +78,66 @@ export default function DetalhesRepertorioContent() {
 
       let idRepertorio = '';
 
+      const topicosFormatados = (dados.eixosSelecionados || []).map(eixo => eixo.nome);
+      const subtopicosFormatados = dados.recortesSelecionados || [];
+
       switch (dados.tipoRepertorio) {
         case 'artigo':
           const repArtigo = await createArtigo({
             titulo: dados.titulo,
             resumo: dados.sintese,
             autor: dados.autoria,
-            topicos: (dados.eixosSelecionados || []).map(eixo => eixo.nome),
-            subtopicos: dados.recortesSelecionados || []
+            topicos: topicosFormatados,
+            subtopicos: subtopicosFormatados
           });
           idRepertorio = repArtigo.id;
           break;
-        
+
         case 'obra':
           const repObra = await createObra({
             titulo: dados.titulo,
             sinopse: dados.sintese,
             autor: dados.autoria,
             tipoObra: dados.tipoObra || 'livro',
-            topicos: (dados.eixosSelecionados || []).map(eixo => eixo.nome),
-            subtopicos: dados.recortesSelecionados || []
+            topicos: topicosFormatados,
+            subtopicos: subtopicosFormatados
           });
           idRepertorio = repObra.id;
           break;
-        
+
         case 'citacao':
           const repCitacao = await createCitacao({
             frase: dados.sintese,
             autor: dados.autoria,
             fonte: dados.titulo,
-            topicos: (dados.eixosSelecionados || []).map(eixo => eixo.nome),
-            subtopicos: dados.recortesSelecionados || []
+            topicos: topicosFormatados,
+            subtopicos: subtopicosFormatados
           });
           idRepertorio = repCitacao.id;
           break;
       }
 
-      console.log(dados);
-
-      if (idRepertorio && dados.comentarioEducador.trim()) {
-        await addComentario(idRepertorio, { texto: dados.comentarioEducador, fixar: dados.fixarComentario });
+      if (idRepertorio && dados.comentarioEducador?.trim()) {
+        await addComentario(idRepertorio, {
+          texto: dados.comentarioEducador,
+          fixar: dados.fixarComentario
+        });
       }
-
       toast.success('Repertório publicado com sucesso!');
-      router.push(`/repertorio/${idRepertorio}?type=${dados.tipoRepertorio}`); 
-      
+      router.push(`/repertorio/${idRepertorio}?type=${dados.tipoRepertorio}`);
+
     } catch (error) {
+      // console.error('Erro Zod:', (error as any).response?.data);
       console.error('Erro ao publicar repertório:', error);
-      toast.error('Erro ao publicar repertório. Tente novamente.');
+      toast.error('Erro ao publicar repertório. Verifique os dados e tente novamente.');
     }
   };
-
 
   return (
     <main className="min-h-screen bg-gray-50 py-6 md:py-8">
       <div className="container mx-auto px-4">
         {/* Container principal */}
-        <div className="max-w-302 mx-auto space-y-6 md:space-y-8 animate-in fade-in duration-500">
+        <div className="max-w-300 mx-auto space-y-6 md:space-y-8 animate-in fade-in duration-500">
           <div className='bg-surface-light rounded-[48px] md:rounded-[88px] p-6 md:p-12 space-y-6 md:space-y-8'>
             {/* Header do repertório */}
             <HeaderDetalhes
@@ -157,7 +165,7 @@ export default function DetalhesRepertorioContent() {
           {/* Comentário do educador */}
           <ComentarioEducador
             comentario={dados.comentarioEducador}
-            fixarComentario={dados.fixarComentario}
+            fixarComentario={dados.fixarComentario || false}
             onComentarioChange={(comentarioEducador) => atualizarDados({ comentarioEducador })}
             onFixarChange={(fixarComentario) => atualizarDados({ fixarComentario })}
           />
@@ -168,11 +176,10 @@ export default function DetalhesRepertorioContent() {
               type="button"
               onClick={publicarRepertorio}
               disabled={isDisabled}
-              className={`px-6 md:px-12 py-3 md:py-4 w-full md:w-145 rounded-2xl md:rounded-[34px] font-semibold text-lg md:text-2xl transition-colors duration-300 ${
-                isDisabled
-                  ? "bg-[#898787] cursor-not-allowed text-neutral-dark"
-                  : "bg-brand-teal-dark text-[#E5EFF0] hover:bg-[#019DA3] cursor-pointer delay-200"
-              }`}
+              className={`px-6 md:px-12 py-3 md:py-4 w-full md:max-w-100 rounded-2xl md:rounded-[34px] font-semibold text-lg md:text-2xl transition-colors duration-300 ${isDisabled
+                ? "bg-[#898787] cursor-not-allowed text-[#434343]"
+                : "bg-brand-teal-dark text-[#E5EFF0] hover:bg-[#019DA3] cursor-pointer delay-200"
+                }`}
               style={{ fontFamily: 'Montserrat' }}
             >
               Publicar repertório
