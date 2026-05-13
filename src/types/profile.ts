@@ -6,7 +6,7 @@ export interface BaseProfile {
 }
 
 export interface AlunoProfile extends BaseProfile {
-  tipo: "aluno"
+  tipo: "student"
 }
 
 export interface ProfessorProfile extends BaseProfile {

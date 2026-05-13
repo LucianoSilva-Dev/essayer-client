@@ -9,6 +9,7 @@ import Link from "next/link";
 import { useAuth } from "../../contexts/auth-context";
 import Image from "next/image";
 import { Redo2 } from "lucide-react";
+import { getProfilePictureLink } from "@/lib/apiCalls/usuario";
 
 interface HeaderProps {
   currentPage?: string;
@@ -32,7 +33,7 @@ export function Header({ currentPage, description, backPage }: HeaderProps) {
       return;
     }
 
-    // getProfilePictureLink(userData.id).then(setProfilePic);
+    getProfilePictureLink(userData.id).then(setProfilePic);
   }, [isLoading, isLoggedIn, userData]);
 
   const handleLogout = () => {

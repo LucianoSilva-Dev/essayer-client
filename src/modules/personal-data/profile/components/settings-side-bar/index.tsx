@@ -34,7 +34,7 @@ export default function SettingsSidebar({ cargo, onItemClick }: {cargo: string; 
           icon={<FileText />}
           text="Solicitações"
         /> */}
-        {cargo === 'aluno' && (
+        {cargo === 'student' && (
           <div onClick={onItemClick}>
             <SidebarItem
               href='/profile/become-professor'

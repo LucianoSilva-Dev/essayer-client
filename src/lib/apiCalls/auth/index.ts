@@ -45,7 +45,7 @@ export const register = async (data: UserRegisterBody) => {
     email: data.email,
     password: data.password,
     name: data.name,
-    callbackURL: `http://localhost:3000/login`,  // ou /login em produção
+    callbackURL: `  /login`,  // ou /login em produção
   });
 
   if (error) {

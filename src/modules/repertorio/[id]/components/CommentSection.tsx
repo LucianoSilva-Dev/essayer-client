@@ -109,7 +109,7 @@ export function CommentSection({
                 isAuthorComment={comment.usuario.id === authorId}
               />
             ))
-          ) : isLoggedIn && userRole !== "aluno" ? (
+          ) : isLoggedIn && userRole !== "student" ? (
             <p className="text-gray-500 font-opensans text-center py-4">
               Seja o primeiro a comentar!
             </p>
@@ -122,7 +122,7 @@ export function CommentSection({
       </div>
 
       {/* INPUT AREA */}
-      {isLoggedIn && userRole !== "aluno" && (
+      {isLoggedIn && userRole !== "student" && (
         <div className="flex items-center gap-3 pt-4 border-t border-gray-300/50 mt-2">
           {/* Avatar Placeholder (ou foto do user logado se quiser implementar) */}
           <div className="w-10 h-10 bg-white rounded-full shrink-0 flex items-center justify-center overflow-hidden">
@@ -130,6 +130,8 @@ export function CommentSection({
           </div>
 
           {/* Form de Input */}
+          {userRole !== "student" && (
+            
           <form onSubmit={onCommentSubmit} className="flex-1 flex gap-2 w-full">
             <input
               type="text"
@@ -148,6 +150,7 @@ export function CommentSection({
               Enviar
             </button>
           </form>
+          )}
         </div>
       )}
 

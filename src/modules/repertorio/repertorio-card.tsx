@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import { ThumbsUp, User, Bookmark, Eye } from "lucide-react"
 import { useRouter } from "next/navigation"
 import type { Repertorio } from "@/types/repertorio"
-// import { getProfilePictureLink } from "../../lib/apiCalls/usuario"
+import { getProfilePictureLink } from "../../lib/apiCalls/usuario"
 import { addLike, removeLike, addFavorito, removeFavorito } from "../../lib/apiCalls/repertorio"
 import { useAuth } from "@/shared/contexts/auth-context"
 import { toast } from "react-toastify"
@@ -30,8 +30,8 @@ export default function RepertorioCard({ repertorio }: RepertorioCardProps) {
   useEffect(() => {
     async function fetchUserProfilePicture() {
       if (repertorio.criador?.id) {
-        // const link = await getProfilePictureLink(repertorio.criador.id)
-        // setUserProfilePictureLink(link)
+        const link = await getProfilePictureLink(repertorio.criador.id)
+        setUserProfilePictureLink(link)
       }
     }
     fetchUserProfilePicture()

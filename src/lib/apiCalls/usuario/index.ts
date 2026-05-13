@@ -32,23 +32,22 @@ export const updateUser = async (id: string, data: UpdateUsuarioBody): Promise<G
 // --- FOTO ---
 export const uploadProfilePicture = async (id: string, file: File): Promise<GenericSuccessResponse> => {
   const formData = new FormData();
-  formData.append('file', file);
+  formData.append('picture', file); // Backend espera 'picture', não 'file'
 
-  // 1. Upload físico do arquivo (mantido no seu backend/bucket)
-  const response = await apiClient.post<{ fotoUrl: string }>(`/usuario/foto/${id}`, formData, {
+  const response = await apiClient.post<GenericSuccessResponse>(`/user/picture/${id}`, formData, {
     headers: { 'Content-Type': 'multipart/form-data' },
   });
+  
+  // Atualiza a URL no Better Auth se precisar, mas getProfilePictureLink buscará do DB
+  return response.data;
+};
 
-  // 2. Atualiza a URL no Better Auth
-  // CORREÇÃO: authClient.updateUser direto na raiz
-  const { error } = await authClient.updateUser({
-    image: response.data.fotoUrl
-  });
+export const getProfilePictureLink = async (id: string): Promise<string | null> => {
+  const response = await apiClient.get<{ image: string | null }>(`/user/picture/${id}`);
+  return response.data.image;
+};
 
-  if (error) {
-      console.error("Erro ao sincronizar imagem com Auth:", error);
-      // Opcional: throw new Error...
-  }
-
-  return { message: "Foto atualizada" };
+export const deleteProfilePicture = async (id: string): Promise<GenericSuccessResponse> => {
+  const response = await apiClient.delete<GenericSuccessResponse>(`/user/picture/${id}`);
+  return response.data;
 };

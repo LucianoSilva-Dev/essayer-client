@@ -32,7 +32,7 @@ export default function IntegranteList({ professor, alunos, totalAlunos }: Integ
              )}
              <div className="space-y-1">
                 {displayAlunos.map((aluno) => (
-                  <IntegranteItem key={aluno.id} integrante={{...aluno, role: 'aluno'}} />
+                  <IntegranteItem key={aluno.id} integrante={{...aluno, role: 'student'}} />
                 ))}
              </div>
         </div>

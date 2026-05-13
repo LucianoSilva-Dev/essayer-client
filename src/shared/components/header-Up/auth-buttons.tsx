@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { getProfilePictureLink } from "@/lib/apiCalls/usuario";
 
 export function AuthButtons() {
   const router = useRouter();
@@ -23,7 +24,7 @@ export function AuthButtons() {
       return;
     }
 
-    // getProfilePictureLink(userData.id).then(setProfilePic);
+    getProfilePictureLink(userData.id).then(setProfilePic);
   }, [isLoading, isLoggedIn, userData?.id]);
 
   if (!mounted) {

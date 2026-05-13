@@ -7,7 +7,7 @@ export interface BaseUser {
 }
 
 export interface Aluno extends BaseUser {
-  tipo: "aluno"
+  tipo: "student"
   escola?: string
   serie?: string
 }
@@ -21,5 +21,5 @@ export interface Professor extends BaseUser {
 
 export type UserRegistration = Aluno | Professor
 
-export type UserType = "aluno" | "professor"
+export type UserType = "student" | "professor"
 

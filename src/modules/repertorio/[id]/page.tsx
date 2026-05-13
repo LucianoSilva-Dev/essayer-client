@@ -8,7 +8,7 @@ import { useAuth } from "@/shared/contexts/auth-context";
 // Tipos e API
 import type { Repertorio } from "@/types/repertorio";
 import { addComentario, addFavorito, addLike, deleteRepertorio, getArtigoById, getCitacaoById, getObraById, getRepertoriosBulk, removeFavorito, removeLike } from "@/lib/apiCalls/repertorio";
-// import { getProfilePictureLink } from "@/lib/apiCalls/usuario";
+import { getProfilePictureLink } from "@/lib/apiCalls/usuario";
 
 // Helpers e Mappers
 import { getEixosComRecortes } from "./helpers/repertorio-mapper";
@@ -165,7 +165,7 @@ function RepertorioDetalhesContent() {
         setIsLiked(mounted.likeDoUsuario);
         setIsFavorito(mounted.favoritadoPeloUsuario);
         if (mounted.criador?.id) {
-          // getProfilePictureLink(mounted.criador.id).then(setAuthorProfilePictureLink);
+          getProfilePictureLink(mounted.criador.id).then(setAuthorProfilePictureLink);
         }
       } else {
         setError("Falha ao processar os dados do repertório.");

@@ -7,7 +7,7 @@ export interface Integrante {
   id: string;
   nome: string;
   fotoPath?: string | null;
-  role?: "professor" | "aluno";
+  role?: "professor" | "student";
 }
 
 export default function IntegranteItem({

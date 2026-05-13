@@ -3,10 +3,10 @@
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { useAuth } from "@/shared/contexts/auth-context"; 
-// import {
-//   getProfilePictureLink,
-//   updateProfilePicture,
-// } from "@/lib/apiCalls/usuario"; 
+import {
+  getProfilePictureLink,
+  uploadProfilePicture,
+} from "@/lib/apiCalls/usuario"; 
 import { toast } from "react-toastify";
 import { Loader2, User } from "lucide-react";
 
@@ -21,10 +21,10 @@ export default function ProfileImageUpload() {
   useEffect(() => {
     if (userData?.id) {
       setIsLoading(true);
-      // getProfilePictureLink(userData.id)
-      //   .then(setProfilePic)
-      //   .catch(() => setProfilePic(null)) // Deixa nulo para mostrar o ícone
-      //   .finally(() => setIsLoading(false));
+      getProfilePictureLink(userData.id)
+        .then(setProfilePic)
+        .catch(() => setProfilePic(null)) // Deixa nulo para mostrar o ícone
+        .finally(() => setIsLoading(false));
     } else {
       // Se não houver ID (ex: logout), limpa a foto e para de carregar
       setProfilePic(null);
@@ -43,7 +43,7 @@ export default function ProfileImageUpload() {
     setIsLoading(true);
     try {
       // Faz o upload da nova foto
-      // await updateProfilePicture(userData.id, file);
+      await uploadProfilePicture(userData.id, file);
 
       // 3. A API foi atualizada.
       // Agora, o *contexto* precisa ser atualizado.
@@ -58,8 +58,8 @@ export default function ProfileImageUpload() {
       // NOTA: Para uma melhoria de UI imediata (antes do contexto atualizar),
       // podemos buscar o link novo e setar o estado local.
       // O useEffect vai rodar de novo quando o contexto mudar, mas a UI já vai estar atualizada.
-      // const newPicLink = await getProfilePictureLink(userData.id);
-      // setProfilePic(newPicLink);
+      const newPicLink = await getProfilePictureLink(userData.id);
+      setProfilePic(newPicLink);
     } catch (error) {
       toast.error("Erro ao atualizar a foto.");
       console.error(error);

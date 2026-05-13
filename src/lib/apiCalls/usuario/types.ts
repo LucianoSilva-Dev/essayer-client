@@ -1,4 +1,4 @@
-export type UserCargo = 'admin' | 'aluno' | 'professor';
+export type UserCargo = 'admin' | 'student' | 'professor';
 
 export interface Usuario {
   id: string;
