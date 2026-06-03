@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useCreateTask } from "../../context";
-import { getAllRepertorios } from "@/lib/apiCalls/repertorio";
+import { getAllRepertoires } from "@/lib/apiCalls/repertorio";
 import { Repertorio } from "@/types/repertorio";
 import { 
   Search, X, Check, Loader2, BookOpen, Quote, FileText, 
@@ -107,7 +107,7 @@ function RepertoireSelectorModal({ isOpen, onClose, eixoFilter, selectedIds, onT
         query += `&topicos=${encodeURIComponent(eixoFilter)}`;
       }
 
-      const response = await getAllRepertorios(query);
+      const response = await getAllRepertoires(query);
       
       // @ts-ignore
       const rawList: any[] = Array.isArray(response) ? response : (response?.documentos || []);

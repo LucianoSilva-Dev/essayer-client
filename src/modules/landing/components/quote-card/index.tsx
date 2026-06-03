@@ -31,10 +31,12 @@ export default function QuoteCard({
 
   useEffect(() => {
     async function fetchData() {
-      const data = await getProfilePictureLink(author?.id)
-      if (data) setAuthorProfilePictureLink(data)
+      if (author?.id) {
+        const data = await getProfilePictureLink(author.id)
+        if (data) setAuthorProfilePictureLink(data)
+      }
     }
-    if (author) fetchData()
+    if (author?.id) fetchData()
   }, [author])
 
   return (

@@ -56,10 +56,10 @@ export function Header({ currentPage, description, backPage }: HeaderProps) {
   };
 
   return (
-    <header className="fixed top-0 px-20 -mb-7.5 w-full bg-transparent z-40 backdrop-blur-md select-none">
+    <header className="fixed top-0 px-4 md:px-20 -mb-7.5 w-full bg-transparent z-40 backdrop-blur-md select-none">
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
         {/* Lado Esquerdo: Seta de voltar + Nome da página */}
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-4 min-w-0 flex-1">
           {/* Seta de voltar - Lógica condicional aplicada aqui */}
           {backPage &&
             (isEntrarTurmaPage ? (
@@ -97,9 +97,9 @@ export function Header({ currentPage, description, backPage }: HeaderProps) {
 
           {/* Título e Subtítulo */}
           {(currentPage || description) && (
-            <div className="flex flex-col">
+            <div className="flex flex-col min-w-0">
               {currentPage && (
-                <h1 className="text-neutral-dark text-2xl font-medium">
+                <h1 className="text-neutral-dark text-lg md:text-2xl font-medium truncate">
                   {currentPage}
                 </h1>
               )}
@@ -128,10 +128,10 @@ export function Header({ currentPage, description, backPage }: HeaderProps) {
               <motion.div
                 key="backdrop"
                 initial={{ opacity: 0 }}
-                animate={{ opacity: 0.35 }}
+                animate={{ opacity: 0.5 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.2 }}
-                className="fixed inset-0 bg-black z-40 md:hidden"
+                className="fixed inset-0 bg-black z-[9998] md:hidden"
                 onClick={() => setIsMenuOpen(false)}
               />
 
@@ -142,7 +142,7 @@ export function Header({ currentPage, description, backPage }: HeaderProps) {
                 animate={{ opacity: 1, height: "auto", y: 0 }}
                 exit={{ opacity: 0, height: 0, y: -8 }}
                 transition={{ duration: 0.28, ease: "easeInOut" }}
-                className="absolute left-4 right-4 top-full z-50 md:hidden"
+                className="absolute left-0 right-0 top-full z-[9999] md:hidden px-4"
                 style={{ pointerEvents: "auto" }}
               >
                 <div className="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden">

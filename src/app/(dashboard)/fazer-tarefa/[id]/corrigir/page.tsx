@@ -1,4 +1,4 @@
-import { EditorCorrecaoProfessorPage } from '@/modules/redacao/correcao/editar-correcao-professor/components/content/EditorCorrecaoProfessorPage'
+import { EditorCorrecaoProfessorPage } from '@/modules/redacao/correcao/editar-correcao-professor/components/content'
 
 export const metadata = {
   title: 'Corrigir Redação',

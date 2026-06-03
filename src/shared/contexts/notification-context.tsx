@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import {
   createContext,
@@ -6,87 +6,82 @@ import {
   useState,
   ReactNode,
   useCallback,
-} from 'react'
+  useEffect,
+} from 'react';
+import { Notification, NotificationContextType } from '@/types/notification';
+import { getAllNotifications, changeStatusNotification } from '@/lib/apiCalls/notificacao';
+import { useAuth } from './auth-context';
 
-export type NotificationType = 'success' | 'error' | 'info' | 'warning'
+const NotificationContext = createContext<NotificationContextType | null>(null);
 
-export interface Notification {
-  id: string
-  type: NotificationType
-  title?: string
-  message: string
-}
+export function NotificationProvider({ children }: { children: ReactNode }) {
+  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const { isLoggedIn, userData } = useAuth();
 
-interface NotificationContextData {
-  notifications: Notification[]
-  notify: (data: Omit<Notification, 'id'>) => void
-  removeNotification: (id: string) => void
-  clearNotifications: () => void
-}
+  const loadNotifications = useCallback(async () => {
+    if (!isLoggedIn) return;
+    try {
+      const data = await getAllNotifications();
+      setNotifications(data as Notification[]);
+    } catch (error) {
+      console.error("Erro ao carregar notificações", error);
+    }
+  }, [isLoggedIn]);
 
-const NotificationContext = createContext<NotificationContextData | null>(null)
+  useEffect(() => {
+    loadNotifications();
+  }, [loadNotifications]);
 
-interface NotificationProviderProps {
-  children: ReactNode
-}
+  const markAsRead = useCallback(async (notificationIds: string[]) => {
+    try {
+      await changeStatusNotification(notificationIds);
+      setNotifications((prev) => 
+        prev.map(n => notificationIds.includes(n.id) ? { ...n, lido: true } : n)
+      );
+    } catch (error) {
+      console.error("Erro ao marcar notificações como lidas", error);
+    }
+  }, []);
 
-export function NotificationProvider({
-  children,
-}: NotificationProviderProps) {
-  const [notifications, setNotifications] = useState<Notification[]>([])
+  // Set up SSE listener for real-time notifications
+  useEffect(() => {
+    if (!isLoggedIn || !userData?.id) return;
 
-  const removeNotification = useCallback((id: string) => {
-    setNotifications((prev) => prev.filter((n) => n.id !== id))
-  }, [])
+    const eventSource = new EventSource('/api/notificacao/listen');
 
-  const clearNotifications = useCallback(() => {
-    setNotifications([])
-  }, [])
+    eventSource.onmessage = (event) => {
+      try {
+        const newNotification = JSON.parse(event.data) as Notification;
+        setNotifications((prev) => [newNotification, ...prev]);
+      } catch (e) {
+        console.error("Failed to parse SSE notification:", e);
+      }
+    };
 
-  const notify = useCallback(
-    ({ type, title, message }: Omit<Notification, 'id'>) => {
-      const id = crypto.randomUUID()
+    return () => {
+      eventSource.close();
+    };
+  }, [isLoggedIn, userData?.id]);
 
-      setNotifications((prev) => [
-        ...prev,
-        {
-          id,
-          type,
-          title,
-          message,
-        },
-      ])
-
-      // auto dismiss (opcional)
-      setTimeout(() => {
-        removeNotification(id)
-      }, 5000)
-    },
-    [removeNotification]
-  )
+  const unreadCount = notifications.filter(n => !n.lido).length;
 
   return (
     <NotificationContext.Provider
       value={{
         notifications,
-        notify,
-        removeNotification,
-        clearNotifications,
+        markAsRead,
+        unreadCount,
       }}
     >
       {children}
     </NotificationContext.Provider>
-  )
+  );
 }
 
 export function useNotification() {
-  const context = useContext(NotificationContext)
-
+  const context = useContext(NotificationContext);
   if (!context) {
-    throw new Error(
-      'useNotification must be used within a NotificationProvider'
-    )
+    throw new Error('useNotification must be used within a NotificationProvider');
   }
-
-  return context
+  return context;
 }

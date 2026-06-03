@@ -8,7 +8,7 @@ export async function GET(request: NextRequest) {
     controller.abort();
   });
 
-  const targetUrl = `${API_BASE_URL}/notificacao/listen`;
+  const targetUrl = `${API_BASE_URL}/notification/listen`;
 
   const response = await fetch(targetUrl, {
     headers: {

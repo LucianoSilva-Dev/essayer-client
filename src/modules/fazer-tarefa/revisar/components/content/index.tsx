@@ -11,7 +11,7 @@ import { AtividadeRedacaoDetalhada } from "@/lib/apiCalls/turma/types";
 import { Repertorio } from "@/types/repertorio";
 import { getAtividadeRedacaoDetalhes } from "@/lib/apiCalls/tarefas";
 import { getRepertoriosBulk } from "@/lib/apiCalls/repertorio";
-import { RepertorioDocument } from "@/lib/apiCalls/repertorio/types";
+import { RepertoireDocument, WorkDocument, ArticleDocument, CitationDocument } from "@/lib/apiCalls/repertorio/types";
 import RepertorioCard from "@/modules/repertorio/repertorio-card";
 
 // Agora aceita 'id' em vez do objeto tarefa completo
@@ -59,45 +59,52 @@ export function RevisaoRedacaoPage({ id }: RevisaoRedacaoPageProps) {
           const data = await getRepertoriosBulk(ids);
           
           // Mapeamento de RepertorioDocument para Repertorio
-          const mappedRepertorios: Repertorio[] = data.map((doc: RepertorioDocument) => {
+          const mappedRepertorios: Repertorio[] = data.map((doc: RepertoireDocument) => {
             const base = {
               id: doc.id,
               totalLikes: doc.totalLikes,
-              favoritadoPeloUsuario: doc.favoritadoPeloUsuario,
-              likeDoUsuario: doc.likeDoUsuario,
-              criador: doc.criador,
-              totalComentarios: doc.totalComentarios || 0,
-              comentarios: doc.comentarios || [],
-              eixos: doc.subtopicos || [],
-              recortes: doc.topicos || [],
+              favoritadoPeloUsuario: doc.favourited,
+              likeDoUsuario: doc.liked,
+              criador: {
+                id: doc.creator.id,
+                nome: doc.creator.name,
+                fotoPath: doc.creator.image ?? null
+              },
+              totalComentarios: doc.totalComments || 0,
+              comentarios: [], 
+              eixos: doc.subtopics || [],
+              recortes: doc.topics || [],
               isPublico: true, // Assumindo true pois veio da API
             };
 
-            if (doc.tipoRepertorio === 'Obra') {
+            if (doc.repertoireType === 'WORK') {
+              const work = doc as WorkDocument;
               return {
                 ...base,
                 modelo: 'obra',
-                titulo: doc.titulo,
-                autoria: doc.autor,
-                sinopse: doc.sinopse,
-                tipoObra: doc.tipoObra,
+                titulo: work.title,
+                autoria: work.author,
+                sinopse: work.synopsis,
+                tipoObra: work.workType,
               } as any;
-            } else if (doc.tipoRepertorio === 'Artigo') {
+            } else if (doc.repertoireType === 'ARTICLE') {
+              const article = doc as ArticleDocument;
               return {
                 ...base,
                 modelo: 'artigo',
-                titulo: doc.titulo,
-                autoria: doc.autor,
-                sintese: doc.resumo,
-                fonte: doc.fonte,
+                titulo: article.title,
+                autoria: article.author,
+                sintese: article.abstract,
+                fonte: article.source,
               } as any;
             } else { // Citacao
+              const citation = doc as CitationDocument;
               return {
                 ...base,
                 modelo: 'citacao',
-                autoria: doc.autor,
-                citacao: doc.frase,
-                fonte: doc.fonte,
+                autoria: citation.author,
+                citacao: citation.quote,
+                fonte: citation.source,
               } as any;
             }
           });

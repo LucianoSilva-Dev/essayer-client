@@ -109,7 +109,7 @@ useEffect(() => {
               <input
                 type="text"
                 placeholder="Pesquise por palavra-chave, título, autor ou obra"
-                className="flex-1 bg-transparent focus:outline-none text-gray-700 placeholder-gray-400"
+                className="flex-1 bg-transparent focus:outline-none text-gray-700 placeholder-gray-400 pr-16"
                 value={termoBusca}
                 onChange={(e) => setTermoBusca(e.target.value)}
               />

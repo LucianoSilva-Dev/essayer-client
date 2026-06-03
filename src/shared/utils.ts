@@ -19,7 +19,7 @@ export const handleAxiosError = (error: unknown) => {
 		const axiosError = error as AxiosError<{ error?: string, errors?: string[] }>;
 		const { response, config } = axiosError;
 
-		if (response?.status === 404 && config?.url?.includes('/usuario/foto/')) {
+		if (response?.status === 404 && config?.url?.includes('/user/picture/')) {
 			return Promise.reject(error); // Reject without showing a toast
 		}
 		if (response?.status === 401 && config?.url?.includes('/auth/refresh')) {

@@ -8,9 +8,9 @@ type OnDelayCallback = (data: null) => any
 type OnErrorCallback = (data: CustomEventSourceMap['appError']) => any
 
 export async function encaminharCorrecaoRedacao(id: string, texto: string, tema: string) {
-  const response = await apiClient.post<GenericSuccessResponse>(`/usuario/redacao/${id}/corrigir`, {
-    textoRedacao: texto,
-    tema
+  const response = await apiClient.post<GenericSuccessResponse>(`/user-essay/${id}/correct`, {
+    essayText: texto,
+    theme: tema
   })
   return response.data
 }                       
@@ -21,7 +21,7 @@ export function listenCorrecaoRedacao(
     onDelay: OnDelayCallback, 
     onCorrecao: OnSuccessCallback) {
     
-    return createResilientEventSource(`/usuario/redacao/${redacaoId}/correcao/listen`, {
+    return createResilientEventSource(`/user-essay/${redacaoId}/correction/listen`, {
         'appError': (event) => {
             const data = JSON.parse(event.data) as CustomEventSourceMap['appError']
             onError(data)

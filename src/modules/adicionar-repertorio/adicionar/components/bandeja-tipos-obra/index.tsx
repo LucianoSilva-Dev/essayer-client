@@ -76,10 +76,10 @@ export const BandejaTiposObra: React.FC<BandejaTiposObraProps> = ({
       {/* Desktop / md+ bandeja drawer */}
       <div
         className={`
-          md:block md:absolute md:top-0 md:left-0
+          hidden md:block md:absolute md:top-0 md:left-0
           transition-all duration-700 ease-[cubic-bezier(0.25,0.8,0.25,1)]
           bg-white md:rounded-r-3xl md:shadow-xl md:border-t md:border-r md:border-b border-gray-100
-          flex flex-col justify-center
+          flex-col justify-center
           md:py-8 md:pr-8 md:pl-20
           md:w-170 md:h-142
           ${isOpen ? 'md:opacity-100 md:pointer-events-auto md:translate-x-90' : 'md:opacity-0 md:pointer-events-none md:translate-x-0'}

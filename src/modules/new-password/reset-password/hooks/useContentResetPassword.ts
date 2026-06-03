@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { updatePassword } from "@/lib/apiCalls/usuario";
+import { authClient } from "@/lib/betterAuth/auth-client";
 import { useAuth } from "@/shared/contexts/auth-context";
 
 export function useContentResetPassword() {
@@ -16,7 +16,7 @@ export function useContentResetPassword() {
   const searchParams = useSearchParams();
   const { isLoggedIn } = useAuth();
 
-  const id = searchParams.get("id");
+  const token = searchParams.get("token") || searchParams.get("id");
   const passwordRegex = /^(?=.*[a-z])(?=.*\d).{8,24}$/;
 
   const passwordsMatch = useMemo(
@@ -31,11 +31,14 @@ export function useContentResetPassword() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!isFormValid || !id) return;
+    if (!isFormValid || !token) return;
 
     setIsSubmitting(true);
     try {
-      await updatePassword(id, { senha: newPassword });
+      const { error } = await authClient.resetPassword({ newPassword, token });
+      if (error) {
+        throw new Error(error.message || "Erro ao redefinir a senha.");
+      }
 
       router.push(
         isLoggedIn

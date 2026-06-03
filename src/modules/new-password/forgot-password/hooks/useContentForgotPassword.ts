@@ -2,7 +2,9 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import { createRequisicaoSenha } from "@/lib/apiCalls/requisicao-senha"
+import { authClient } from "@/lib/betterAuth/auth-client"
+import { toast } from "react-toastify"
+import axios from "axios"
 
 export function useContentForgotPassword() {
   const [email, setEmail] = useState("")
@@ -16,16 +18,12 @@ export function useContentForgotPassword() {
     try {
       setIsSubmitting(true)
 
-      const { id } = await createRequisicaoSenha({ email })
-
-      const query = new URLSearchParams({
-        id,
-        email,
-      })
-
-      router.push(`/forgot-password/verify-code?${query}`)
-    } catch (error) {
-      console.error("Erro ao criar requisição de senha", error)
+      const baseURL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3002"
+      await axios.post(`${baseURL}/auth/request-password-reset`, { email })
+      toast.success("Enviamos um link de recuperação para o seu email!")
+    } catch (error: any) {
+      console.error("Erro ao solicitar recuperação de senha", error)
+      toast.error(error.response?.data?.message || "Ocorreu um erro inesperado")
     } finally {
       setIsSubmitting(false)
     }

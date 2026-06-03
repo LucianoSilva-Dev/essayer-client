@@ -48,4 +48,3 @@ export interface CorrigirRedacaoLivreBody {
   tema: string;
   textoRedacao: string;
 }
-

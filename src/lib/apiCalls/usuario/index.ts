@@ -29,6 +29,12 @@ export const updateUser = async (id: string, data: UpdateUsuarioBody): Promise<G
   return { message: "Perfil atualizado" };
 };
 
+
+export const createProfessorRequest = async (id: string, data: { lattes: string }): Promise<GenericSuccessResponse> => {
+  const response = await apiClient.post<GenericSuccessResponse>(`/user/${id}/teacher`, data);
+  return response.data;
+};
+
 // --- FOTO ---
 export const uploadProfilePicture = async (id: string, file: File): Promise<GenericSuccessResponse> => {
   const formData = new FormData();

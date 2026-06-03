@@ -6,7 +6,7 @@ import { useAuth } from "@/shared/contexts/auth-context";
 import { AnimatePresence } from "framer-motion";
 import SettingsSidebar from "@/modules/personal-data/profile/components/settings-side-bar";
 import Loading from "./loading";
-import { Menu, X } from "lucide-react";
+import { ChevronRight, X } from "lucide-react";
 
 export default function ProfileSettingsLayout({
   children,
@@ -34,26 +34,22 @@ export default function ProfileSettingsLayout({
   return (
     <main className="min-h-[calc(100vh-80px)] bg-gray-50">
       <div className="flex flex-col lg:flex-row gap-0 lg:gap-8 h-full">
-        {/* Header Mobile */}
-        <div className="lg:hidden bg-white border-b border-gray-200 px-4 py-4 flex items-center justify-between sticky top-0 z-30">
-          <h1 className="text-2xl font-semibold text-neutral-dark">Perfil</h1>
+        {/* Botão sutil para abrir sidebar de configurações no mobile (não parece um header) */}
+        <div className="lg:hidden px-4 pt-3 pb-1">
           <button
-            onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-            className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
-            aria-label="Abrir menu"
+            onClick={() => setIsSidebarOpen(true)}
+            className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-800 transition-colors"
+            aria-label="Abrir menu de configurações"
           >
-            {isSidebarOpen ? (
-              <X className="w-6 h-6 text-neutral-dark" />
-            ) : (
-              <Menu className="w-6 h-6 text-neutral-dark" />
-            )}
+            <span>Menu</span>
+            <ChevronRight className="w-4 h-4" />
           </button>
         </div>
 
         {/* Overlay Mobile */}
         {isSidebarOpen && (
           <div
-            className="fixed inset-0 bg-black/50 lg:hidden z-20"
+            className="fixed inset-0 bg-black/50 lg:hidden z-40"
             onClick={() => setIsSidebarOpen(false)}
           />
         )}
@@ -61,8 +57,8 @@ export default function ProfileSettingsLayout({
         {/* Sidebar */}
         <aside
           className={`
-            fixed lg:static inset-y-0 left-0 top-20 w-full sm:w-80 lg:w-116
-            bg-white z-20 transform transition-transform duration-300 lg:transform-none
+            fixed lg:static inset-y-0 left-0 top-0 w-full sm:w-80 lg:w-116
+            bg-white z-50 transform transition-transform duration-300 lg:transform-none
             lg:top-0 overflow-y-auto shrink-0
             ${
               isSidebarOpen
@@ -71,6 +67,17 @@ export default function ProfileSettingsLayout({
             }
           `}
         >
+          {/* Botão fechar no mobile dentro da sidebar */}
+          <div className="lg:hidden flex items-center justify-between px-4 pt-4 pb-2 border-b border-gray-100">
+            <span className="text-lg font-semibold text-neutral-dark">Configurações</span>
+            <button
+              onClick={() => setIsSidebarOpen(false)}
+              className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+              aria-label="Fechar menu de configurações"
+            >
+              <X className="w-5 h-5 text-neutral-dark" />
+            </button>
+          </div>
           <div className="p-4 sm:p-6 lg:p-10">
             <SettingsSidebar
               cargo={userData.role}

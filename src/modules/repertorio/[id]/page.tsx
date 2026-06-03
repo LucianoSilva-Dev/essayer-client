@@ -43,6 +43,17 @@ const mountFrontendRepertoire = (repertoire: RepertoireDocument): Repertorio | n
     nome: repertoire.creator.name
   }
 
+  const mappedComments = (repertoire.comments || []).map((c: any) => ({
+    id: c.id,
+    texto: c.text,
+    fixado: c.fixed,
+    usuario: {
+      id: c.user?.id,
+      nome: c.user?.name,
+      fotoPath: c.user?.image,
+    }
+  }));
+
   if (repertoire.repertoireType === "CITATION") {
     return {
       id: repertoire.id,
@@ -58,7 +69,7 @@ const mountFrontendRepertoire = (repertoire: RepertoireDocument): Repertorio | n
       likeDoUsuario: repertoire.liked,
       criador: criadorFormatado,
       totalComentarios: repertoire.totalComments ?? 0,
-      comentarios: repertoire.comments as any ?? []
+      comentarios: mappedComments
     }
   }
 
@@ -78,7 +89,7 @@ const mountFrontendRepertoire = (repertoire: RepertoireDocument): Repertorio | n
       likeDoUsuario: repertoire.liked,
       criador: criadorFormatado,
       totalComentarios: repertoire.totalComments ?? 0,
-      comentarios: repertoire.comments as any ?? []
+      comentarios: mappedComments
     }
   }
 
@@ -98,7 +109,7 @@ const mountFrontendRepertoire = (repertoire: RepertoireDocument): Repertorio | n
       likeDoUsuario: repertoire.liked,
       criador: criadorFormatado,
       totalComentarios: repertoire.totalComments ?? 0,
-      comentarios: repertoire.comments as any ?? []
+      comentarios: mappedComments
     }
   }
 
